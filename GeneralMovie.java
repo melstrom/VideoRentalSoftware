@@ -5,7 +5,7 @@
  *      @author mattp
  *	@version 1.0 March 27, 2011
  *      @version 1.1 March 29
- *              -removed sku from add movie catalog query
+ *              -changed the implementation of SKU
  *              -fixed parameter naming
  *              -fixed getActors()
  */
@@ -21,16 +21,18 @@ public class GeneralMovie
     /**
      *  General movie constructor
      *  takes 5 default attributes
+     * @param SKU the number uniquely identifies each movie catalog
      * @param title the title of a movie
      * @param actors the actors of a movie
      * @param director the director of a movie
      * @param releaseDate  the release date of a movie
      * @param synopsis the brief description of a movie
      */
-    public GeneralMovie(String title, String actors[], String director, Date releaseDate, String synopsis)throws SQLException
+    public GeneralMovie(int SKU, String title, String actors[], String director, Date releaseDate, String synopsis)throws SQLException
     {
         reservations = new ArrayList<Reservation>();
         this.title = title;
+        this.SKU = SKU;
         this.actors = actors;
         this.synopsis = synopsis;
         setActors(actors);
@@ -115,14 +117,15 @@ public class GeneralMovie
      */
     final protected void addNewTitle()throws SQLException
     {
-        String table="Video";
+        String table="Videoinfo";
         String query = "insert into"+table
-              +"values ("+quote+""+quote+comma
+              +"values ("+quote+""+quote+comma//infoID
                         +quote+title+quote+comma
                         +quote+director+quote+comma
                         +quote+releaseDate.getYear()+releaseDate.getMonth()+releaseDate.getDate()+quote+comma 
                         +quote+actors[0]+quote+comma
-                        +quote+synopsis+quote
+                        +quote+synopsis+quote+comma
+                        +quote+SKU+quote
                         +");";
 
         executeQuery(query);
@@ -224,6 +227,7 @@ public class GeneralMovie
         return synopsis;
     }
     private String title;
+    private int SKU;
     private String actors[];
     private String director;
     private Date releaseDate;
