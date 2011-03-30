@@ -76,15 +76,19 @@ public class Transaction
 	Marks the transaction as finalized/paid.
 	@param payment the payment method and ammount.
 	<dt><b>Precondition:</b><dd>
-	payment.getAmount() >= thisTransaction.getSubTotal() + thisTransaction.getTax()
-	payment has been verified
-	- for cash, the employee should visually inspect it.
-	- for credit, the dummy credit card machine class should verify it.
-	- for debit, the dummy debit machine class should verify it.
+		<ul>
+			<li>payment.getAmount() >= thisTransaction.getSubTotal() + thisTransaction.getTax()</li>
+			<li>payment has been verified</li>
+				<ul>
+					<li>for cash, the employee should visually inspect it.</li>
+					<li>for credit, the dummy credit card machine class should verify it.</li>
+					<li>for debit, the dummy debit machine class should verify it.</li>
+				</ul>
+		</ul>
 	<dt><b>Postcondition:</b><dd>
 	The payment method and ammount is recorded in the transaction/invoice
 	*/
-	public markPaid(Payment payment)
+	public Boolean markPaid(Payment payment)
 	{
 		paymentMethod = payment.getPaymentMethod();
 		paymentAmount = payment.getAmount();
