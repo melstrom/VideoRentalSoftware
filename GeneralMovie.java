@@ -214,7 +214,7 @@ public class GeneralMovie
     {
         String actorList="";
         for(int i =0;actors[i]!=null&&i<actors.length;i++)
-        actorList+=actors[i];
+          actorList+=actors[i]+",";
       
         return actorList;
     }
