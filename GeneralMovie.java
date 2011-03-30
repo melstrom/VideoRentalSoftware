@@ -131,6 +131,14 @@ public class GeneralMovie
         executeQuery(query);
     }
     /**
+    *   Get SKU
+    *  @param SKU the SKU uniquely identifies a movie catalog 
+    */
+    protected int getSKU()
+    {
+        return SKU;
+    }
+    /**
      * Set title
      * @param title the title of a movie
      */
