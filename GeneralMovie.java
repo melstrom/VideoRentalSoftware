@@ -25,7 +25,7 @@ public class GeneralMovie
      * @param title the title of a movie
      * @param actors the actors of a movie
      * @param director the director of a movie
-     * @param releaseDate  the release date of a movie
+     * @param releaseDate  the release date of a movie 
      * @param synopsis the brief description of a movie
      */
     public GeneralMovie(int SKU, String title, String actors[], String director, Date releaseDate, String synopsis)throws SQLException
