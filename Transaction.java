@@ -30,22 +30,8 @@ todo: update class diagram for transaction to version2
 - CrediCardMachine and DebitMachine could be subclass of PaymentMachine class with methods: boolean verify(int CCnumber, int amountInCents, int pin)
 */
 
-/**
-	Marks the transaction as finalized/paid.
-	@param payment the payment method and ammount.
-	<dt><b>Precondition:</b><dd>
-	payment.getAmount() >= this.getSubTotal() + this.getTax()
-	payment has been verified
-	- for cash, the employee should visually inspect it.
-	- for credit, the dummy credit card machine class should verify it.
-	- for debit, the dummy debit machine class should verify it.
-	<dt><b>Postcondition:</b><dd>
-	The payment method and ammount is recorded in the transaction/invoice
 
 
-
-
-*/
 import java.util.ArrayList;
 import java.util.Date;
 /**
@@ -59,6 +45,7 @@ public class Transaction
 	// TODO: or should transactinID be set in constructor? what if a transaction is created and not paid (transaction is canceled)
 	private Date transactionDate; // date is set when payment is made
 	private ArrayList<TransactionItem> items;
+	private int paymentAmount;
 	private String paymentMethod;
 	private int subtotalInCents; // this will be modified whenever addTransaction() is called
 	private int taxInCents; // this will be set when payment method (checkOut() ) is called
@@ -85,7 +72,27 @@ public class Transaction
 		items = new ArrayList<TransactionItem>();
 	}
 	
-	
+	/**
+	Marks the transaction as finalized/paid.
+	@param payment the payment method and ammount.
+	<dt><b>Precondition:</b><dd>
+		<ul>
+			<li>payment.getAmount() >= thisTransaction.getSubTotal() + thisTransaction.getTax()</li>
+			<li>payment has been verified</li>
+				<ul>
+					<li>for cash, the employee should visually inspect it.</li>
+					<li>for credit, the dummy credit card machine class should verify it.</li>
+					<li>for debit, the dummy debit machine class should verify it.</li>
+				</ul>
+		</ul>
+	<dt><b>Postcondition:</b><dd>
+	The payment method and ammount is recorded in the transaction/invoice
+	*/
+	public Boolean markPaid(Payment payment)
+	{
+		paymentMethod = payment.getPaymentMethod();
+		paymentAmount = payment.getAmount();
+	}
 
 
 

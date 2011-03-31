@@ -4,6 +4,10 @@
  *      Stores general information of a movie
  *      @author mattp
  *	@version 1.0 March 27, 2011
+ *      @version 1.1 March 29
+ *              -changed the implementation of SKU
+ *              -fixed parameter naming
+ *              -fixed getActors()
  */
 import java.util.Date;
 import java.util.ArrayList;
@@ -17,21 +21,22 @@ public class GeneralMovie
     /**
      *  General movie constructor
      *  takes 5 default attributes
-     * @param title1 the title of a movie
-     * @param actors1 the actors of a movie
-     * @param director1 the director of a movie
-     * @param releaseDate1  the release date of a movie
-     * @param synopsis1 the brief description of a movie
+     * @param SKU the number uniquely identifies each movie catalog
+     * @param title the title of a movie
+     * @param actors the actors of a movie
+     * @param director the director of a movie
+     * @param releaseDate  the release date of a movie
+     * @param synopsis the brief description of a movie
      */
-    public GeneralMovie(String title1, String actors1[], String director1, Date releaseDate1, String synopsis1)throws SQLException
+    public GeneralMovie(int SKU, String title, String actors[], String director, Date releaseDate, String synopsis)throws SQLException
     {
-        titleCounter = 1;
         reservations = new ArrayList<Reservation>();
-        title = title1;
-        actors = actors1;
-        synopsis = synopsis1;
-        setActors(actors1);
-        setReleaseDate(releaseDate1);
+        this.title = title;
+        this.SKU = SKU;
+        this.actors = actors;
+        this.synopsis = synopsis;
+        setActors(actors);
+        setReleaseDate(releaseDate);
         setupConnection();
         addNewTitle();
     }
@@ -43,7 +48,7 @@ public class GeneralMovie
     public void reservationEnqueue(Reservation aReservation)throws SQLException
     {
             reservations.add(aReservation);
-            addReservation();
+            addReservation(aReservation);
     }
     /**
      * Remove the first reservation from the reservation list
@@ -57,16 +62,16 @@ public class GeneralMovie
     }
     /**
      * Create reservation query
+     * @param aReservation a reservation record
      * @throws SQLException
      */
-    final protected void addReservation() throws SQLException
+    final protected void addReservation(Reservation aReservation) throws SQLException
     {
         String table = "Reservation";
         String query = "insert into "+table
                 +"values ("+quote+title+quote+comma //movie title
-                           +quote+reservation.get(reservations.size())getCustomer().getAccountID()+quote+comma //account id of the customer
-                           +quote+reservation.get(reservations.size()).getDate()+quote //the date this movie is reserved
-                           +");";
+                           +quote+reservation.getCustomer().getAccountID()+quote+comma //account id of the customer
+                            +quote+reservation.getDate()+quote+");";//the date this movie is reserved 
 
         executeQuery(query);
     }
@@ -112,27 +117,34 @@ public class GeneralMovie
      */
     final protected void addNewTitle()throws SQLException
     {
-        String table="Video";
+        String table="Videoinfo";
         String query = "insert into"+table
-              +"values ("+quote+""+quote+comma
+              +"values ("+quote+""+quote+comma//infoID
                         +quote+title+quote+comma
                         +quote+director+quote+comma
                         +quote+releaseDate.getYear()+releaseDate.getMonth()+releaseDate.getDate()+quote+comma 
                         +quote+actors[0]+quote+comma
                         +quote+synopsis+quote+comma
-                        +quote+titleCounter+quote //sku 
+                        +quote+SKU+quote
                         +");";
 
         executeQuery(query);
-        titleCounter++; //auto increment sku number for each new catalog
+    }
+    /**
+    *   Get SKU
+    *  @param SKU the SKU uniquely identifies a movie catalog 
+    */
+    protected int getSKU()
+    {
+        return SKU;
     }
     /**
      * Set title
-     * @param title1 the title of a movie
+     * @param title the title of a movie
      */
-    protected void setTitle(String title1)
+    protected void setTitle(String title)
     {
-        title=title1;
+        this.title=title;
     }
     /**
      * Get movie title
@@ -144,11 +156,11 @@ public class GeneralMovie
     }
     /**
      * Set director
-     * @param director1 the director of a movie
+     * @param director the director of a movie
      */
-    protected void setDirector(String director1)
+    protected void setDirector(String director)
     {
-        director = director1;
+        this.director = director;
     }
     /**
      * Get director
@@ -160,13 +172,13 @@ public class GeneralMovie
     }
     /**
      * Set release date
-     * @param releaseDate1 the release date of a movie
+     * @param releaseDate the release date of a movie
      */
-    protected void setReleaseDate(Date releaseDate1)
+    protected void setReleaseDate(Date releaseDate)
     {
-        releaseDate.setYear(releaseDate1.getYear());
-        releaseDate.setMonth(releaseDate1.getMonth());
-        releaseDate.setDate(releaseDate1.getDate());
+        this.releaseDate.setYear(releaseDate.getYear());
+        this.releaseDate.setMonth(releaseDate.getMonth());
+        this.releaseDate.setDate(releaseDate.getDate());
     }
     /**
      * Get Release date
@@ -178,21 +190,21 @@ public class GeneralMovie
     }
     /**
      * Set actors
-     * @param actors1 the actor list of a movie
+     * @param actors the actor list of a movie
      */
-    protected void setActors(String actors1[])
+    protected void setActors(String actors[])
     {
-        if(actors1.length>ACTOR_COUNT)
+        if(actors.length>ACTOR_COUNT)
         {
             int count = ACTOR_COUNT;
-            while(actors1.length > count)//if the actor array doesn't have enough space, double its size
+            while(actors.length > count)//if the actor array doesn't have enough space, double its size
                count*=2;
             actors = new String[count];
         }
         else
             actors = new String[ACTOR_COUNT];
 
-        System.arraycopy(actors1, 0, actors, 0, actors1.length); //copy the actor list 
+        System.arraycopy(actors, 0, this.actors, 0, actors.length); //copy the actor list
     }
     /**
      * Get actors
@@ -201,18 +213,18 @@ public class GeneralMovie
     protected String getActors()
     {
         String actorList="";
-        for(int i =0;i<actors.length;i++)
-        actorList+=actors[i];
+        for(int i =0;actors[i]!=null&&i<actors.length;i++)
+          actorList+=actors[i]+",";
       
         return actorList;
     }
     /**
      * Set synopsis/description 
-     * @param synopsis1 the synopsis of a movie
+     * @param synopsis the synopsis of a movie
      */
-    protected void setSynopsis(String synopsis1)
+    protected void setSynopsis(String synopsis)
     {
-        synopsis = synopsis1;
+        this.synopsis = synopsis;
     }
     /**
      * Get synopsis/description
@@ -223,12 +235,12 @@ public class GeneralMovie
         return synopsis;
     }
     private String title;
+    private int SKU;
     private String actors[];
     private String director;
     private Date releaseDate;
     private String synopsis;
     private ArrayList reservations;
-    private int titleCounter;
     private Connection connection;
     private Statement statement;
     final private int ACTOR_COUNT=1;
