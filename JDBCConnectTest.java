@@ -10,22 +10,21 @@ public class JDBCConnectTest
   {
     JDBCConnectTest catfood = new JDBCConnectTest();
     catfood.doSelectTest();
-      System.out.println("test1 main");
+    System.out.println("DEBUG: end of main()");
   }
  
   public JDBCConnectTest()
   {
-      System.out.println("test penis");
+    System.out.println("DEBUG: begin JDCConnectTest() constructor");
     try
     {
-        System.out.println("test2 try ConnectTest");
       Class.forName("com.mysql.jdbc.Driver").newInstance();
-        System.out.println("after class");
       String url = "jdbc:mysql://174.132.159.251/kpoirier_CPSC2301";
       conn = DriverManager.getConnection(url, "kpoirier_User", "foobar");
-        System.out.println("test3 after connection is made");
       doTests();
+      System.out.println("DEBUG: before conn.close()");
       conn.close();
+      System.out.println("DEBUG: after conn.close()");
     }
     catch (ClassNotFoundException ex) {System.err.println(ex.getMessage());}
     catch (IllegalAccessException ex) {System.err.println(ex.getMessage());}
@@ -37,7 +36,7 @@ public class JDBCConnectTest
   {
     doSelectTest();
 
-    //doInsertTest();  doSelectTest();
+    doInsertTest();  doSelectTest();
     //doUpdateTest();  doSelectTest();
     //doDeleteTest();  doSelectTest();
   }

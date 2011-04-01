@@ -19,7 +19,10 @@ todo: update class diagram for transaction to version2
 - add method getCustomerFirstName()
 - add method getCustomerLastName()
 - add method getCustomerID()
-- add method 
+- add method getNumberOfItems()
+- add method getItemType(int itemNumber)
+- add method getItemName(int itemNumber)
+- add method getItemPrice(int itemNumber)
 
 - add method markPaid(PaymentMethod payment)
 
@@ -45,38 +48,228 @@ public class Transaction
 	// TODO: or should transactinID be set in constructor? what if a transaction is created and not paid (transaction is canceled)
 	private Date transactionDate; // date is set when payment is made
 	private ArrayList<TransactionItem> items;
+	
 	private int paymentAmount;
 	private String paymentMethod;
 	private int subtotalInCents; // this will be modified whenever addTransaction() is called
-	private int taxInCents; // this will be set when payment method (checkOut() ) is called
-	private boolean paid; // set to true if the transaction is finished and paid for. 
-	private CustomerAccount account; // the customer account being worked on 
+	private int taxInCents; // this will be modified whenever addTransaction() is called
+	private boolean paid; // set to true if the transaction is finished and paid for. addTransactionITem() should be disabled after payment is made.
+	//private Customer account; // the customer account being worked on 
+	private String customerFirstName;
+	private String customerLastName;
+	private String customerID;
+	private String employeeFirstName;
+	private String employeeID;
+	private double taxPercent;
 	
-	/**
+	
+	
+	//the signiture of this constructor in the class diagram seems incomplete, how would I know the employee name/id and tax percent
+	// the Customer object is passed to me, but then I can do things like account.setName("John likes poo"), that sounds bad. Maybe you shouldn't pass the Customer object and instead pass the information needed, the name/id/etc
+	/*
 		Constructs an empty transaction for the given customer.
 		@param account the customer account.
 		@param transactionID the id number of the transaction (aka invoice number).
+		@param taxPercent the percent the tax amount is as a double.
 		<dt><b>Precondition:</b><dd>
-		The customer account exists and is able to rent movies (account.getStatus() == true).
-		The transactionID should be a positive number and be the smallest id that does not yet exist in the database.
+			<ul>
+				<li>The customer account exists and is able to rent movies (account.getStatus() == true).</li>
+				<li>The transactionID should be a positive number and be the smallest id that does not yet exist in the database.</li>
+			</ul>
 		<dt><b>Postcondition:</b><dd>
-		The transaction/invoice is associated with the customer
-	*/
-	//status: not done
-	public Transaction(CustomerAccount account, int transactionID)
+			<ul>
+				<li>The transaction/invoice is associated with the customer</li>
+			</ul>
+	
+	//status: 
+	public Transaction(Customer account, int transactionID, double taxPercent)
 	{
+		
+		this(account.getFname(),
+			account.getLname(),
+			account.getAccountID(),
+			"employeeName goes here",
+			"employeeID goes here",
+			transactionID,
+			taxPercent);
+	}*/
+	/**
+		Constructs an empty transaction for the given customer name and id. I made this other constructor because I don't think you should pass the customer's Account object to the 1st Transaction constructor. If you did, then this class can do things like thisAccount.setName("newName").
+		@param firstName the first name of the customer account.
+		@param lastName the last name of the customer account.
+		@param customerID the customer's membership card number.
+		@param employeeName the first name of the employee that initially handled the transaction.
+		@param employeeID the employee's id.
+		@param transactionID the id number of the transaction (aka invoice number).
+		@param taxPercent the percent the tax amount is as a double.
+		<dt><b>Precondition:</b><dd>
+			<ul>
+				<li>The customer account exists and is able to rent movies (account.getStatus() == true).</li>
+				<li>The transactionID should be a positive number and be the smallest id that does not yet exist in the database.</li>
+			</ul>
+		<dt><b>Postcondition:</b><dd>
+			<ul>
+				<li>The transaction/invoice is associated with the customer</li>
+			</ul>
+	*/
+	public Transaction(String firstName, String lastName, String customerID, String employeeName, String employeeID, int transactionID, double taxPercent)
+	{
+		this.customerFirstName = firstName;
+		this.customerLastName = lastName;
+		this.customerID = customerID;
+		this.employeeFirstName = employeeName;
+		this.employeeID = employeeID;
 		this.transactionID = transactionID;
-		this.account = account;
+		this.taxPercent = taxPercent;
 		paid = false;
 		paymentMethod = "";
 		items = new ArrayList<TransactionItem>();
 	}
 	
+
+	
+	
+	
+	
+	
+	
+	/**
+		Checks if this transaction has been paid yet.
+		@return true if this transaction has been paid for.
+	*/
+	public boolean isPaid()
+	{
+		return paid;
+	}
+	
+	/**
+		Gets the customer's first name that is associated with this transaction.
+		@return the customer's first name.
+	*/
+	public String getCustomerFirstName()
+	{
+		return customerFirstName;
+	}
+	
+	/**
+		Gets the customer's last name that is associated with this transaction.
+		@return the customer's first name.
+	*/
+	public String getCustomerLastName()
+	{
+		return customerLastName;
+	}
+	
+	/**
+		Gets the customer's ID that is associated with this transaction.
+		@return the customer's ID.
+	*/
+	public String getCustomerID()
+	{
+		return customerID;
+	}
+	
+	/**
+		Gets the employee's first name that handled this transaction.
+		@return the employee's first name.
+	*/
+	public String getEmployeeName()
+	{
+		return employeeFirstName;
+	}
+	
+	/**
+		Gets the employee's ID that handled this transaction.
+		@return the employee's ID name.
+	*/
+	public String getEmployeeID()
+	{
+		return employeeID;
+	}
+	
+	/**
+		Gets the number of items in this transaction.
+		@return the number of transaction items.
+	*/
+	public int getNumberOfItems()
+	{
+		return items.size();
+	}
+	/**
+		Returns the type that the item is (Video Rental, Video Sale, Discount, etc).
+		@param lineNumber the line number of the transaction item you wish to get info on (first item is index 1).
+		@return the type of transaction item.
+		@throws IndexOutOfBoundsException if the index is out of range (lineNumber less than 0 or greater than this.getNumberOfItems())
+	*/
+	public String getItemType(int lineNumber)
+	{	
+		int numberOfItems = items.size();
+		if (numberOfItems == 0)
+		{
+			throw new IndexOutOfBoundsException("There are no items.");
+		}
+		else if (lineNumber > numberOfItems || lineNumber < 0)
+		{
+			throw new IndexOutOfBoundsException("lineNumber is out of range.");
+		}
+		//todo: find out method name of TransactionItem that lets you get its type
+		return items.get(lineNumber).getType();
+	}
+		
+	/**
+		Gets the name of the item (Name of the movie or name of the discount, etc).
+		@param lineNumber the line number of the transaction item you wish to get info on (first item is index 1).
+		@return the name of the transaction item.
+		@throws IndexOutOfBoundsException if the index is out of range (lineNumber less than 0 or greater than this.getNumberOfItems())
+	*/
+	public String getItemName(int lineNumber)
+	{		
+		int numberOfItems = items.size();
+		if (numberOfItems == 0)
+		{
+			throw new IndexOutOfBoundsException("There are no items.");
+		}
+		else if (lineNumber > numberOfItems || lineNumber < 0)
+		{
+			throw new IndexOutOfBoundsException("lineNumber is out of range.");
+		}
+		
+		//todo: find out method name of TransactionItem that lets you get its name
+		return items.get(lineNumber).getName();
+	}
+	
+	/**
+		Gets the price of the item.
+		@param lineNumber the line number of the transaction item you wish to get info on (first item is index 1).
+		@return the price of the transaction item in cents.
+		@throws IndexOutOfBoundsException if the index is out of range (lineNumber less than 0 or greater than this.getNumberOfItems())
+	*/
+	public int getItemPrice(int lineNumber)
+	{		
+		int numberOfItems = items.size();
+		if (numberOfItems == 0)
+		{
+			throw new IndexOutOfBoundsException("There are no items.");
+		}
+		else if (lineNumber > numberOfItems || lineNumber < 0)
+		{
+			throw new IndexOutOfBoundsException("lineNumber is out of range.");
+		}
+		
+		//todo: find out method name of TransactionItem that lets you get its name
+		return items.get(lineNumber).getPrice();
+	}
+	
+	
+	
+	
 	/**
 	Marks the transaction as finalized/paid.
 	@param payment the payment method and ammount.
+	@throws IllegalStateException if the Transaction has already been paid for or if the amount is not enough
 	<dt><b>Precondition:</b><dd>
 		<ul>
+			<li>The transaction has not been paid for.</li>
 			<li>payment.getAmount() >= thisTransaction.getSubTotal() + thisTransaction.getTax()</li>
 			<li>payment has been verified</li>
 				<ul>
@@ -86,12 +279,27 @@ public class Transaction
 				</ul>
 		</ul>
 	<dt><b>Postcondition:</b><dd>
-	The payment method and ammount is recorded in the transaction/invoice
+		<ul>
+			<li>The payment method and ammount is recorded in the transaction/invoice</li>
+			<li>Transaction items can not be added anymore.</li>
+			<li>The transaction has been marked as paid and this.isPaid() returns true.</li>
+		</ul>
+	
 	*/
-	public Boolean markPaid(Payment payment)
+	public boolean markPaid(Payment payment)
 	{
+		if (paid == true)
+		{
+			throw new IllegalStateException("Transaction has already been paid for.");
+		}
+		else if (payment.getAmount() < this.getSubTotal() + this.getTax())
+		{
+			throw new IllegalStateException("Payment amount is not enough.");
+		}
+		paid = true;
 		paymentMethod = payment.getPaymentMethod();
 		paymentAmount = payment.getAmount();
+		return true;
 	}
 
 
@@ -110,40 +318,91 @@ public class Transaction
 		Adds a transaction item to the current transaction.
 		@param line the transaction item to add
 		<dt><b>Precondition:</b><dd>
-		Payment for the transaction has not been made.
+			<ul>
+				<li>Payment for the transaction has not been made (thisTransaction.isPaid() == false).</li>
+			</ul>
+		<dt><b>Postcondition:</b><dd>
+			<ul>
+				<li>The subtotal for the transaction is updated.</li>
+				<li>The total tax amount is updated.</li>
+			</ul>
 	*/
-	//status: done
 	public void addTransactionItem(TransactionItem item)
 	{
-		items.add(item);	
+		if (paid == true)
+		{
+			throw new IllegalStateException("Transaction has already been paid for.");
+		}
+		//System.out.println("Size 1: " + items.size());
+		items.add(item);
+		//System.out.println("Size 2: " + items.size());
+		subtotalInCents += item.getPrice();
+		taxInCents = (int)(taxPercent * subtotalInCents);
 	}
 	
 	/**
 		Removes a transaction item from the transaction.
 		@param lineNumber the item you want to remove from the transaction.
-		@retrun returns true if the transaction item was removed.
+		@return returns true if the transaction item was removed.
+		@throws IndexOutOfBoundsException if the index is out of range (lineNumber less than 0 or greater than this.getNumberOfItems())
+		<dt><b>Precondition:</b><dd>
+		<ul>
+			<li>(lineNumber is betwen 1 and this.getNumberOfItems(), inclusive)</li>
+		</ul>
+		<dt><b>Postcondition:</b><dd>
+		<ul>
+			<li>The transaction item associated with the lineNumber is removed. All other item's line numbers are shifted down</li>
+		</ul>
 	*/
-	//status: done
 	public boolean removeTransactionItem(int lineNumber)
 	{
-		return items.remove(lineNumber);
+		int numberOfItems = items.size();
+		if (numberOfItems == 0)
+		{
+			throw new IndexOutOfBoundsException("There are no items to remove, list is empty.");
+		}
+		else if (lineNumber > numberOfItems || lineNumber < 0)
+		{
+			throw new IndexOutOfBoundsException("lineNumber is out of range.");
+		}
+		items.remove(lineNumber - 1);
+		if (numberOfItems - 1 == items.size())
+			return true;
+		else
+			return false;
 	}
 	
 	/**
-	 * Removes the last transaction item added.
-	 * @return returns true if the last transaction was successfuly removed.
+		Removes the last transaction item added.
+		@return returns true if the last transaction was successfuly removed.
+		@throws IndexOutOfBoundsException if the list is empty
+		<dt><b>Precondition:</b><dd>
+		<ul>
+			<li>The number of items in the transaction is not zero</li>
+		</ul>
+		<dt><b>Postcondition:</b><dd>
+		<ul>
+			<li>The last transaction item added is removed.</li>
+		</ul>
 	 */
-	//status: done, double check this method works with empty items list.
 	public boolean removeLastTransactionItem()
 	{
-		return items.remove(items.size());
+		int numberOfItems = items.size();
+		if (numberOfItems == 0)
+		{
+			throw new IndexOutOfBoundsException("There are no items to remove, list is empty");
+		}
+		items.remove(items.size() - 1);
+		if (numberOfItems - 1 == items.size())
+			return true;
+		else
+			return false;
 	}
 
 	/**
 		Gets the date of the transaction. The date of the transaction is set after payment is made and the transaction is finished.
 		@return the date the transaction was completed.
 	*/
-	//status: done
 	public Date getDate()
 	{
 		return transactionDate;
@@ -153,7 +412,6 @@ public class Transaction
 		Gets the total tax ammount for the transaction in cents.
 		@return the total tax ammount for the transaction in cents.
 	*/
-	//status: done
 	public int getTax()
 	{
 		return taxInCents;
@@ -163,7 +421,6 @@ public class Transaction
 		Gets the sub total for the transaction in cents.
 		@return the sub total for the transaction in cents.
 	*/
-	//status: done
 	public int getSubTotal()
 	{
 		return subtotalInCents;
@@ -174,67 +431,96 @@ public class Transaction
 		Gets the total for the transaction in cents.
 		@return the total for the transaction cents.
 	*/
-	//status: done
 	public int getTotal()
 	{
 		return subtotalInCents + taxInCents;
 	}
-	
-	/**
+
+
+/*
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		Make a payment for the transaction by cash. After a transaction is paid for, items should not be allowed to be added to the transaction anymore.
 		@param ammount the ammount of cash used to pay for the transaction if the payment method is cash.
 		<dt><b>Postcondition:</b><dd>
 		addTransactionItem() method will not add anymore items
-	*/
+
 	public boolean checkoutByCash(int ammount)
 	{
 	}
 	
-	/**
+
 		Make a payment for the transaction by credit card.
 		@return true if the payment was successful.
 		<dt><b>Postcondition:</b><dd>
 		addTransactionItem() method will not add anymore items
-	*/
+
 	public boolean checkoutByCredit()
 	{
 	}
 	
-	/**
+
 		Make a payment for the transaction by debit.
 		@param ammount the ammount of cash used to pay for the transaction if the payment method is cash.
 		<dt><b>Postcondition:</b><dd>
 		addTransactionItem() method will not add anymore items
-	*/
+
 	public boolean checkoutByDebit()
 	{
 	}
 	
-	/**
+
 		Prints a reciept.
 		<dt><b>Precondition:</b><dd>
 		The transaction has been paid for.
-	*/
+
 	public void printReciept()
 	{
 	}
 	
-	/**
+
 		Returns the contents of the reciept as a string.
 		<dt><b>Precondition:</b><dd>
 		The transaction has been paid for.
-	*/
+
 	public String printRecieptString()
 	{
 	}
-	
+////////////////////////////////////////////////////////////////////////////////////////////////////////	
+*/
 	/**
-		Returns a String object representing this Transaction.
+		Returns a String object representing this Transaction (for debuging).
 		@return a string representatin of this transaction.
 	*/
 	public String toString()
 	{
-		return "not done, fill this in if it is needed for testing";
+		String newline = System.getProperty("line.separator");
+		String myTransaction = "Transaction ID: " + transactionID + newline;
+		myTransaction += "Date: " + transactionDate + newline;
+		
+		myTransaction += "Number of Items: " + items.size() + newline;
+		
+		int i = 1;
+		if (items.size() != 0)
+			myTransaction += "      - Item Type - Item name - Item price" + newline;
+		for (i = 0; i < items.size(); i++)
+		{
+			myTransaction += "Item " + (i+1) + ": " + this.getItemType(i) + " - " + this.getItemName(i) + " - " + this.getItemPrice(i) + newline;
+		}
+		
+		if (paid)
+		{
+			myTransaction += "Paid: Yes" + newline;
+			myTransaction += "Method of Payment: " + paymentMethod + newline;
+			myTransaction += "Amount of money given (in cents): " + paymentAmount + newline;
+			myTransaction += "Change: " + (paymentAmount - subtotalInCents - taxInCents) + newline;
+		}
+		else
+		{
+			myTransaction += "Paid: No" + newline;
+		}
+		
+		return myTransaction;
 	}
 	
 	
