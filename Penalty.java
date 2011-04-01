@@ -4,7 +4,7 @@
 *	@auther mattp
 *	@version 1.0 March 22, 2011
 */
-public class Penalty
+public class Penalty extends TransactionItem
 {
 	/**
                 Constructor with 2 parameters
@@ -17,6 +17,7 @@ public class Penalty
 		setPenaltyPerDay(movie.getMediaType());
 		overdueDates = overdueDates1;
 		calculate();
+		movieName = movie.getName();
 	}
 	/**
 		Set penalty per day according to media type
@@ -47,6 +48,33 @@ public class Penalty
 		overdueFee = penaltyPerDay * numberOfDays;
 	}
 	
+	/**
+		Gets the price in cents of this item (aka the over due fee amount)
+		@return the price of this item in cents.
+	*/	
+	public int getPrice()
+	{
+		return (int)getOverdueFee();
+	}
+	/**
+		Gets the name of the movie this penalty is for.
+		@return the name of the movie this penalty is for
+	*/
+	public String getName()
+	{
+		return movieName;
+	}
+	/**
+		Gets the type the item is (example: Promo, Rental movie, Penalty, SaleMovie).
+		@return the type this item is (Penalty).
+	*/
+	public String getType()
+	{
+		return type;
+	}
+	
+	private String type = "Penalty";
+	private String movieName;
 	private double overdueFee;
 	private int numberOfDays;
 	private double penaltyPerDay;
