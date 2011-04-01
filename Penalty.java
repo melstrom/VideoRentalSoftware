@@ -4,7 +4,7 @@
 *	@auther mattp
 *	@version 1.0 March 22, 2011
 */
-public class Penalty extends TransactionItem
+public class Penalty implements TransactionItem
 {
 	/**
                 Constructor with 2 parameters

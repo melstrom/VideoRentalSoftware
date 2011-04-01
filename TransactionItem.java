@@ -10,7 +10,7 @@ public interface TransactionItem
 		this.price = price;
 	}
 */
-	String getType()
-	String getName()
-	int getPrice() // price in cents
+	String getType();
+	String getName();
+	int getPrice(); // price in cents
 }
