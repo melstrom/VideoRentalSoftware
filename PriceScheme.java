@@ -1,6 +1,6 @@
 package pricescheme;
 import java.sql.*;
-import JDBCConnect;
+import JDBCConnect;//kristan's stuff
 import java.io.IOException;
 
 /**
@@ -30,8 +30,10 @@ import java.io.IOException;
  * User PLEASE notice the number scheme of the arrays and the number scheme of
  * the table in database are not the same.
  *
+ *Also, there is also a chance that a price is empty(null).
+ *
  * Also keep in mind that the price is in cents, not in dollar, even though the
- * example above has prices less than 10.
+ * example above has prices less than 100.
  *
  * @author kevin
  */
@@ -203,24 +205,6 @@ int
     public int getNumOfFormats()
     {
         return formats.length;
-    }
-
-    public String getCategory(int i)
-            throws IOException
-    {
-        if(i < category.length)
-            return category[i];
-        else
-            throw new IOException("Index number out of bound.");
-    }
-
-    public String getFormat(int i)
-            throws IOException
-    {
-        if(i < formats.length)
-            return formats[i];
-        else
-            throw new IOException("Index number out of bound.");
     }
 
     private int[][] prices;
