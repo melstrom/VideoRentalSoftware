@@ -1,10 +1,11 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Inventory / Reservation
+ * Entity Class
  */
 
 package Inventory;
 
+import java.util.Date;
 import Account.CustomerAccount;
 
 /**
@@ -14,42 +15,69 @@ import Account.CustomerAccount;
 public class Reservation {
 
     /**
-     * Reservation is the constructor for this class.
+     * Customer who make the reservation.
      */
-    public Reservation(){
-      //default class
+    private CustomerAccount customer;
+
+    /**
+     * Date for pickup.
+     */
+    private Date pickupDate;
+
+
+    /**
+     * Reservation is the constructor for this class. 
+     * It takes a customer object and a Date object to make a reservation.
+     * @param reserveAcc Account object of Customer who make the reservation.
+     * @param reservePickupdate Date for pickup.
+     * @pre reserveCustomer a valid CustomerAccount object.
+     * @pre pickupDate > today.
+     * @post Object Reservation created.
+     */
+    public Reservation(CustomerAccount reserveAcc, Date reservePickupdate){
+      customer = reserveAcc;
+      pickupDate = reservePickupdate;
+    }
+
+
+    /**
+     * accessors - Get the customer account.
+     * @return account of the customer who makes the reservation
+     * @pre customer not null.
+     * @post return customer.
+     */
+    public CustomerAccount getAccount(){
+        return customer;
     }
 
     /**
-     * process Movie Reservation.
-     * @param movie movie to be reserve.
-     * @param customer Customer who whats to reserve the movie.
-     * @return reqID request ID.
+     * accessors - Get the reservation date.
+     * @return reservation date.
+     * @pre pickupDate not null.
+     * @post return pickupDate.
      */
-    public int process(IndividualMovie movie, CustomerAccount customer){
-
-        int reservationID;
-
-        reservationID = updateDB(prepareQuery(movie, customer));
-
-        return reservationID;
-
+    public Date getDate(){
+        return pickupDate;
     }
 
-    private String prepareQuery(IndividualMovie movie, CustomerAccount customer){
-    // formate date into Quere Sting
-        String query = "123";
-        return query;
+     /**
+     * accessors - Set the customer account.
+     * @param acc account to replace existing account.
+     * @pre acc is a valid CustomerAccount object.
+     * @post new account replaced.
+     */
+    public void setAccount(CustomerAccount acc){
+        customer = acc;
     }
 
-    private int updateDB( String query){
-      int reservationID = 99;
-    // Database connction code.
-
-      return reservationID;
-    }
-
-    //IndividualMovie movie;
-    //CustomerAccount customer;
+    /**
+     * accessors - Set the reservation date.
+     * @param date new reservation date to be set.
+     * @pre date is a valid Date object.
+     * @post new date replaced.
+     */
+    public void GetDate(Date date){
+        pickupDate = date;
+    }   
 
 }
