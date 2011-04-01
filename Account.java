@@ -108,7 +108,7 @@ public class Account
      * Get account ID
      * @return phoneNum the account ID of the account
      */
-    public int getAcccountID()
+    public int getAccountID()
     {
         return accountID;
     }
