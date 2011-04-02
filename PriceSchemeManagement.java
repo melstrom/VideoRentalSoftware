@@ -1,230 +1,315 @@
-package pricescheme;
+package inventory;
 import java.sql.*;
-import JDBCConnect;
 import java.io.IOException;
+//import JDBCConnection;//kristan's stuff
 
 /**
- *This is the class that implements the price scheme table in the database.
- * A sample of the price scheme table in the database:
- *
- * Category_Name    VHS     DVD     Blu-ray
- * New Release       3       4         6
- * 7 Days Rental     1       2         4
- * Weekly Special    1      2.5        4
- * For Sale          4      25         45
- *
- * The object of the PriceScheme class will store the prices and also the
- * category names. In this example, attribute int[][] price will be
- *        [0]  [1] [2]
- * [0]     3    4   6
- * [1]     1    2   4
- * [2]     1    2.5 4
- * [3]     4    25  45
- * Attribute String[] scheme will be:
- *      [0]             [1]                    [2]              [3]
- * "New Release"    "7 Days Rental"     "Weekly Special"    "For Sale"
- * Attribute String[] format will be:
- * [0]      [1]      [2]
- * VHS      DVD     Blu-ray
- *
- * User PLEASE notice the number scheme of the arrays and the number scheme of
- * the table in database are not the same.
- *
- * Also keep in mind that the price is in cents, not in dollar, even though the
- * example above has prices less than 10.
- *
- * @author kevin
- */
-public class PriceScheme
+*This is the control object for the PriceScheme class. It hold a PriceScheme object for quick reference for prices.
+*Every time there is a valid change request such as adding a new category, a new format, or setting price for specific
+*category and format, the attribute PRICE_SCHEME will be re-constructed again. Because the behavior of those 
+*methods directly change the PriceSchem table in the database.  Keep in mind that the classPriceShceme is just a 
+*entity class.
+*For the PriceSchemeManagement, PriceScheme and for IndividualMovie, category and format pair up implicitly define 
+*the price.
+*@author kevin
+*/
+public class PriceSchemeManagement
 {
-    /**
-     * This constructor will extract all the information of the table
-     * PriceScheme and store it into the PriceScheme object.
-     * @throws SQLException If there is anything wrong with the database, this exception will be thrown.
-     */
-    public PriceScheme()
-            throws SQLException
-    {
-        /*
-         * Kristan's connection stuff here
-         */
-        try
-        {
-            PreparedStatement stat = conn.prepareStatement("SELECT * FROM PriceScheme");
-            ResultSet result = stat.executeQuery();
-            ResultSetMetaData metaData = result.getMetaData();
+	/**
+	*The ordinary constructor. It will initiate the PRICE_SCHEME attribute.
+	*/
+	public PriceSchemeManagement()
+			throws SQLException
+	{
+		PRICE_SCHEME = new PriceScheme();
+	}
 
-            //Configure numOfCols
-            int numOfCols = metaData.getColumnCount()-1; // because the first column
-                                                     //is the name of the format.
-
-            //Configure format
-            for(int i = 0; i< numOfCols; i++)
-                formats[i] = metaData.getColumnLabel(i + 2);
-
-            //Configure category
-            ResultSet tempResult = result;
-            int numOfRows = 0;
-            while(tempResult.next())
-                category[numOfRows++] = result.getString(1).toLowerCase();
-                //the first column of the table is the name of the category
-
-            //Configure prices
-            prices = new int[numOfRows][numOfCols];
-            for(int i = 0; i < numOfRows; i++)
-                for(int j = 0; result.next(); j++)
-                    prices[i][j] = result.getInt(j + 2);
-                    //the index number for the ResultSet's get method is 2
-                    //larger than the index of column at this case
-        }
-        finally
-        {
-            conn.close();
-        }
-    }
-
-
-    /**
-     *This method will return the price of the movie with corresponding category
-     * and format defined.
-     * @param cat the name of the category of the IndividualMovie
-     * @param form the name of the media(format) of the IndividualMovie
-     * @return int the price in cents
-     * @throws IOException If the parameter that is passed to this method cannot
-     * be found in the arrays (category and format), then IOException will be
-     * thrown indicates that the name(s) is(are) wrong
-     */
-    /*public int getPrice(String cat, String form)
-            throws IOException
-    {
-        int row = 0;
-        int col = 0;
-        boolean isCatCorrect = false;
-        boolean isFormCorrect = false;
-int
-        //examine the correctness of input cat
-        for(; row < category.length; row++)
-            if(category[row].equals(cat))
-            {
-                isCatCorrect = true;
-                break;
-            }
-
-        //examine the correctness of input med
-        for(; col < formats.length; col++)
-            if(formats[col].equals(form))
-            {
-                isFormCorrect = true;
-                break;
-            }
-
-        if(isCatCorrect && isFormCorrect)
-        //when both the string cat and med exist in the array category and format
-            return prices[row][col];
-        else
-        //if any or both of them is false
-            throw new IOException("Name of the Category or/and Format is not correct.");
-    }*/
-
-    /**
-     *This method takes the index number of the array prices, and return the
-     * value in that particular entry. Make sure you know the index number well
-     * when using this method, because misunderstanding cannot be detected.
-     * @param cat the number of the row, also can be think as the index of category
-     * @param med the number of the columns, also can be think as the index of format
-     * @return int the price in cents
-     * @throws IOException If the cat and/or med is larger than the length of the
-     * arrays, this exception will be thrown.
-     */
-    public int getPrice(int cat, int form)
-            throws IOException
-    {
-        if(cat <= category.length && form <= formats.length)
-            return prices[cat][form];
-        else
-            throw new IOException("Index number out of bound");
-    }
-
-    /**
-     * The Category_Name attribute with corresponding index number of the table
-     * PriceScheme will be returned. Pay attention to the number that pass to
-     * the method. The first category starts at 0 for this method; whereas, in
-     * the database, the first attribute starts at 1.
-     * @param cat The index number of the record
-     * @return String The name of the category
-     * @throws IOException If the number passed to this method exceed the boundary
-     * of the array category
-     */
-    public String getCategoryName(int cat)
-            throws IOException
-    {
-        if(cat < category.length)
-            return category[cat];
-        else
-            throw new IOException("Index number out of bound");
-    }
-
-    /**
-     * The name of the column in the PriceScheme table in the database. Pay
-     * attention to the number that pass to this method. The first column/element
-     * starts at 0; whereas, in the database, it starts at 1.
-     * @param form The index number for the array that the caller method want to
-     * know
-     * @return String The name of the format.
-     * @throws IOException If the number passed to this method exceed the boundary
-     * of the array format
-     */
-    public String getFormatName(int form)
-            throws IOException
-    {
-        if(form < formats.length)
-            return formats[form];
-        else
-            throw new IOException("Index number out of bound");
-    }
-
-    /**
-     *Ordinary getter method that get the number of category stored in the database.
-     *This method can also be used to obtain the number of records/rows in the
-     * PriceScheme table in the database.
-     * @return int the number of categories
-     */
-    public int getNumOfCategory()
-    {
-        return category.length;
-    }
-
-    /**
-     *Ordinary getter method that get the number of format stored in the database.
-     * This method can also be used to obtain the number of columns in the PriceScheme
-     * table in the database.
-     * @return int the number of formats.
-     */
-    public int getNumOfFormats()
-    {
-        return formats.length;
-    }
-
-    public String getCategory(int i)
-            throws IOException
-    {
-        if(i < category.length)
-            return category[i];
-        else
-            throw new IOException("Index number out of bound.");
-    }
-
-    public String getFormat(int i)
-            throws IOException
-    {
-        if(i < formats.length)
-            return formats[i];
-        else
-            throw new IOException("Index number out of bound.");
-    }
-
-    private int[][] prices;
-    private String[] category;
-    private String[] formats;
+	/**
+	*This method will return the price of a movie that with valid category name and format name specified.
+	* And this should be the only way to get a price.
+	*IMPORTANT FOR DEVELOPERS: Situation like "NewRelease" is passed to here, but inside the PriceScheme 
+	*table, the category name is "New_Release" may happen!!! So, before you implementing your class, double check
+	*the naming scheme of tables among the database! 
+	*If you wonder why it takes strings as parameter but not int? Because there is no gaurenteed the order of category
+	*in the database. (For more info, please look at the documentation of the PriceScheme class.)
+	*@param String cat The name of the category
+	*@param String form The name of the format.
+	*@return int the price with the parameters specified.
+	*@throws IOException If cat and/or form cannot be found in the PriceScheme object, this exception will be
+	*thrown.
+	*/
+	public int getPrice(String cat, String form)
+			throws IOException
+	{
+		int row = 0;
+		int col = 0;
+		boolean isCatCorrect = false;
+		boolean isFormCorrect = false;
+		
+		//examine the correctness of the input cat
+		for(;row <PRICE_SCHEME.getNumOfCategory(); row++)
+			if(PRICE_SCHEME.getCategoryName(row).equals(cat))
+			{
+				isCatCorrect = true;
+				break;
+			}
+		//examine the correctness of the input form
+		for(; PRICE_SCHEME.getNumOfFormats(); col++)
+			if(PRICE_SCHEME.getFormatName(col).equals(form))
+			{
+				isFormCorrect = true;
+				break;
+			}
+		
+		if(isCatCorrect && isFormCorrect)
+		//when both the string cat and form exist in the array category and format
+			PRICE_SCHEME.getPrice(row, col);
+		else
+		//if any or both of them is false
+			throw new IOException("Name of the Category or/and Format is not correct.");
+	}
+	
+	/**
+	* This method should be used for testing purpose. 
+	*@param  int row the index of the row in the array attribute of PRICE_SCHEME
+	*@param int col the index of column in the array attribute of PRICE_SCHEME
+	*@return int the price
+	*/
+	public int getPrice(int row, int col)
+	{
+		return PRICE_SCHEME.getPrice(row, col);
+	}
+	
+	/**
+	*This method will set particular value in the database with valid category name and format
+	*name given.
+	*@post the value at the particular cell will changed to priceInCents
+	*@param String cat the category name
+	*@param String form the format name
+	*@param int priceInCents the new price
+	*@throws IOException  If cat and/or form cannot be found in the PriceScheme object, this exception will be
+	*thrown.
+	*@throws SQLException database error.
+	*/
+	public void setPrice(String cat, String form, int priceInCents)
+			throws IOException, SQLException
+	{
+		if(priceInCents < 0)
+			throw new IOException("Price cannot be smaller than 0.");
+		boolean isCatCorrect = false;
+		boolean isFormCorrect = false;
+		//examine the correctness of the input cat
+		for(int row = 0; row <PRICE_SCHEME.getNumOfCategory(); row++)
+			if(PRICE_SCHEME.getCategoryName(row).equals(cat))
+			{
+				isCatCorrect = true;
+				break;
+			}
+		//examine the correctness of the input form
+		for(int col = 0; PRICE_SCHEME.getNumOfFormats(); col++)
+			if(PRICE_SCHEME.getFormatName(col).equals(form))
+			{
+				isFormCorrect = true;
+				break;
+			}
+		
+		if(isCatCorrect && isFomrCorrect)
+		{
+			/*
+			 *Kristan's stuff here
+			 */
+			conn.getConnection();
+			try
+			{
+				PreparedStatement stat = conn.prepareStatement("UPDATE PriceScheme "
+					+ " SET "+ form + " =" + priceInCents + "WHERE Category_Name LIKE "
+					+ cat + ";");//mySQL command for setting price for paritcular format under 
+							 //particular category.
+				stat.executeUpdate();
+				//re-construct the PriceScheme object after change.
+				PRICE_SCHEME = new PriceScheme();
+			}
+			finally
+			{
+				conn.close();
+			}
+		}
+		else
+			throw new IOException("Category and/or Format cannot be found in the database.");
+	}
+	
+	/**
+	*This method will add a new category to the PriceScheme table in the database. BUT, all the price for this 
+	*category regarding to each format is not defined yet. 
+	*For example, originally, it was:
+	*
+	*[Category_Name]		[VHS]		[DVD]		[Blu-ray]
+	*New Release			200		500		800
+	*7-Day				150		350		650
+	*
+	*Then if I call addCategory("go to bed"), it will becomes:
+	*
+	*[Category_Name]		[VHS]		[DVD]		[Blu-ray]
+	*New Release			200		500		800
+	*7-Day				150		350		650
+	*go to bed									
+	*
+	*So, the UI guy (Albert) should design the GUI to guild the manager to set the price for the empty columns.
+	*@post a new record is added to the PriceScheme table in the database, but the prices are not set up yet.
+	*@param String newCat the name of the new category
+	*@throws IOException If the newCat has already existed in the PriceScheme table, this exception.
+	*@throws SQLException Database error.
+	*/
+	public void addCategory(String newCat)
+			throws IOException, SQLException
+	{
+		boolean catExist = false;
+		for(int i = 0; i < PRICE_SCHEME.getNumOfCategory(); i ++)
+			if(PRICE_SCHEME.getCategoryName(i).equals(newCat))
+			{
+				catExist = true;
+				break;
+			}
+		if(catExist)
+			throw new IOException("The category already exists in the database.");
+		else
+		{
+			/*
+			 *Kristan' stuff
+			 */
+			conn.getConnection();
+			try
+			{
+				PreparedStatement stat = conn.prepareStatement("INSERT INTO PriceScheme "
+						+ " Category_Name = " + newCat + ";");
+				stat.execute();
+				PRICE_SCHEME = new PriceScheme();
+			}
+			finally
+			{
+				conn.close();
+			}
+		}
+	}
+	
+	
+	/**
+	*This method is similar to the addCategory() method that only adds the a new column to the PriceScheme table in
+	*the database, but prices are not specified after this method.
+	*GUI guy should guild the manager to set the missing prices.
+	*@post a new column is added to the table.
+	*@param newForm the name of the new format.
+	*@throws IOException if the newForm has already existed in the  PriceScheme table.
+	*@throws SQLException database error.
+	*/
+	public void addFormat(String newForm)
+			throws IOException, SQLException
+	{
+		boolean formExist = false;
+		for(int i = 0; i < PRICE_SCHEME.getNumOfFormats(); i++)
+			if(PRICE_SCHEME.getFormatName(i).equals(newForm))
+			{
+				formExist = true;
+				break;
+			}
+		if(formExist)
+			throw new IOException("The format already exists in the database.");
+		else
+		{
+			/*
+			 * Kristan's stuff
+			 */
+			conn.getConnection();
+			try
+			{
+				PreparedStatement stat = conn.prepareStatement("ALTER TABLE PriceScheme "
+						+ "ADD " + newForm + " INT;");
+				stat.execute();
+				PRICE_SCHEME = new PriceScheme();
+			}
+			finally
+			{
+				conn.close();
+			}
+		}
+	}
+	
+	/**
+	*This method delete a category and all the prices that is associate with it.
+	*@post the number of record in the PriceScheme table is 1 less than before.
+	*@param String cat the name of the category that  wanted to be deleted.
+	*@throws IOException If the category name in the parameter does not 
+	*exist in the PriceScheme.
+	*@throws SQLException database error.
+	*/
+	public void removeRecord(String cat)
+		throws IOException, SQLException
+	{
+		boolean isCatCorrect = flase;
+		for(int i = 0; i < PRICE_SCHEME.getNumOfCategory; i++)
+			if(PRICE_SCHEME.getCategoryName(i).equals(cat))
+			{
+				isCatCorrect = true;
+				break;
+			}
+		if(isCatCorrect)
+		{
+			/*
+			*Kristan's stuff here
+			*/
+			conn.getConnection();
+			try
+			{
+				PreparedStatement stat = conn.prepareStatement("DELETE  FROM PriceScheme "
+						+ "WHERE Category_Name LIKE" + cat);
+				stat.execute();
+			}
+			finally
+			{
+				conn.close();
+			}
+		}
+		else
+			throw new IOException("The category name does not exist in the database.");
+	}
+	
+	/**
+	*This method will remove a vertical column in the PriceScheme table by the 
+	*parameter specified.
+	*@post the number of column in the PriceSchem table will be 1 less than before.
+	*@param String form the name of the format.
+	*@throws IOException if the "form" in the parameter does not exist
+	*@throws SQLException database error.
+	*/
+	public void removeFormat(String form)
+	{
+		boolean isFormCorrect = flase;
+		for(int i = 0; i < PRICE_SCHEME.getNumOfFormat(); i++)
+			if(PRICE_SCHEME.getFormatName(i).equals(form))
+			{
+				isFormCorrect = true;
+				break;
+			}
+		if(isFormCorrect)
+		{
+			/*
+			*Kristan's stuff here
+			*/
+			conn.getConnection();
+			try
+			{
+				PreparedStatement stat = conn.prepareStatement("ALTER TABLE PriceScheme "
+						+ "DROP "+ form);
+				stat.execute();
+			}
+			finally
+			{
+				conn.close();
+			}
+		}
+		else
+			throw new IOException("The format name does not exist in the database.");
+	}
+	
+	private PriceScheme PRICE_SCHEME;
 }
-
