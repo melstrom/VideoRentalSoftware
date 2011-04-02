@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import accounts.Customer;
 import inventory.GeneralMovie;
+import inventory.IndividualMovie;
+import inventory.MovieNotFoundException;
 import inventory.RentalMovie;
 import utility.*;
 
@@ -94,8 +96,8 @@ public class Search
             
             while (result.next())
             {
-                int matchingAccountID = result.getInt("accountID");
-                matchingMembers.add(new accounts.Customer(matchingAccountID));
+                String matchingAccountID = result.getString("accountID");
+                matchingMembers.add(getCustomer(Customer(matchingAccountID)));
             }
             result.close();
         } // end try
@@ -166,7 +168,7 @@ public class Search
      * records
      * @throws SQLException if a connection with the database cannot be made
      */
-    /* this might just be the Customer constructor
+    
     public static Customer getCustomer(int memberID)
             throws SQLException
     {
@@ -183,10 +185,8 @@ public class Search
                 String lastName = result.getString("lName");
                 String address = result.getString("address");
                 String driversLicenseNum = result.getString("dlsin");
-                // TODO: type of phoneNum is not set in stone. might be BigInteger
                 String phoneNum = result.getString("phone");
                 String altPhoneNum = result.getString("altPhone");
-                // TODO: need comments about customer
 
 
                 result.close();
@@ -204,7 +204,7 @@ public class Search
             connection.close();
         }
     }
-*/
+
 
     /**
      * This method searches the database for a GeneralMovie matching the passed
@@ -236,8 +236,7 @@ public class Search
         ArrayList<GeneralMovie> searchResults = new ArrayList<GeneralMovie>();
         while (result.next())
         {
-            searchResults.add(
-                    new GeneralMovie(result.getString("physicalVideo.SKU")));
+            searchResults.add(previewMovie(result.getString("physicalVideo.SKU")));
         }
         result.close();
 
@@ -402,14 +401,160 @@ public class Search
      * @return the movie that corresponds to the barcodeID
      * TODO: need to understand the GeneralMovie class better
      */
-    /* this might just be the movie constructor
     public static GeneralMovie previewMovie(String barcodeID)
+            throws MovieNotFoundException, SQLException,
+            IllegalArgumentException,SanitizerExceptoin
     {
-        return new GeneralMovie(barcodeID);
-        // TODO: implement this STUB
+        Sanitizer.sanitize(barcodeID);
+        int barcodeLength = barcodeID.length();
+        GeneralMovie movie;
+        switch (barcodeLength)
+        {
+            case GeneralMovie.SKU_LENGTH:
+                movie = previewGeneralMovie(barcodeID);
+                break;
+            case (GeneralMovie.SKU_LENGTH + IndividualMovie.COPY_NUM_LENGTH):
+                movie = previewIndividualMovie(barcodeID);
+                break;
+            default:
+                throw new IllegalArgumentException("IllegalArgumentException: "
+                        + "not a valid barcode number");
+        }
+        
+        return movie;
+        
     }
-     *
+
+
+
+    /**
+     * Returns an individual movie that matches the barcodeID
+     * @param barcodeID
+     * @return
+     * @throws MovieNotFoundException
+     * @throws SQLException
+     * @throws IllegalArgumentException
      */
+    private static IndividualMovie previewIndividualMovie(String barcodeID)
+            throws MovieNotFoundException, SQLException, IllegalArgumentException
+    {
+        String SKU = barcodeID.substring(0, GeneralMovie.SKU_LENGTH);
+        String copyNum = barcodeID.substring(GeneralMovie.SKU_LENGTH);
+
+        GeneralMovie generalMovie = previewGeneralMovie(SKU);
+        String rentalQuery = "SELECT * FROM RentalVideo, PhysicalVideo,"
+                + " WHERE RentalVideo.SKU = '"+SKU+"' AND RentalVideo.rentalID = "
+                + "'"+copyNum;
+        String saleQuery = "SELECT * FROM SaleVideo, PhysicalVideo,"
+                + " WHERE SaleVideo.SKU = '"+SKU+"' AND SaleVideo.rentalID = "
+                + "'"+copyNum;
+
+        Connection conn = DataSource.getConnection();
+        try
+        {
+            Statement stat = conn.createStatment();
+            ResultSet result = stat.executeQuery(rentalQuery);
+            if (result.next())
+            {
+                String category = result.getString("RentalVideo.category");
+                String format = result.getString("PhysicalVideo.format");
+                String condition = result.getString("SaleVideo.condition");
+                return new RentalMovie(generalMovie, category, format,
+                        condition, barcodeID);
+                // TODO: confirm constructor for RentalMovie
+                // TODO: rental time?
+            }
+            else
+            {
+                result.close();
+                result = stat.executeQuery(saleQuery);
+                if (result.next())
+                {
+                    String category = result.getString("SaleVideo.category");
+                    String format = result.getString("PhysicalVideo.format");
+                    String condition = result.getString("SaleVideo.condition");
+                    return new IndividualMovie(generalMovie, category, format,
+                            condition, barcodeID);
+                }
+                else
+                {
+                    throw new MovieNotFoundException("MovieNotFoundException:"
+                            + " could not find that barcode");
+                }
+     
+            }
+        }
+        finally
+        {
+            connection.close();
+        }
+
+    }
+    
+    
+
+    /**
+     * Creates a GenrealMovie object based on the SKU
+     * @param barcodeID
+     * @return
+     * @throws SQLException
+     * @throws MovieNotFoundException
+     */
+    private static GeneralMovie previewGeneralMovie(String barcodeID)
+            throws SQLException, MovieNotFoundException
+    {
+        String query = "SELECT * FROM VideoInfo, PhysicalVideo "
+                + "WHERE VideoInfo.InfoID = PhysicalVideo.InfoID "
+                + "AND PhysicalVideo.SKU = '" + barcodeID + "'";
+        
+        Connection connection = DataSource.getConnection();
+        try
+        {
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(query);
+
+            if (!results.next())
+            {
+                throw new MovieNotFoundException("MovieNotFoundException:"
+                        + "the specified SKU does not exist");
+            }
+            String title = results.getString("Title");
+            String actors = results.getString("Actors");
+            String director = results.getString("Director");
+            int releaseDate = results.getInt("ReleaseDate");
+            String synopsis = results.getString("Synopsis");
+            String rating = results.getString("Rating");
+            String genre = results.getString("Genre");
+            String publisher = results.getString("Publisher");
+
+            if (results.next())
+            {
+                throw new MovieNotFoundException("MovieNotFoundException: "
+                        + "Movies sharing the same SKU found.");
+            }
+            String[] actorList = actors.split(", ");
+            // the format of releaseDate is YYYYMMDD, or an 8 digit integer
+            // To get its four most significant digits, we want to get rid of
+            // the four least significant, so divide it by 10^4
+            int year = releaseDate / 10000;
+            // To get the month, divide by 10^2 to get rid of the first two
+            // digits, then mod it by 10^2 to get the months
+            int month = (releaseDate / 100) % 100;
+            // mod by 10^2 to get the days
+            int day = (releaseDate % 100);
+            java.util.GregorianCalendar release =
+                    new java.util.GregorianCalendar(year, month, day);
+            return new GeneralMovie(title, actorList, director, release,
+                    synopsis, rating, genre, publisher);
+        } // end try
+
+        finally
+        {
+            connection.close();
+        }
+        
+    }
+    
 
 
 
@@ -473,7 +618,8 @@ public class Search
      * @return an SQL query for all rental movies matching the passed search
      * criteria, or null if no movies could be found.
      *
-     * TODO: set to private after testing
+     * TODO: need to fix the SQL, especially for customer.
+     * It might make more sense to give every RentalVideo a memberID instead.
      */
     private static String searchRentalsGenerateQuery(
             String title,
@@ -679,7 +825,7 @@ public class Search
             String barcode = "";
             barcode += result.getString("VideoRental.SKU");
             barcode += result.getString("VideoRental.rentalID");
-            rentalList.add(new RentalMovie(barcode));
+            rentalList.add((RentalMovie) previewMovie(barcode));
         }
         if (rentalList.isEmpty())
         {
@@ -819,7 +965,7 @@ public class Search
         while (result.next())
         {
             resultsList.add(
-                    new GeneralMovie(result.getString("physicalVideo.SKU")));
+                    previewMovie(result.getString("physicalVideo.SKU")));
         }
         return resultsList;
     }

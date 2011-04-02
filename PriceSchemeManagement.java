@@ -1,6 +1,7 @@
+package inventory;
 import java.sql.*;
 import java.io.IOException;
-import JDBCConnection;//kristan's stuff
+//import JDBCConnection;//kristan's stuff
 
 /**
 *This is the control object for the PriceScheme class. It hold a PriceScheme object for quick reference for prices.

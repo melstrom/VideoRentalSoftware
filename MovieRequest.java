@@ -1,11 +1,12 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
+ * Can't figure out what this does.
  */
 
 package Inventory;
 
-import Account.CustomerAccount;
+import accounts.Customer;
 
 /**
  *
@@ -27,7 +28,7 @@ public class MovieRequest {
      * @param customer Customer who whats to request the movie.
      * @return reqID request ID.
      */
-    public int process(IndividualMovie movie, CustomerAccount customer){
+    public int process(IndividualMovie movie, Customer customer){
 
         int reqID;
 
@@ -37,7 +38,7 @@ public class MovieRequest {
 
     }
 
-    private String prepareQuery(IndividualMovie movie, CustomerAccount customer){
+    private String prepareQuery(IndividualMovie movie, Customer customer){
     // formate date into Quere Sting
         String query = "123";
         return query;

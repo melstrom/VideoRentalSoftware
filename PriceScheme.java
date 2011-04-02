@@ -1,6 +1,6 @@
-package pricescheme;
+package inventory;
 import java.sql.*;
-import JDBCConnect;//kristan's stuff
+//import JDBCConnect; //kristan's stuff
 import java.io.IOException;
 
 /**

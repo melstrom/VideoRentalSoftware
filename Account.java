@@ -1,11 +1,14 @@
+package accounts;
+
 /**
  *	Account Class
  *
  *      Stores basic information of an account
  *      @author mattp
  *	@version 1.0 March 30, 2011
+ *      changed it to be an abstract class: Mitch
  */
-public class Account
+public abstract class Account
 {
     /**
      * Account default constructor

@@ -9,12 +9,14 @@
  *              -fixed parameter naming
  *              -fixed getActors()
  */
+package inventory;
 import java.util.Date;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.GregorianCalendar;
 
 public class GeneralMovie
 {
@@ -38,8 +40,15 @@ public class GeneralMovie
         setActors(actors);
         setReleaseDate(releaseDate);
         setupConnection();
-        addNewTitle();
+        //addNewTitle();
+        // removed by Mitch
+        // reason: we need to be able to create GeneralMovie objects without
+        // adding them to the database
     }
+
+
+
+    
    /**
     * Add a reservation to the end of reservation list
     * @param aReservation a reservation record
@@ -65,18 +74,19 @@ public class GeneralMovie
      * @param aReservation a reservation record
      * @throws SQLException
      */
-    final protected void addReservation(Reservation aReservation) throws SQLException
+    final protected void addReservation(Reservation reservation) throws SQLException
     {
         String table = "Reservation";
         String query = "insert into "+table
                 +"values ("+quote+title+quote+comma //movie title
-                           +quote+reservation.getCustomer().getAccountID()+quote+comma //account id of the customer
+                           +quote+reservation.getAccount().getAccountID()+quote+comma //account id of the customer
                             +quote+reservation.getDate()+quote+");";//the date this movie is reserved 
 
         executeQuery(query);
     }
     /**
      * Create remove reservation query
+     * TODO: change the SQL query when we know what the table looks like
      * @throws SQLException
      */
     final protected void removeReservation() throws SQLException
@@ -172,6 +182,7 @@ public class GeneralMovie
     }
     /**
      * Set release date
+     * TODO: change to Calendar. Date is deprecated.
      * @param releaseDate the release date of a movie
      */
     protected void setReleaseDate(Date releaseDate)
@@ -215,6 +226,7 @@ public class GeneralMovie
         String actorList="";
         for(int i =0;actors[i]!=null&&i<actors.length;i++)
           actorList+=actors[i]+",";
+        //TODO: get rid of the last comma
       
         return actorList;
     }
