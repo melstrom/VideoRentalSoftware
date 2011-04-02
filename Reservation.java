@@ -41,7 +41,7 @@ public class Reservation {
 
 
     /**
-     * accessors - Get the customer account.
+     * Accessors - Get the customer account.
      * @return account of the customer who makes the reservation
      * @pre customer not null.
      * @post return customer.
@@ -51,7 +51,7 @@ public class Reservation {
     }
 
     /**
-     * accessors - Get the reservation date.
+     * Accessors - Get the reservation date.
      * @return reservation date.
      * @pre pickupDate not null.
      * @post return pickupDate.
@@ -61,7 +61,7 @@ public class Reservation {
     }
 
      /**
-     * accessors - Set the customer account.
+     * Mutator - Set the customer account.
      * @param acc account to replace existing account.
      * @pre acc is a valid CustomerAccount object.
      * @post new account replaced.
@@ -71,7 +71,7 @@ public class Reservation {
     }
 
     /**
-     * accessors - Set the reservation date.
+     * Mutator - Set the reservation date.
      * @param date new reservation date to be set.
      * @pre date is a valid Date object.
      * @post new date replaced.
