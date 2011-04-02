@@ -1,16 +1,19 @@
 /**
  *	General Movie Class
  *
- *      Stores general information of a movie
- *      @author mattp
+ *      	Stores general information of a movie
+ *   	@author mattp
  *	@version 1.0 March 27, 2011
- *      @version 1.1 March 29
- *              -changed the implementation of SKU
- *              -fixed parameter naming
- *              -fixed getActors()
+ * 	@version 1.1 March 29
+ *		-changed the implementation of SKU
+ *              	-fixed parameter naming
+ *              	-fixed getActors()
+	@version 1.2 April 1
+		-removed addNewTitle() from constructor
+		-replaced releaseDate's data type to GregorianCalendar type 
+		-removed Date class (deprecated)
  */
 package inventory;
-import java.util.Date;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -22,7 +25,7 @@ public class GeneralMovie
 {
     /**
      *  General movie constructor
-     *  takes 5 default attributes
+     *  takes 6 default attributes
      * @param SKU the number uniquely identifies each movie catalog
      * @param title the title of a movie
      * @param actors the actors of a movie
@@ -30,7 +33,7 @@ public class GeneralMovie
      * @param releaseDate  the release date of a movie 
      * @param synopsis the brief description of a movie
      */
-    public GeneralMovie(int SKU, String title, String actors[], String director, Date releaseDate, String synopsis)throws SQLException
+    public GeneralMovie(int SKU, String title, String actors[], String director, GregorianCalendar releaseDate, String synopsis)throws SQLException
     {
         reservations = new ArrayList<Reservation>();
         this.title = title;
@@ -40,15 +43,7 @@ public class GeneralMovie
         setActors(actors);
         setReleaseDate(releaseDate);
         setupConnection();
-        //addNewTitle();
-        // removed by Mitch
-        // reason: we need to be able to create GeneralMovie objects without
-        // adding them to the database
     }
-
-
-
-    
    /**
     * Add a reservation to the end of reservation list
     * @param aReservation a reservation record
@@ -132,7 +127,7 @@ public class GeneralMovie
               +"values ("+quote+""+quote+comma//infoID
                         +quote+title+quote+comma
                         +quote+director+quote+comma
-                        +quote+releaseDate.getYear()+releaseDate.getMonth()+releaseDate.getDate()+quote+comma 
+                        +quote+releaseDate.get(YEAR), releaseDate.get(MONTH), releaseDate.get(DATE)+quote+comma 
                         +quote+actors[0]+quote+comma
                         +quote+synopsis+quote+comma
                         +quote+SKU+quote
@@ -182,22 +177,19 @@ public class GeneralMovie
     }
     /**
      * Set release date
-     * TODO: change to Calendar. Date is deprecated.
      * @param releaseDate the release date of a movie
      */
-    protected void setReleaseDate(Date releaseDate)
+    protected void setReleaseDate(GregorianCalendar releaseDate)
     {
-        this.releaseDate.setYear(releaseDate.getYear());
-        this.releaseDate.setMonth(releaseDate.getMonth());
-        this.releaseDate.setDate(releaseDate.getDate());
+	this.releaseDate.set(releaseDate.get(YEAR), releaseDate.get(MONTH), releaseDate.get(DATE));
     }
     /**
      * Get Release date
      * @return the release date of a movie
      */
-    protected String getReleaseDate()
+    protected GregorianCalendar getReleaseDate()
     {
-        return ""+releaseDate.getYear()+releaseDate.getMonth()+releaseDate.getDate();
+        return releaseDate;
     }
     /**
      * Set actors
@@ -225,8 +217,11 @@ public class GeneralMovie
     {
         String actorList="";
         for(int i =0;actors[i]!=null&&i<actors.length;i++)
-          actorList+=actors[i]+",";
-        //TODO: get rid of the last comma
+	{
+		actorList+=actors[i];
+		if(i!=actors.length-1)
+		actorList+=" ,";
+	}
       
         return actorList;
     }
@@ -250,7 +245,7 @@ public class GeneralMovie
     private int SKU;
     private String actors[];
     private String director;
-    private Date releaseDate;
+    private GregorianCalendar releaseDate;
     private String synopsis;
     private ArrayList reservations;
     private Connection connection;
