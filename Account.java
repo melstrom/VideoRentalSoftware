@@ -7,6 +7,10 @@ package accounts;
  *      @author mattp
  *	@version 1.0 March 30, 2011
  *      changed it to be an abstract class: Mitch
+	@version 1.1 April 2
+		-renamed setStatus() to changeStatus()
+		-changed status type to boolean
+		
  */
 public abstract class Account
 {
@@ -25,7 +29,7 @@ public abstract class Account
         this.Lname = Lname;
         this.address = address;
         this.phoneNum = phoneNum;
-        status = "Active";
+        status = true;
     }
     /**
      * Set log in information
@@ -55,9 +59,9 @@ public abstract class Account
      * Set status of the account 
      * @param status the status of the account(Active/Inactive)
      */
-    public void setStatus(String status)
+    public void changeStatus()
     {
-        this.status = status;
+        status = !status;
     }
     /**
      * Set password
@@ -149,9 +153,9 @@ public abstract class Account
     }
     /**
      * Get status
-     * @return status the status of the account (Active/Inactive)
+     * @return status the status of the account (True = Active/False = Inactive)
      */
-    public String getStatus()
+    public boolean getStatus()
     {
         return status;
     }
@@ -162,5 +166,5 @@ public abstract class Account
     private String phoneNum;
     private String address;
     private String password;
-    private String status;
+    private boolean status;
 }
