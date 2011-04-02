@@ -1,3 +1,5 @@
+import accounts.Customer;
+import java.util.Date;
 /**
  * This is a inventory item that the store carries with it's own unique barcode number.
  */
@@ -28,3 +30,5 @@ public interface TransactionItem
 	 * @param 
 	 */
 	boolean updateItemInfo(Customer customerID, Date theDate);
+}
+
