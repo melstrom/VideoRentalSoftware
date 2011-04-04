@@ -19,7 +19,7 @@ class SaleMovie extends IndividualMovie{
 
 	private String condition;
 	private String status;
-	final private String WRITEOFF = "write off";               //movie is written off for excessive damage
+	final private String WRITEOFF = "write off"; //movie is written off for excessive damage
 
 	/**
          * The constructor

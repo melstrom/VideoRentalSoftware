@@ -44,8 +44,7 @@ class RentalMovie extends IndividualMovie{
     final char quote ='\'';
     final char comma =',';
     Scanner myScanner = new Scanner(System.in);
-   
-        
+
     /**
     * Create a history query that updates the rental history table
     * @param history a history record of the rental movie

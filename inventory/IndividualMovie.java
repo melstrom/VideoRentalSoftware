@@ -43,7 +43,6 @@ public class IndividualMovie extends GeneralMovie{
     *input: aFormat
     *@param aFormat a format type
     */
-    
     protected void setFormat(String aFormat)
     {
     	this.format = aFormat;
