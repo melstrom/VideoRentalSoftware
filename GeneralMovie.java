@@ -127,7 +127,7 @@ public class GeneralMovie
               +"values ("+quote+""+quote+comma//infoID
                         +quote+title+quote+comma
                         +quote+director+quote+comma
-                        +quote+releaseDate.get(YEAR), releaseDate.get(MONTH), releaseDate.get(DATE)+quote+comma 
+                        +quote+releaseDate.get(releaseDate.YEAR)+releaseDate.get(releaseDate.MONTH)+ releaseDate.get(releaseDate.DATE)+quote+comma
                         +quote+actors[0]+quote+comma
                         +quote+synopsis+quote+comma
                         +quote+SKU+quote
