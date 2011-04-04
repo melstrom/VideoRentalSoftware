@@ -3,7 +3,10 @@
 * Which provides and initialises information about an individual sale movie, and changes from rental to sale
 * @author Legen
 * @version 1.0 March 27, 2011
-*/
+*----------matt: removed setCondition() and setStatus() from constructor (duplicate function calls)
+*----------removed changeCategory() it is already in the superclass IndividualMovie as setCategory()
+*----------fixed implementation for setStatus() (status datatype mismatch)
+ */
 package inventory;
 import java.util.ArrayList;
 import java.sql.Connection;
@@ -19,32 +22,33 @@ class SaleMovie extends IndividualMovie{
 	final private String WRITEOFF = "write off";               //movie is written off for excessive damage
 
 	/**
-	 * The constructor
+         * The constructor
 	 * inherits from IndividualMovie
 	 * takes 2 default attributes
-	 * @param 
-	 */
+         * @param condition the condition of the movie item
+         * @param status the status of the movie (sold/for sale)
+         * @param movie the inherited individualMovie
+         */
 	public SaleMovie(String condition, String status, IndividualMovie movie)
 	{
 	   this.condition = condition;                     //condition of movie
 	   this.status = status;						//if it is sold or for sale
-	   setCondition(condition);
-	   setStatus(status);
 	   setPrice(movie.getPrice());
 	   setFormat(movie.getFormat());
 	   setCategory(movie.getCategory());
 	   setBarCode(movie.getBarCode());
 	 }
 	
-	/**
+	/*
 	*change the category for the individual movie from rental to sale, which is used for pricing schemes
 	*input: saleMovie
 	*@param saleMovie is a movie category for sale movies
-	*/
+	
 	 protected void changeCategory(RentalMovie saleMovie)
 	 {
 	   	this.category = saleMovie;
 	 }
+         */
 	
 	    /**
 	     *Set the condition for the individual movie which can be damaged, good, or scratched, or write off
@@ -59,7 +63,7 @@ class SaleMovie extends IndividualMovie{
 	    	        String query = "delete from "+table
 	    	                +"where barcode ="+quote+barcode+quote                 //delete the movie
 	    	                 +";";
-	    	        executeQuery(query);
+	    	        super.executeQuery(query);
 	     	}
 	     	this.condition = state;
 	     }
@@ -79,26 +83,23 @@ class SaleMovie extends IndividualMovie{
 	      *@param aStatus is the sale status
 	      */
 	      private void setStatus(String aStatus)
-	      {
-	    	  boolean sale = true;
-	    	  boolean sold = false;
-	    	  
-	    	  if(aStatus.equals(sold)){
+                {
+	    	  if(aStatus.equals("Sold")){
 	    		  String table = "SaleMovie";
 	    	        String query = "delete from "+table
 	    	                +"where barcode ="+quote+barcode+quote
 	    	                 +";";
-	    	        executeQuery(query);
+	    	        super.executeQuery(query);
 	    	  }
-	    	  else(aStatus.equals(sale)){
+	    	  else if(aStatus.equals("Sale")){
 	    		  String table = "SaleMovie";
-	    	        String query = ""insert into "+table
+	    	        String query = "insert into "+table
                         +"values ("+quote+title+quote+comma      //movie title
                                    +quote+barcode+quote+comma    //movie id
                                    +quote+category+quote+");";  //the category of movie discount, sale.
 
-        executeQuery(query);
-    }
+                  super.executeQuery(query);
+		}
 	      	  this.status = aStatus;
 	      }
 	     

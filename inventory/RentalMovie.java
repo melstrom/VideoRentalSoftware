@@ -4,6 +4,7 @@
 * status, history and condition which will be stored in history
 * @author Legen
 * @version 1.0 March 27, 2011
+* -----------matt: removed setCondition() and setStatus() from constructor (duplicate function calls)
 */
 package inventory;
 import java.util.ArrayList;
@@ -20,19 +21,16 @@ class RentalMovie extends IndividualMovie{
     * The constructor
     * inherits from IndividualMovie
     * takes 3 default attributes
-    * @param status The status of the movie, if it is store "rent" or is out "rented out" or reserved
+    * @param status The status of the movie, if it is store "rent" or is out "rented out" or "reserved"
     * @param condition The physical condition of the movie, states as a string whether its damaged, good, scratched etc
     * @param history The rental history of a movie, information such as who has the movie rented out, and when it will be returned
     */
    
     public RentalMovie(String condition, String status, IndividualMovie movie)
     {
-        //this.history = history;
     	history = new ArrayList<RentalHistory>();
     	this.condition = condition;
         this.status = status;
-        setCondition(condition);
-        setStatus(status);
         setPrice(movie.getPrice());
         setFormat(movie.getFormat());
         setCategory(movie.getCategory());
@@ -42,7 +40,6 @@ class RentalMovie extends IndividualMovie{
     private ArrayList history;           //The rental history of a movie, who has it, and when it will be returned
     private String status;              //The status of the movie, if it is store "rent" or is out "rented out" or reserved
     private String condition;           //The physical condition of the movie, states as a string whether its damaged, good, scratched etc
-    private Connection connection;
     private Statement statement;
     final char quote ='\'';
     final char comma =',';
@@ -71,15 +68,14 @@ class RentalMovie extends IndividualMovie{
           					+quote+history.rentDate().getDate()+quote+comma			//the date this movie is checked out, todays date
                             +quote+history.returnDate().getDate()+quote+comma			//the date this movie is to be returned
             				+quote+history.getStatus()+quote+comma 		    //the status of the movie
-            				+quote+history.getCondition()+quote+comma 		//the condition of the movie
-            			+";";
-           executeQuery(query);
+            				+quote+history.getCondition()+quote		//the condition of the movie
+            			+");";
+           super.executeQuery(query);
           
     }
     
     /**
     * Show movies whole rental history
-    * @param a
     */
     protected void showHistory()
     {
@@ -132,21 +128,4 @@ class RentalMovie extends IndividualMovie{
     {
     	return condition;
     }
-   
-    /**
-    * Send query to the database
-    * @param query the sql query
-    */
-        final protected void executeQuery(String query)throws SQLException
-        {
-            try
-            {
-                statement.execute(query);
-            }
-            finally
-            {
-                connection.close();
-            }
-        }
-    
 }

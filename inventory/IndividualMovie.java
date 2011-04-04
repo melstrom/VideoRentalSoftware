@@ -86,7 +86,7 @@ public class IndividualMovie extends GeneralMovie{
     {
     this.category = aCategory;
     }
-   
+
    
     /**
     *Get the type of category for the individual movie
