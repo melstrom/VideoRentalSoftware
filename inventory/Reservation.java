@@ -1,11 +1,12 @@
 /*
  * Inventory / Reservation
  * Entity Class
+* -------matt: replaced Date object with GregorianCalendar. (Date is deprecated)
  */
 
-package Inventory;
+package inventory;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 import Account.CustomerAccount;
 
 /**
@@ -17,12 +18,12 @@ public class Reservation {
     /**
      * Customer who make the reservation.
      */
-    private CustomerAccount customer;
+    private Customer customer;
 
     /**
      * Date for pickup.
      */
-    private Date pickupDate;
+    private GregorianCalendar pickupDate;
 
 
     /**
@@ -34,7 +35,7 @@ public class Reservation {
      * @pre pickupDate > today.
      * @post Object Reservation created.
      */
-    public Reservation(CustomerAccount reserveAcc, Date reservePickupdate){
+    public Reservation(Customer reserveAcc, GregorianCalendar reservePickupdate){
       customer = reserveAcc;
       pickupDate = reservePickupdate;
     }
@@ -46,7 +47,7 @@ public class Reservation {
      * @pre customer not null.
      * @post return customer.
      */
-    public CustomerAccount getAccount(){
+    public Customer getAccount(){
         return customer;
     }
 
@@ -56,7 +57,7 @@ public class Reservation {
      * @pre pickupDate not null.
      * @post return pickupDate.
      */
-    public Date getDate(){
+    public GregorianCalendar getDate(){
         return pickupDate;
     }
 
@@ -66,7 +67,7 @@ public class Reservation {
      * @pre acc is a valid CustomerAccount object.
      * @post new account replaced.
      */
-    public void setAccount(CustomerAccount acc){
+    public void setAccount(Customer acc){
         customer = acc;
     }
 
@@ -76,7 +77,7 @@ public class Reservation {
      * @pre date is a valid Date object.
      * @post new date replaced.
      */
-    public void GetDate(Date date){
+    public void GetDate(GregorianCalendar date){
         pickupDate = date;
     }   
 

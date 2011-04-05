@@ -3,7 +3,7 @@
  * Entity Class
  */
 
-package Inventory;
+package inventory;
 
 import java.util.Date;
 import Account.CustomerAccount;

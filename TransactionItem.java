@@ -27,7 +27,9 @@ public interface TransactionItem
 	String getBarcode();
 	/**
 	 * This updates the item info (to be used when the item is added to the Transaction, example: for a Rental Video, the video should be marked as checked by the customer on the given date, and for Penalties  it should be marked as paid, and for Promos maybe nothing or for future functions)
-	 * @param 
+	 * @param customerID the customer ID that is associated with this item on the given date.
+	 * @param theDate the date the customer interacted with this item.
+	 * @pre the item should be paid for before calling this method.
 	 */
 	boolean updateItemInfo(Customer customerID, Date theDate);
 }
