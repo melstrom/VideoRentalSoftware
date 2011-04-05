@@ -193,7 +193,7 @@ public class MovieRequest {
      * Create queue will create a sql queue that will add a request record.
      * @return Queue to create a request record.
      */
-    public String creatQueue(){
+    public String createQueue(){
 
     return "";
     }

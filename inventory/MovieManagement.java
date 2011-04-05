@@ -1,7 +1,10 @@
 package inventory;
-import java.util.Date;
+import java.util.GregorianCalendar;
 import account.Customer;
 /**
+ * April 5 (Tuesday)
+ * -changed all Dates to GC (Notice createMovie and editMovie now takes in 2 arguments)
+ *
  * April 4 (Monday)
  * -to-do
  *      understand and setup SQL connection
@@ -66,7 +69,7 @@ public class MovieManagement
      * Constructs a new movie as part of the movie catalog
      * @param info contains the 7 required information to identify a movie
      */
-    public void createGeneralMovie(String[] info)
+    public void createGeneralMovie(String[] info, GregorianCalendar releaseDate)
     {
         if (this.checkNULLinfo(info) == false)
         {
@@ -78,12 +81,12 @@ public class MovieManagement
                 String title = info[1];
                 String actors = info[2];
                 String director = info[3];
-                String releaseDate = info[4];
-                String synopsis = info[5];
-                String genre = info[6];
+                //String releaseDate = info[4];     //use Calendar type at UI to eliminate conversion
+                String synopsis = info[4];
+                String genre = info[5];
 
-                            //splits the actors into an array of actors
-            String[] actorArray = actors.split(",");
+                //splits the actors into an array of actors
+                //String[] actorArray = actors.split(",");
 
                 this.movie = new GeneralMovie(SKU, title, actors, director, releaseDate, synopsis); //pass in actors? or actorArray?
                 movie.addNewTitle();
@@ -101,11 +104,11 @@ public class MovieManagement
     {
         if (this.checkDuplicateBarcode(barcode) == false)
         {
-            String SKU = this.movie.getSKU();       //getSKU returns wrong type:int
-            barcode = BarCodeChecker.assign(SKU);
+            String SKU = this.movie.getSKU();
+            barcode = BarCodeChecker.assign(SKU);   //no barcodechecker yet
 
             //passed all tests, create the copy
-            this.copy = new IndividualMovie(category,format, barcode, this.movie);
+            this.copy = new IndividualMovie(category, format, barcode, this.movie);
 
             copy.setCategory(category);
             copy.setFormat(format);
@@ -117,7 +120,7 @@ public class MovieManagement
      * Changes the information of a movie
      * @param info contains the 7 required information to identify a movie
      */
-    public void editInfo(String[] info)
+    public void editInfo(String[] info, GregorianCalendar releaseDate)
     {
         if (this.checkNULLinfo(info) == false)
         {
@@ -125,20 +128,20 @@ public class MovieManagement
             String title = info[1];
             String actors = info[2];
             String director = info[3];
-            String releaseDate = info[4];
-            String synopsis = info[5];
-            String genre = info[6];
+            //String releaseDate = info[4];
+            String synopsis = info[4];
+            String genre = info[5];
             
             //splits the actors into an array of actors
-            String[] actorArray = actors.split(",");
+            //String[] actorArray = actors.split(",");
 
             //movie.setSKU(SKU);                //GM does not have setSKU:allowed to edit at all?
             movie.setTitle(title);
-            movie.setActors(actorArray);
+            movie.setActors(actors);
             movie.setDirector(director);
             movie.setReleaseDate(releaseDate);  //GregorianCalendar
             movie.setSynopsis(synopsis);
-            movie.setGenre(genre);              //missing setGenre in GM
+            //movie.setGenre(genre);              //missing setGenre in GM
         }
     }
 
@@ -161,7 +164,9 @@ public class MovieManagement
     public MovieRequest[] getRequest()
     {
         String[] movieRequest = new String[0];
-        //where does request go in the db?
+        String table = "madeSpecialOrders";
+        String column = "*";
+        
         //can't fetch any data...
         return movieRequest;
     }
@@ -171,7 +176,7 @@ public class MovieManagement
         //String title, String format, Date releaseDate, CustomerAccount requestAcc
         String title = copy.getTitle();
         String format = copy.getFormat();      //missing method?
-        Date releaseDate = copy.getReleaseDate();  //need to fix type to match return
+        GregorianCalendar releaseDate = copy.getReleaseDate();  //need to fix type to match return
         Customer requestAcc = account;
 
         this.request = new MovieRequest(title, format, releaseDate, requestAcc);
