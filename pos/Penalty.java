@@ -1,3 +1,4 @@
+package pos;
 /**
 *	Penalty calculation class
 *	
