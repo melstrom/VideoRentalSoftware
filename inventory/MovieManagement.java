@@ -1,25 +1,30 @@
 package inventory;
+
 import java.util.GregorianCalendar;
 import account.Customer;
+
 /**
  * April 5 (Tuesday)
- * -changed all Dates to GC (Notice createMovie and editMovie now takes in 2 arguments)
+ * -changed all Dates to GC (UI: Notice createMovie and editMovie now takes in 2 arguments)
+ * -added GenerateQuery method to handle QueryGeneration
+ * -question: how will the UI handle MovieRequest objects? What information can the UI use from this?
+ * -question: should we add movie genre to the whole system
  *
  * April 4 (Monday)
  * -to-do
  *      understand and setup SQL connection
  *      read on java exceptions and implement them (may reimpl. checkDupl&NULL as exceptions)
  * -movieRequest does not perform any functions
- *      -on top of that, there is no place for it in the db
+ *      -FIXED: on top of that, there is no place for it in the db
  *
  * April 3 (Sunday)
  * -start implementation of most methods
  * -to-do
- *      private bool checkDuplicateSKU (String SKU)
- *      private bool checkDuplicateBarcode (String barcode)
- *      private bool checkNULLinfo (String[] info)
+ *      DONE: private bool checkDuplicateSKU (String SKU)
+ *      DONE: private bool checkDuplicateBarcode (String barcode)
+ *      DONE: private bool checkNULLinfo (String[] info)
  * -bugs
- *      line 90, wrong return type
+ *      FIXED: line 90, wrong return type
  *
  * March 31 (Thursday)
  * -add/remove methods to reflect changes in class diagram
@@ -44,9 +49,9 @@ import account.Customer;
 public class MovieManagement
 {
 
-    private GeneralMovie movie;
-    private IndividualMovie copy;
-    private MovieRequest request;
+    private GeneralMovie movie = null;
+    private IndividualMovie copy = null;
+    private MovieRequest request = null;
 
     /**
      *
@@ -131,7 +136,7 @@ public class MovieManagement
             //String releaseDate = info[4];
             String synopsis = info[4];
             String genre = info[5];
-            
+
             //splits the actors into an array of actors
             //String[] actorArray = actors.split(",");
 
@@ -157,7 +162,6 @@ public class MovieManagement
 //
 //        return quantity;
 //    }
-
     /**
      * 
      */
@@ -166,7 +170,7 @@ public class MovieManagement
         String[] movieRequest = new String[0];
         String table = "madeSpecialOrders";
         String column = "*";
-        
+
         //can't fetch any data...
         return movieRequest;
     }
@@ -184,10 +188,10 @@ public class MovieManagement
         //createQueue does nothing, moreover, it's spelt wrong the MovieRequest class
     }
 
-/**
- * Manually removes a request from the list of requests
- * @param request
- */
+    /**
+     * Manually removes a request from the list of requests
+     * @param request
+     */
     public void removeRequest(MovieRequest request)
     {
         //how do we identify a single request?
@@ -195,18 +199,21 @@ public class MovieManagement
         this.request = request;
     }
 
-/**
- *         //check if this movie already exists in the db
- * @param SKU
- * @return
- */
+    /**
+     *         //check if this movie already exists in the db
+     * @param SKU
+     * @return
+     */
     private boolean checkDuplicateSKU(String SKU)
     {
 
         //SELECT SKU FROM videoInfo WHERE SKU = 'newSKU#'
         String table = "videoInfo";
         String column = "SKU";
-        String query = "SELECT " + column + " FROM " + table + " WHERE " + column + "='" + SKU + "'";
+        String constraint = SKU;
+
+        generateQuery(table, column, constraint);
+        //String query = "SELECT " + column + " FROM " + table + " WHERE " + column + "='" + SKU + "'";
 
         if (execute(query) != 0)
         {
@@ -226,13 +233,22 @@ public class MovieManagement
         //Query:SELECT barcode FROM physicalVideo WHERE barcode = 'barcode'
         String table = "barcode";
         String column = "physicalVideo";
-        String query = "SELECT " + column + " FROM " + table + " WHERE " + column + "='" + barcode + "'";
+        String constraint = barcode;
+
+        generateQuery(table, column, barcode);
+        //String query = "SELECT " + column + " FROM " + table + " WHERE " + column + "='" + barcode + "'";
 
         if (execute(query) != 0)
         {
             //Exception:Movie already exists
         }
         return false;
+    }
+
+    private String generateQuery(String table, String column, String constraint)
+    {
+        String query = "SELECT "+column+" FROM "+table+" WHERE "+constraint;
+        return query;
     }
 
     /**
