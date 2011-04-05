@@ -9,15 +9,15 @@ public class Penalty implements TransactionItem
 	/**
                 Constructor with 2 parameters
 		Initialize a penalty record
-		@param overdueDates1 the number of days an item is overdue
+		@param numberOfDays the number of days an item is overdue
 		@param movie the movie that is overdue
 	*/
 	public Penalty(int numberOfDays, Movie movie)
 	{
 		setPenaltyPerDay(movie.getMediaType());
-		overdueDates = overdueDates1;
+		this.numberOfDays = numberOfDays;
 		calculate();
-		movieName = movie.getName();
+		movieName = movie.getTitle();
 	}
 	/**
 		Set penalty per day according to media type
