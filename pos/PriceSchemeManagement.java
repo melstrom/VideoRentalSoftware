@@ -1,4 +1,4 @@
-package inventory;
+package pos;
 import java.sql.*;
 import java.io.IOException;
 //import JDBCConnection;//kristan's stuff
