@@ -3,14 +3,21 @@
  * 
  * @author mattp
  * @version 1.0 April 3, 2011
+ * @version 1.1 April 4
+ *      -added isDuplicatedID()
  */
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 public class AccountManagement
 {
     /**
      * Default constructor with no parameters
      */
-    public AccountManagement()
+    public AccountManagement()throws SQLException
     {
+        setupConnection();
     }
     /**
      * Create an employee account
@@ -22,7 +29,9 @@ public class AccountManagement
      * @param phoneNum the phone number of the user
      */
     public void createEmployee(String position, int accountID, String Fname, String Lname, String address, String phoneNum)
+            throws SQLException
     {
+        if(!isDuplicatedID(accountID, "employee"))
         account = new Employee(position, accountID, Fname, Lname, address, phoneNum);
     }
     /**
@@ -35,7 +44,9 @@ public class AccountManagement
      * @param phoneNum the phone number of the user
      */
     public void createCustomer(String DL, int accountID, String Fname, String Lname, String address, String phoneNum)
+            throws SQLException
     {
+        if(!isDuplicatedID(accountID, "customer"))
         account = new Customer(DL, accountID, Fname, Lname, address, phoneNum);
     }
     /**
@@ -50,6 +61,20 @@ public class AccountManagement
         else if(accountType.equals("customer"))
         account = (Customer)aAccount;
     }
+    /**
+     * Check if an account id already exists in the database
+     * @param ID an account ID
+     * @param userType the type of user (employee/customer)
+     * @return boolean
+     * @throws SQLException 
+     */
+    private boolean isDuplicatedID(int ID, String accountType)throws SQLException
+    {
+        String table = accountType, column = accountType + "ID", query = "";
+
+        return executeQuery(query);
+    }
+
     /**
      * Set log in information
      * @param loginID the log in ID/username of the account
@@ -104,6 +129,35 @@ public class AccountManagement
     {
         account.setPosition("Employee");
     }
-
+    /**
+     * Set up database connections
+     * @throws SQLException 
+     */
+    final private void setupConnection()throws SQLException
+    {
+        connection = DriverManager.getConnection(url,username,password); //url, username and password for the database is still unknown
+        statement = connection.createStatement();
+    }
+    /**
+     * Execute query in the database
+     * @param query a query
+     * @return boolean - true=at least one match/false=no match
+     * @throws SQLException
+     */
+    private boolean executeQuery(String query)throws SQLException
+    {
+        boolean isFound;
+        try
+        {
+            isFound = statement.execute(query);
+        }
+        finally
+        {
+            connection.close();
+        }
+        return isFound;
+    }
     private Account account;
+    private Connection connection;
+    private Statement statement;
 }

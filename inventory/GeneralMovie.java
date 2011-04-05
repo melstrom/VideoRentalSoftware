@@ -6,12 +6,15 @@
  *	@version 1.0 March 27, 2011
  * 	@version 1.1 March 29
  *		-changed the implementation of SKU
- *              	-fixed parameter naming
- *              	-fixed getActors()
+ *              -fixed parameter naming
+ *              -fixed getActors()
 	@version 1.2 April 1
 		-removed addNewTitle() from constructor
 		-replaced releaseDate's data type to GregorianCalendar type 
 		-removed Date class (deprecated)
+	@version 1.2.5 April 4
+		-changed SKU to type String
+		-changed actors(type array) to actors(type String)
  */
 package inventory;
 import java.util.ArrayList;
@@ -33,14 +36,13 @@ public class GeneralMovie
      * @param releaseDate  the release date of a movie 
      * @param synopsis the brief description of a movie
      */
-    public GeneralMovie(int SKU, String title, String actors[], String director, GregorianCalendar releaseDate, String synopsis)throws SQLException
+    public GeneralMovie(String SKU, String title, String actors, String director, GregorianCalendar releaseDate, String synopsis)throws SQLException
     {
         reservations = new ArrayList<Reservation>();
         this.title = title;
         this.SKU = SKU;
         this.actors = actors;
         this.synopsis = synopsis;
-        setActors(actors);
         setReleaseDate(releaseDate);
         setupConnection();
     }
@@ -139,7 +141,7 @@ public class GeneralMovie
     *   Get SKU
     *  @param SKU the SKU uniquely identifies a movie catalog 
     */
-    protected int getSKU()
+    protected String getSKU()
     {
         return SKU;
     }
@@ -181,7 +183,7 @@ public class GeneralMovie
      */
     protected void setReleaseDate(GregorianCalendar releaseDate)
     {
-	this.releaseDate.set(releaseDate.get(YEAR), releaseDate.get(MONTH), releaseDate.get(DATE));
+	this.releaseDate.set(releaseDate.get(releaseDate.YEAR), releaseDate.get(releaseDate.MONTH), releaseDate.get(releaseDate.DATE));
     }
     /**
      * Get Release date
@@ -195,19 +197,9 @@ public class GeneralMovie
      * Set actors
      * @param actors the actor list of a movie
      */
-    protected void setActors(String actors[])
+    protected void setActors(String actors)
     {
-        if(actors.length>ACTOR_COUNT)
-        {
-            int count = ACTOR_COUNT;
-            while(actors.length > count)//if the actor array doesn't have enough space, double its size
-               count*=2;
-            actors = new String[count];
-        }
-        else
-            actors = new String[ACTOR_COUNT];
-
-        System.arraycopy(actors, 0, this.actors, 0, actors.length); //copy the actor list
+	this.actors = actors;
     }
     /**
      * Get actors
@@ -215,15 +207,7 @@ public class GeneralMovie
      */
     protected String getActors()
     {
-        String actorList="";
-        for(int i =0;actors[i]!=null&&i<actors.length;i++)
-	{
-		actorList+=actors[i];
-		if(i!=actors.length-1)
-		actorList+=" ,";
-	}
-      
-        return actorList;
+	return actors;
     }
     /**
      * Set synopsis/description 
@@ -242,8 +226,8 @@ public class GeneralMovie
         return synopsis;
     }
     private String title;
-    private int SKU;
-    private String actors[];
+    private String SKU;
+    private String actors;
     private String director;
     private GregorianCalendar releaseDate;
     private String synopsis;
