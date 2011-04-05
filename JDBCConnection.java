@@ -33,4 +33,12 @@ class JDBCConnection {
       catch(Exception egg){System.err.println(egg.getMessage());}
       return st;
   }
+
+  public Statement prepareStatement(){
+      try{
+          st = conn.createStatement();
+      }
+      catch(Exception egg){System.err.println(egg.getMessage());}
+      return st;
+  }
 }
