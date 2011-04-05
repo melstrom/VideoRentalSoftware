@@ -12,7 +12,7 @@ public class Penalty implements TransactionItem
 		@param numberOfDays the number of days an item is overdue
 		@param movie the movie that is overdue
 	*/
-	public Penalty(int numberOfDays, Movie movie)
+	public Penalty(int numberOfDays, RentalMovie movie)
 	{
 		setPenaltyPerDay(movie.getMediaType());
 		this.numberOfDays = numberOfDays;
