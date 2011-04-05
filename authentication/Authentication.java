@@ -1,3 +1,4 @@
+package authentication;
 /**
 *	User authentication class
 *	
