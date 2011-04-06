@@ -1,3 +1,4 @@
+package pos;
 
 /**
 	An object representing a payment.
@@ -7,6 +8,9 @@ public class Payment
 {
 	private int amount;
 	private String paymentMethod;
+//	boolean verified;
+//	public boolean isVerified()
+//	public void setVerified()
 	
 	/**
 		Constructs a payment with attributes amount and paymentMethod.

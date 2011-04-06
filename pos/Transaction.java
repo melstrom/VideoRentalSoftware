@@ -524,7 +524,15 @@ public class Transaction
 		
 		return myTransaction;
 	}
-	
+
+	/**
+	 * This returns the tax rate at the time of the transaction (assumptions: only 1 tax).
+	 * @return the tax rate as an integer (12 means 12 percent).
+	 */
+	public int getTaxRateAtTimeOfSale()
+	{
+	    return (int)(taxPercent*100);
+	}
 	
 	
 	
