@@ -23,7 +23,7 @@ import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
-import jdbconnect.JDBCConnection;
+import jdbconnection.JDBCConnection;
 
 public class GeneralMovie
 {
@@ -44,8 +44,8 @@ public class GeneralMovie
         this.SKU = SKU;
         this.actors = actors;
         this.synopsis = synopsis;
-        setReleaseDate(releaseDate);
-        setupConnection();
+        this.releaseDate = releaseDate;
+        //setupConnection();
     }
    /**
     * Add a reservation to the end of reservation list
@@ -77,7 +77,7 @@ public class GeneralMovie
         String table = "Reservation";
         String query = "insert into "+table
                 +"values ("+quote+title+quote+comma //movie title
-                           +quote+reservation.getAccount().getAccountID()+quote+comma //account id of the customer
+                           +quote+reservation.getAccountID()+quote+comma //account id of the customer
                             +quote+reservation.getDate()+quote+");";//the date this movie is reserved 
 
         executeQuery(query);
@@ -116,7 +116,7 @@ public class GeneralMovie
      */
     final protected void setupConnection()throws SQLException
     {
-        connection = DriverManager.getConnection(url,username,password); //url, username and password for the database is still unknown
+        //connection = DriverManager.getConnection(url,username,password); //url, username and password for the database is still unknown
         statement = connection.createStatement();
     }
     /**
@@ -131,7 +131,7 @@ public class GeneralMovie
                         +quote+title+quote+comma
                         +quote+director+quote+comma
                         +quote+releaseDate.get(releaseDate.YEAR)+releaseDate.get(releaseDate.MONTH)+ releaseDate.get(releaseDate.DATE)+quote+comma
-                        +quote+actors[0]+quote+comma
+                        +quote+actors+quote+comma
                         +quote+synopsis+quote+comma
                         +quote+SKU+quote
                         +");";

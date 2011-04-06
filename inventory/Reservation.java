@@ -2,12 +2,12 @@
  * Inventory / Reservation
  * Entity Class
 * -------matt: replaced Date object with GregorianCalendar. (Date is deprecated)
+*-------replaced Customer parameter with customerID (this class has no access to Customer Class which is in a package outside of inventory package)
  */
 
 package inventory;
 
 import java.util.GregorianCalendar;
-import Account.CustomerAccount;
 
 /**
  *
@@ -16,9 +16,9 @@ import Account.CustomerAccount;
 public class Reservation {
 
     /**
-     * Customer who make the reservation.
+     * The id of the customer who made the reservation.
      */
-    private Customer customer;
+    private int customerID;
 
     /**
      * Date for pickup.
@@ -31,12 +31,12 @@ public class Reservation {
      * It takes a customer object and a Date object to make a reservation.
      * @param reserveAcc Account object of Customer who make the reservation.
      * @param reservePickupdate Date for pickup.
-     * @pre reserveCustomer a valid CustomerAccount object.
+     * @pre a valid customer id
      * @pre pickupDate > today.
      * @post Object Reservation created.
      */
-    public Reservation(Customer reserveAcc, GregorianCalendar reservePickupdate){
-      customer = reserveAcc;
+    public Reservation(int reserveAccID, GregorianCalendar reservePickupdate){
+      customerID = reserveAccID;
       pickupDate = reservePickupdate;
     }
 
@@ -44,11 +44,10 @@ public class Reservation {
     /**
      * Accessors - Get the customer account.
      * @return account of the customer who makes the reservation
-     * @pre customer not null.
-     * @post return customer.
+     * @post return customer id.
      */
-    public Customer getAccount(){
-        return customer;
+    public int getAccountID(){
+        return customerID;
     }
 
     /**
@@ -64,11 +63,9 @@ public class Reservation {
      /**
      * Mutator - Set the customer account.
      * @param acc account to replace existing account.
-     * @pre acc is a valid CustomerAccount object.
-     * @post new account replaced.
      */
-    public void setAccount(Customer acc){
-        customer = acc;
+    public void setAccountID(int id){
+        customerID = id;
     }
 
     /**
