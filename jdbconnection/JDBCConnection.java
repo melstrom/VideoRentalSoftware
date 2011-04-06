@@ -12,8 +12,9 @@ import java.sql.*;
  * added a closeConnection() method so that the database connection can be
  * released on command
  * removed all catch blocks since they are not dealing with errors at this level
+ * changed the class to be public
  */
-class JDBCConnection {
+public class JDBCConnection {
 
     //this is the connection variable that will make the connection to MySql DB
    private Connection conn = null;
