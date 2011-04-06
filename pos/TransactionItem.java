@@ -4,7 +4,7 @@ package pos;
 import accounts.Customer;
 import java.util.Date;
 /**
- * This is a inventory item that the store carries with it's own unique barcode number.
+ * This is a inventory item that the store carries with it's own unique barcode number; The classes that should implement this interface include: physical video, refund, penalty, lost movie, discount.
  */
 public interface TransactionItem
 {
@@ -34,6 +34,8 @@ public interface TransactionItem
 	 * @param theDate the date the customer interacted with this item.
 	 * @pre the item should be paid for before calling this method.
 	 */
-	boolean updateItemInfo(Customer customerID, Date theDate);
+	boolean updateItemInfoAtCheckOut(Customer customerID, Date theDate);
+	//this method should probably be in some inventory item class.
+	//boolean updateItemInfoAtCheckIn(Date theDate, String barcode);
 }
 
