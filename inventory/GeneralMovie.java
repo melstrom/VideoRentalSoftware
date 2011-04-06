@@ -23,6 +23,7 @@ import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
+import jdbconnect.JDBCConnection;
 
 public class GeneralMovie
 {

@@ -1,3 +1,5 @@
+package jdbconnection;
+
 //package com.devdaily.sqlprocessortests;
 
 import java.sql.*;
