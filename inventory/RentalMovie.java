@@ -6,7 +6,7 @@
 * @version 1.0 March 27, 2011
 * -----------matt: removed setCondition() and setStatus() from constructor (duplicate function calls)
 */
-package inventory;
+//package inventory;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -27,14 +27,19 @@ class RentalMovie extends IndividualMovie{
     */
    
     public RentalMovie(String condition, String status, IndividualMovie movie)
-    {
-    	history = new ArrayList<RentalHistory>();
+   {
     	this.condition = condition;
         this.status = status;
+	setSKU(movie.getSKU());
+        setTitle(movie.getTitle());
+        setActors(movie.getActors());
+        setDirector(movie.getDirector());
+        setSynopsis(movie.getSynopsis());
+        setReleaseDate(movie.getReleaseDate());
         setPrice(movie.getPrice());
         setFormat(movie.getFormat());
         setCategory(movie.getCategory());
-        setBarCode(movie.getBarCode());
+        setBarcode(movie.getBarcode());
     }
    
     private ArrayList history;           //The rental history of a movie, who has it, and when it will be returned
@@ -44,52 +49,6 @@ class RentalMovie extends IndividualMovie{
     final char quote ='\'';
     final char comma =',';
     Scanner myScanner = new Scanner(System.in);
-
-    /**
-    * Create a history query that updates the rental history table
-    * @param history a history record of the rental movie
-    * * @throws SQLException
-    */
-    final protected void appendHistory(RentalHistory history) throws SQLException
-    {
-       setStatus("rented out");                            //changes the status of the movie to rented out
-       if(!getCondition().equals("good")){                 //checks the condition of the movie
-    	   System.out.print("what is the movie condition? " );
-   		   String state = myScanner.nextLine();               //gets input from staff about condition of movie
-    	   setCondition(state);                            //changes the condition of the movie to rented out
-       }
-       history.add("Barcode= "+ barcode + " Customer= "+ CustomerAccount.customer()+" Rented= "+ Date.rentDate()+" Due= "
-    		   + Date.returnDate()+" Status=  "+ status +" Condition= "+ condition); //adds information to arraylist as a single index
-       String table = "RentalHistory";
-           String query = "insert into "+table
-          				+"where barcode ="+quote+barcode+quote+comma			   //makes sure the correct movie is selected by barcode
-          				+"values ("+quote+history.getAccount().getAccountID()+quote+comma //account id of the customer
-          					+quote+history.rentDate().getDate()+quote+comma			//the date this movie is checked out, todays date
-                            +quote+history.returnDate().getDate()+quote+comma			//the date this movie is to be returned
-            				+quote+history.getStatus()+quote+comma 		    //the status of the movie
-            				+quote+history.getCondition()+quote		//the condition of the movie
-            			+");";
-           super.executeQuery(query);
-          
-    }
-    
-    /**
-    * Show movies whole rental history
-    */
-    protected void showHistory()
-    {
-     System.out.println("The movie " + barcode + " history is :");
-    //display elements of history
-    for(int index=0; index < history.size(); index++)
-    System.out.println(history.get(index));	
-    //this shows the last line only
-    //if (!history.isEmpty()) {
-    //	  history.get(history.size()-1);
-    //	}
-
-    }
-    
-    
     /**
     *Set or change the status for the individual movie which can be rented out, rent ,or reserved
     *input: aStatus

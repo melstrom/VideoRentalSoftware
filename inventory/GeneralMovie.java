@@ -15,18 +15,25 @@
 	@version 1.2.5 April 4
 		-changed SKU to type String
 		-changed actors(type array) to actors(type String)
+		-added empty constructor
  */
-package inventory;
+//package inventory;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
-import jdbconnection.JDBCConnection;
+//import jdbconnection.JDBCConnection;
 
 public class GeneralMovie
 {
+    /**
+	Constructor with no parameter
+     */
+    public GeneralMovie()
+    {
+    }
     /**
      *  General movie constructor
      *  takes 6 default attributes
@@ -40,11 +47,13 @@ public class GeneralMovie
     public GeneralMovie(String SKU, String title, String actors, String director, GregorianCalendar releaseDate, String synopsis)throws SQLException
     {
         reservations = new ArrayList<Reservation>();
+	this.releaseDate = new GregorianCalendar();
         this.title = title;
         this.SKU = SKU;
+	this.director = director;
         this.actors = actors;
         this.synopsis = synopsis;
-        this.releaseDate = releaseDate;
+	this.releaseDate = releaseDate;
         //setupConnection();
     }
    /**
@@ -80,7 +89,7 @@ public class GeneralMovie
                            +quote+reservation.getAccountID()+quote+comma //account id of the customer
                             +quote+reservation.getDate()+quote+");";//the date this movie is reserved 
 
-        executeQuery(query);
+       //executeQuery(query);
     }
     /**
      * Create remove reservation query
@@ -93,7 +102,7 @@ public class GeneralMovie
         String query = "delete from "+table
                 +"where title ="+quote+title+quote
                  +";";
-        executeQuery(query);
+       // executeQuery(query);
     }
     /**
      * Send query to the database
@@ -139,8 +148,15 @@ public class GeneralMovie
         executeQuery(query);
     }
     /**
+    * @param SKU the SKU uniquely identifies a movie catalog 
+    */
+    protected void setSKU(String SKU)
+    {
+	this.SKU = SKU;
+    }
+    /**
     *   Get SKU
-    *  @param SKU the SKU uniquely identifies a movie catalog 
+    *  @return SKU - the SKU uniquely identifies a movie catalog 
     */
     protected String getSKU()
     {
@@ -184,7 +200,7 @@ public class GeneralMovie
      */
     protected void setReleaseDate(GregorianCalendar releaseDate)
     {
-	this.releaseDate.set(releaseDate.get(releaseDate.YEAR), releaseDate.get(releaseDate.MONTH), releaseDate.get(releaseDate.DATE));
+	this.releaseDate = releaseDate;
     }
     /**
      * Get Release date
@@ -226,6 +242,25 @@ public class GeneralMovie
     {
         return synopsis;
     }
+    /**
+    *  Get reservation list
+    *  @return reservations - reservation arraylist
+    */
+    public ArrayList getReservations()
+    {
+	    return reservations;
+    }
+    //testing class
+    public void getAll()
+    {
+	    System.out.println(getSKU());
+	    System.out.println(getTitle());
+	    System.out.println(getActors());
+	    System.out.println(getDirector());
+	    System.out.println(getReleaseDate().get(releaseDate.YEAR));
+	    System.out.println(getSynopsis());
+    }
+    
     private String title;
     private String SKU;
     private String actors;

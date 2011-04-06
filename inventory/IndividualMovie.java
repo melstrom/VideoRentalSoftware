@@ -5,11 +5,17 @@
 * @version 1.0 March 27, 2011
 */
 
-package inventory;
+//package inventory;
 
 public class IndividualMovie extends GeneralMovie{
 
-    /**
+   /**
+   *	Empty constructor for decendant classes
+   */
+   public IndividualMovie()
+   {
+   }	   
+   /**
     * The constructor
     * inherits from GeneralMovie
     * takes 4 default attributes
@@ -18,9 +24,9 @@ public class IndividualMovie extends GeneralMovie{
     * @param price this cost of the rental in cents
     * @param format is the type of movie format, such as DVD, VHS, Bluray
     */
-   
    public IndividualMovie(String category, int price, String format, String barcode, GeneralMovie movie)
    {
+	setSKU(movie.getSKU());
         setTitle(movie.getTitle());
         setActors(movie.getActors());
         setDirector(movie.getDirector());
@@ -29,8 +35,8 @@ public class IndividualMovie extends GeneralMovie{
         setPrice(price);
         setFormat(format);
         setCategory(category);
-        setBarCode(barcode);
-        setupConnection();
+        setBarcode(barcode);
+        //setupConnection();
    }
    
     private String category;            //The categories for the movies such as new release, 7 day rental ect.
@@ -101,7 +107,7 @@ public class IndividualMovie extends GeneralMovie{
     *input: theBarcode
     *@param theBarcode the unique string on the movie the identifies it
     */
-    protected void setBarCode(String theBarcode)
+    protected void setBarcode(String theBarcode)
     {
     this.barcode = theBarcode;
     }
@@ -111,7 +117,7 @@ public class IndividualMovie extends GeneralMovie{
     *Get the individual movies barcode which is a unique string 
     *@return barcode
     */
-    public String getBarCode()
+    public String getBarcode()
     {
     return barcode;
     }

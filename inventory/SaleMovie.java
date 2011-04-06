@@ -6,8 +6,9 @@
 *----------matt: removed setCondition() and setStatus() from constructor (duplicate function calls)
 *----------removed changeCategory() it is already in the superclass IndividualMovie as setCategory()
 *----------fixed implementation for setStatus() (status datatype mismatch)
+*----------removed history
  */
-package inventory;
+//package inventory;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -32,23 +33,19 @@ class SaleMovie extends IndividualMovie{
 	public SaleMovie(String condition, String status, IndividualMovie movie)
 	{
 	   this.condition = condition;                     //condition of movie
-	   this.status = status;						//if it is sold or for sale
+	   this.status = status;	
+	   setSKU(movie.getSKU());
+           setTitle(movie.getTitle());
+           setActors(movie.getActors());
+           setDirector(movie.getDirector());
+           setSynopsis(movie.getSynopsis());
+           setReleaseDate(movie.getReleaseDate());		//if it is sold or for sale
 	   setPrice(movie.getPrice());
 	   setFormat(movie.getFormat());
 	   setCategory(movie.getCategory());
-	   setBarCode(movie.getBarCode());
+	   setBarcode(movie.getBarcode());
 	 }
 	
-	/*
-	*change the category for the individual movie from rental to sale, which is used for pricing schemes
-	*input: saleMovie
-	*@param saleMovie is a movie category for sale movies
-	
-	 protected void changeCategory(RentalMovie saleMovie)
-	 {
-	   	this.category = saleMovie;
-	 }
-         */
 	
 	    /**
 	     *Set the condition for the individual movie which can be damaged, good, or scratched, or write off
@@ -59,11 +56,11 @@ class SaleMovie extends IndividualMovie{
 	     {
 	     	if (state.equals(WRITEOFF))
 	     	{
-	     		  String table = "SaleMovie";
-	    	        String query = "delete from "+table
+	     		 String table = "SaleMovie";
+	    	        /*String query = "delete from "+table
 	    	                +"where barcode ="+quote+barcode+quote                 //delete the movie
 	    	                 +";";
-	    	        super.executeQuery(query);
+	    	        super.executeQuery(query);*/
 	     	}
 	     	this.condition = state;
 	     }
@@ -86,20 +83,21 @@ class SaleMovie extends IndividualMovie{
                 {
 	    	  if(aStatus.equals("Sold")){
 	    		  String table = "SaleMovie";
-	    	        String query = "delete from "+table
+	    	       /* String query = "delete from "+table
 	    	                +"where barcode ="+quote+barcode+quote
-	    	                 +";";
-	    	        super.executeQuery(query);
+	    	                 +";";*/
+	    	     
 	    	  }
 	    	  else if(aStatus.equals("Sale")){
 	    		  String table = "SaleMovie";
-	    	        String query = "insert into "+table
+	    	       /* String query = "insert into "+table
                         +"values ("+quote+title+quote+comma      //movie title
                                    +quote+barcode+quote+comma    //movie id
                                    +quote+category+quote+");";  //the category of movie discount, sale.
 
-                  super.executeQuery(query);
+			*/
 		}
+		 //super.executeQuery(query);
 	      	  this.status = aStatus;
 	      }
 	     
