@@ -1,0 +1,10 @@
+Unit test completed (under normal condition)
+
+<Class list>
+
+-GeneralMovie
+-IndividualMovie
+-RentalMovie
+-SaleMovie
+-Reservation
+

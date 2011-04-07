@@ -16,20 +16,17 @@
 		-changed SKU to type String
 		-changed actors(type array) to actors(type String)
 		-added empty constructor
+	@version 1.3
+		-moved all database/query stuff out 
  */
 //package inventory;
 import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.GregorianCalendar;
-//import jdbconnection.JDBCConnection;
 
 public class GeneralMovie
 {
     /**
-	Constructor with no parameter
+	Empty Constructor 
      */
     public GeneralMovie()
     {
@@ -44,7 +41,7 @@ public class GeneralMovie
      * @param releaseDate  the release date of a movie 
      * @param synopsis the brief description of a movie
      */
-    public GeneralMovie(String SKU, String title, String actors, String director, GregorianCalendar releaseDate, String synopsis)throws SQLException
+    public GeneralMovie(String SKU, String title, String actors, String director, GregorianCalendar releaseDate, String synopsis)
     {
         reservations = new ArrayList<Reservation>();
 	this.releaseDate = new GregorianCalendar();
@@ -54,34 +51,29 @@ public class GeneralMovie
         this.actors = actors;
         this.synopsis = synopsis;
 	this.releaseDate = releaseDate;
-        //setupConnection();
     }
    /**
     * Add a reservation to the end of reservation list
     * @param aReservation a reservation record
-    * @throws SQLException
     */
-    public void reservationEnqueue(Reservation aReservation)throws SQLException
+    public void reservationEnqueue(Reservation aReservation)
     {
-            reservations.add(aReservation);
-            addReservation(aReservation);
+	    reservations.add(aReservation);
     }
     /**
      * Remove the first reservation from the reservation list
-     * @throws SQLException
      */
-    public void reservationDequeue()throws SQLException
+    public void reservationDequeue()
     {
         if(!reservations.isEmpty())
         reservations.remove(0);
-        removeReservation();
     }
     /**
      * Create reservation query
      * @param aReservation a reservation record
      * @throws SQLException
      */
-    final protected void addReservation(Reservation reservation) throws SQLException
+  /*  final protected void addReservation(Reservation reservation) throws SQLException
     {
         String table = "Reservation";
         String query = "insert into "+table
@@ -90,12 +82,12 @@ public class GeneralMovie
                             +quote+reservation.getDate()+quote+");";//the date this movie is reserved 
 
        //executeQuery(query);
-    }
+    }*/
     /**
      * Create remove reservation query
-     * TODO: change the SQL query when we know what the table looks like
      * @throws SQLException
      */
+    /*
     final protected void removeReservation() throws SQLException
     {
         String table = "Reservation";
@@ -103,36 +95,14 @@ public class GeneralMovie
                 +"where title ="+quote+title+quote
                  +";";
        // executeQuery(query);
-    }
-    /**
-     * Send query to the database
-     * @param query the sql query
-     */
-    final protected void executeQuery(String query)throws SQLException
-    {
-        try
-        {
-            statement.execute(query);
-        }
-        finally
-        {
-            connection.close();
-        }
-    }
-    /**
-     * Set up connection between the application and the database
-     * @throws SQLException
-     */
-    final protected void setupConnection()throws SQLException
-    {
-        //connection = DriverManager.getConnection(url,username,password); //url, username and password for the database is still unknown
-        statement = connection.createStatement();
-    }
+    }*/
+
+
     /**
      * Create query for adding a new movie catalog
      * @throws SQLException
      */
-    final protected void addNewTitle()throws SQLException
+   /* final protected void addNewTitle()throws SQLException
     {
         String table="Videoinfo";
         String query = "insert into"+table
@@ -146,7 +116,7 @@ public class GeneralMovie
                         +");";
 
         executeQuery(query);
-    }
+    }*/
     /**
     * @param SKU the SKU uniquely identifies a movie catalog 
     */
@@ -250,15 +220,13 @@ public class GeneralMovie
     {
 	    return reservations;
     }
-    //testing class
-    public void getAll()
+    /**
+    * testing class
+    */
+    public String getAll()
     {
-	    System.out.println(getSKU());
-	    System.out.println(getTitle());
-	    System.out.println(getActors());
-	    System.out.println(getDirector());
-	    System.out.println(getReleaseDate().get(releaseDate.YEAR));
-	    System.out.println(getSynopsis());
+	    return getSKU()+" "+getTitle()+" "+getActors()+" "+getDirector()
+			+" "+getReleaseDate().get(releaseDate.YEAR)+" "+getSynopsis();
     }
     
     private String title;
@@ -267,10 +235,6 @@ public class GeneralMovie
     private String director;
     private GregorianCalendar releaseDate;
     private String synopsis;
-    private ArrayList reservations;
-    private Connection connection;
-    private Statement statement;
+    private ArrayList <Reservation> reservations;
     final private int ACTOR_COUNT=1;
-    final char quote ='\'';
-    final char comma =',';
 }

@@ -6,17 +6,13 @@
 *----------matt: removed setCondition() and setStatus() from constructor (duplicate function calls)
 *----------removed changeCategory() it is already in the superclass IndividualMovie as setCategory()
 *----------fixed implementation for setStatus() (status datatype mismatch)
-*----------removed history
+*----------removed history 
+*----------moved out querys 
  */
 //package inventory;
 import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Scanner;
 
-class SaleMovie extends IndividualMovie{
+public class SaleMovie extends IndividualMovie{
 
 	private String condition;
 	private String status;
@@ -39,7 +35,7 @@ class SaleMovie extends IndividualMovie{
            setActors(movie.getActors());
            setDirector(movie.getDirector());
            setSynopsis(movie.getSynopsis());
-           setReleaseDate(movie.getReleaseDate());		//if it is sold or for sale
+           setReleaseDate(movie.getReleaseDate());		
 	   setPrice(movie.getPrice());
 	   setFormat(movie.getFormat());
 	   setCategory(movie.getCategory());
@@ -48,21 +44,17 @@ class SaleMovie extends IndividualMovie{
 	
 	
 	    /**
-	     *Set the condition for the individual movie which can be damaged, good, or scratched, or write off
-	     *input: state
-	     *@param state is the condition of the movie
+	     *Set the condition for the individual movie which can be damaged, good, or scratched
+	     *@param condition is the condition of the movie
 	     */
-	     private void setCondition(String state)
+	     public void setCondition(String condition)
 	     {
-	     	if (state.equals(WRITEOFF))
-	     	{
 	     		 String table = "SaleMovie";
 	    	        /*String query = "delete from "+table
 	    	                +"where barcode ="+quote+barcode+quote                 //delete the movie
-	    	                 +";";
-	    	        super.executeQuery(query);*/
-	     	}
-	     	this.condition = state;
+	    	                 +";";;*/
+	     	
+	     	this.condition = condition;
 	     }
 	    
 	     /**
@@ -76,18 +68,17 @@ class SaleMovie extends IndividualMovie{
 	     
 	     /**
 	      *Set or change the status for the individual movie which cannot be rented out, and can only be sold or for sale
-	      *input: aStatus
 	      *@param aStatus is the sale status
 	      */
-	      private void setStatus(String aStatus)
+	      public void setStatus(String aStatus)
                 {
-	    	  if(aStatus.equals("Sold")){
+			/*if(aStatus.equals("Sold")){
 	    		  String table = "SaleMovie";
 	    	       /* String query = "delete from "+table
 	    	                +"where barcode ="+quote+barcode+quote
 	    	                 +";";*/
 	    	     
-	    	  }
+	    	/*  }
 	    	  else if(aStatus.equals("Sale")){
 	    		  String table = "SaleMovie";
 	    	       /* String query = "insert into "+table
@@ -95,9 +86,8 @@ class SaleMovie extends IndividualMovie{
                                    +quote+barcode+quote+comma    //movie id
                                    +quote+category+quote+");";  //the category of movie discount, sale.
 
-			*/
-		}
-		 //super.executeQuery(query);
+			
+		}*/
 	      	  this.status = aStatus;
 	      }
 	     

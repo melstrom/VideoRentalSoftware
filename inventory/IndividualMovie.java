@@ -26,17 +26,12 @@ public class IndividualMovie extends GeneralMovie{
     */
    public IndividualMovie(String category, int price, String format, String barcode, GeneralMovie movie)
    {
-	setSKU(movie.getSKU());
-        setTitle(movie.getTitle());
-        setActors(movie.getActors());
-        setDirector(movie.getDirector());
-        setSynopsis(movie.getSynopsis());
-        setReleaseDate(movie.getReleaseDate());
+	super(movie.getSKU(),movie.getTitle(),movie.getActors(), movie.getDirector(),movie.getReleaseDate(),movie.getSynopsis());
+	
         setPrice(price);
         setFormat(format);
         setCategory(category);
         setBarcode(barcode);
-        //setupConnection();
    }
    
     private String category;            //The categories for the movies such as new release, 7 day rental ect.

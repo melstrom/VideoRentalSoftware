@@ -29,7 +29,7 @@ public class Reservation {
     /**
      * Reservation is the constructor for this class. 
      * It takes a customer object and a Date object to make a reservation.
-     * @param reserveAcc Account object of Customer who make the reservation.
+     * @param reserveAcc Account id of the Customer who make the reservation.
      * @param reservePickupdate Date for pickup.
      * @pre a valid customer id
      * @pre pickupDate > today.
@@ -42,8 +42,8 @@ public class Reservation {
 
 
     /**
-     * Accessors - Get the customer account.
-     * @return account of the customer who makes the reservation
+     * Accessors - Get the customer account id
+     * @return account id of the customer who makes the reservation
      * @post return customer id.
      */
     public int getAccountID(){
@@ -71,10 +71,10 @@ public class Reservation {
     /**
      * Mutator - Set the reservation date.
      * @param date new reservation date to be set.
-     * @pre date is a valid Date object.
+     * @pre YEAR, MONTH, DATE are set in date
      * @post new date replaced.
      */
-    public void GetDate(GregorianCalendar date){
+    public void setDate(GregorianCalendar date){
         pickupDate = date;
     }   
 
