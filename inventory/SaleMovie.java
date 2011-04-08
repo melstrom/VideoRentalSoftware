@@ -9,7 +9,7 @@
 *----------removed history 
 *----------moved out querys 
  */
-//package inventory;
+package inventory;
 import java.util.ArrayList;
 
 public class SaleMovie extends IndividualMovie{

@@ -5,7 +5,7 @@
 *-------replaced Customer parameter with customerID (this class has no access to Customer Class which is in a package outside of inventory package)
  */
 
-//package inventory;
+package inventory;
 
 import java.util.GregorianCalendar;
 

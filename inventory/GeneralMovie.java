@@ -19,7 +19,7 @@
 	@version 1.3
 		-moved all database/query stuff out 
  */
-//package inventory;
+package inventory;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -44,6 +44,7 @@ public class GeneralMovie
     public GeneralMovie(String SKU, String title, String actors, String director, GregorianCalendar releaseDate, String synopsis)
     {
         reservations = new ArrayList<Reservation>();
+        // need to populate this arraylist of reservations
 	this.releaseDate = new GregorianCalendar();
         this.title = title;
         this.SKU = SKU;
@@ -51,6 +52,10 @@ public class GeneralMovie
         this.actors = actors;
         this.synopsis = synopsis;
 	this.releaseDate = releaseDate;
+
+        // missing some attributes that are in the database like genre and rating and retail price
+        // TODO: update when the database is online
+        // is actors really just a string, or is it an array of strings?
     }
    /**
     * Add a reservation to the end of reservation list

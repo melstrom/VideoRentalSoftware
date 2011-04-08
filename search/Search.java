@@ -6,12 +6,14 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
-import accounts.Customer;
+import account.Customer;
 import inventory.GeneralMovie;
 import inventory.IndividualMovie;
 import inventory.MovieNotFoundException;
 import inventory.RentalMovie;
-import utility.*;
+import java.util.Arrays;
+import jdbconnection.JDBCConnection;
+
 
 /**
  * The Search class is a utility class that searches the database for Movies,
@@ -32,10 +34,14 @@ import utility.*;
  * TODO: make sure all SQL queries match the database tables
  *
  * Last updated:
- * 29 Mar
+ * 7 April
  *
  * @author Mitch
  * @version 0.2
+ *
+ * 7 April:
+ * removed Sanitizer since PreparedStatement takes care of that already
+ *
  *
  */
 public class Search
@@ -63,24 +69,20 @@ public class Search
      * @return a list of Customers that match the search criteria, or
      * null if no matching accounts could be found
      * @throws SQLException if a connection with the database cannot be made
-     * @throws SanitizerException if the passed parameters contain SQL queries
-     * TODO: update when I understand Sanitizer better
-     * TODO: verify assumption that Customer can be constructed with only
-     * the member ID.
-     * TODO: problem with a 10 digit phone number being too large for Integer.
-     * solution: made it a string
+     * @throws ClassNotFoundException
+     * TODO: is memberID a string or an integer? how long is it?
      */
     public static ArrayList<Customer>
             searchCustomers(String lastName, String phoneNum)
-            throws SQLException, SanitizerException
+            throws SQLException, ClassNotFoundException
     {
         if (lastName == null && phoneNum == null)
         {
             return null;
         }
         ArrayList<Customer> matchingMembers
-                    = new ArrayList<accounts.Customer>();
-        Connection connection = utility.DataSource.getConnection();
+                    = new ArrayList<Customer>();
+        Connection connection = JDBCConnection.getConnection();
         try
         {
             String query = generateCustomerQuery(lastName, phoneNum);
@@ -90,14 +92,14 @@ public class Search
                 statement.setString(1, lastName);
             }
             
-            utility.Sanitizer.sanitize(phoneNum);
             ResultSet result = statement.executeQuery(query);
 
             
             while (result.next())
             {
                 String matchingAccountID = result.getString("accountID");
-                matchingMembers.add(getCustomer(Customer(matchingAccountID)));
+                int matchingAccountID_int = Integer.parseInt(matchingAccountID);
+                matchingMembers.add(getCustomer(matchingAccountID_int));
             }
             result.close();
         } // end try
@@ -123,7 +125,7 @@ public class Search
      * passing it to this.  However, there is a redundant check anyways.
      * @param lastName member's last name to search for
      * @param phoneNum member's phone number
-     * @return a string containg the query or null if lastName and phoneNum are
+     * @return a string containing the query or null if lastName and phoneNum are
      * both null
      */
     private static String generateCustomerQuery(String lastName, String phoneNum)
@@ -161,18 +163,21 @@ public class Search
      * the database.  Depends on both the Customer class and the customer
      * table in the database.
      *
-     * TODO: find out if memberID is a good name based on the Customer class
      *
      * @param memberID the unique identifying number of the member
      * @return the member's account, or null if the member ID did not match any
      * records
      * @throws SQLException if a connection with the database cannot be made
+     * @throws ClassNotFoundException if the driver cannot be found
+     *
+     * TODO: find out length of memberID and check to make the sure the
+     * pass parameter matches
      */
     
     public static Customer getCustomer(int memberID)
-            throws SQLException
+            throws SQLException, ClassNotFoundException
     {
-        Connection connection = DataSource.getConnection();
+        Connection connection = JDBCConnection.getConnection();
         try
         {
             Statement statement = connection.createStatement();
@@ -190,8 +195,11 @@ public class Search
 
 
                 result.close();
-                return new Customer(memberID, firstName, lastName, address,
-                        driversLicenseNum, phoneNum, altPhoneNum);
+                return new Customer(driversLicenseNum, memberID, firstName,
+                        lastName, address, phoneNum);
+                // copy and pasted signature from the Customer class
+                //Customer(String DL, int accountID, String Fname,
+                //String Lname, String address, String phoneNum)
             } // end if
             else
             {
@@ -229,7 +237,7 @@ public class Search
             String title,
             String actor,
             String director)
-            throws SQLException, SanitizerException
+            throws SQLException, ClassNotFoundException, MovieNotFoundException
     {
         ResultSet result 
                 = searchMoviesGetSQLResult(title, actor, director);
@@ -262,17 +270,14 @@ public class Search
      * @return the results of an SQL query for all movies or rental movies that
      * match the search criteria
      * @throws SQLException
-     * @throws SanitizerException
-     * TODO: update when sanitizer is better understood
-     * TODO: verify assumption that GeneralMovie can be constructed with only the infoID
      * TODO: verify assumption that GeneralMovie infoID will be a String
-     * TODO: verify that RentalMovie will inherit from Movie
+     * TODO: change to be able to search for multiple actors (low priority)
      */
     private static ResultSet searchMoviesGetSQLResult(
             String title,
             String actor,
             String director)
-            throws SQLException, SanitizerException
+            throws SQLException, ClassNotFoundException
     {
         String query = generateMovieQuery(title, actor, director);
         if (query == null)
@@ -281,11 +286,6 @@ public class Search
         }
 
         String[] searchTerms = {title, actor, director};
-        for (String term : searchTerms)
-        {
-            Sanitizer.sanitize(term);
-            // TODO: verify assumption that sanitize can handle null
-        }
 
         if (searchTerms[1] != null)
         {
@@ -293,7 +293,7 @@ public class Search
             // padding the actor with wildcards before the search
         }
 
-        Connection connection = DataSource.getConnection();
+        Connection connection = JDBCConnection.getConnection();
         try
         {
             PreparedStatement statement = connection.prepareStatement(query);
@@ -399,13 +399,11 @@ public class Search
      *
      * @param barcodeID the unique identifying number of the movie
      * @return the movie that corresponds to the barcodeID
-     * TODO: need to understand the GeneralMovie class better
      */
     public static GeneralMovie previewMovie(String barcodeID)
             throws MovieNotFoundException, SQLException,
-            IllegalArgumentException,SanitizerExceptoin
+            IllegalArgumentException
     {
-        Sanitizer.sanitize(barcodeID);
         int barcodeLength = barcodeID.length();
         GeneralMovie movie;
         switch (barcodeLength)
@@ -436,24 +434,28 @@ public class Search
      * @throws IllegalArgumentException
      */
     private static IndividualMovie previewIndividualMovie(String barcodeID)
-            throws MovieNotFoundException, SQLException, IllegalArgumentException
+            throws MovieNotFoundException, SQLException, 
+            IllegalArgumentException, ClassNotFoundException
     {
         String SKU = barcodeID.substring(0, GeneralMovie.SKU_LENGTH);
         String copyNum = barcodeID.substring(GeneralMovie.SKU_LENGTH);
 
         GeneralMovie generalMovie = previewGeneralMovie(SKU);
         String rentalQuery = "SELECT * FROM RentalVideo, PhysicalVideo,"
-                + " WHERE RentalVideo.SKU = '"+SKU+"' AND RentalVideo.rentalID = "
-                + "'"+copyNum;
+                + " WHERE RentalVideo.SKU = ? AND RentalVideo.rentalID = ?";
         String saleQuery = "SELECT * FROM SaleVideo, PhysicalVideo,"
-                + " WHERE SaleVideo.SKU = '"+SKU+"' AND SaleVideo.rentalID = "
-                + "'"+copyNum;
+                + " WHERE SaleVideo.SKU = ? AND SaleVideo.rentalID = ?";
 
-        Connection conn = DataSource.getConnection();
+        Connection conn = JDBCConnection.getConnection();
         try
         {
-            Statement stat = conn.createStatment();
-            ResultSet result = stat.executeQuery(rentalQuery);
+            PreparedStatement statement = conn.prepareStatement(rentalQuery);
+            int parameterIndex = 1;
+            // sql starts numbering parameter indecies from 1
+            statement.setString(parameterIndex, SKU);
+            parameterIndex++;
+            statement.setString(parameterIndex, copyNum);
+            ResultSet result = statement.executeQuery(rentalQuery);
             if (result.next())
             {
                 String category = result.getString("RentalVideo.category");
@@ -461,13 +463,21 @@ public class Search
                 String condition = result.getString("SaleVideo.condition");
                 return new RentalMovie(generalMovie, category, format,
                         condition, barcodeID);
-                // TODO: confirm constructor for RentalMovie
-                // TODO: rental time?
+                // copy and pasted signature for RentalMovie
+                //public RentalMovie(String condition, String status, IndividualMovie movie)
+                // TODO: rewrite RentalMovie
             }
             else
             {
                 result.close();
-                result = stat.executeQuery(saleQuery);
+                statement.close();
+                statement = conn.prepareStatement(saleQuery);
+                parameterIndex = 1;
+                // reset parameter index
+                statement.setString(parameterIndex, SKU);
+                parameterIndex++;
+                statement.setString(parameterIndex, copyNum);
+                result = statement.executeQuery(saleQuery);
                 if (result.next())
                 {
                     String category = result.getString("SaleVideo.category");
@@ -475,6 +485,7 @@ public class Search
                     String condition = result.getString("SaleVideo.condition");
                     return new IndividualMovie(generalMovie, category, format,
                             condition, barcodeID);
+                    // TODO: rewreite IndividualMovie
                 }
                 else
                 {
@@ -486,7 +497,7 @@ public class Search
         }
         finally
         {
-            connection.close();
+            conn.close();
         }
 
     }
@@ -499,15 +510,16 @@ public class Search
      * @return
      * @throws SQLException
      * @throws MovieNotFoundException
+     * @throws ClassNotFoundException
      */
     private static GeneralMovie previewGeneralMovie(String barcodeID)
-            throws SQLException, MovieNotFoundException
+            throws SQLException, MovieNotFoundException, ClassNotFoundException
     {
         String query = "SELECT * FROM VideoInfo, PhysicalVideo "
                 + "WHERE VideoInfo.InfoID = PhysicalVideo.InfoID "
                 + "AND PhysicalVideo.SKU = '" + barcodeID + "'";
         
-        Connection connection = DataSource.getConnection();
+        Connection connection = JDBCConnection.getConnection();
         try
         {
             Statement statement = connection.createStatement();
@@ -533,6 +545,8 @@ public class Search
                         + "Movies sharing the same SKU found.");
             }
             String[] actorList = actors.split(", ");
+
+
             // the format of releaseDate is YYYYMMDD, or an 8 digit integer
             // To get its four most significant digits, we want to get rid of
             // the four least significant, so divide it by 10^4
@@ -544,8 +558,11 @@ public class Search
             int day = (releaseDate % 100);
             java.util.GregorianCalendar release =
                     new java.util.GregorianCalendar(year, month, day);
-            return new GeneralMovie(title, actorList, director, release,
-                    synopsis, rating, genre, publisher);
+            // copy and pasted GeneralMovie signature
+            //public GeneralMovie(String SKU, String title, String actors, String director, GregorianCalendar releaseDate, String synopsis)
+            return new GeneralMovie(barcodeID, title, actorList, director, release, synopsis);
+            // TODO: rating, genre, publisher fields in GeneralMovie
+            // TODO: maybe actorList is just a single string delimited by ,
         } // end try
 
         finally
@@ -594,7 +611,7 @@ public class Search
 
 
 
-    /**
+    /** BOOKMARK: 7 April
      * This is a helper method for searchRentals.  It generates an SQL query of
      * the form:
      * SELECT videoRental.SKU, videoRental.rentalID
@@ -734,7 +751,7 @@ public class Search
             Sanitizer.sanitize(term);
         }
 
-        Connection connection = DataSource.getConnection();
+        Connection connection = JDBCConnection.getConnection();
         try
         {
 
@@ -934,7 +951,7 @@ public class Search
     private static ResultSet browseGetSQLResult(String query)
             throws SQLException
     {
-        Connection connection = DataSource.getConnection();
+        Connection connection = JDBCConnection.getConnection();
         try
         {
             Statement statement = connection.createStatement();

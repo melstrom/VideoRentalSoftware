@@ -21,11 +21,12 @@ public class connectionExamples {
     private static String pnum = "";
     private static String address = "";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // TODO code application logic here
         connectToDb();
         getInput();
         SelectTest();
+        DBConn.closeConnection();
     }
     public static void connectToDb(){
         try{
@@ -43,7 +44,7 @@ public class connectionExamples {
         System.out.println("Enter address:");
         address = sc.next();
     }
-    public static void InsertTest(){
+    public static void InsertTest() throws Exception{
         Statement st = DBConn.createStatement();
         try{
         st.executeUpdate("insert into Customer (FirstName,PhoneNumber,address)value('" + fname + "','" + pnum + "','" + address + "');");

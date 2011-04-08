@@ -5,7 +5,7 @@
 * @version 1.0 March 27, 2011
 */
 
-//package inventory;
+package inventory;
 
 public class IndividualMovie extends GeneralMovie{
 

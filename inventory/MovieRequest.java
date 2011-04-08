@@ -6,7 +6,7 @@
 package inventory;
 
 import java.util.Date;
-import Account.CustomerAccount;
+import account.CustomerAccount;
 
 
 /**
