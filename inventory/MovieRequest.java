@@ -2,12 +2,14 @@
  * Inventory / MovieRequest
  * Entity Class
  */
-
+//--matt: changed Date to Gregorian Calendar
+//--fixed object naming
+//--accountID and SKU as constructor parameters
+//--removed extra methods (get and sets for title, director and actors) 
+//--removed sql stuff
 package inventory;
 
-import java.util.Date;
-import account.CustomerAccount;
-
+import java.util.GregorianCalendar;
 
 /**
  * This class is a container for entity object Movie Request
@@ -15,74 +17,55 @@ import account.CustomerAccount;
  */
 public class MovieRequest {
 
-    /**
-     * Movies title
-     */
-    private String title;
-
+    private String SKU;
     /**
      * Movie's media type
      */
     private String format;
+    /**
+     *  The date the movie is available in store and to checkout.
+     */
+    private GregorianCalendar releaseDate;
 
     /**
-     * Movie's actor info. Optional
+     * The id of the Customer who make the reservation.
      */
-    private String[] actors;
-
-    /**
-     * Movie's director info. Optional
-     */
-    private String director;
-
-    /**
-     * This movie's releaseDate
-     */
-    private Date releaseDate;
-
-    /**
-     * Customer who make the reservation.
-     */
-    private CustomerAccount customer;
-
-
+    private int accountID;
     /**
      * MovieRequest is the constructor for this class.
      * It takes a customer Account object and some movie informations to make a request.
-     * @param title Movie title to be request.
+     * @param SKU the SKU number of the movie
      * @param format Movie's media format.
-     * @param releaseDate Movie's Release Date.
-     * @param requestAcc Customer Account object for customer who want this movie.
-     * @pre reserveCustomer a valid CustomerAccount object.
-     * @pre title size > 0 and size < .
+     * @param releaseDate the date the movie is available in store and to checkout.
+     * @param accountID Customer Account id for customer who want this movie.
      * @pre format size > 0.
-     * @pre releaseDate a proper Date class.
+     * @pre releaseDate is not null
      * @post Object Request created.
      */
-    public MovieRequest(String title, String format, Date releaseDate, CustomerAccount requestAcc){
+    public MovieRequest(String SKU, String format, GregorianCalendar releaseDate, int accountID){
 
-        this.title = title;
+        this.SKU = SKU;
         this.format = format;
         this.releaseDate = releaseDate;
-        customer = requestAcc;
+        this.accountID = accountID;
 
     }
 
     /**
-     * Accessors - Get movie title.
-     * @return movie title in string.
-     * @pre title not empty.
-     * @post return customer.
+     * Accessors - Get movie SKU.
+     * @return movie SKU in string.
+     * @pre SKU not empty.
+     * @post return SKU.
      */
-    public String getTitle(){
-        return title;
+    public String getSKU(){
+        return SKU;
     }
 
     /**
-     * Accessors - Get media format.
+     * Accessors - Get media format (dvd / video/ blueray)
      * @return movie's media format.
      * @pre format not empty.
-     * @post return pickupDate.
+     * @post return format
      */
     public String getFormat(){
         return format;
@@ -94,49 +77,17 @@ public class MovieRequest {
      * @pre releaseDate not null.
      * @post return releaseDate.
      */
-    public Date getReleaseDate(){
+    public GregorianCalendar getReleaseDate(){
         return releaseDate;
     }
 
     /**
      * Accessors - Get the customer account.
-     * @return account of the customer who makes the request.
-     * @pre customer not null.
-     * @post return customer.
+     * @return account id of the customer who makes the request.
+     * @post return customer id.
      */
-    public CustomerAccount getAccount(){
-        return customer;
-    }
-
-    /**
-     * Accessors - (Optional) Get actors in this movie.
-     * @return actors, an array contain actors.
-     * @pre actor array not empty.
-     * @post return array index.
-     */
-    public String[] getActors(){
-        return actors;
-    }
-
-    /**
-     * Accessors - (Optional) Get director name of this movie.
-     * @return director name in string.
-     * @pre director not empty.
-     * @post return director.
-     */
-    public String getDirector(){
-        return director;
-    }
-
-
-    /**
-     * Mutator - Set movie title.
-     * @param title new title to be set.
-     * @pre title is not a empty string.
-     * @post new title replaced.
-     */
-    public void setTitle(String title){
-        this.title = title;
+    public int getAccountID(){
+        return accountID;
     }
 
     /**
@@ -145,58 +96,25 @@ public class MovieRequest {
      * @pre format a valid media format.
      * @post new media format set.
      */
-    public void setformat(String format){
+    public void setFormat(String format){
         this.format = format;
     }
 
     /**
      * Mutator - Set the release date.
-     * @param date new release date to be set.
-     * @pre date is a valid Date object.
+     * @param date the date the movie is available in store and to pickup.
+     * @pre date is not null
      * @post new date replaced.
      */
-    public void setDate(Date date){
+    public void setDate(GregorianCalendar date){
         releaseDate = date;
     }
 
      /**
-     * Mutator - Set the customer account.
-     * @param acc account to replace existing account.
-     * @pre acc is a valid CustomerAccount object.
-     * @post new account replaced.
+     * Mutator - Set the customer account id.
+     * @param accountID the account id of the customer
      */
-    public void setAccount(CustomerAccount acc){
-        customer = acc;
+    public void setAccountID(int accountID){
+        this.accountID = accountID;
     }
-
-    /**
-     * Mutator - (Optional) Set actors will replace existing actor array with new one.
-     * @param actors new actors array to be set.
-     * @pre actors a valid array index.
-     * @post new actor array set.
-     */
-    public void setActors(String[] actors){
-        this.actors = actors;
-    }
-
-    /**
-     * Mutator - (Optional) Set director will reset director name.
-     * @param director new director name to be set.
-     * @pre director a valid is not a empty string.
-     * @post new director name set.
-     */
-    public void setDirector(String director){
-        this.director = director;
-    }
-
-    /**
-     * Create queue will create a sql queue that will add a request record.
-     * @return Queue to create a request record.
-     */
-    public String createQueue(){
-
-    return "";
-    }
-
-
 }

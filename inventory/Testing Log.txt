@@ -7,4 +7,5 @@ Unit test completed (under normal condition)
 -RentalMovie
 -SaleMovie
 -Reservation
+-MovieRequest
 
