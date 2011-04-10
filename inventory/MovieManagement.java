@@ -313,20 +313,24 @@ public class MovieManagement
      * Checks if the movie copy already exist in the database
      * @param barcode
      */
-    private void checkDuplicateBarcode(String barcode) throws SQLException
+    public static void checkDuplicateBarcode(String barcode) throws Exception
     {
 
         //Query:SELECT barcode FROM physicalVideo WHERE barcode = 'barcode'
-        String table = "barcode";
-        String column = "physicalVideo";
-        String constraint = barcode;
+        //String table = "barcode";
+        //String column = "physicalVideo";
+        //String constraint = barcode;
 
-        String query = generateQuery(table, column, barcode);
+        String table = "physicalVideo";
+        String column = "SKU";
+        String constraint = "SKU = '"+barcode.replaceAll("'","")+"'";
+
+        //String query = generateQuery(table, column, barcode);
+        String query = generateQuery(table, column, constraint);
         //String query = "SELECT " + column + " FROM " + table + " WHERE " + column + "='" + barcode + "'";
-
         boolean found = statement.execute(query);
 
-        if (found == true)
+        if (found)
         {
             throw new MovieExistsException("This copy already exists (in the database)");
         }
@@ -339,7 +343,7 @@ public class MovieManagement
      * @param constraint The constraint of the query
      * @return
      */
-    private String generateQuery(String table, String column, String constraint)
+    private static String generateQuery(String table, String column, String constraint)
     {
         String query = "SELECT " + column + " FROM " + table + " WHERE " + constraint;
         return query;
