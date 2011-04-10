@@ -19,6 +19,8 @@ public class JDBCConnection {
     //this is the connection variable that will make the connection to MySql DB
    private Connection conn = null;
    private Statement st =null;
+   public static final int COLUMNS = 0;
+   public static final int VALUES = 1;
 
    //Constructor that calls getConnection to create the connection.
 
@@ -150,6 +152,45 @@ public static Connection getConnection()
         {
             query = query + "WHERE "+constraint;
         }
+        return query;
+    }
+
+
+
+    /**
+     * This method makes an insert query of the form
+     * INSERT INTO tableName (information[COLUMNS][0], information[COLUMNS][1],
+     * ..., information[COLUMNS][n])
+     * VALUES (information[VALUES][0], information[VALUES][1],
+     * ..., information[VALUES][n])
+     * @param tableName
+     * @param information
+     * @return
+     * @pre parameters cannot be null
+     * @throws NullPointerException if any information is null
+     */
+    public static String makeInsert(String tableName, String[][] information)
+    {
+        String query = "INSERT INTO " + tableName + " ";
+        query = query + "(" + information[COLUMNS][0];
+
+        for (int i = 1; i < information[COLUMNS].length; i++)
+        {
+            query += ", ";
+            query += information[COLUMNS][i];
+        }
+
+        query += ")";
+
+        query = query + "VALUES (" + information[VALUES][0];
+        for (int j = 1; j < information[VALUES].length; j++)
+        {
+            query += ", ";
+            query += information[VALUES][j];
+        }
+
+        query += ")";
+
         return query;
     }
 

@@ -142,13 +142,13 @@ public class GeneralMovie
         String dashlessRating = rating.replaceAll("-", "");
         dashlessRating = dashlessRating.replaceAll(" ", "");
 
-        for (String[] possibleRating : possibleRatings)
+        for (int i = 0; i < possibleRatings[CANADIAN].length; i++)
         {
-            if (possibleRating[AMERICAN].replaceAll("-", "").equalsIgnoreCase(dashlessRating))
+            if (possibleRatings[AMERICAN][i].replaceAll("-", "").equalsIgnoreCase(dashlessRating))
             {
-                dashlessRating = possibleRating[CANADIAN];
+                dashlessRating = possibleRatings[CANADIAN][i];
             }
-            if (dashlessRating.equalsIgnoreCase(possibleRating[CANADIAN]))
+            if (dashlessRating.equalsIgnoreCase(possibleRatings[CANADIAN][i]))
             {
                 this.rating = dashlessRating;
                 return;
@@ -410,7 +410,7 @@ public class GeneralMovie
      * @throws IllegalArgumentException if it is not a valid genre
      * @pre the passed genre must be a valid genre
      */
-    public void setGenre(String genre)
+    public final void setGenre(String genre)
     {
         if (genre == null)
             throw new IllegalArgumentException("Not a valid genre");
