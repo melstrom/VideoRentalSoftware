@@ -6,20 +6,23 @@ package pos;
 
 public class Payment
 {
-	private int amount;
+	//private int requiredAmount;
+	private int collectedAmount;
 	private String paymentMethod;
-//	boolean verified;
+	private boolean verified;
 //	public boolean isVerified()
 //	public void setVerified()
+	//@param requiredAmount the amount required in cents for the transaction.
 	
 	/**
-		Constructs a payment with attributes amount and paymentMethod.
-		@param amount the amount the customer is paying in cents (example: with cash, a $20 would be 2000 and with CC or debit it is exact amount in cents).
+		Constructs a Cash payment with attributes required and collected payment.
+		
+		@param collectedAmount the amount the customer is paying in cents.
 		@param paymentMethod the method the customer is paying with.
 	*/
-	public Payment(int amount, String paymentMethod)
+	public Payment(int collectedAmount, String paymentMethod)
 	{
-		this.amount = amount;
+		this.collectedAmount = collectedAmount;
 		this.paymentMethod = paymentMethod;
 	}
 	
@@ -29,7 +32,7 @@ public class Payment
 	*/
 	public int getAmount()
 	{
-		return amount;
+		return collectedAmount;
 	}
 	
 	/**
