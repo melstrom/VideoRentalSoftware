@@ -174,20 +174,33 @@ public class MovieManagement
         String column = "infoID";
         String constraint = makeConstraint(movie);
         String query = JDBCConnection.makeQuery(table, column, constraint);
-        ResultSet result = JDBCConnection.getResults(query);
-        if (result.next())
+        JDBCConnection conn = new JDBCConnection();
+        try
         {
-            int infoID = result.getInt(column);
-            return infoID;
+            ResultSet result = conn.getResults(query);
+            if (result.next())
+            {
+                int infoID = result.getInt(column);
+                return infoID;
+            }
+            else
+            {
+                return null;
+            }
         }
-        else
+        finally
         {
-            return null;
+            conn.closeConnection();
         }
     }
 
 
 
+    /**
+     * Makes the constraint string for searching for videoInfo
+     * @param movie
+     * @return
+     */
     private static String makeConstraint(GeneralMovie movie)
     {
 
@@ -200,29 +213,29 @@ public class MovieManagement
         String synopsis = movie.getSynopsis();
         String rating = movie.getRating();
         java.util.Calendar releaseDate = movie.getReleaseDate();
-        int retailPriceInCents = movie.getRetailPriceInCents();
         String genre = movie.getGenre();
+        int runtime = movie.getRuntime();
 
         String constraint = "SKU = '"+SKU+"'";
         constraint += " AND ";
-        constraint += "title = '"+title+"'";
+        constraint += "Title = '"+title+"'";
         constraint += " AND ";
         constraint += makeActorConstraint(actors);
         constraint += " AND ";
-        constraint += "director = '"+director+"'";
+        constraint += "Director = '"+director+"'";
         constraint += " AND ";
-        constraint += "producer = '"+producer+"'";
+        constraint += "Producer = '"+producer+"'";
         constraint += " AND ";
         constraint += "studio = '"+studio+"'";
         constraint += " AND ";
-        constraint += "synopsis = '"+synopsis+"'";
+        constraint += "Description = '"+synopsis+"'";
         constraint += " AND ";
-        constraint += "rating = '"+rating+"'";
-        constraint += makeReleaseDateString(releaseDate);
+        constraint += "Rating = '"+rating+"'";
+        constraint += "ReleaseDate = '"+makeReleaseDateString(releaseDate)+"'";
         constraint += " AND ";
-        constraint += "retailPriceInCents = '"+retailPriceInCents+"'";
+        constraint += "Genre = '"+genre+"'";
         constraint += " AND ";
-        constraint += "genre = '"+genre+"'";
+        constraint += "Length = '"+runtime+"'";
         return constraint;
     }
 
@@ -307,10 +320,10 @@ public class MovieManagement
     private static int getHighestID(String table, String column) throws Exception
     {
         String query = JDBCConnection.makeQuery(table, "MAX("+column+")", null);
-        JDBCConnection connection = new JDBCConnection();
+        JDBCConnection conn = new JDBCConnection();
         try
         {
-            ResultSet result = connection.getResults(query);
+            ResultSet result = conn.getResults(query);
             if (result.next())
             {
                 return result.getInt(column);
@@ -322,7 +335,7 @@ public class MovieManagement
         }
         finally
         {
-            connection.closeConnection();
+            conn.closeConnection();
         }
     }
 
@@ -349,6 +362,8 @@ public class MovieManagement
         String rating = movie.getRating();
         java.util.Calendar releaseDate = movie.getReleaseDate();
         String genre = movie.getGenre();
+        String length = "" + movie.getRuntime();
+
 
         if (actors == null || actors.length < 1)
             throw new IllegalArgumentException("No actors provided");
@@ -363,14 +378,14 @@ public class MovieManagement
 
         String[][] videoInfo =
         {
-            {"InfoID", "Title", "actors", "director", "producer","studio",
-                     "Description", "rating", "releaseDate", "genre"
+            {"InfoID", "Title", "Actors", "Director", "Producer","studio",
+                     "Description", "Rating", "ReleaseDate", "Genre", "Length"
             },
 
             {
                "" + infoID, title, actorsString, director, producer,
                        studio, synopsis, rating, makeReleaseDateString(releaseDate),
-                       genre
+                       genre, length
             }
         };
 
@@ -418,15 +433,23 @@ public class MovieManagement
         };
 
         String insert = JDBCConnection.makeInsert(tableName, information);
-        int linesChanged = JDBCConnection.update(insert);
-        if (linesChanged > 1)
+        JDBCConnection conn = new JDBCConnection();
+        try
         {
-            // throw new SQLException("" + linesChanged + "rows were changed");
-            // undo the update
+            int linesChanged = conn.update(insert);
+            if (linesChanged > 1)
+            {
+                // throw new SQLException("" + linesChanged + "rows were changed");
+                // undo the update
+            }
+            else if (linesChanged == 0)
+            {
+                throw new java.sql.SQLException("Updates were not completed");
+            }
         }
-        else if (linesChanged == 0)
+        finally
         {
-            throw new java.sql.SQLException("Updates were not completed");
+            conn.closeConnection();
         }
     }
 
@@ -595,7 +618,7 @@ public class MovieManagement
      * Check if the movie information already exist in the database
      * @param SKU
      */
-    private void checkDuplicateSKU(String SKU) throws SQLException
+    private void checkDuplicateSKU(String SKU) throws SQLException, MovieExistsException
     {
 
         //SELECT SKU FROM videoInfo WHERE SKU = 'newSKU#'
@@ -610,7 +633,7 @@ public class MovieManagement
 
         if (found == true)
         {
-            throw new MovieExsistsException("This movie already exists (in the database)");
+            throw new MovieExistsException("This movie already exists (in the database)");
         }
     }
 
@@ -631,13 +654,24 @@ public class MovieManagement
         String constraint = "SKU = '"+barcode.replaceAll("'","")+"'";
 
         //String query = generateQuery(table, column, barcode);
-        String query = generateQuery(table, column, constraint);
+        String query = JDBCConnection.makeQuery(table, column, constraint);
         //String query = "SELECT " + column + " FROM " + table + " WHERE " + column + "='" + barcode + "'";
-        boolean found = statement.execute(query);
-
-        if (found)
+        //boolean found = statement.execute(query);
+        JDBCConnection conn = new JDBCConnection();
+        try
         {
-            throw new MovieExistsException("This copy already exists (in the database)");
+            ResultSet results = conn.getResults(query);
+
+
+//            if (found)
+            if (results.next())
+            {
+                throw new MovieExistsException("This copy already exists (in the database)");
+            }
+        }
+        finally
+        {
+            conn.closeConnection();
         }
     }
 

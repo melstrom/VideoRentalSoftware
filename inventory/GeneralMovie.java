@@ -69,7 +69,8 @@ public class GeneralMovie
 	    String rating,
             String studio,
             int retailPriceInCents,
-            String format)
+            String format,
+            int runtime)
             throws Exception
     {
         reservations = new ArrayList<Reservation>();
@@ -85,6 +86,28 @@ public class GeneralMovie
 	setRating(rating);
         setGenre(genre);
         setFormat(format);
+        this.runtime = runtime;
+    }
+
+
+
+    public int getRuntime()
+    {
+        return runtime;
+    }
+
+
+    public int setRuntime(int runtime)
+    {
+        if (runtime < 1)
+        {
+            throw new IllegalArgumentException("Runtime must be positive");
+        }
+        else
+        {
+            this.runtime = runtime;
+        }
+
     }
 
 	
@@ -485,6 +508,7 @@ public class GeneralMovie
     private String director;
     private GregorianCalendar releaseDate;
     private String synopsis;
+    private int runtime;
     private ArrayList <Reservation> reservations;
     final private int ACTOR_COUNT=1;
     public static final int MAX_SKU_LENGTH = 25;

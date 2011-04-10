@@ -180,13 +180,13 @@ public static Connection getConnection()
             query += information[COLUMNS][i];
         }
 
-        query += ")";
+        query += ") ";
 
-        query = query + "VALUES (" + information[VALUES][0];
+        query = query + "VALUES ('" + information[VALUES][0]+"'";
         for (int j = 1; j < information[VALUES].length; j++)
         {
             query += ", ";
-            query += information[VALUES][j];
+            query = query + "'"+ information[VALUES][j] + "'";
         }
 
         query += ")";
@@ -207,8 +207,10 @@ public static Connection getConnection()
      */
     public ResultSet getResults(String query) throws Exception
     {
+        System.out.println(query);
         ResultSet result = null;
-        Statement statement = conn.prepareStatement(query);
+        Statement statement = conn.createStatement();
+        //Statement statement = conn.prepareStatement(query);
         result = statement.executeQuery(query);
         return result;
     }
