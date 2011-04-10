@@ -22,8 +22,6 @@
  *      @version 1.4
  *              - added in missing attributes:
  *                  producer, rating, studio, retailPriceInCents
- *              - TODO: add accessors, mutators for new attributes
- *              -TODO: modify getAll()
  */
 package inventory;
 import java.util.ArrayList;
@@ -54,7 +52,7 @@ public class GeneralMovie
      * @param studio
      * @param retailPriceInCents
      */
-    //public GeneralMovie(String SKU, String title, String actors, String director, GregorianCalendar releaseDate, String synopsis)
+    
     public GeneralMovie
             (String SKU,
             String title,
@@ -63,26 +61,24 @@ public class GeneralMovie
             String producer,
             GregorianCalendar releaseDate,
             String synopsis,
-            String rating,
+	    String rating,
             String studio,
             int retailPriceInCents)
     {
         reservations = new ArrayList<Reservation>();
-        // need to populate this arraylist of reservations
-	//this.releaseDate = new GregorianCalendar();
-        this.releaseDate = (GregorianCalendar) releaseDate.clone();
         this.title = title;
         this.SKU = SKU;
 	this.director = director;
         this.actors = actors;
         this.synopsis = synopsis;
+	this.studio = studio;
 	this.releaseDate = releaseDate;
         this.producer = producer;
-        setRating(rating);
         this.retailPriceInCents = retailPriceInCents;
+	setRating(rating);
     }
 
-
+	
 
     /**
      * Sets the rating of this GeneralMovie object to the specified rating.
@@ -158,6 +154,15 @@ public class GeneralMovie
 
         throw new IllegalArgumentException("Not a valid rating");
     }
+    
+    /**
+    * Get rating
+    *@return rating 
+    */
+    public String getRating()
+    {
+	    return rating;
+    }
 
 
 
@@ -229,6 +234,24 @@ public class GeneralMovie
         executeQuery(query);
     }*/
     /**
+    *	Set retail price in cents
+    * @param price the retailPriceInCents
+    */
+    protected void setRetailPriceInCents(int price)
+    {
+	    retailPriceInCents = price;
+    }
+    /**
+    * 	Get retailPriceInCents
+    * @return the retailPriceInCents
+    */
+    public int getRetailPriceInCents()
+    {
+	    return retailPriceInCents;
+    }
+    
+    /**
+    *	Set SKU
     * @param SKU the SKU uniquely identifies a movie catalog
     */
     protected void setSKU(String SKU)
@@ -276,6 +299,21 @@ public class GeneralMovie
         return director;
     }
     /**
+    *	Set producer
+    * @param producer the producer of the movie
+    */
+    protected void setProducer(String producer)
+    {
+	    this.producer = producer;
+    }
+    /**
+    *	
+    */
+    public String getProducer()
+    {
+	    return producer;
+    }
+    /**
      * Set release date
      * @param releaseDate the release date of a movie
      */
@@ -295,7 +333,7 @@ public class GeneralMovie
      * Set actors
      * @param actors the actor list of a movie
      */
-    protected void setActors(String actors)
+    protected void setActors(String []actors)
     {
 	this.actors = actors;
     }
@@ -303,9 +341,25 @@ public class GeneralMovie
      * Get actors
      * @return the actor list of a movie
      */
-    public String getActors()
+    public String []getActors()
     {
 	return actors;
+    }
+    /**
+    * Set studio
+    *@param studio the studio name
+    */
+    protected void setStudio(String studio)
+    {
+	    this.studio = studio;
+    }
+    /**
+    *Get studio
+    *@return studio the studio name
+    */
+    public String getStudio()
+    {
+	    return studio;
     }
     /**
      * Set synopsis/description
@@ -333,24 +387,23 @@ public class GeneralMovie
     }
     /**
     * testing class
-    */
+    
     public String getAll()
-    {
-	    return getSKU()+" "+getTitle()+" "+getActors()+" "+getDirector()
+    {	    			
+	    return getSKU()+" "+getTitle()+" "+getDirector()
 			+" "+getReleaseDate().get(releaseDate.YEAR)+" "+getSynopsis();
-    }
+    }*/
 
     private String title;
     private String SKU;
-    private String[] actors;
+    private String studio;
+    private String actors[];
     private String director;
     private GregorianCalendar releaseDate;
     private String synopsis;
     private ArrayList <Reservation> reservations;
     final private int ACTOR_COUNT=1;
     private static final int MAX_SKU_LENGTH = 25;
-    private final char comma = ',';
-    private final char quote = '\'';
     private String producer;
     private String rating;
     private int retailPriceInCents;

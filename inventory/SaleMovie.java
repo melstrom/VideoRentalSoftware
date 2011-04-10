@@ -15,7 +15,7 @@ public class SaleMovie extends IndividualMovie{
 
 	private String condition;
 	private String status;
-	final private String WRITEOFF = "write off"; //movie is written off for excessive damage
+	final private String WRITEOFF = "WRITEOF"; //movie is written off for excessive damage
 
 	/**
          * The constructor
@@ -27,18 +27,22 @@ public class SaleMovie extends IndividualMovie{
          */
 	public SaleMovie(String condition, String status, IndividualMovie movie)
 	{
-	   this.condition = condition;                     //condition of movie
-	   this.status = status;	
-	   setSKU(movie.getSKU());
-           setTitle(movie.getTitle());
-           setActors(movie.getActors());
-           setDirector(movie.getDirector());
-           setSynopsis(movie.getSynopsis());
-           setReleaseDate(movie.getReleaseDate());		
-	   setPrice(movie.getPrice());
-	   setFormat(movie.getFormat());
-	   setCategory(movie.getCategory());
-	   setBarcode(movie.getBarcode());
+		this.condition = condition;                     //condition of movie
+		this.status = status;	
+		setSKU(movie.getSKU());
+		setTitle(movie.getTitle());
+		setActors(movie.getActors());
+		setDirector(movie.getDirector());
+		setSynopsis(movie.getSynopsis());
+		setReleaseDate(movie.getReleaseDate());
+		setPrice(movie.getPrice());
+		setFormat(movie.getFormat());
+		setCategory(movie.getCategory());
+		setBarcode(movie.getBarcode());
+		setStudio(movie.getStudio());
+		setRating(movie.getRating());
+		setRetailPriceInCents(movie.getRetailPriceInCents());
+		setProducer(movie.getProducer());
 	 }
 	
 	

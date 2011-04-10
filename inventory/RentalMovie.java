@@ -34,11 +34,15 @@ public class RentalMovie extends IndividualMovie{
         setFormat(movie.getFormat());
         setCategory(movie.getCategory());
         setBarcode(movie.getBarcode());
-        // setRentalTime(); TODO: implement this method
+	setStudio(movie.getStudio());
+	setRating(movie.getRating());
+	setRetailPriceInCents(movie.getRetailPriceInCents());
+	setProducer(movie.getProducer());
     }
    
     private String status;              //The status of the movie, if it is store "rent" or is out "rented out" or reserved
     private String condition;           //The physical condition of the movie, states as a string whether its damaged, good, scratched etc
+    public static final int ID_LENGTH = IndividualMovie.ID_LENGTH;
     /**
     *Set or change the status for the individual movie which can be rented out, rent ,or reserved
     *@param aStatus is the rental status of the movie, three states rent, rented out, and reserved
@@ -74,8 +78,4 @@ public class RentalMovie extends IndividualMovie{
     {
     	return condition;
     }
-
-
-
-    public static final int ID_LENGTH = IndividualMovie.ID_LENGTH;
 }

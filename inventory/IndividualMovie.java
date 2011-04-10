@@ -26,7 +26,9 @@ public class IndividualMovie extends GeneralMovie{
     */
    public IndividualMovie(String category, int price, String format, String barcode, GeneralMovie movie)
    {
-	super(movie.getSKU(),movie.getTitle(),movie.getActors(), movie.getDirector(),movie.getReleaseDate(),movie.getSynopsis());
+	super(movie.getSKU(),movie.getTitle(),movie.getActors(),movie.getDirector(), movie.getProducer(),
+			movie.getReleaseDate(), movie.getSynopsis(), movie.getRating(), movie.getStudio(),
+			movie.getRetailPriceInCents());
 	
         setPrice(price);
         setFormat(format);

@@ -61,7 +61,7 @@ public class RentalMovieManagement {
             throws MovieNotFoundException, SQLException
     {
         //RentalMovie rentalMovie = new RentalMovie(barcodeNum);
-	   RentalMovie rentalMovie  = search(barcodeNum);
+	  // RentalMovie rentalMovie  = search(barcodeNum);
 	    
         return rentalMovie.getStatus();
     }
@@ -100,7 +100,7 @@ public class RentalMovieManagement {
     public static String getCondition(String barcodeNum)
             throws MovieNotFoundException, SQLException
     {
-	    RentalMovie rentalMovie  = search(barcodeNum);
+	    //RentalMovie rentalMovie  = search(barcodeNum);
         return rentalMovie.getCondition();
     }
 
@@ -334,13 +334,10 @@ public class RentalMovieManagement {
      */
     private static String setConditionGenerateSQL(String barcodeNum, String condition)
     {
-        String[] splitBarcode = {null, null};
-        splitBarcode(barcodeNum, splitBarcode);
-        final int SKU_INDEX = 0;
-        final int RENTAL_ID_INDEX = 1;
+        splitBarcode(barcodeNum);
 
-        String where = "(RentalID = '" + splitBarcode[RENTAL_ID_INDEX]
-                + "' AND SKU = '" + splitBarcode[SKU_INDEX] + "')";
+        String where = "(RentalID = '" + rentalID
+                + "' AND SKU = '" + SKU+ "')";
         String query = generateUpdateSQL("VideoRental", "Condition", condition, where);
         
         return query;
@@ -356,10 +353,9 @@ public class RentalMovieManagement {
     private static String generateMovieWhere(String barcodeNum)
     {
         splitBarcode(barcodeNum);
-        final int SKU_INDEX = 0;
-        final int RENTAL_ID_INDEX = 1;
-        String where = "RentalID = '" + splitBarcode[RENTAL_ID_INDEX] + "'"
-                + "AND SKU = '" + splitBarcode[SKU_INDEX] + "'";
+    
+        String where = "RentalID = '" + RentalID+ "'"
+                + "AND SKU = '" + s+ "'";
         return where;
     }
     
@@ -376,7 +372,7 @@ public class RentalMovieManagement {
     public static String getCategory(String barcodeNum)
             throws SQLException, MovieNotFoundException
     {
-        RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
+        //RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
         return movie.getCategory();
     }
     
@@ -441,8 +437,7 @@ public class RentalMovieManagement {
 
         // TODO: disallow if movie is not available or condition not good?
 
-        String[] keys = {null, null};
-        splitBarcode(barcodeNum, keys);
+        splitBarcode(barcodeNum);
         String[] deleteColumnNames = {"SKU", "rentalID"};
         String deleteQuery = generateDeleteSQL("VideoRental", deleteColumnNames, keys);
         String[] insertColumnNames = { "condition", "SKU", "saleID" };
@@ -597,13 +592,9 @@ public class RentalMovieManagement {
      */
     private static String generateMovieWhere(String barcodeNum)
     {
-        
-        String[] splitBarcode = {null, null};
         splitBarcode(barcodeNum);
-        final int SKU_INDEX = 0;
-        final int RENTAL_ID_INDEX = 1;
-        String where = "RentalID = '" + splitBarcode[RENTAL_ID_INDEX] + "'"
-                + "AND SKU = '" + splitBarcode[SKU_INDEX] + "'";
+        String where = "RentalID = '" + rentalID + "'"
+                + "AND SKU = '" + SKU+ "'";
         return where;
     }
     

@@ -2,15 +2,21 @@ import java.util.GregorianCalendar;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import inventory.MovieRequest;
+import inventory.GeneralMovie;
+import inventory.IndividualMovie;
+import inventory.RentalMovie;
+import inventory.SaleMovie;
+import inventory.Reservation;
 public class TestMovies
 {
 	public static void main(String arg[]) throws SQLException
 	{
 		/*GregorianCalendar calendar = new GregorianCalendar();
 		calendar.set(2011, 2, 31);
-	
+		String ac [] = new String [1];
+		 ac[0]= "fk";
 		//SKU, title, actors, director, releaseDate, synopsis
-		GeneralMovie movie = new GeneralMovie("a", "b", "c", "d" , calendar, "e");
+		//GeneralMovie movie = new GeneralMovie("a", "b", ac, "c", "d" , calendar, "e", "f","g", 100);
 		//category, price, format, barcode
 		IndividualMovie movie1 = new IndividualMovie("f", 1, "g", "h", movie);
 		
@@ -58,7 +64,7 @@ public class TestMovies
 		movie.reservationDequeue();
 
 	       list = movie.getReservations();
-		Object[] elements1 = list.toArray();*/
+		Object[] elements1 = list.toArray();
 	       
 		GregorianCalendar calendar1 = new GregorianCalendar();
 		calendar1.set(1999, 5, 7);
@@ -70,12 +76,12 @@ public class TestMovies
 		date = r.getDate().get(r.getDate().DATE);
 		System.out.println("+++"+num+" "+date +" "+month+" "+year);
 		for(int i=0; i < elements1.length ; i++)        
-               System.out.println(elements1[i]);*/
+               System.out.println(elements1[i]);
 	       
-	       MovieRequest request = new MovieRequest("c1", "dvd", calendar1, 88);
+	    /*   MovieRequest request = new MovieRequest("c1", "dvd", calendar1, 88);
 	       request.setFormat("blueray");
 	       System.out.println(request.getSKU() +" "+request.getFormat()+" "
-				+request.getReleaseDate().get(request.getReleaseDate().YEAR)+" "+request.getAccountID());
+				+request.getReleaseDate().get(request.getReleaseDate().YEAR)+" "+request.getAccountID());*/
 	}
 
 }
