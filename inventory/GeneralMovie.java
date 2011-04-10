@@ -27,6 +27,7 @@ package inventory;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.sql.ResultSet;
+import jdbconnection.JDBCConnection;
 
 public class GeneralMovie
 {
@@ -41,7 +42,7 @@ public class GeneralMovie
 
     /**
      * Constructor of GeneralMovie
-     * takes 10 parameters
+     * takes 12 parameters
      * @param SKU
      * @param title
      * @param actors
@@ -100,16 +101,24 @@ public class GeneralMovie
         String tableName = "formats";
         String query =
                 jdbconnection.JDBCConnection.makeQuery(tableName, null, null);
-        ResultSet results = jdbconnection.JDBCConnection.getResults(query);
-        while (results.next())
+        JDBCConnection connection = new JDBCConnection();
+        try
         {
-            if (format.equalsIgnoreCase(results.getString("format")))
+            ResultSet results = connection.getResults(query);
+            while (results.next())
             {
-                this.format = format;
-                return;
+                if (format.equalsIgnoreCase(results.getString("format")))
+                {
+                    this.format = format;
+                    return;
+                }
             }
+            throw new IllegalArgumentException("Not a valid format");
         }
-        throw new IllegalArgumentException("Not a valid format");
+        finally
+        {
+            connection.closeConnection();
+        }
 
 
     }

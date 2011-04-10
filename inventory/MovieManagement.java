@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Calendar;
 import account.Customer;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -100,6 +101,7 @@ public class MovieManagement
      * Constructs a new movie as part of the movie catalog
      * @param info contains the 7 required information to identify a movie
      */
+    /*
     public void createGeneralMovie(String[] info, GregorianCalendar releaseDate)
     {
         String SKU = info[0];
@@ -125,7 +127,310 @@ public class MovieManagement
         {
             connection.close();
         }
+    }*/
+
+     /**
+     * Adds a GeneralMovie to the database by inserting into the videoInfo
+     * and physicalVideo tables.  It first searches to see if the information
+     * contained in the GeneralMovie object
+     * @param movie the movie to add
+     * @pre movie is not null
+     * @pre the SKU for the GeneralMovie object does not already exist
+     */
+    public static void createGeneralMovie(GeneralMovie movie) throws Exception
+    {
+        if (movie == null)
+        {
+            throw new IllegalArgumentException("Null movie passed");
+        }
+
+        inventory.MovieManagement.checkDuplicateBarcode(movie.getSKU());
+
+        Integer infoID = findMatchingVideoInfo(movie);
+        if (infoID == null)
+        {
+            infoID = nextInfoID();
+        }
+        addVideoInfo(infoID, movie);
+        addPhysicalVideo(infoID, movie);
+
     }
+
+
+    /**
+     * This method looks at the attributes of a GeneralMovie and tries to
+     * find matches in the attributes of the videoInfo table.  If it finds an
+     * exact match, it returns the infoID of the videoInfo.  Otherwise, it
+     * returns null
+     * Assumes that there is only one such primary key in database
+     * @param movie the movie whose information we are trying to match
+     * @return the infoID that matches the information you provided, or null if
+     * no such infoID exists
+     */
+    private static Integer findMatchingVideoInfo(GeneralMovie movie)
+            throws Exception
+    {
+        String table = "videoInfo";
+        String column = "infoID";
+        String constraint = makeConstraint(movie);
+        String query = JDBCConnection.makeQuery(table, column, constraint);
+        ResultSet result = JDBCConnection.getResults(query);
+        if (result.next())
+        {
+            int infoID = result.getInt(column);
+            return infoID;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+
+    private static String makeConstraint(GeneralMovie movie)
+    {
+
+        String SKU = movie.getSKU();
+        String title =  movie.getTitle();
+        String[] actors = movie.getActors();
+        String director = movie.getDirector();
+        String producer = movie.getProducer();
+        String studio = movie.getStudio();
+        String synopsis = movie.getSynopsis();
+        String rating = movie.getRating();
+        java.util.Calendar releaseDate = movie.getReleaseDate();
+        int retailPriceInCents = movie.getRetailPriceInCents();
+        String genre = movie.getGenre();
+
+        String constraint = "SKU = '"+SKU+"'";
+        constraint += " AND ";
+        constraint += "title = '"+title+"'";
+        constraint += " AND ";
+        constraint += makeActorConstraint(actors);
+        constraint += " AND ";
+        constraint += "director = '"+director+"'";
+        constraint += " AND ";
+        constraint += "producer = '"+producer+"'";
+        constraint += " AND ";
+        constraint += "studio = '"+studio+"'";
+        constraint += " AND ";
+        constraint += "synopsis = '"+synopsis+"'";
+        constraint += " AND ";
+        constraint += "rating = '"+rating+"'";
+        constraint += makeReleaseDateString(releaseDate);
+        constraint += " AND ";
+        constraint += "retailPriceInCents = '"+retailPriceInCents+"'";
+        constraint += " AND ";
+        constraint += "genre = '"+genre+"'";
+        return constraint;
+    }
+
+
+
+    /**
+     * Creates a string of the form
+     * (actors LIKE '%Tom Cruise%' AND actors LIKE '%Kelly McGillis')
+     * This is intended to identify a movie with identical actors, regardless
+     * of the order in which they are stored in the database.
+     * This method assumes that the actors are being stored in the database
+     * as a single string, delimited by commas
+     * @param actors an array of the actors you want to include in the query
+     * @return a string that can be suffixed to WHERE to form a WHERE clause
+     */
+    private static String makeActorConstraint(String[] actors)
+    {
+
+        int numActors = actors.length;
+        int actorIndex = 0; // start from the first actor
+        String actorConstraint = "(";
+        actorConstraint = actorConstraint
+                + "actors LIKE '%"+actors[actorIndex]+"%' ";
+        actorIndex++;
+        while (actorIndex < numActors)
+        {
+            actorConstraint += "AND ";
+            actorConstraint = actorConstraint
+                    + "actors LIKE '%"+actors[actorIndex]+"%' ";
+            actorIndex++;
+        }
+        actorConstraint += ")";
+        return actorConstraint;
+    }
+
+
+
+    /**
+     * retrieves a string of form YYYY-MM-DD from the Calendar object
+     * assumes that this form is the form of sql datetime
+     * @param releaseDate
+     * @return
+     */
+    private static String makeReleaseDateString(Calendar releaseDate)
+    {
+        String year = "" + releaseDate.get(Calendar.YEAR);
+        String month = "-" + releaseDate.get(Calendar.MONTH);
+        String day = "-" + releaseDate.get(Calendar.DATE);
+        String datetime = year + month + day;
+        return datetime;
+    }
+
+
+
+    /**
+     * This method finds the next unused infoID number and returns it.
+     * @pre the infoIDs are below maximum
+     * @return the next unused infoID
+     * @throws MovieLimitReachedException if there are no infoIDs left
+     */
+    private static int nextInfoID() throws Exception
+    {
+        int currentHighestID = getHighestID("videoInfo", "infoID");
+        int newHighestID = currentHighestID + 1;
+        if (newHighestID > Math.pow(1,GeneralMovie.INFO_ID_LENGTH + 1))
+        {
+            throw new MovieLimitReachedException("Cannot add movie information."
+                    + "Maximum number of movie information is reached");
+        }
+        return newHighestID;
+    }
+
+
+
+    /**
+     * This method finds the highest ID number that currently exists
+     * @pre The ID number is an integer
+     * @pre The ID number has a minimum value of 100000000
+     * @return
+     * @throws Exception
+     */
+    private static int getHighestID(String table, String column) throws Exception
+    {
+        String query = JDBCConnection.makeQuery(table, "MAX("+column+")", null);
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            ResultSet result = connection.getResults(query);
+            if (result.next())
+            {
+                return result.getInt(column);
+            }
+             else
+            {
+                return (int) Math.pow(1, GeneralMovie.INFO_ID_LENGTH);
+            }
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+    }
+
+
+
+    /**
+     * This method adds information to the videoInfo table in the database
+     * @param infoID the new key for the videoInfo
+     * @param movie the movie to add
+     * @throws Exception
+     */
+    private static void addVideoInfo(int infoID, GeneralMovie movie)
+            throws Exception
+    {
+
+        if (movie == null)
+            throw new IllegalArgumentException("No movie provided");
+        String title = movie.getTitle();
+        String[] actors = movie.getActors();
+        String director = movie.getDirector();
+        String producer = movie.getProducer();
+        String studio = movie.getStudio();
+        String synopsis = movie.getSynopsis();
+        String rating = movie.getRating();
+        java.util.Calendar releaseDate = movie.getReleaseDate();
+        String genre = movie.getGenre();
+
+        if (actors == null || actors.length < 1)
+            throw new IllegalArgumentException("No actors provided");
+        String actorsString = actors[0];
+        for (int i = 1; i < actors.length; i++)
+        {
+            actorsString += ", ";
+            actorsString += actors[i];
+        }
+
+        String tableName = "videoInfo";
+
+        String[][] videoInfo =
+        {
+            {"InfoID", "Title", "actors", "director", "producer","studio",
+                     "Description", "rating", "releaseDate", "genre"
+            },
+
+            {
+               "" + infoID, title, actorsString, director, producer,
+                       studio, synopsis, rating, makeReleaseDateString(releaseDate),
+                       genre
+            }
+        };
+
+        String query = JDBCConnection.makeInsert(tableName, videoInfo);
+        JDBCConnection conn = new JDBCConnection();
+        try
+        {
+            int linesChanged = conn.update(query);
+            if (linesChanged > 1)
+            {
+                // throw new SQLException("" + linesChanged + "rows were changed");
+                // undo the update
+            }
+            else if (linesChanged == 0)
+            {
+                throw new java.sql.SQLException("Updates were not completed");
+            }
+        }
+        finally
+        {
+            conn.closeConnection();
+        }
+
+    }
+
+
+
+    /**
+     * This method adds a physical video to the database tables
+     * @param infoID
+     * @param movie
+     * @throws Exception
+     */
+    private static void addPhysicalVideo(int infoID, GeneralMovie movie)
+            throws Exception
+    {
+        String SKU = movie.getSKU();
+        String format = movie.getFormat();
+        String retailPriceInCents = "" + movie.getRetailPriceInCents();
+
+        String tableName = "physicalVideo";
+        String[][] information = {
+            { "SKU", "Format", "InfoID", "RetailPrice" },
+            { SKU, format, ""+infoID, retailPriceInCents }
+        };
+
+        String insert = JDBCConnection.makeInsert(tableName, information);
+        int linesChanged = JDBCConnection.update(insert);
+        if (linesChanged > 1)
+        {
+            // throw new SQLException("" + linesChanged + "rows were changed");
+            // undo the update
+        }
+        else if (linesChanged == 0)
+        {
+            throw new java.sql.SQLException("Updates were not completed");
+        }
+    }
+
+
 
 //    final protected void addNewTitle() throws SQLException
 //    {

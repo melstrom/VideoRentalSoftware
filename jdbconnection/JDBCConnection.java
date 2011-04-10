@@ -202,20 +202,14 @@ public static Connection getConnection()
      * @return the results of the query
      * @throws SQLException if a connection to the database cannot be made
      * @throws ClassNotFoundException if the Driver cannot be found
+     *
+     *
      */
-    public static ResultSet getResults(String query) throws Exception
+    public ResultSet getResults(String query) throws Exception
     {
-        Connection connection = getConnection();
         ResultSet result = null;
-        try
-        {
-            Statement statement = connection.prepareStatement(query);
-            result = statement.executeQuery(query);
-        }
-        finally
-        {
-            connection.close();
-        }
+        Statement statement = conn.prepareStatement(query);
+        result = statement.executeQuery(query);
         return result;
     }
 
@@ -228,20 +222,24 @@ public static Connection getConnection()
      * @return
      * @throws Exception
      */
-    public static int update(String query) throws Exception
+    public int update(String query) throws Exception
     {
-        Connection connection = getConnection();
         int linesChanged = 0;
-        try
-        {
-            Statement statement = connection.prepareStatement(query);
-            linesChanged = statement.executeUpdate(query);
-        }
-        finally
-        {
-            connection.close();
-        }
+        Statement statement = conn.prepareStatement(query);
+        linesChanged = statement.executeUpdate(query);
+        
         return linesChanged;
+    }
+
+
+
+    /**
+     * This method is used to re-open a database connection if you have closed it
+     * @throws Exception
+     */
+    public void openConnection() throws Exception
+    {
+        conn = getConnection();
     }
   
 }
