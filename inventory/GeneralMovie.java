@@ -48,6 +48,7 @@ public class GeneralMovie
      * @param producer
      * @param releaseDate
      * @param synopsis
+     * @param genre
      * @param rating
      * @param studio
      * @param retailPriceInCents
@@ -61,6 +62,7 @@ public class GeneralMovie
             String producer,
             GregorianCalendar releaseDate,
             String synopsis,
+            String genre,
 	    String rating,
             String studio,
             int retailPriceInCents)
@@ -76,6 +78,7 @@ public class GeneralMovie
         this.producer = producer;
         this.retailPriceInCents = retailPriceInCents;
 	setRating(rating);
+        setGenre(genre);
     }
 
 	
@@ -393,6 +396,36 @@ public class GeneralMovie
     }
 
 
+    public String getGenre()
+    {
+        return genre;
+    }
+
+
+
+    /**
+     * Sets the genre of this general movie to the specified genre, assuming that
+     * it is a valid genre
+     * @param genre
+     * @throws IllegalArgumentException if it is not a valid genre
+     * @pre the passed genre must be a valid genre
+     */
+    public void setGenre(String genre)
+    {
+        if (genre == null)
+            throw new IllegalArgumentException("Not a valid genre");
+        for (String possibleGenre : possibleGenres)
+        {
+            if (possibleGenre.equalsIgnoreCase(genre))
+            {
+                this.genre = genre;
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Not a valid genre");
+    }
+
+
 
     /**
     * testing class
@@ -417,4 +450,8 @@ public class GeneralMovie
     private String producer;
     private String rating;
     private int retailPriceInCents;
+    private String genre;
+    public final String[] possibleGenres = { "science fiction", "musical", "action",
+            "drama", "comedy", "romance", "family", "horror", "suspense"
+        };
 }
