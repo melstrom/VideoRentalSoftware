@@ -152,6 +152,31 @@ public static Connection getConnection()
         }
         return query;
     }
+
+
+
+    /**
+     * This method gets the results of an SQL query that you provide
+     * @param query a SELECT FROM WHERE query
+     * @return the results of the query
+     * @throws SQLException if a connection to the database cannot be made
+     * @throws ClassNotFoundException if the Driver cannot be found
+     */
+    public static ResultSet getResults(String query) throws Exception
+    {
+        Connection connection = getConnection();
+        ResultSet result = null;
+        try
+        {
+            Statement statement = connection.prepareStatement(query);
+            result = statement.executeQuery(query);
+        }
+        finally
+        {
+            connection.close();
+        }
+        return result;
+    }
   
 }
 

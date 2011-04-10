@@ -391,6 +391,9 @@ public class GeneralMovie
     {
 	    return reservations;
     }
+
+
+
     /**
     * testing class
     
@@ -409,7 +412,8 @@ public class GeneralMovie
     private String synopsis;
     private ArrayList <Reservation> reservations;
     final private int ACTOR_COUNT=1;
-    private static final int MAX_SKU_LENGTH = 25;
+    public static final int MAX_SKU_LENGTH = 25;
+    public static final int INFO_ID_LENGTH = 9;
     private String producer;
     private String rating;
     private int retailPriceInCents;
