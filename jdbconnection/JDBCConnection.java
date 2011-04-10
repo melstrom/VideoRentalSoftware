@@ -218,6 +218,31 @@ public static Connection getConnection()
         }
         return result;
     }
+
+
+
+    /**
+     * This method executes a query that changes the database.
+     * It can be either an INSERT, UPDATE, or DELETE query.
+     * @param query
+     * @return
+     * @throws Exception
+     */
+    public static int update(String query) throws Exception
+    {
+        Connection connection = getConnection();
+        int linesChanged = 0;
+        try
+        {
+            Statement statement = connection.prepareStatement(query);
+            linesChanged = statement.executeUpdate(query);
+        }
+        finally
+        {
+            connection.close();
+        }
+        return linesChanged;
+    }
   
 }
 
