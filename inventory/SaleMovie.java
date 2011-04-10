@@ -10,7 +10,6 @@
 *----------moved out querys 
  */
 package inventory;
-import java.util.ArrayList;
 
 public class SaleMovie extends IndividualMovie{
 
