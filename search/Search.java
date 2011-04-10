@@ -611,7 +611,7 @@ public class Search
 
 
 
-    /** BOOKMARK: 7 April
+    /** 
      * This is a helper method for searchRentals.  It generates an SQL query of
      * the form:
      * SELECT videoRental.SKU, videoRental.rentalID
@@ -687,9 +687,10 @@ public class Search
             needsMovieWhereClause = true;
         }
 
+
         if (memberID != null)
         {
-            searchCriteria.add("customer.accountID = ? ");
+            searchCriteria.add("customer.customerID = ? ");
             whereClause.add("customer.rentalID = videoRental.rentalID");
         }
 
@@ -731,13 +732,12 @@ public class Search
      * @param actors
      * @param director
      * @param memberID
-     * @throws SanitizerException if the search terms contain SQL statements
      * @throws SQLException if the database cannot be connected to
      * @return
      */
     private static ResultSet searchRentalsGetSQLResult(String query,
             String title, String[] actors, String director, Integer memberID)
-            throws SanitizerException, SQLException
+            throws SQLException, ClassNotFoundException
     {
         ArrayList<String> searchTerms = consolidateSearchTerms(title, actors,
                 director, memberID);
@@ -746,10 +746,6 @@ public class Search
             return null;
         }
 
-        for (String term : searchTerms)
-        {
-            Sanitizer.sanitize(term);
-        }
 
         Connection connection = JDBCConnection.getConnection();
         try
@@ -789,6 +785,8 @@ public class Search
      * @param memberID
      * @return an array list of the non-null parameters, or null if they are all
      * null
+     * @throws IllegalArgumnetException if the length of the memberID is not
+     * correct
      */
     private static ArrayList<String> consolidateSearchTerms(String title,
             String[] actors, String director, Integer memberID)
@@ -811,6 +809,15 @@ public class Search
         }
         if (memberID != null)
         {
+
+            if (memberID >= Math.pow(1, account.Account.ID_LENGTH)
+                    || memberID < Math.pow(1,account.Account.ID_LENGTH))
+            {
+                throw new IllegalArgumentException("IllegalArgumentException:"
+                        + " customer account ID must be "
+                        +account.Account.ID_LENGTH+ " digits long");
+            }
+
             searchTerms.add("" + memberID);
         }
         if (searchTerms.isEmpty())

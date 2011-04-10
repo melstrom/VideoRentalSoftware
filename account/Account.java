@@ -10,6 +10,11 @@ package account;
 	@version 1.1 April 2
 		-renamed setStatus() to changeStatus()
 		-changed status type to boolean
+ *
+ *      9 April: Mitch
+ *          - made the constant with the length of an account ID as 9 to prevent
+ *              integer overflow (2^32 - 1 = ~2e9, so ID numbers of 1e8 - 9e8
+ *              are safe)
 		
  */
 public abstract class Account
@@ -167,4 +172,7 @@ public abstract class Account
     private String address;
     private String password;
     private boolean status;
+
+
+    public static final int ID_LENGTH = 9;
 }

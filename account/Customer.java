@@ -7,6 +7,7 @@ package account;
  *      Stores information of a customer account
  *      @author mattp
  *	@version 1.0 March 30, 2011
+ *
  */
 public class Customer extends Account
 {

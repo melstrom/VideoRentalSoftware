@@ -38,6 +38,7 @@ public class IndividualMovie extends GeneralMovie{
     private int price;                  //The cost of renting the movie in cents
     private String format;              //The format of the movie, such as vhs, bluray, dvd
     private String barcode;             //The unique number code that is on each movie as barcodes
+    public static final int ID_LENGTH = 9;
   
     /**
     *Set the format for the individual movie which could be DVD, VHS, Blu-ray for example
