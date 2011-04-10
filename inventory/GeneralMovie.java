@@ -258,6 +258,9 @@ public class GeneralMovie
     {
 	this.SKU = SKU;
     }
+
+
+
     /**
     *   Get SKU
     *  @return SKU - the SKU uniquely identifies a movie catalog
@@ -266,6 +269,9 @@ public class GeneralMovie
     {
         return SKU;
     }
+
+
+
     /**
      * Set title
      * @param title the title of a movie

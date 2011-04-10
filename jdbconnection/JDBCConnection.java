@@ -113,4 +113,47 @@ public static Connection getConnection()
       //catch(Exception egg){System.err.println(egg.getMessage());}
       return st;
   }
+  
+  
+  
+  
+    /**
+     * This method generates a simple SQL query of the form
+     * SELECT ___ FROM ____ WHERE ____
+     * Both tableName and columnName will be filtered for ' characters,
+     * but it is the responsibility of the caller to make sure that constraint
+     * does not contain any characters that will escape the SQL statement.
+     * @param tableName the name of the table you are querying
+     * @param columnName the name of the column that you are selecting the 
+     * results from
+     * @param constraint the condition that narrows your results
+     * @return a string containing a valid SQL query
+     * @pre tableName must not be null
+     * @throws NullPointerException if tableName is null
+     */
+    public static String makeQuery(String tableName, String columnName, String constraint)
+    {
+        String query = "";
+        
+        if (columnName == null)
+        {
+            query = "SELECT * ";
+        }
+        else
+        {
+            query =  "SELECT " + columnName.replaceAll("'", "") + " ";
+        }
+        
+        query = query + "FROM "+tableName.replaceAll("'","")+" ";
+        
+        if (constraint != null)
+        {
+            query = query + "WHERE "+constraint;
+        }
+        return query;
+    }
+  
 }
+
+
+
