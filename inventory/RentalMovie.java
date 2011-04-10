@@ -74,4 +74,8 @@ public class RentalMovie extends IndividualMovie{
     {
     	return condition;
     }
+
+
+
+    public static final int ID_LENGTH = IndividualMovie.ID_LENGTH;
 }
