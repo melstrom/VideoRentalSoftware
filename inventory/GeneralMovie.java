@@ -10,14 +10,20 @@
  *              -fixed getActors()
 	@version 1.2 April 1
 		-removed addNewTitle() from constructor
-		-replaced releaseDate's data type to GregorianCalendar type 
+		-replaced releaseDate's data type to GregorianCalendar type
 		-removed Date class (deprecated)
 	@version 1.2.5 April 4
 		-changed SKU to type String
 		-changed actors(type array) to actors(type String)
 		-added empty constructor
 	@version 1.3
-		-moved all database/query stuff out 
+		-moved all database/query stuff out
+ *
+ *      @version 1.4
+ *              - added in missing attributes:
+ *                  producer, rating, studio, retailPriceInCents
+ *              - TODO: add accessors, mutators for new attributes
+ *              -TODO: modify getAll()
  */
 package inventory;
 import java.util.ArrayList;
@@ -26,37 +32,136 @@ import java.util.GregorianCalendar;
 public class GeneralMovie
 {
     /**
-	Empty Constructor 
+	Empty Constructor
      */
     public GeneralMovie()
     {
     }
+
+
+
     /**
-     *  General movie constructor
-     *  takes 6 default attributes
-     * @param SKU the number uniquely identifies each movie catalog
-     * @param title the title of a movie
-     * @param actors the actors of a movie
-     * @param director the director of a movie
-     * @param releaseDate  the release date of a movie 
-     * @param synopsis the brief description of a movie
+     * Constructor of GeneralMovie
+     * takes 10 parameters
+     * @param SKU
+     * @param title
+     * @param actors
+     * @param director
+     * @param producer
+     * @param releaseDate
+     * @param synopsis
+     * @param rating
+     * @param studio
+     * @param retailPriceInCents
      */
-    public GeneralMovie(String SKU, String title, String actors, String director, GregorianCalendar releaseDate, String synopsis)
+    //public GeneralMovie(String SKU, String title, String actors, String director, GregorianCalendar releaseDate, String synopsis)
+    public GeneralMovie
+            (String SKU,
+            String title,
+            String[] actors,
+            String director,
+            String producer,
+            GregorianCalendar releaseDate,
+            String synopsis,
+            String rating,
+            String studio,
+            int retailPriceInCents)
     {
         reservations = new ArrayList<Reservation>();
         // need to populate this arraylist of reservations
-	this.releaseDate = new GregorianCalendar();
+	//this.releaseDate = new GregorianCalendar();
+        this.releaseDate = (GregorianCalendar) releaseDate.clone();
         this.title = title;
         this.SKU = SKU;
 	this.director = director;
         this.actors = actors;
         this.synopsis = synopsis;
 	this.releaseDate = releaseDate;
-
-        // missing some attributes that are in the database like genre and rating and retail price
-        // TODO: update when the database is online
-        // is actors really just a string, or is it an array of strings?
+        this.producer = producer;
+        setRating(rating);
+        this.retailPriceInCents = retailPriceInCents;
     }
+
+
+
+    /**
+     * Sets the rating of this GeneralMovie object to the specified rating.
+     * The rating must correspond to either British Columbian classification
+     * system, or the Motion Picture Association of America film rating.
+     * American film ratings will automatically be converted to the
+     * British Columbian equivalent.
+     *
+     * The ratings are as follows:
+
+
+        General (G)
+        All ages.
+        The contents of these motion pictures are suitable for viewing by all ages.
+
+     * Parental Guidance (PG)
+        All ages.
+        Parental guidance advised. Theme or content may not be suitable for all children.
+
+        14A
+        Anyone under 14 years of age must be accompanied by an adult.
+        Parents cautioned. These films may contain violence, coarse language, and/or sexually suggestive scenes.
+
+        18A
+        Anyone under 18 years of age must be accompanied by an adult.
+        Parents strongly cautioned. Will likely contain explicit violence, frequent coarse language, sexual activity and/or horror.
+
+        Restricted (R)
+        No one under the age of 18 may view under any circumstances.
+        Content not suitable for minors. May contain scenes of explicit sex and/or violence. However, the film classification office considers these films to have some artistic, historical, political, educational or scientific merit.
+
+     * Adult (A)
+        No one under the age of 18 may view under any circumstances.
+        May contain explicit sexual scenes and/or violence. However, the film classification office considers these films to be tolerable to the community.
+     *
+     * source: http://www.media-awareness.ca/english/resources/ratings_classification_systems/film_classification/bc_film_classification.cfm
+     *
+     * No Rating (NR)
+     *
+     * @param rating the rating of the movie. Dashes and capitalization is ignored.
+     * @throws IllegalArgumentException if the provided rating is not one of the
+     * given
+     */
+    public final void setRating(String rating)
+    {
+        final int CANADIAN = 0;
+        final int AMERICAN = 1;
+        String[][] possibleRatings = {
+            {"G", "PG", "14A", "18A", "R", "A", "NR"},
+            {"G", "PG", "PG-13", "R", "NC-17", "NC-17", "NR"}
+        };
+
+        if (rating == null)
+        {
+            throw new IllegalArgumentException("Must provide a rating");
+        }
+
+        String dashlessRating = rating.replaceAll("-", "");
+        dashlessRating = dashlessRating.replaceAll(" ", "");
+
+        for (String[] possibleRating : possibleRatings)
+        {
+            if (possibleRating[AMERICAN].replaceAll("-", "").equalsIgnoreCase(dashlessRating))
+            {
+                dashlessRating = possibleRating[CANADIAN];
+            }
+            if (dashlessRating.equalsIgnoreCase(possibleRating[CANADIAN]))
+            {
+                this.rating = dashlessRating;
+                return;
+            }
+        }
+
+        throw new IllegalArgumentException("Not a valid rating");
+    }
+
+
+
+
    /**
     * Add a reservation to the end of reservation list
     * @param aReservation a reservation record
@@ -84,7 +189,7 @@ public class GeneralMovie
         String query = "insert into "+table
                 +"values ("+quote+title+quote+comma //movie title
                            +quote+reservation.getAccountID()+quote+comma //account id of the customer
-                            +quote+reservation.getDate()+quote+");";//the date this movie is reserved 
+                            +quote+reservation.getDate()+quote+");";//the date this movie is reserved
 
        //executeQuery(query);
     }*/
@@ -107,7 +212,7 @@ public class GeneralMovie
      * Create query for adding a new movie catalog
      * @throws SQLException
      */
-   /* final protected void addNewTitle()throws SQLException
+    /*final void addNewTitle()throws java.sql.SQLException
     {
         String table="Videoinfo";
         String query = "insert into"+table
@@ -115,6 +220,7 @@ public class GeneralMovie
                         +quote+title+quote+comma
                         +quote+director+quote+comma
                         +quote+releaseDate.get(releaseDate.YEAR)+releaseDate.get(releaseDate.MONTH)+ releaseDate.get(releaseDate.DATE)+quote+comma
+                        // that's not how you use the Calendar
                         +quote+actors+quote+comma
                         +quote+synopsis+quote+comma
                         +quote+SKU+quote
@@ -123,7 +229,7 @@ public class GeneralMovie
         executeQuery(query);
     }*/
     /**
-    * @param SKU the SKU uniquely identifies a movie catalog 
+    * @param SKU the SKU uniquely identifies a movie catalog
     */
     protected void setSKU(String SKU)
     {
@@ -131,9 +237,9 @@ public class GeneralMovie
     }
     /**
     *   Get SKU
-    *  @return SKU - the SKU uniquely identifies a movie catalog 
+    *  @return SKU - the SKU uniquely identifies a movie catalog
     */
-    protected String getSKU()
+    public String getSKU()
     {
         return SKU;
     }
@@ -149,7 +255,7 @@ public class GeneralMovie
      * Get movie title
      * @return title the title of a movie
      */
-    protected String getTitle()
+    public String getTitle()
     {
         return title;
     }
@@ -165,7 +271,7 @@ public class GeneralMovie
      * Get director
      * @return director the director of a movie
      */
-    protected String getDirector()
+    public String getDirector()
     {
         return director;
     }
@@ -181,7 +287,7 @@ public class GeneralMovie
      * Get Release date
      * @return the release date of a movie
      */
-    protected GregorianCalendar getReleaseDate()
+    public GregorianCalendar getReleaseDate()
     {
         return releaseDate;
     }
@@ -197,12 +303,12 @@ public class GeneralMovie
      * Get actors
      * @return the actor list of a movie
      */
-    protected String getActors()
+    public String getActors()
     {
 	return actors;
     }
     /**
-     * Set synopsis/description 
+     * Set synopsis/description
      * @param synopsis the synopsis of a movie
      */
     protected void setSynopsis(String synopsis)
@@ -213,7 +319,7 @@ public class GeneralMovie
      * Get synopsis/description
      * @return synopsis the synopsis of a movie
      */
-    protected String getSynopsis()
+    public String getSynopsis()
     {
         return synopsis;
     }
@@ -233,18 +339,19 @@ public class GeneralMovie
 	    return getSKU()+" "+getTitle()+" "+getActors()+" "+getDirector()
 			+" "+getReleaseDate().get(releaseDate.YEAR)+" "+getSynopsis();
     }
-    
+
     private String title;
     private String SKU;
-    private String actors;
+    private String[] actors;
     private String director;
     private GregorianCalendar releaseDate;
     private String synopsis;
     private ArrayList <Reservation> reservations;
     final private int ACTOR_COUNT=1;
-<<<<<<< HEAD
-    
-=======
     private static final int MAX_SKU_LENGTH = 25;
->>>>>>> origin/master
+    private final char comma = ',';
+    private final char quote = '\'';
+    private String producer;
+    private String rating;
+    private int retailPriceInCents;
 }
