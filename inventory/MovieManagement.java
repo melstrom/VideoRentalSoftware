@@ -171,7 +171,7 @@ public class MovieManagement
             throws Exception
     {
         String table = "videoInfo";
-        String column = "infoID";
+        String column = "InfoID";
         String constraint = makeConstraint(movie);
         String query = JDBCConnection.makeQuery(table, column, constraint);
         JDBCConnection conn = new JDBCConnection();
@@ -204,7 +204,7 @@ public class MovieManagement
     private static String makeConstraint(GeneralMovie movie)
     {
 
-        String SKU = movie.getSKU();
+        //String SKU = movie.getSKU();
         String title =  movie.getTitle();
         String[] actors = movie.getActors();
         String director = movie.getDirector();
@@ -214,15 +214,15 @@ public class MovieManagement
         String rating = movie.getRating();
         java.util.Calendar releaseDate = movie.getReleaseDate();
         String genre = movie.getGenre();
-        int runtime = movie.getRuntime();
-
-        String constraint = "SKU = '"+SKU+"'";
-        constraint += " AND ";
+        int runtime = movie.getLength();
+        String constraint = "";
+        //constraint = "SKU = '"+SKU+"'";
+        //constraint += " AND ";
         constraint += "Title = '"+title+"'";
         constraint += " AND ";
         constraint += makeActorConstraint(actors);
         constraint += " AND ";
-        constraint += "Director = '"+director+"'";
+        constraint += "director = '"+director+"'";
         constraint += " AND ";
         constraint += "Producer = '"+producer+"'";
         constraint += " AND ";
@@ -231,11 +231,12 @@ public class MovieManagement
         constraint += "Description = '"+synopsis+"'";
         constraint += " AND ";
         constraint += "Rating = '"+rating+"'";
-        constraint += "ReleaseDate = '"+makeReleaseDateString(releaseDate)+"'";
+        constraint += " AND ";
+        constraint += "releaseDate = '"+makeReleaseDateString(releaseDate)+"'";
         constraint += " AND ";
         constraint += "Genre = '"+genre+"'";
         constraint += " AND ";
-        constraint += "Length = '"+runtime+"'";
+        constraint += "length = '"+runtime+"'";
         return constraint;
     }
 
@@ -298,10 +299,11 @@ public class MovieManagement
      */
     private static int nextInfoID() throws Exception
     {
-        int currentHighestID = getHighestID("videoInfo", "infoID");
+        int currentHighestID = getHighestID("videoInfo", "InfoID");
         int newHighestID = currentHighestID + 1;
-        if (newHighestID > Math.pow(1,GeneralMovie.INFO_ID_LENGTH + 1))
+        if (newHighestID > Math.pow(10,GeneralMovie.INFO_ID_LENGTH + 1))
         {
+
             throw new MovieLimitReachedException("Cannot add movie information."
                     + "Maximum number of movie information is reached");
         }
@@ -326,17 +328,23 @@ public class MovieManagement
             ResultSet result = conn.getResults(query);
             if (result.next())
             {
-                return result.getInt(column);
+                result.getString(1);
+                if (result.wasNull())
+                {
+                    return (int) Math.pow(10, GeneralMovie.INFO_ID_LENGTH);
+                }
+                else
+                {
+                    return result.getInt(column);
+                }
             }
-             else
-            {
-                return (int) Math.pow(1, GeneralMovie.INFO_ID_LENGTH);
-            }
+             
         }
         finally
         {
             conn.closeConnection();
         }
+        return -1; // should never get here
     }
 
 
@@ -362,7 +370,7 @@ public class MovieManagement
         String rating = movie.getRating();
         java.util.Calendar releaseDate = movie.getReleaseDate();
         String genre = movie.getGenre();
-        String length = "" + movie.getRuntime();
+        String length = "" + movie.getLength();
 
 
         if (actors == null || actors.length < 1)
@@ -378,8 +386,8 @@ public class MovieManagement
 
         String[][] videoInfo =
         {
-            {"InfoID", "Title", "Actors", "Director", "Producer","studio",
-                     "Description", "Rating", "ReleaseDate", "Genre", "Length"
+            {"InfoID", "Title", "Actors", "director", "Producer","studio",
+                     "Description", "Rating", "releaseDate", "Genre", "length"
             },
 
             {
