@@ -11,7 +11,6 @@ import inventory.GeneralMovie;
 import inventory.IndividualMovie;
 import inventory.MovieNotFoundException;
 import inventory.RentalMovie;
-import java.util.Arrays;
 import jdbconnection.JDBCConnection;
 
 
@@ -598,7 +597,7 @@ public class Search
             String[] actors,
             String director,
             Integer memberID)
-            throws SQLException, SanitizerException
+            throws SQLException
     {
         String query =
                 searchRentalsGenerateQuery(title, actors, director, memberID);
@@ -737,18 +736,13 @@ public class Search
      */
     private static ResultSet searchRentalsGetSQLResult(String query,
             String title, String[] actors, String director, Integer memberID)
-            throws SanitizerException, SQLException
+            throws SQLException
     {
         ArrayList<String> searchTerms = consolidateSearchTerms(title, actors,
                 director, memberID);
         if (searchTerms == null)
         {
             return null;
-        }
-
-        for (String term : searchTerms)
-        {
-            Sanitizer.sanitize(term);
         }
 
         Connection connection = JDBCConnection.getConnection();

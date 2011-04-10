@@ -242,4 +242,5 @@ public class GeneralMovie
     private String synopsis;
     private ArrayList <Reservation> reservations;
     final private int ACTOR_COUNT=1;
+    
 }

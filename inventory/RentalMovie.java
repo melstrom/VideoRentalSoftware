@@ -8,7 +8,6 @@
 **----------moved out querys 
 */
 package inventory;
-import java.util.ArrayList;
 
 
 public class RentalMovie extends IndividualMovie{
@@ -21,7 +20,6 @@ public class RentalMovie extends IndividualMovie{
     * @param condition The physical condition of the movie, states as a string whether its damaged, good, scratched etc
     * @param movie inherited movie information
     */
-   
     public RentalMovie(String condition, String status, IndividualMovie movie)
    {
     	this.condition = condition;
@@ -41,7 +39,6 @@ public class RentalMovie extends IndividualMovie{
    
     private String status;              //The status of the movie, if it is store "rent" or is out "rented out" or reserved
     private String condition;           //The physical condition of the movie, states as a string whether its damaged, good, scratched etc
-    private int rentalTimeInDays;       // The rental time of the movie in days
     /**
     *Set or change the status for the individual movie which can be rented out, rent ,or reserved
     *@param aStatus is the rental status of the movie, three states rent, rented out, and reserved
