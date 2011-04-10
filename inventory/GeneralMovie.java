@@ -26,6 +26,7 @@
 package inventory;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.sql.ResultSet;
 
 public class GeneralMovie
 {
@@ -52,6 +53,7 @@ public class GeneralMovie
      * @param rating
      * @param studio
      * @param retailPriceInCents
+     * @param format
      */
     
     public GeneralMovie
@@ -65,7 +67,9 @@ public class GeneralMovie
             String genre,
 	    String rating,
             String studio,
-            int retailPriceInCents)
+            int retailPriceInCents,
+            String format)
+            throws Exception
     {
         reservations = new ArrayList<Reservation>();
         this.title = title;
@@ -79,9 +83,38 @@ public class GeneralMovie
         this.retailPriceInCents = retailPriceInCents;
 	setRating(rating);
         setGenre(genre);
+        setFormat(format);
     }
 
 	
+
+    public String getFormat()
+    {
+        return format;
+    }
+
+
+
+    public final void setFormat(String format) throws Exception
+    {
+        String tableName = "formats";
+        String query =
+                jdbconnection.JDBCConnection.makeQuery(tableName, null, null);
+        ResultSet results = jdbconnection.JDBCConnection.getResults(query);
+        while (results.next())
+        {
+            if (format.equalsIgnoreCase(results.getString("format")))
+            {
+                this.format = format;
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Not a valid format");
+
+
+    }
+
+
 
     /**
      * Sets the rating of this GeneralMovie object to the specified rating.
@@ -451,6 +484,7 @@ public class GeneralMovie
     private String rating;
     private int retailPriceInCents;
     private String genre;
+    private String format;
     public final String[] possibleGenres = { "science fiction", "musical", "action",
             "drama", "comedy", "romance", "family", "horror", "suspense"
         };
