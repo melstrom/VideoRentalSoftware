@@ -328,7 +328,7 @@ public class MovieManagement
 
         if (found == true)
         {
-            throw new CopyExistsException("This copy already exists (in the database)");
+            throw new MovieExistsException("This copy already exists (in the database)");
         }
     }
 
