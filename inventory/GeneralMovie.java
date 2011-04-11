@@ -21,7 +21,7 @@
  *
  *      @version 1.4
  *              - added in missing attributes:
- *                  producer, rating, studio, retailPriceInCents
+ *                  producer, rating, studio, retailPriceInCents, format
  */
 package inventory;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class GeneralMovie
 	    String rating,
             String studio,
             int retailPriceInCents,
-           // String format,
+            String format,
             int runtime)
             throws Exception
     {
@@ -85,7 +85,7 @@ public class GeneralMovie
         this.retailPriceInCents = retailPriceInCents;
 	setRating(rating);
         setGenre(genre);
-       // setFormat(format);
+       setFormat(format);
         this.runtime = runtime;
     }
 
@@ -112,14 +112,14 @@ public class GeneralMovie
 
 	
 
-   /* public String getFormat()
+   public String getFormat()
     {
         return format;
-    }*/
+    }
 
 
 
-    /*public final void setFormat(String format) throws Exception
+    public final void setFormat(String format) throws Exception
     {
        /* String tableName = "formats";
         String query =
@@ -145,7 +145,7 @@ public class GeneralMovie
         
         this.format = format;
 
-    }*/
+    }
 
 
 
