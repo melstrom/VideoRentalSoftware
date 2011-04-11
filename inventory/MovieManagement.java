@@ -200,6 +200,7 @@ public class MovieManagement
      * Makes the constraint string for searching for videoInfo
      * @param movie
      * @return
+     * TODO: use PreparedStatement to prevent escaping queries with '
      */
     private static String makeConstraint(GeneralMovie movie)
     {
@@ -335,7 +336,7 @@ public class MovieManagement
                 }
                 else
                 {
-                    return result.getInt(column);
+                    return result.getInt(1);
                 }
             }
              
@@ -354,6 +355,7 @@ public class MovieManagement
      * @param infoID the new key for the videoInfo
      * @param movie the movie to add
      * @throws Exception
+     * TODO: Use PreparedStatement to prevent escaping '
      */
     private static void addVideoInfo(int infoID, GeneralMovie movie)
             throws Exception

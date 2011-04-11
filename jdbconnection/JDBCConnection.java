@@ -207,7 +207,7 @@ public static Connection getConnection()
      */
     public ResultSet getResults(String query) throws Exception
     {
-        System.out.println(query);
+        //System.out.println(query); // TESTING
         ResultSet result = null;
         Statement statement = conn.createStatement();
         //Statement statement = conn.prepareStatement(query);
