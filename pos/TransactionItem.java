@@ -34,7 +34,7 @@ public interface TransactionItem
 	 * @param theDate the date the customer interacted with this item.
 	 * @pre the item should be paid for before calling this method.
 	 */
-	boolean updateItemInfoAtCheckOut(Customer customerID, Date theDate);
+	boolean updateItemInfoAtCheckOut(int customerID, Date theDate);
 	//this method should probably be in some inventory item class.
 	//boolean updateItemInfoAtCheckIn(Date theDate, String barcode);
 }
