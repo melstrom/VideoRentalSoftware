@@ -26,8 +26,8 @@
 package inventory;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.sql.ResultSet;
-import jdbconnection.JDBCConnection;
+//import java.sql.ResultSet;
+//import jdbconnection.JDBCConnection;
 
 public class GeneralMovie
 {
@@ -97,7 +97,7 @@ public class GeneralMovie
     }
 
 
-    public int setLength(int runtime)
+    public void setLength(int runtime)
     {
         if (runtime < 1)
         {
@@ -121,7 +121,7 @@ public class GeneralMovie
 
     public final void setFormat(String format) throws Exception
     {
-        String tableName = "formats";
+       /* String tableName = "formats";
         String query =
                 jdbconnection.JDBCConnection.makeQuery(tableName, null, null);
         JDBCConnection connection = new JDBCConnection();
@@ -142,7 +142,8 @@ public class GeneralMovie
         {
             connection.closeConnection();
         }
-
+        */
+        this.format = format;
 
     }
 
