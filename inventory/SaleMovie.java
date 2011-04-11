@@ -31,10 +31,9 @@ public class SaleMovie extends IndividualMovie{
          * @param status the status of the movie (sold/for sale)
          * @param movie the inherited individualMovie
          */
-	public SaleMovie(String condition, String status, IndividualMovie movie)
+	public SaleMovie( IndividualMovie movie)
 	{
-		this.condition = condition;                     //condition of movie
-		this.status = status;	
+
 		setSKU(movie.getSKU());
 		setTitle(movie.getTitle());
 		setActors(movie.getActors());
