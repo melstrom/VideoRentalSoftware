@@ -7,19 +7,26 @@ package account;
  * @version 1.0 April 3, 2011
  * @version 1.1 April 4
  *      -added isDuplicatedID()
+ * @version 1.2 
+ *	-added barcodeGenerator (incomplete)
+ *	-added JDBCConnetion package
+ *	-fixed demote(), promote() and editAccount()
  */
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import jdbconnection.JDBCConnection;
+
 public class AccountManagement
 {
     /**
      * Default constructor with no parameters
      */
-    public AccountManagement()throws SQLException
+    public AccountManagement()throws SQLException, ClassNotFoundException
     {
-        setupConnection();
+	JDBC = new JDBCConnection();
+      connection = JDBC.getConnection();
     }
     /**
      * Create an employee account
@@ -31,7 +38,7 @@ public class AccountManagement
      * @param phoneNum the phone number of the user
      */
     public void createEmployee(String position, int accountID, String Fname, String Lname, String address, String phoneNum)
-            throws SQLException
+            throws SQLException,java.lang.Exception
     {
         if(!isDuplicatedID(accountID, "employee"))
         account = new Employee(position, accountID, Fname, Lname, address, phoneNum);
@@ -46,10 +53,19 @@ public class AccountManagement
      * @param phoneNum the phone number of the user
      */
     public void createCustomer(String DL, int accountID, String Fname, String Lname, String address, String phoneNum)
-            throws SQLException
+            throws SQLException,java.lang.Exception
     {
         if(!isDuplicatedID(accountID, "customer"))
-        account = new Customer(DL, accountID, Fname, Lname, address, phoneNum);
+	account = new Customer(generateBarcode(), DL, accountID, Fname, Lname, address, phoneNum);
+    }
+    /**
+    * Generate membership barcode
+    * @return barcode
+    */
+    private String generateBarcode()
+    {
+	    String barcode = "101";
+	    return barcode;
     }
     /**
      * Edit an existing account
@@ -59,9 +75,15 @@ public class AccountManagement
     public void editAccount(Object aAccount, String accountType)
     {
         if(accountType.equals("employee"))
-        account = (Employee)aAccount;
-        else if(accountType.equals("customer"))
-        account = (Customer)aAccount;
+	{	
+		Employee employee = (Employee)aAccount;
+		account = employee;
+        }
+	else if(accountType.equals("customer"))
+        {
+		Customer customer=(Customer)aAccount;
+		account = customer;
+	}
     }
     /**
      * Check if an account id already exists in the database
@@ -70,11 +92,12 @@ public class AccountManagement
      * @return boolean
      * @throws SQLException 
      */
-    private boolean isDuplicatedID(int ID, String accountType)throws SQLException
+    private boolean isDuplicatedID(int ID, String accountType)
+	throws SQLException,ClassNotFoundException,java.lang.Exception
     {
         String table = accountType, column = accountType + "ID", query = "";
-
-        return executeQuery(query);
+	
+        return JDBC.update(query)>0;
     }
 
     /**
@@ -107,8 +130,10 @@ public class AccountManagement
      */
     public void setPersonalInfo(String DL, String Fname, String Lname, String address, String phoneNum)
     {
-        account.setPersonalInfo(Fname, Lname, address, phoneNum);
-        account.setDL(DL);
+		Customer customer = (Customer)account;
+		customer.setPersonalInfo(Fname, Lname, address, phoneNum);
+		customer.setDL(DL);
+		account = customer;
     }
     /**
      * Change the status of the account (Active/Inactive)
@@ -122,44 +147,23 @@ public class AccountManagement
      */
     public void promoteEmployee()
     {
-        account.setPosition("Manager");
+	Employee employee = (Employee)account;
+        employee.setPosition("Manager");
+	account = employee;
     }
     /**
      * Demote a manager to employee
      */
     public void demoteManager()
     {
-        account.setPosition("Employee");
+	Employee employee = (Employee)account;
+        employee.setPosition("Employee");
+	account = employee;
     }
-    /**
-     * Set up database connections
-     * @throws SQLException 
-     */
-    final private void setupConnection()throws SQLException
-    {
-        connection = DriverManager.getConnection(url,username,password); //url, username and password for the database is still unknown
-        statement = connection.createStatement();
-    }
-    /**
-     * Execute query in the database
-     * @param query a query
-     * @return boolean - true=at least one match/false=no match
-     * @throws SQLException
-     */
-    private boolean executeQuery(String query)throws SQLException
-    {
-        boolean isFound;
-        try
-        {
-            isFound = statement.execute(query);
-        }
-        finally
-        {
-            connection.close();
-        }
-        return isFound;
-    }
+
+
     private Account account;
-    private Connection connection;
     private Statement statement;
+    private JDBCConnection JDBC;
+    private Connection connection;
 }
