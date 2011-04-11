@@ -17,6 +17,12 @@ public class SaleMovie extends IndividualMovie{
 	private String status;
 	final private String WRITEOFF = "WRITEOF"; //movie is written off for excessive damage
 
+        /**
+         * Empty constructor
+         */
+        public SaleMovie()
+        {
+        }
 	/**
          * The constructor
 	 * inherits from IndividualMovie

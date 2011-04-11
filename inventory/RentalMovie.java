@@ -13,6 +13,12 @@ package inventory;
 public class RentalMovie extends IndividualMovie{
 
     /**
+     * Empty constructor
+     */
+    public RentalMovie()
+    {
+    }
+    /**
     * The constructor
     * inherits from IndividualMovie
     * takes 3 default attributes

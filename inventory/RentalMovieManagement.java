@@ -4,8 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import search.Search;
+//import search.Search;
 import inventory.MovieNotFoundException;
+import inventory.MovieNotAvailableException;
 import inventory.GeneralMovie;
 import inventory.IndividualMovie;
 import inventory.RentalMovie;
@@ -72,8 +73,9 @@ public class RentalMovieManagement {
             throws MovieNotFoundException, SQLException
     {
      
-       // RentalMovie rentalMovie = new RentalMovie(barcodeNum);
+       RentalMovie rentalMovie = new RentalMovie();
 	  // RentalMovie rentalMovie  = search(barcodeNum);
+	    
 	    
         return rentalMovie.getStatus();
     }
@@ -113,7 +115,8 @@ public class RentalMovieManagement {
             throws MovieNotFoundException, SQLException
     {
 	    //RentalMovie rentalMovie  = search(barcodeNum);
-        return rentalMovie.getCondition();
+	    RentalMovie movie = new RentalMovie(); 
+        return movie.getCondition();
     }
 
     /** This method sets the condition of the instanced RentalMovie to a specified
@@ -128,7 +131,7 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException if the barcode cannot be found
      * @post one and only one row is changed
      */
-    private static void setConditionByBarcode(String barcodeNum, String condition)
+    private void setConditionByBarcode(String barcodeNum, String condition)
             throws IllegalArgumentException, SQLException,
                 MovieNotFoundException
     {
@@ -161,12 +164,12 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException if the barcode cannot be found
      * @post one and only one row is changed
      */
-    private static void setConditionByMovie(RentalMovie rentalMovie, String condition)
+    private void setConditionByMovie(RentalMovie rentalMovie, String condition)
             throws IllegalArgumentException, SQLException,
                 MovieNotFoundException
     {
-        String barcodeNum = rentalMovie.getBarcodeNum();
-        setCondition(barcodeNum, condition);
+        String barcodeNum = rentalMovie.getBarcode();
+        setConditionByBarcode(barcodeNum, condition);
     }
 
 
@@ -214,14 +217,16 @@ public class RentalMovieManagement {
             throws MovieNotFoundException, CustomerNotFoundException,
             MovieNotAvailableException, SQLException
     {
-        Search search = new Search();
-        RentalMovie movie = search.previewIndividualMovie(barcodeNum);
-
+        //Search search = new Search();
+        //RentalMovie movie = search.previewIndividualMovie(barcodeNum);
+	RentalMovie movie = new RentalMovie();
 	rentMovieUpdateDatabase(movie, "VideoRental", "condition", Status.RENTED);
 
-        
+        Calendar today = Calendar.getInstance();
+        dueDate.setTime(today.getTime());
+        dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE)+rental_period);
 
-	return (GregorianCalendar)dueDate.getInstance();
+	return dueDate;
     }
 
 
@@ -263,7 +268,10 @@ public class RentalMovieManagement {
 
         movie.setStatus(Status.RENTED);
 
-        return ?GregorianCalendar)dueDate.getInstance();
+        Calendar today = Calendar.getInstance();
+        dueDate.setTime(today.getTime());
+        dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE)+rental_period);
+        return dueDate;
     }
 
     
@@ -292,7 +300,7 @@ public class RentalMovieManagement {
                     + " Could not find movie in database.");
         }
     }
-
+ 
         
     
      /**
@@ -372,8 +380,8 @@ public class RentalMovieManagement {
     public String getCategory(String barcodeNum)
             throws SQLException, MovieNotFoundException
     {
-        Search search = new Search();
-        RentalMovie movie = search.previewIndividualMovie(barcodeNum);
+        //Search search = new Search();
+        //RentalMovie movie = search.previewIndividualMovie(barcodeNum);
 
         return movie.getCategory();
     }
@@ -390,8 +398,8 @@ public class RentalMovieManagement {
     public String getFormat(String barcodeNum)
             throws SQLException, MovieNotFoundException
     {
-        Search search = new Search();
-        RentalMovie movie = search.previewIndividualMovie(barcodeNum);
+        //Search search = new Search();
+        //RentalMovie movie = search.previewIndividualMovie(barcodeNum);
         return movie.getFormat();
     }
     
@@ -436,7 +444,7 @@ public class RentalMovieManagement {
     private void changeToSale(String barcodeNum)
             throws MovieNotFoundException, SQLException
     {
-        RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
+        //RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
 
         // TODO: disallow if movie is not available or condition not good?
 
@@ -472,8 +480,8 @@ public class RentalMovieManagement {
     public static String getTitle(String barcodeNum)
             throws SQLException, MovieNotFoundException
     {
-        Search search = new Search();
-        GeneralMovie movie = search.previewMovie(barcodeNum);
+      //  Search search = new Search();
+       // GeneralMovie movie = search.previewMovie(barcodeNum);
         return movie.getTitle();
     }
 
@@ -525,7 +533,7 @@ public class RentalMovieManagement {
             String format, String condition, String status)
             throws MovieNotFoundException, SQLException
     {
-        RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
+     //   RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
         setCategory(movie, category);
         setFormat(movie, format);
         setCondition(movie, condition);
@@ -543,25 +551,14 @@ public class RentalMovieManagement {
      * @throws IllegalArgumentException
      * @throws MovieNotFoundException
      */
-    private static void setCategory(RentalMovie movie, String category)
+    private void setCategory(RentalMovie movie, String category)
             throws SQLException, IllegalArgumentException, MovieNotFoundException
     {
         String barcodeID = movie.getBarcodeNum();
         changeCategory(barcodeID, category);
         movie.setCategory(category);
 
-    }
-
-
-
-
-    private static void setFormat(Individual movie, String format)
-    {
-        
-    }
-    
-
-    
+    }    
     
     /**
      * Refactored code.  Generates a WHERE statement to specify the specific
@@ -651,6 +648,7 @@ public class RentalMovieManagement {
         private JDBCConnection JDBC;
         private Connection connection;
 	private GregorianCalendar dueDate;
+        final private int rental_period= 7;
 	final public static int SKU_length = 11;
 	final public static int rentalID_length = 4;
     
