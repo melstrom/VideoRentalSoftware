@@ -1,5 +1,5 @@
 package account;
-
+// TODO: sepearate account attribute into employee and customer
 /**
  * Account Manager class
  * 
@@ -14,11 +14,13 @@ package account;
  */
 import java.sql.Connection;
 import java.sql.Statement;
-import java.sql.DriverManager;
+//import java.sql.DriverManager;
+import jdbconnection.*;
 import java.sql.SQLException;
 import jdbconnection.JDBCConnection;
 
 public class AccountManagement
+
 {
     /**
      * Default constructor with no parameters
@@ -41,7 +43,7 @@ public class AccountManagement
             throws SQLException,java.lang.Exception
     {
         if(!isDuplicatedID(accountID, "employee"))
-        account = new Employee(position, accountID, Fname, Lname, address, phoneNum);
+        employee = new Employee(position, accountID, Fname, Lname, address, phoneNum);
     }
     /**
      * Create a customer account
@@ -109,6 +111,7 @@ public class AccountManagement
     {
         account.setLogin(loginID, password);
     }
+    
     /**
      * Set personal information with 4 attributes
      * @param Fname the first name of the user
@@ -120,6 +123,7 @@ public class AccountManagement
     {
         account.setPersonalInfo(Fname, Lname, address, phoneNum);
     }
+
     /**
      * Set personal information with 5 attributes
      * @param DL the driver license id of the customer
@@ -135,6 +139,7 @@ public class AccountManagement
 		customer.setDL(DL);
 		account = customer;
     }
+
     /**
      * Change the status of the account (Active/Inactive)
      */
@@ -142,6 +147,7 @@ public class AccountManagement
     {
         account.changeStatus();
     }
+
     /**
      * Promote an employee to manager
      */
@@ -151,6 +157,7 @@ public class AccountManagement
         employee.setPosition("Manager");
 	account = employee;
     }
+
     /**
      * Demote a manager to employee
      */
@@ -160,7 +167,6 @@ public class AccountManagement
         employee.setPosition("Employee");
 	account = employee;
     }
-
 
     private Account account;
     private Statement statement;
