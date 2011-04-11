@@ -1,5 +1,5 @@
 
-package Proxy;
+package proxy;
 /**
  * 
  * 

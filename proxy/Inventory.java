@@ -1,5 +1,5 @@
 
-package Proxy;
+package proxy;
 /**
  * 
  * 
@@ -17,7 +17,7 @@ public interface Inventory {
  * 
  * @poseidon-object-id [Im68939bd3m12f379ec5cemm61f6]
  */
-    public void ReserveMovie();
+    public void reserveMovie();
 }
 
 
