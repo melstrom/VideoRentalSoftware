@@ -24,7 +24,8 @@ public class TransactionManager
 	private Transaction myTransaction;
 	private Payment myPayment;
 	private PreparedStatement pstatement;
-	
+	private Statement statement;
+	Connection connection;
 	
 	
 	/**
@@ -88,11 +89,8 @@ public class TransactionManager
 	*/
 	private void insertInvoiceTable(int invoiceID, String paymentMethod, Date dateTime, String customerID, String employeeID, int taxRate)
 	{
-		// need to refactor this with the other parts where a db connections are made and maybe put them in try/catch blocks
-		Class.forName("com.mysql.jdbc.Driver");
-		String url = "jdbc:mysql://174.132.159.251:3306/kpoirier_CPSC2301?user=kpoirier_User&password=foobar";
-		Connection connection = DriverManager.getConnection(url);
-		
+		initDB();
+
 		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dateTime).toString();
 				
@@ -105,14 +103,18 @@ public class TransactionManager
 			+ "\'" + customerID + "\',"
 			+ taxRate + ")";
 		
-		Statement statement = connection.createStatement();
+		
 		statement.addBatch(queryString);
 		statement.executeBatch();
 		connection.close();
 	}	
 	private void initDB()
 	{
-		
+		// need to refactor this with the other parts where a db connections are made and maybe put them in try/catch blocks
+		Class.forName("com.mysql.jdbc.Driver");
+		String url = "jdbc:mysql://174.132.159.251:3306/kpoirier_CPSC2301?user=kpoirier_User&password=foobar";
+		connection = DriverManager.getConnection(url);
+		statement = connection.createStatement();
 	}
 	
 	/**
@@ -187,11 +189,7 @@ public class TransactionManager
 	private int getTotalNumberOfInvoices()
 	{
 		int total;
-		// need to refactor this with the other parts where a db connections are made and maybe put them in try/catch blocks
-		Class.forName("com.mysql.jdbc.Driver");
-		String url = "jdbc:mysql://174.132.159.251:3306/kpoirier_CPSC2301?user=kpoirier_User&password=foobar";
-		Connection connection = DriverManager.getConnection(url);
-		Statement statement = connection.createStatement();
+		initDB();
 		ResultSet resultSet = statement.executeQuery("SELECT COUNT(invoiceID) FROM invoice");
 		while (resultSet.next())
 		{
