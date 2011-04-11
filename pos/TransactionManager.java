@@ -89,32 +89,53 @@ public class TransactionManager
 	*/
 	private void insertInvoiceTable(int invoiceID, String paymentMethod, Date dateTime, String customerID, String employeeID, int taxRate)
 	{
-		initDB();
-
+		//convert java Date object into String format sql insert command expects
 		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = sdf.format(dateTime).toString();
-				
-		String queryString = "INSERT INTO invoice (invoiceID, paymentMethod, dateTime, customerID, employeeID, tax) VALUES ("
-			+ invoiceID + ","
-			+ "\'" + paymentMethod + "\',"
-			+ "\'" + currentTime + "\',"
-			+ "\'" + customerID + "\',"
-			+ "\'" + employeeID + "\',"
-			+ "\'" + customerID + "\',"
-			+ taxRate + ")";
+
+		String queryString = "INSERT INTO invoice ("
+			+ "invoiceID,"
+			+ "paymentMethod,"
+			+ "dateTime,"
+			+ "customerID,"
+			+ "employeeID,"
+			+ "tax) "
+			+ "VALUES (?, ?, ?, ?, ?, ?)";
+			
+		initDB2(queryString);	
 		
-		
-		statement.addBatch(queryString);
-		statement.executeBatch();
+		pstatement.setInt(1, invoiceID);
+		pstatement.setString(2, paymentMethod);
+		pstatement.setString(3, currentTime);
+		pstatement.setString(4, customerID);
+		pstatement.setString(5, employeeID);
+		pstatement.setInt(6, taxRate);
+
+		pstatement.executeUpdate();
 		connection.close();
-	}	
+	}
+	
+	/**
+		Init connection to the db and setup the PreparedStatement
+	*/
+	private void initDB2(String sql)
+	{
+		initDBcommon();
+		pstatement = connection.prepareStatement(sql);
+	}
+	/**
+		Init connection to the db and setup the Statement
+	*/
 	private void initDB()
 	{
-		// need to refactor this with the other parts where a db connections are made and maybe put them in try/catch blocks
+		initDBcommon();
+		statement = connection.createStatement();
+	}
+	private void initDBcommon()
+	{
 		Class.forName("com.mysql.jdbc.Driver");
 		String url = "jdbc:mysql://174.132.159.251:3306/kpoirier_CPSC2301?user=kpoirier_User&password=foobar";
 		connection = DriverManager.getConnection(url);
-		statement = connection.createStatement();
 	}
 	
 	/**
