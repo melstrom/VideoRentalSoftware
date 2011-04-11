@@ -32,7 +32,7 @@ public class RentalMovieManagement {
      * Default constructor
      * initialize JDBC connection
      */
-    public RentalMovieManagement()
+    public RentalMovieManagement()throws SQLException, ClassNotFoundException
     {
       JDBC = new JDBCConnection();
       connection = JDBC.getConnection();
@@ -220,7 +220,7 @@ public class RentalMovieManagement {
         //Search search = new Search();
         //RentalMovie movie = search.previewIndividualMovie(barcodeNum);
 	RentalMovie movie = new RentalMovie();
-	rentMovieUpdateDatabase(movie, "VideoRental", "condition", Status.RENTED);
+	rentMovieUpdateDatabase(movie, "VideoRental", "condition", Status.RENTED.name());
 
         Calendar today = Calendar.getInstance();
         dueDate.setTime(today.getTime());
@@ -261,12 +261,12 @@ public class RentalMovieManagement {
         }
 
         rentMovieUpdateDatabase(movie, "VideoRental", "condition",
-                Status.RENTED);
+                Status.RENTED.name());
         
         rentMovieUpdateDatabase(movie, "VideoRental", "MemberID", "" + customer.getAccountID());
 
 
-        movie.setStatus(Status.RENTED);
+        movie.setStatus(Status.RENTED.name());
 
         Calendar today = Calendar.getInstance();
         dueDate.setTime(today.getTime());
@@ -382,7 +382,7 @@ public class RentalMovieManagement {
     {
         //Search search = new Search();
         //RentalMovie movie = search.previewIndividualMovie(barcodeNum);
-
+	RentalMovie movie = new RentalMovie();
         return movie.getCategory();
     }
     
@@ -400,6 +400,7 @@ public class RentalMovieManagement {
     {
         //Search search = new Search();
         //RentalMovie movie = search.previewIndividualMovie(barcodeNum);
+	    RentalMovie movie = new RentalMovie();
         return movie.getFormat();
     }
     
@@ -447,7 +448,7 @@ public class RentalMovieManagement {
         //RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
 
         // TODO: disallow if movie is not available or condition not good?
-
+	RentalMovie movie = new RentalMovie();
         splitBarcode(barcodeNum);
         String[] deleteColumnNames = {"SKU", "rentalID"};
         String deleteQuery = generateDeleteSQL("VideoRental", deleteColumnNames);
@@ -482,6 +483,7 @@ public class RentalMovieManagement {
     {
       //  Search search = new Search();
        // GeneralMovie movie = search.previewMovie(barcodeNum);
+	RentalMovie movie = new RentalMovie();
         return movie.getTitle();
     }
 
@@ -500,7 +502,7 @@ public class RentalMovieManagement {
      * @throws SQLException
      * @throws MovieNotFoundException
      */
-    public static void editCopy(String barcodeNum, String[] info)
+    public void editCopy(String barcodeNum, String[] info)
             throws SQLException, MovieNotFoundException
     {
         final int EXPECTED_INFO_LENGTH = 4;
@@ -529,19 +531,27 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException
      * @throws SQLException
      */
-    public static void editCopy(String barcodeNum, String category,
+    public void editCopy(String barcodeNum, String category,
             String format, String condition, String status)
             throws MovieNotFoundException, SQLException
     {
      //   RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
-        setCategory(movie, category);
+        
+	RentalMovie movie = new RentalMovie();
+	setCategory(movie, category);
         setFormat(movie, format);
-        setCondition(movie, condition);
+        setConditionByMovie(movie, condition);
         setStatus(movie, status);
     }
 
+    
+    private void setStatus(RentalMovie movie, String status)
+    {
+    }
 
-
+    private void setFormat(RentalMovie movie, String format)
+    {
+    }
 
     /**
      * Synonym for changeCategory
@@ -554,7 +564,7 @@ public class RentalMovieManagement {
     private void setCategory(RentalMovie movie, String category)
             throws SQLException, IllegalArgumentException, MovieNotFoundException
     {
-        String barcodeID = movie.getBarcodeNum();
+        String barcodeID = movie.getBarcode();
         changeCategory(barcodeID, category);
         movie.setCategory(category);
 

@@ -69,7 +69,7 @@ public class GeneralMovie
 	    String rating,
             String studio,
             int retailPriceInCents,
-            String format,
+           // String format,
             int runtime)
             throws Exception
     {
@@ -85,7 +85,7 @@ public class GeneralMovie
         this.retailPriceInCents = retailPriceInCents;
 	setRating(rating);
         setGenre(genre);
-        setFormat(format);
+       // setFormat(format);
         this.runtime = runtime;
     }
 
@@ -112,14 +112,14 @@ public class GeneralMovie
 
 	
 
-    public String getFormat()
+   /* public String getFormat()
     {
         return format;
-    }
+    }*/
 
 
 
-    public final void setFormat(String format) throws Exception
+    /*public final void setFormat(String format) throws Exception
     {
        /* String tableName = "formats";
         String query =
@@ -142,10 +142,10 @@ public class GeneralMovie
         {
             connection.closeConnection();
         }
-        */
+        
         this.format = format;
 
-    }
+    }*/
 
 
 
@@ -191,7 +191,7 @@ public class GeneralMovie
      * @throws IllegalArgumentException if the provided rating is not one of the
      * given
      */
-    public final void setRating(String rating)
+    public void setRating(String rating)
     {
         final int CANADIAN = 0;
         final int AMERICAN = 1;

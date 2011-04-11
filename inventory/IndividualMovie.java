@@ -24,11 +24,11 @@ public class IndividualMovie extends GeneralMovie{
     * @param price this cost of the rental in cents
     * @param format is the type of movie format, such as DVD, VHS, Bluray
     */
-   public IndividualMovie(String category, int price, String format, String barcode, GeneralMovie movie)
+   public IndividualMovie(String category, int price, String format, String barcode, GeneralMovie movie)throws java.lang.Exception
    {
 	super(movie.getSKU(),movie.getTitle(),movie.getActors(),movie.getDirector(), movie.getProducer(),
-			movie.getReleaseDate(), movie.getSynopsis(), movie.getRating(), movie.getStudio(),
-			movie.getRetailPriceInCents(), movie.getLength());
+			movie.getReleaseDate(), movie.getSynopsis(), movie.getGenre(), movie.getRating(), 
+				movie.getStudio(), movie.getRetailPriceInCents(), movie.getLength());
 	
         setPrice(price);
         setFormat(format);
@@ -47,7 +47,7 @@ public class IndividualMovie extends GeneralMovie{
     *input: aFormat
     *@param aFormat a format type
     */
-    protected void setFormat(String aFormat)
+    public void setFormat(String aFormat)
     {
     	this.format = aFormat;
     }

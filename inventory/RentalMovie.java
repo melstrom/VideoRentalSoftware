@@ -45,6 +45,7 @@ public class RentalMovie extends IndividualMovie{
 	setRetailPriceInCents(movie.getRetailPriceInCents());
 	setProducer(movie.getProducer());
         setLength(movie.getLength());
+	setGenre(movie.getGenre());
     }
    
     private String status;              //The status of the movie, if it is store "rent" or is out "rented out" or reserved
