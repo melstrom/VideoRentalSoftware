@@ -8,7 +8,13 @@ package pos;
 
 //import inventory.MovieManagement;
 //import jdbconnection.JDBCConnection;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+
+import java.util.Date;
 
 /**
 	This object manages one transaction, the current one.
@@ -60,41 +66,49 @@ public class TransactionManager
 		int transactionID = myTransaction.getInvoiceID();
 		Date transactionDate = myTransaction.getDate();
 		//ArrayList<TransactionItem> items;
-		int paymentAmount;
+//int paymentAmount;
 		String paymentMethod = myTransaction.getPaymentMethod();
-		int subtotalInCents = myTransaction.getSubTotal();
-		int taxInCents = myTransaction.getTax();
-		boolean paid = myTransaction.isPaid();
+		//int subtotalInCents = myTransaction.getSubTotal();
+		//int taxInCents = myTransaction.getTax();
+		//boolean paid = myTransaction.isPaid();
 		//private Customer account; // the customer account being worked on 
-		String customerFirstName = myTransaction.getCustomerFirstName();
-		String customerLastName = myTransaction.getCustomerLastName();
+		//String customerFirstName = myTransaction.getCustomerFirstName();
+		//String customerLastName = myTransaction.getCustomerLastName();
 		String customerID = myTransaction.getCustomerID();
-		String employeeFirstName = myTransaction.getEmployeeName();
+		//String employeeFirstName = myTransaction.getEmployeeName();
 		String employeeID = myTransaction.getEmployeeID();
 		int taxRate = myTransaction.getTaxRateAtTimeOfSale();
 		
+		insertInvoiceTable(transactionID, paymentMethod, transactionDate, customerID, employeeID, taxRate);
+		
+	}
+	
+	/**
+		Method to insert transaction info into the db table.
+	*/
+	private void insertInvoiceTable(int invoiceID, String paymentMethod, Date dateTime, String customerID, String employeeID, int taxRate)
+	{
 		// need to refactor this with the other parts where a db connections are made and maybe put them in try/catch blocks
 		Class.forName("com.mysql.jdbc.Driver");
 		String url = "jdbc:mysql://174.132.159.251:3306/kpoirier_CPSC2301?user=kpoirier_User&password=foobar";
 		Connection connection = DriverManager.getConnection(url);
 		
-		
-		//java.util.Date transactionDate = new java.util.Date();
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // TODO: need to find out the format the INSERT command expects or how to set the format
-		String currentTime = sdf.format(transactionDate).toString();
-		
-		
+		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String currentTime = sdf.format(dateTime).toString();
+				
 		String queryString = "INSERT INTO invoice (invoiceID, paymentMethod, dateTime, customerID, employeeID, tax) VALUES ("
-			+ transactionID + ","
+			+ invoiceID + ","
 			+ "\'" + paymentMethod + "\'"
 			+ "\'" + currentTime + "\'"
 			+ "\'" + customerID + "\'"
 			+ "\'" + employeeID + "\'"
-			+ "\'" + customerID + "\'" + ")";
+			+ "\'" + customerID + "\'"
+			+ taxRate + ")";
 		
 		Statement statement = connection.createStatement();
 		statement.addBatch(queryString);
 		statement.executeBatch();
+		connection.close();
 	}
 	
 	/**
@@ -179,6 +193,7 @@ public class TransactionManager
 		{
 			total = Integer.parseInt(resultSet.getString(1));
 		}
+		connection.close();
 		return total;
 	}
 	
