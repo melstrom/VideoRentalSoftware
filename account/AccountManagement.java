@@ -1,5 +1,5 @@
 package account;
-
+// TODO: sepearate account attribute into employee and customer
 /**
  * Account Manager class
  * 
@@ -11,13 +11,15 @@ package account;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.DriverManager;
+import jdbconnection.*;
 import java.sql.SQLException;
 public class AccountManagement
+
 {
     /**
      * Default constructor with no parameters
      */
-    public AccountManagement()throws SQLException
+    public AccountManagement()throws SQLException, ClassNotFoundException
     {
         setupConnection();
     }
@@ -135,9 +137,9 @@ public class AccountManagement
      * Set up database connections
      * @throws SQLException 
      */
-    final private void setupConnection()throws SQLException
+    private void setupConnection()throws SQLException, ClassNotFoundException
     {
-        connection = DriverManager.getConnection(url,username,password); //url, username and password for the database is still unknown
+        connection = JDBCConnection.getJDBCConnection(); //url, username and password for the database is still unknown
         statement = connection.createStatement();
     }
     /**
