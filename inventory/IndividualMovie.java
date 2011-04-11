@@ -28,7 +28,7 @@ public class IndividualMovie extends GeneralMovie{
    {
 	super(movie.getSKU(),movie.getTitle(),movie.getActors(),movie.getDirector(), movie.getProducer(),
 			movie.getReleaseDate(), movie.getSynopsis(), movie.getRating(), movie.getStudio(),
-			movie.getRetailPriceInCents());
+			movie.getRetailPriceInCents(), movie.getLength());
 	
         setPrice(price);
         setFormat(format);

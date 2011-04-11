@@ -68,7 +68,7 @@ public class RentalMovieManagement {
      * @throws SQLException if the RentalMovie information cannot be read from
      * the database
      */
-    public static String getStatus(String barcodeNum)
+    public static String getStatusByBarcode(String barcodeNum)
             throws MovieNotFoundException, SQLException
     {
      
@@ -86,7 +86,7 @@ public class RentalMovieManagement {
      * @return the status of the RentalMovie
      * @throws MovieNotFoundException if the passed movie is null
      */
-    private static String getStatus(RentalMovie rentalMovie)
+    private static String getStatusByMovie(RentalMovie rentalMovie)
             throws MovieNotFoundException
     {
         if (rentalMovie == null)
@@ -128,7 +128,7 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException if the barcode cannot be found
      * @post one and only one row is changed
      */
-    private static void setCondition(String barcodeNum, String condition)
+    private static void setConditionByBarcode(String barcodeNum, String condition)
             throws IllegalArgumentException, SQLException,
                 MovieNotFoundException
     {
@@ -161,7 +161,7 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException if the barcode cannot be found
      * @post one and only one row is changed
      */
-    private static void setCondition(RentalMovie rentalMovie, String condition)
+    private static void setConditionByMovie(RentalMovie rentalMovie, String condition)
             throws IllegalArgumentException, SQLException,
                 MovieNotFoundException
     {
@@ -292,6 +292,9 @@ public class RentalMovieManagement {
                     + " Could not find movie in database.");
         }
     }
+
+        
+    
      /**
      * This method sends an update query to the Database
      * @param query an SQL query
@@ -355,8 +358,7 @@ public class RentalMovieManagement {
         
         return query;
     }
-   
-    
+
     
   
     
@@ -558,30 +560,7 @@ public class RentalMovieManagement {
         
     }
     
-        /**
-     * Updates the database that the movie is rented out
-     * @param movie
-     * @throws MovieNotFoundException if the movie is not found in the db
-     */
-    private void rentMovieUpdateDatabase(RentalMovie movie, String tableName,
-            String attributeName, String setAttributeTo)
-            throws MovieNotFoundException, SQLException
-    {
-        String barcodeNum = movie.getBarcode();
-        String movieWhere = generateMovieWhere(barcodeNum);
-        
-        String movieCommand = generateUpdateSQL(tableName, attributeName,
-                setAttributeTo, movieWhere);
 
-        int rowsChanged = updateDatabase(movieCommand);
-        
-        if (rowsChanged == 0)
-        {
-            throw new MovieNotFoundException("MovieNotFoundException:"
-                    + " Could not find movie in database.");
-        }
-    }
-    
     
     
     /**
@@ -663,45 +642,10 @@ public class RentalMovieManagement {
         
     }
 	
-        /**
-     * This method generates a simple sql query for updating a table
-     * @param tableName
-     * @param attributeName
-     * @param setAttributeTo
-     * @param whereCondition
-     * @return
-     */
-    private static String (String tableName, String attributeName,
-            String setAttributeTo, String whereCondition)
-    {
-        String command = "UPDATE " + tableName
-                + " SET " + attributeName + " = '" + setAttributeTo + "'"
-                + " WHERE " + whereCondition;
-        return command;
-    }
 
 
 
-    /**
-     * This method generates an SQL query to set the condition of the RentalMovie
-     * eg
-     * UPDATE VideoRental
-     * SET Condition = 'lost'
-     * WHERE (RentalID = 1021 AND SKU = 10010010011)
-     * @param barcodeNum
-     * @param condition
-     * @return
-     */
-    private static String setConditionGenerateSQL(String barcodeNum, String condition)
-    {
-        splitBarcode(barcodeNum);
 
-        String where = "(RentalID = '" + rentalID
-                + "' AND SKU = '" + SKU+ "')";
-        String query = generateUpdateSQL("VideoRental", "Condition", condition, where);
-        
-        return query;
-    }
 	private String SKU;
 	private String rentalID;
         private JDBCConnection JDBC;

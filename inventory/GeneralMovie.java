@@ -86,14 +86,14 @@ public class GeneralMovie
 	setRating(rating);
         setGenre(genre);
         setFormat(format);
-        this.length = runtime;
+        this.runtime = runtime;
     }
 
 
 
     public int getLength()
     {
-        return length;
+        return runtime;
     }
 
 
@@ -105,7 +105,7 @@ public class GeneralMovie
         }
         else
         {
-            this.length = runtime;
+            this.runtime = runtime;
         }
 
     }
@@ -511,7 +511,7 @@ public class GeneralMovie
     private String director;
     private GregorianCalendar releaseDate;
     private String synopsis;
-    private int length;
+    private int runtime;
     private ArrayList <Reservation> reservations;
     final private int ACTOR_COUNT=1;
     public static final int MAX_SKU_LENGTH = 25;

@@ -43,6 +43,7 @@ public class SaleMovie extends IndividualMovie{
 		setRating(movie.getRating());
 		setRetailPriceInCents(movie.getRetailPriceInCents());
 		setProducer(movie.getProducer());
+                setLength(movie.getLength());
 	 }
 	
 	
