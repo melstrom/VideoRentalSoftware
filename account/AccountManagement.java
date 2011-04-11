@@ -10,7 +10,7 @@ package account;
  */
 import java.sql.Connection;
 import java.sql.Statement;
-import java.sql.DriverManager;
+//import java.sql.DriverManager;
 import jdbconnection.*;
 import java.sql.SQLException;
 public class AccountManagement
@@ -36,7 +36,7 @@ public class AccountManagement
             throws SQLException
     {
         if(!isDuplicatedID(accountID, "employee"))
-        account = new Employee(position, accountID, Fname, Lname, address, phoneNum);
+        employee = new Employee(position, accountID, Fname, Lname, address, phoneNum);
     }
     /**
      * Create a customer account
@@ -51,7 +51,7 @@ public class AccountManagement
             throws SQLException
     {
         if(!isDuplicatedID(accountID, "customer"))
-        account = new Customer(DL, accountID, Fname, Lname, address, phoneNum);
+        customer = new Customer(DL, accountID, Fname, Lname, address, phoneNum);
     }
     /**
      * Edit an existing account
@@ -61,9 +61,9 @@ public class AccountManagement
     public void editAccount(Object aAccount, String accountType)
     {
         if(accountType.equals("employee"))
-        account = (Employee)aAccount;
+        employee = (Employee)aAccount;
         else if(accountType.equals("customer"))
-        account = (Customer)aAccount;
+        customer = (Customer)aAccount;
     }
     /**
      * Check if an account id already exists in the database
@@ -110,7 +110,7 @@ public class AccountManagement
     public void setPersonalInfo(String DL, String Fname, String Lname, String address, String phoneNum)
     {
         account.setPersonalInfo(Fname, Lname, address, phoneNum);
-        account.setDL(DL);
+        customer.setDL(DL);
     }
     /**
      * Change the status of the account (Active/Inactive)
@@ -124,14 +124,14 @@ public class AccountManagement
      */
     public void promoteEmployee()
     {
-        account.setPosition("Manager");
+        employee.setPosition("Manager");
     }
     /**
      * Demote a manager to employee
      */
     public void demoteManager()
     {
-        account.setPosition("Employee");
+        employee.setPosition("Employee");
     }
     /**
      * Set up database connections
@@ -161,6 +161,9 @@ public class AccountManagement
         }
         return isFound;
     }
+
+    private Customer customer;
+    private Employee employee;
     private Account account;
     private Connection connection;
     private Statement statement;
