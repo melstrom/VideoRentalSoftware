@@ -98,17 +98,21 @@ public class TransactionManager
 				
 		String queryString = "INSERT INTO invoice (invoiceID, paymentMethod, dateTime, customerID, employeeID, tax) VALUES ("
 			+ invoiceID + ","
-			+ "\'" + paymentMethod + "\'"
-			+ "\'" + currentTime + "\'"
-			+ "\'" + customerID + "\'"
-			+ "\'" + employeeID + "\'"
-			+ "\'" + customerID + "\'"
+			+ "\'" + paymentMethod + "\',"
+			+ "\'" + currentTime + "\',"
+			+ "\'" + customerID + "\',"
+			+ "\'" + employeeID + "\',"
+			+ "\'" + customerID + "\',"
 			+ taxRate + ")";
 		
 		Statement statement = connection.createStatement();
 		statement.addBatch(queryString);
 		statement.executeBatch();
 		connection.close();
+	}	
+	private void initDB()
+	{
+		
 	}
 	
 	/**
@@ -197,9 +201,6 @@ public class TransactionManager
 		return total;
 	}
 	
-	private void initDB()
-	{
-		
-	}
+
 
 }
