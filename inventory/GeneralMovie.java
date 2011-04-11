@@ -197,8 +197,10 @@ public class GeneralMovie
         final int AMERICAN = 1;
         String[][] possibleRatings = {
             {"G", "PG", "14A", "18A", "R", "A", "NR"},
-            {"G", "PG", "PG-13", "R", "NC-17", "NC-17", "NR"}
+            {"G", "PG", "PG-13", "18A", "NC-17", "NC-17", "NR"}
         };
+        // note: R is not included in the American rating array because otherwise
+        // the method will overwrite the Canadian R with 18A as well.
 
         if (rating == null)
         {
