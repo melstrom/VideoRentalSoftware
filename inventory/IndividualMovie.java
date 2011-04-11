@@ -3,6 +3,7 @@
 * Sets and gets the individual movie object with price, format, category and bar-code by calling and setting methods.
 * @author Legen
 * @version 1.0 March 27, 2011
+*  matt: removed format, added condition
 */
 
 package inventory;
@@ -28,7 +29,7 @@ public class IndividualMovie extends GeneralMovie{
    {
 	super(movie.getSKU(),movie.getTitle(),movie.getActors(),movie.getDirector(), movie.getProducer(),
 			movie.getReleaseDate(), movie.getSynopsis(), movie.getGenre(), movie.getRating(), 
-				movie.getStudio(), movie.getRetailPriceInCents(), movie.getLength(), movie.getFormat());
+				movie.getStudio(), movie.getRetailPriceInCents(), movie.getFormat(), movie.getLength());
 	this.condition = condition;
         setPrice(price);
         setCategory(category);
