@@ -6,8 +6,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import search.Search;
 import inventory.MovieNotFoundException;
+import inventory.GeneralMovie;
+import inventory.IndividualMovie;
+import inventory.RentalMovie;
 import account.CustomerNotFoundException;
 import account.Customer;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import jdbconnection.JDBCConnection;
 
@@ -23,8 +27,15 @@ import jdbconnection.JDBCConnection;
  */
 public class RentalMovieManagement {
 
-
-
+    /**
+     * Default constructor
+     * initialize JDBC connection
+     */
+    public RentalMovieManagement()
+    {
+      JDBC = new JDBCConnection();
+      connection = JDBC.getConnection();
+    }
     // methods
 
     public enum Status
@@ -60,7 +71,8 @@ public class RentalMovieManagement {
     public static String getStatus(String barcodeNum)
             throws MovieNotFoundException, SQLException
     {
-        //RentalMovie rentalMovie = new RentalMovie(barcodeNum);
+     
+       // RentalMovie rentalMovie = new RentalMovie(barcodeNum);
 	  // RentalMovie rentalMovie  = search(barcodeNum);
 	    
         return rentalMovie.getStatus();
@@ -97,7 +109,7 @@ public class RentalMovieManagement {
      * because of lack of connection to the database.
      * @pre the barcode number must correspond to an existing RentalMovie
      */
-    public static String getCondition(String barcodeNum)
+    public String getCondition(String barcodeNum)
             throws MovieNotFoundException, SQLException
     {
 	    //RentalMovie rentalMovie  = search(barcodeNum);
@@ -171,7 +183,7 @@ public class RentalMovieManagement {
      * @throws IllegalArguementException if the barcode is not the right length
      * or the array is not length 2
      */
-    private static void splitBarcode(String barcodeNum)
+    private void splitBarcode(String barcodeNum)
             throws IllegalArgumentException
     {
         if (barcodeNum == null || barcodeNum.length() != SKU_length + rentalID_length)
@@ -198,14 +210,17 @@ public class RentalMovieManagement {
      * @throws CustomerNotFoundException if the customer does not exist
      * @throws MovieNotAvailableException if the movie is not available
      */
-    public static GregorianCalendar rent(String barcodeNum, String memberID)
+    public GregorianCalendar rentWithBarcode(String barcodeNum, String memberID)
             throws MovieNotFoundException, CustomerNotFoundException,
             MovieNotAvailableException, SQLException
     {
-        RentalMovie movie = search(barcodeNum);
+        Search search = new Search();
+        RentalMovie movie = search.previewIndividualMovie(barcodeNum);
 
 	rentMovieUpdateDatabase(movie, "VideoRental", "condition", Status.RENTED);
-	
+
+        
+
 	return (GregorianCalendar)dueDate.getInstance();
     }
 
@@ -224,7 +239,7 @@ public class RentalMovieManagement {
      * @throws MovieNotAvailableException if the movie is not available
      * @post the movie's status is changed to rented.
      */
-    private static GregorianCalendar rent(RentalMovie movie, Customer customer)
+    private GregorianCalendar rentWithMovieInfo(RentalMovie movie, Customer customer)
             throws MovieNotFoundException, CustomerNotFoundException,
             MovieNotAvailableException, SQLException
     {
@@ -246,9 +261,9 @@ public class RentalMovieManagement {
         rentMovieUpdateDatabase(movie, "VideoRental", "MemberID", "" + customer.getAccountID());
 
 
-        movie.setStatus("rented");
+        movie.setStatus(Status.RENTED);
 
-        return dueDate.getInstance();
+        return ?GregorianCalendar)dueDate.getInstance();
     }
 
     
@@ -259,7 +274,7 @@ public class RentalMovieManagement {
      * @param movie
      * @throws MovieNotFoundException if the movie is not found in the db
      */
-    private static void rentMovieUpdateDatabase(RentalMovie movie, String tableName,
+    private void rentMovieUpdateDatabase(RentalMovie movie, String tableName,
             String attributeName, String setAttributeTo)
             throws MovieNotFoundException, SQLException
     {
@@ -283,12 +298,9 @@ public class RentalMovieManagement {
      * @return the number of rows affected.
      * @throws SQLException
      */
-    private static int updateDatabase(String query)
+    private int updateDatabase(String query)
             throws SQLException
-    {
-        JDBCConnection jdbc = new JDBCConnection();
-        Connection connection = jdbc.getConnection();
-        
+    {        
         try
         {
             java.sql.Statement statement = connection.createStatement();
@@ -318,6 +330,7 @@ public class RentalMovieManagement {
                 + " SET " + attributeName + " = '" + setAttributeTo + "'"
                 + " WHERE " + whereCondition;
         return command;
+
     }
 
 
@@ -332,7 +345,7 @@ public class RentalMovieManagement {
      * @param condition
      * @return
      */
-    private static String setConditionGenerateSQL(String barcodeNum, String condition)
+    private String setConditionGenerateSQL(String barcodeNum, String condition)
     {
         splitBarcode(barcodeNum);
 
@@ -342,25 +355,10 @@ public class RentalMovieManagement {
         
         return query;
     }
+   
     
     
-    /**
-     * Refactored code.  Generates a WHERE statement to specify the specific
-     * RentalMovie that has the barcodeNum
-     * @param barcodeNum
-     * @return
-     */
-    private static String generateMovieWhere(String barcodeNum)
-    {
-        splitBarcode(barcodeNum);
-    
-        String where = "RentalID = '" + RentalID+ "'"
-                + "AND SKU = '" + s+ "'";
-        return where;
-    }
-    
-    
-    
+  
     
     /**
      * Gets the category of the movie
@@ -369,10 +367,12 @@ public class RentalMovieManagement {
      * @throws SQLException
      * @throws MovieNotFoundException
      */
-    public static String getCategory(String barcodeNum)
+    public String getCategory(String barcodeNum)
             throws SQLException, MovieNotFoundException
     {
-        //RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
+        Search search = new Search();
+        RentalMovie movie = search.previewIndividualMovie(barcodeNum);
+
         return movie.getCategory();
     }
     
@@ -385,10 +385,11 @@ public class RentalMovieManagement {
      * @throws SQLException
      * @throws MovieNotFoundException
      */
-    public static String getFormat(String barcodeNum)
+    public String getFormat(String barcodeNum)
             throws SQLException, MovieNotFoundException
     {
-        //RentalMovie movie = new RentalMovie(barcodeNum);
+        Search search = new Search();
+        RentalMovie movie = search.previewIndividualMovie(barcodeNum);
         return movie.getFormat();
     }
     
@@ -405,7 +406,7 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException
      * @throws IllegalArgumentException if the category is not a valid category
      */
-    public static void changeCategory(String barcodeNum, String category)
+    public void changeCategory(String barcodeNum, String category)
             throws SQLException, MovieNotFoundException
     {
         Category cat = Category.valueOf((category.replaceAll(" ", "_")).toUpperCase());
@@ -430,7 +431,7 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException
      * @throws SQLException
      */
-    private static void changeToSale(String barcodeNum)
+    private void changeToSale(String barcodeNum)
             throws MovieNotFoundException, SQLException
     {
         RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
@@ -439,23 +440,21 @@ public class RentalMovieManagement {
 
         splitBarcode(barcodeNum);
         String[] deleteColumnNames = {"SKU", "rentalID"};
-        String deleteQuery = generateDeleteSQL("VideoRental", deleteColumnNames, keys);
+        String deleteQuery = generateDeleteSQL("VideoRental", deleteColumnNames);
         String[] insertColumnNames = { "condition", "SKU", "saleID" };
-        String[] values = { movie.getCondition(), keys[0], keys[1] };
+        String[] values = { movie.getCondition(), SKU, rentalID };
         String insertQuery = generateInsertSQL("VideoSales", insertColumnNames, values);
-
-
-        java.sql.Connection conn = utility.DataSource.getConnection();
+        
         try
         {
 
-            Statement stat = conn.createStatement();
+            Statement stat = connection.createStatement();
             stat.executeQuery(deleteQuery);
             stat.execute(insertQuery);
         }
         finally
         {
-            conn.close();
+            connection.close();
         }
 
     }
@@ -471,7 +470,8 @@ public class RentalMovieManagement {
     public static String getTitle(String barcodeNum)
             throws SQLException, MovieNotFoundException
     {
-        //RentalMovie movie = Search(barcodeNum);
+        Search search = new Search();
+        GeneralMovie movie = search.previewMovie(barcodeNum);
         return movie.getTitle();
     }
 
@@ -553,7 +553,7 @@ public class RentalMovieManagement {
 
 
 
-    private static void setFormat(RentalMovie movie, String format)
+    private static void setFormat(Individual movie, String format)
     {
         
     }
@@ -563,7 +563,7 @@ public class RentalMovieManagement {
      * @param movie
      * @throws MovieNotFoundException if the movie is not found in the db
      */
-    private static void rentMovieUpdateDatabase(RentalMovie movie, String tableName,
+    private void rentMovieUpdateDatabase(RentalMovie movie, String tableName,
             String attributeName, String setAttributeTo)
             throws MovieNotFoundException, SQLException
     {
@@ -590,7 +590,7 @@ public class RentalMovieManagement {
      * @param barcodeNum
      * @return
      */
-    private static String generateMovieWhere(String barcodeNum)
+    private String generateMovieWhere(String barcodeNum)
     {
         splitBarcode(barcodeNum);
         String where = "RentalID = '" + rentalID + "'"
@@ -609,22 +609,15 @@ public class RentalMovieManagement {
      * @return
      * @throws SQLException
      */
-    private static String generateDeleteSQL(String tableName, String[] columns, String[] keys)
+    private String generateDeleteSQL(String tableName, String[] columns)
             throws SQLException
     {
-        if (columns.length != keys.length)
-        {
-            throw new SQLException("SQLException: column/value mismatch");
-        }
         String query = "DELETE FROM "+tableName+" WHERE ";
-        for (int i = 0; i < columns.length; i++)
-        {
-            query = query + columns[i] + " = '"+keys[i]+"'";
-            if (i != columns.length - 1)
-            {
-                query += " AND ";
-            }
-        }
+       
+            query = query + columns[0] + " = '"+SKU+"'"
+                    + " AND "+columns[1] +" = '"+rentalID+"'";
+          
+        
         return query;
 
     }
@@ -678,7 +671,7 @@ public class RentalMovieManagement {
      * @param whereCondition
      * @return
      */
-    private static String generateUpdateSQL(String tableName, String attributeName,
+    private static String (String tableName, String attributeName,
             String setAttributeTo, String whereCondition)
     {
         String command = "UPDATE " + tableName
@@ -711,9 +704,11 @@ public class RentalMovieManagement {
     }
 	private String SKU;
 	private String rentalID;
+        private JDBCConnection JDBC;
+        private Connection connection;
 	private GregorianCalendar dueDate;
-	final static public int SKU_length = 11;
-	final static public int rentalID_length = 4;
+	final public static int SKU_length = 11;
+	final public static int rentalID_length = 4;
     
 
 }
