@@ -102,7 +102,6 @@ public class Transaction
 		@param customerID the customer's membership card number.
 		@param employeeName the first name of the employee that initially handled the transaction.
 		@param employeeID the employee's id.
-		@param transactionID the id number of the transaction (aka invoice number).
 		@param taxPercent the percent the tax amount is as a double.
 		<dt><b>Precondition:</b><dd>
 			<ul>
@@ -114,14 +113,14 @@ public class Transaction
 				<li>The transaction/invoice is associated with the customer</li>
 			</ul>
 	*/
-	public Transaction(String firstName, String lastName, String customerID, String employeeName, String employeeID, int transactionID, double taxPercent)
+	public Transaction(String firstName, String lastName, String customerID, String employeeName, String employeeID, double taxPercent)
 	{
 		this.customerFirstName = firstName;
 		this.customerLastName = lastName;
 		this.customerID = customerID;
 		this.employeeFirstName = employeeName;
 		this.employeeID = employeeID;
-		this.transactionID = transactionID;
+		//this.transactionID = transactionID;
 		this.taxPercent = taxPercent;
 		paid = false;
 		paymentMethod = "";
@@ -129,7 +128,19 @@ public class Transaction
 	}
 	
 
-	
+	/**
+		Returns an item given the line number.
+		@param line the line number of the item on the invoice.
+		@throws IllegalStateException if the line is out of bounds.
+	*/
+	public TransactionItem getItem(int line) throws IllegalStateException
+	{
+		if ((items.size() < line) || (line <= 0))
+		{
+			throw new IllegalStateException("Line number out of bounds.");
+		}
+		return items.get(line - 1);
+	}
 	
 	
 	
@@ -214,7 +225,7 @@ public class Transaction
 		{
 			throw new IndexOutOfBoundsException("lineNumber is out of range.");
 		}
-		//todo: find out method name of TransactionItem that lets you get its type
+		
 		return items.get(lineNumber).getType();
 	}
 		
@@ -236,8 +247,28 @@ public class Transaction
 			throw new IndexOutOfBoundsException("lineNumber is out of range.");
 		}
 		
-		//todo: find out method name of TransactionItem that lets you get its name
 		return items.get(lineNumber).getName();
+	}
+	
+	/**
+		Gets the barcode of the item .
+		@param lineNumber the line number of the transaction item you wish to get info on (first item is index 1).
+		@return the barcode of the transaction item.
+		@throws IndexOutOfBoundsException if the index is out of range (lineNumber less than 0 or greater than this.getNumberOfItems())
+	*/
+	public String getItemBarcode(int lineNumber)
+	{		
+		int numberOfItems = items.size();
+		if (numberOfItems == 0)
+		{
+			throw new IndexOutOfBoundsException("There are no items.");
+		}
+		else if (lineNumber > numberOfItems || lineNumber < 0)
+		{
+			throw new IndexOutOfBoundsException("lineNumber is out of range.");
+		}
+		
+		return items.get(lineNumber).getBarcode();
 	}
 	
 	/**
@@ -258,7 +289,6 @@ public class Transaction
 			throw new IndexOutOfBoundsException("lineNumber is out of range.");
 		}
 		
-		//todo: find out method name of TransactionItem that lets you get its name
 		return items.get(lineNumber).getPrice();
 	}
 	
@@ -268,6 +298,7 @@ public class Transaction
 	/**
 	Marks the transaction as finalized/paid.
 	@param payment the payment method and ammount.
+	@param nextAvailableInvoiceID the invoice id that this ivoice is associated with.
 	@throws IllegalStateException if the Transaction has already been paid for or if the amount is not enough
 	<dt><b>Precondition:</b><dd>
 		<ul>
@@ -288,7 +319,7 @@ public class Transaction
 		</ul>
 	
 	*/
-	public boolean markPaid(Payment payment)
+	public boolean markPaid(Payment payment, int nextAvailableInvoiceID) throws IllegalStateException
 	{
 		if (paid == true)
 		{
@@ -301,7 +332,33 @@ public class Transaction
 		paid = true;
 		paymentMethod = payment.getPaymentMethod();
 		paymentAmount = payment.getAmount();
+		transactionID = nextAvailableInvoiceID;
+		updateItemInfo();
+		setDate()
 		return true;
+	}
+	
+	
+	/**
+		helper method to set date
+	*/
+	private void setDate()
+	{
+		
+		transactionDate = new Date()
+	}
+	/**
+		helper method to update the items info once it is checked out
+	*/	
+	private void updateItemInfo()
+	{
+		int total = items.size(); // total number of items	
+		int counter;
+		for (counter = 0; counter < total; counter++)
+		{
+			items.get(counter).updateItemInfoAtCheckOut(customerID, transactionDate);
+		}
+		
 	}
 
 
@@ -316,6 +373,25 @@ public class Transaction
 //	    return 100000;
 //	}
 
+
+	/**
+		Returns the invoice ID.
+		@return the invoice number
+		@throws IllegalStateException if the transaction has not been paid for.
+		<dt><b>Precondition:</b><dd>
+		<ul>
+				<li>Payment for the transaction has been made. Invoice number is set when the customer has paid.</li>
+		</ul>
+	*/
+	public int getInvoiceID() throws IllegalStateException
+	{
+		if (this.isPaid() == false)
+		{
+			throw new IllegalStateException("The invoice has not been paid, Invoice ID has not been set.");
+		}
+		return transactionID;
+	}
+	
 	/**
 		Adds a transaction item to the current transaction.
 		@param line the transaction item to add
@@ -329,7 +405,7 @@ public class Transaction
 				<li>The total tax amount is updated.</li>
 			</ul>
 	*/
-	public void addTransactionItem(TransactionItem item)
+	public void addTransactionItem(TransactionItem item) throws IllegalStateException
 	{
 		if (paid == true)
 		{
@@ -356,7 +432,7 @@ public class Transaction
 			<li>The transaction item associated with the lineNumber is removed. All other item's line numbers are shifted down</li>
 		</ul>
 	*/
-	public boolean removeTransactionItem(int lineNumber)
+	public boolean removeTransactionItem(int lineNumber) throws IndexOutOfBoundsException
 	{
 		int numberOfItems = items.size();
 		if (numberOfItems == 0)
@@ -387,7 +463,7 @@ public class Transaction
 			<li>The last transaction item added is removed.</li>
 		</ul>
 	 */
-	public boolean removeLastTransactionItem()
+	public boolean removeLastTransactionItem() throws IndexOutOfBoundsException
 	{
 		int numberOfItems = items.size();
 		if (numberOfItems == 0)
@@ -526,7 +602,7 @@ public class Transaction
 	}
 
 	/**
-	 * This returns the tax rate at the time of the transaction (assumptions: only 1 tax).
+	 * This returns the tax rate at the time of the transaction as an integer (12 means 12 percent)(assumptions: only 1 tax).
 	 * @return the tax rate as an integer (12 means 12 percent).
 	 */
 	public int getTaxRateAtTimeOfSale()
