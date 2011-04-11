@@ -24,12 +24,12 @@ public class IndividualMovie extends GeneralMovie{
     * @param price this cost of the rental in cents
     * @param format is the type of movie format, such as DVD, VHS, Bluray
     */
-   public IndividualMovie(String category, int price, String format, String barcode, GeneralMovie movie)throws java.lang.Exception
+   public IndividualMovie(String category, int price, String format, String barcode, GeneralMovie movie, String condition)throws java.lang.Exception
    {
 	super(movie.getSKU(),movie.getTitle(),movie.getActors(),movie.getDirector(), movie.getProducer(),
 			movie.getReleaseDate(), movie.getSynopsis(), movie.getGenre(), movie.getRating(), 
 				movie.getStudio(), movie.getRetailPriceInCents(), movie.getLength());
-	
+	this.condition = condition;
         setPrice(price);
         setFormat(format);
         setCategory(category);
@@ -40,6 +40,7 @@ public class IndividualMovie extends GeneralMovie{
     private int price;                  //The cost of renting the movie in cents
     private String format;              //The format of the movie, such as vhs, bluray, dvd
     private String barcode;             //The unique number code that is on each movie as barcodes
+    private String condition;
     public static final int ID_LENGTH = 9;
   
     /**
@@ -119,4 +120,20 @@ public class IndividualMovie extends GeneralMovie{
     {
     return barcode;
     }
+   /**
+   *  Set condition
+   * @param condition the condition of the movie ( / / / /)
+   */
+    public void setCondition(String condition)
+   {
+     this.condition = condition;
+   }
+   /**
+   * Get condition
+   * @return condition 
+   */
+    public String getCondition()
+   {
+     return condition;
+   }
 }
