@@ -6,8 +6,8 @@ Things that are unclear:
 */
 package pos;
 
-import inventory.MovieManagement;
-import jdbconnection.JDBCConnection;
+//import inventory.MovieManagement;
+//import jdbconnection.JDBCConnection;
 import java.sql.*;
 
 /**
@@ -39,7 +39,7 @@ public class TransactionManager
 	*/
 	public void createTransaction(String firstName, String lastName, String customerID, String employeeName, String employeeID, double taxPercent)
 	{
-		myTransaction = new Transaction(firstName, lastName, customerID, employeeName, employeeID, double taxPercent);
+		myTransaction = new Transaction(firstName, lastName, customerID, employeeName, employeeID, taxPercent);
 	}
 	
 	/**
@@ -68,9 +68,9 @@ public class TransactionManager
 		//private Customer account; // the customer account being worked on 
 		String customerFirstName = myTransaction.getCustomerFirstName();
 		String customerLastName = myTransaction.getCustomerLastName();
-		String customerID = myTransaction.getCustomer;
-		String employeeFirstName = myTransaction.get;
-		String employeeID = myTransaction.get;
+		String customerID = myTransaction.getCustomerID();
+		String employeeFirstName = myTransaction.getEmployeeName();
+		String employeeID = myTransaction.getEmployeeID();
 		int taxRate = myTransaction.getTaxRateAtTimeOfSale();
 		
 		// need to refactor this with the other parts where a db connections are made and maybe put them in try/catch blocks
@@ -79,20 +79,22 @@ public class TransactionManager
 		Connection connection = DriverManager.getConnection(url);
 		
 		
-		java.util.Date transactionDate = new java.util.Date();
+		//java.util.Date transactionDate = new java.util.Date();
 		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // TODO: need to find out the format the INSERT command expects or how to set the format
-		String currentTime = sdf.format(tansactionDate).toString();
+		String currentTime = sdf.format(transactionDate).toString();
 		
 		
-		String queryString = "INSERT INTO invoice (invoiceID, paymentMethod, dateTime, customerID, employeeID, storeID, tax) VALUES ("
+		String queryString = "INSERT INTO invoice (invoiceID, paymentMethod, dateTime, customerID, employeeID, tax) VALUES ("
 			+ transactionID + ","
-			+ \' + paymentMethod + \'
-			+ \
+			+ "\'" + paymentMethod + "\'"
+			+ "\'" + currentTime + "\'"
+			+ "\'" + customerID + "\'"
+			+ "\'" + employeeID + "\'"
+			+ "\'" + customerID + "\'" + ")";
 		
-		PreparedStatement pstatement = connection.createStatement();
-		.... to be continued
-		
-		
+		Statement statement = connection.createStatement();
+		statement.addBatch(queryString);
+		statement.executeBatch();
 	}
 	
 	/**
@@ -124,7 +126,7 @@ public class TransactionManager
 	*/
 	public void removeItem(String barcode) throws IllegalStateException
 	{
-		itemCount = myTransaction.getNumberOfItems;
+		int itemCount = myTransaction.getNumberOfItems();
 		if (itemCount == 0)
 		{
 			throw new IllegalStateException("There are no items on the Invoice.");
@@ -136,7 +138,7 @@ public class TransactionManager
 		for (line = 1; line <= itemCount; line++)
 		{
 			TransactionItem itemOnInvoice = myTransaction.getItem(line);
-			if (itemOnInvoice.get(line).getBarcode == barcode)
+			if (itemOnInvoice.getBarcode() == barcode)
 			{
 				found = true;
 				break;

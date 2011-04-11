@@ -38,7 +38,7 @@ todo: update class diagram for transaction to version2
 
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 /**
 	A point of sales transaction.
 	@see "class diagram from SRS+SDD from teamMitch"
@@ -48,7 +48,7 @@ public class Transaction
 {
 	private int transactionID; // transactionID is set when payment is made and is the next transactionID
 	// TODO: or should transactinID be set in constructor? what if a transaction is created and not paid (transaction is canceled)
-	private Date transactionDate; // date is set when payment is made
+	private java.sql.Date transactionDate; // date is set when payment is made
 	private ArrayList<TransactionItem> items;
 	
 	private int paymentAmount;
@@ -334,7 +334,7 @@ public class Transaction
 		paymentAmount = payment.getAmount();
 		transactionID = nextAvailableInvoiceID;
 		updateItemInfo();
-		setDate()
+		setDate();
 		return true;
 	}
 	
@@ -345,7 +345,7 @@ public class Transaction
 	private void setDate()
 	{
 		
-		transactionDate = new Date()
+		transactionDate = new java.sql.Date();
 	}
 	/**
 		helper method to update the items info once it is checked out
@@ -493,6 +493,20 @@ public class Transaction
 	public int getTax()
 	{
 		return taxInCents;
+	}
+	
+	/**
+		Gets the payment method.
+		@return the payment method.
+		@throws IllegalStateException if the transaction has not been paid for yet.
+	*/
+	public String getPaymentMethod() throws IllegalStateException
+	{
+		if (paid == false)
+		{
+			throw new IllegalStateException("Transaction has not been paid for.");
+		}
+		return paymentMethod;
 	}
 	
 	/**
