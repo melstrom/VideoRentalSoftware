@@ -42,24 +42,7 @@ public class IndividualMovie extends GeneralMovie{
     private String condition;
     public static final int ID_LENGTH = 9;
   
-    /**
-    *Set the format for the individual movie which could be DVD, VHS, Blu-ray for example
-    *input: aFormat
-    *@param aFormat a format type
-    */
-    public void setFormat(String aFormat)
-    {
-    	this.format = aFormat;
-    }
-   
-    /**
-    *Get the format for the individual movie 
-    *@return format
-    */
-    public String getFormat()
-    {
-    return format;
-    }
+
    
     /**
     *Set the price for the individual movie in cents

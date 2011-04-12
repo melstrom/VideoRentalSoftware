@@ -22,12 +22,12 @@
  *      @version 1.4
  *              - added in missing attributes:
  *                  producer, rating, studio, retailPriceInCents, format
+ *     
  */
 package inventory;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-//import java.sql.ResultSet;
-//import jdbconnection.JDBCConnection;
+
 
 public class GeneralMovie
 {
@@ -493,17 +493,6 @@ public class GeneralMovie
         }
         throw new IllegalArgumentException("Not a valid genre");
     }
-
-
-
-    /**
-    * testing class
-    
-    public String getAll()
-    {	    			
-	    return getSKU()+" "+getTitle()+" "+getDirector()
-			+" "+getReleaseDate().get(releaseDate.YEAR)+" "+getSynopsis();
-    }*/
 
     private String title;
     private String SKU;
