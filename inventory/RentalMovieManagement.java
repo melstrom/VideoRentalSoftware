@@ -157,9 +157,14 @@ public class RentalMovieManagement {
         {
             throw new IllegalArgumentException("IllegalArgumentException: Invalid barcode number");
         }
-
-        SKU = barcodeNum.substring(0, SKU_length);
-        rentalID = barcodeNum.substring(SKU_length);
+	
+	if(barcodeNum.length > 18)
+	{
+		SKU = barcodeNum.substring(0, SKU_length);
+		rentalID = barcodeNum.substring(SKU_length);
+	}
+	else if(barcodeNum.length >= 10 && barcodeNum<= 18)
+	SKU = barcodeNum;
     }
 
 
@@ -508,14 +513,7 @@ public class RentalMovieManagement {
         setStatus(movie, status);
     }
 
-    
-    private void setStatus(RentalMovie movie, String status)
-    {
-    }
 
-    private void setFormat(RentalMovie movie, String format)
-    {
-    }
 
     /**
      * Synonym for changeCategory
@@ -624,7 +622,4 @@ public class RentalMovieManagement {
 	private GregorianCalendar dueDate;
         final private int rental_period= 7;
 	final public static int SKU_length = 11;
-	final public static int rentalID_length = 4;
-    
-
 }
