@@ -32,9 +32,9 @@ public class SearchProxy implements proxy.Search
  *
  * @poseidon-object-id [Im68939bd3m12f379ec5cemm6136]
  */
-    public void browse()
+    public void browse(String genre)
     {
-        Search search new Search();
-        search.browse(genre);
+        Search search = new Search();
+        search.browse(String genre);
     }
 }
