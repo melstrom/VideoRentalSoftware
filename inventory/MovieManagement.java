@@ -172,12 +172,28 @@ public class MovieManagement
     {
         String table = "videoInfo";
         String column = "InfoID";
-        String constraint = makeConstraint(movie);
+        //String constraint = makeConstraint(movie);
+        String constraint = makePreparedConstraint(movie);
         String query = JDBCConnection.makeQuery(table, column, constraint);
         JDBCConnection conn = new JDBCConnection();
         try
         {
-            ResultSet result = conn.getResults(query);
+            //ResultSet result = conn.getResults(query);
+
+
+            String title =  movie.getTitle();
+            String director = movie.getDirector();
+            String producer = movie.getProducer();
+            String studio = movie.getStudio();
+            String synopsis = movie.getSynopsis();
+            String rating = movie.getRating();
+            String genre = movie.getGenre();
+
+            int numParameters = 7;
+            String[] parameters = 
+                {title, director, producer, studio, synopsis, rating, genre};
+
+            ResultSet result = conn.getResults(query, numParameters, parameters);
             if (result.next())
             {
                 int infoID = result.getInt(column);
@@ -192,6 +208,37 @@ public class MovieManagement
         {
             conn.closeConnection();
         }
+    }
+
+
+
+    private static String makePreparedConstraint(GeneralMovie movie)
+    {
+        java.util.Calendar releaseDate = movie.getReleaseDate();
+        int runtime = movie.getLength();
+        String[] actors = movie.getActors();
+        String constraint = "";
+
+        constraint += "Title = ?";
+        constraint += " AND ";
+        constraint += makeActorConstraint(actors);
+        constraint += " AND ";
+        constraint += "director = ?";
+        constraint += " AND ";
+        constraint += "Producer = ?";
+        constraint += " AND ";
+        constraint += "studio = ?";
+        constraint += " AND ";
+        constraint += "Description = ?";
+        constraint += " AND ";
+        constraint += "Rating = ?";        
+        constraint += " AND ";
+        constraint += "releaseDate = '"+makeReleaseDateString(releaseDate)+"'";
+        constraint += " AND ";
+        constraint += "Genre = ?";
+        constraint += " AND ";
+        constraint += "length = '"+runtime+"'";
+        return constraint;
     }
 
 
@@ -260,13 +307,13 @@ public class MovieManagement
         int actorIndex = 0; // start from the first actor
         String actorConstraint = "(";
         actorConstraint = actorConstraint
-                + "actors LIKE '%"+actors[actorIndex]+"%' ";
+                + "actors LIKE '%"+actors[actorIndex].replaceAll("'","")+"%' ";
         actorIndex++;
         while (actorIndex < numActors)
         {
             actorConstraint += "AND ";
             actorConstraint = actorConstraint
-                    + "actors LIKE '%"+actors[actorIndex]+"%' ";
+                    + "actors LIKE '%"+actors[actorIndex].replaceAll("'","")+"%' ";
             actorIndex++;
         }
         actorConstraint += ")";
@@ -383,19 +430,27 @@ public class MovieManagement
             actorsString += ", ";
             actorsString += actors[i];
         }
+        actorsString = actorsString.replaceAll("'","");
 
         String tableName = "videoInfo";
 
+
+        
         String[][] videoInfo =
         {
             {"InfoID", "Title", "Actors", "director", "Producer","studio",
                      "Description", "Rating", "releaseDate", "Genre", "length"
             },
-
+/*
             {
                "" + infoID, title, actorsString, director, producer,
                        studio, synopsis, rating, makeReleaseDateString(releaseDate),
                        genre, length
+            }*/
+            {
+               "" + infoID, null, actorsString, null, null,
+                       null, null, null, makeReleaseDateString(releaseDate),
+                       null, length
             }
         };
 
@@ -403,7 +458,11 @@ public class MovieManagement
         JDBCConnection conn = new JDBCConnection();
         try
         {
-            int linesChanged = conn.update(query);
+            int numParameters = 7;
+            String[] parameters = {title, director, producer, studio, synopsis,
+                rating, genre};
+
+            int linesChanged = conn.update(query, numParameters, parameters);
             if (linesChanged > 1)
             {
                 // throw new SQLException("" + linesChanged + "rows were changed");

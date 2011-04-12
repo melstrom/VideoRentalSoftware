@@ -69,7 +69,7 @@ public class GeneralMovie
 	    String rating,
             String studio,
             int retailPriceInCents,
-           // String format,
+            String format,
             int runtime)
             throws Exception
     {
@@ -85,7 +85,7 @@ public class GeneralMovie
         this.retailPriceInCents = retailPriceInCents;
 	setRating(rating);
         setGenre(genre);
-       // setFormat(format);
+        setFormat(format);
         this.runtime = runtime;
     }
 
@@ -112,14 +112,14 @@ public class GeneralMovie
 
 	
 
-   /* public String getFormat()
+    public String getFormat()
     {
         return format;
-    }*/
+    }
 
 
 
-    /*public final void setFormat(String format) throws Exception
+    public final void setFormat(String format) throws Exception
     {
        /* String tableName = "formats";
         String query =
@@ -142,10 +142,10 @@ public class GeneralMovie
         {
             connection.closeConnection();
         }
-        
+        */
         this.format = format;
 
-    }*/
+    }
 
 
 
@@ -514,6 +514,7 @@ public class GeneralMovie
     private int runtime;
     private ArrayList <Reservation> reservations;
     final private int ACTOR_COUNT=1;
+    public static final int MIN_SKU_LENGTH = 10;
     public static final int MAX_SKU_LENGTH = 25;
     public static final int INFO_ID_LENGTH = 9;
     private String producer;

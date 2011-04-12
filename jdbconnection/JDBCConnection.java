@@ -13,6 +13,10 @@ import java.sql.*;
  * released on command
  * removed all catch blocks since they are not dealing with errors at this level
  * changed the class to be public
+ *
+ * The way to use this class is to create a new JDBCConnection object
+ * ie JDBCConnection connection = new JDBCConnection();
+ *
  */
 public class JDBCConnection {
 
@@ -186,7 +190,14 @@ public static Connection getConnection()
         for (int j = 1; j < information[VALUES].length; j++)
         {
             query += ", ";
-            query = query + "'"+ information[VALUES][j] + "'";
+            if (information[VALUES][j] == null)
+            {
+                query = query + "?";
+            }
+            else
+            {
+                query = query + "'"+ information[VALUES][j] + "'";
+            }
         }
 
         query += ")";
@@ -214,6 +225,33 @@ public static Connection getConnection()
         result = statement.executeQuery(query);
         return result;
     }
+    
+    
+
+    /**
+     * This method uses PreparedStatement to get a ResultSet.  A query should
+     * be of form SELECT * FROM tableName WHERE condition = ?
+     * where there can be as many ? as you require, so long as the number of them
+     * is given.  An array holding the Strings you want to replace the ? with
+     * should also be provided.
+     * @param query The SQL query with a number of parameters to be filled in
+     * @param numParameters the number of ?s to be filled in
+     * @param parameters an array of the strings to replace the ?s with
+     * @return the results of the sql query
+     * @throws SQLException if a connection to the database cannot be made
+     */
+    public ResultSet getResults(String query, int numParameters,
+            String[] parameters) throws Exception
+    {
+        ResultSet result = null;
+        PreparedStatement statement = conn.prepareStatement(query);
+        for (int parameterIndex = 1; parameterIndex <= numParameters; parameterIndex++)
+        {
+            statement.setString(parameterIndex, parameters[parameterIndex - 1]);
+        }
+        result = statement.executeQuery();
+        return result;
+    }
 
 
 
@@ -230,6 +268,33 @@ public static Connection getConnection()
         Statement statement = conn.prepareStatement(query);
         linesChanged = statement.executeUpdate(query);
         
+        return linesChanged;
+    }
+
+
+
+    /**
+     * This method executes a query that chagnse the database.
+     * It can be either an INSERT, UPDATE, or DELETE query.
+     * It uses PreparedStatement to prevent escaping SQL statements with '
+     * @param query the update query
+     * @param numParameters the number of ?s to fill in
+     * @param parameters what to fill the ?s in with
+     * @return the number of lines changed
+     * @throws Exception
+     */
+    public int update(String query, int numParameters, String[] parameters)
+            throws Exception
+    {
+       
+        int linesChanged = 0;
+        PreparedStatement statement = conn.prepareStatement(query);
+        for (int parameterIndex = 1; parameterIndex <= numParameters; parameterIndex++)
+        {
+            statement.setString(parameterIndex, parameters[parameterIndex - 1]);
+        }
+        linesChanged = statement.executeUpdate();
+
         return linesChanged;
     }
 

@@ -25,6 +25,9 @@ import jdbconnection.JDBCConnection;
  * @author Mitch
  * version 0.3
  *
+ * TODO: add reserve method
+ * TODO: add getAvailability(ArrayList<GeneralMovie> movies): ArrayList<String> method
+ *
  */
 public class RentalMovieManagement {
 
