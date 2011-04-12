@@ -6,15 +6,17 @@ Things that are unclear:
 */
 package pos;
 
-//import inventory.MovieManagement;
-//import jdbconnection.JDBCConnection;
+import java.lang.ClassNotFoundException;
+import java.sql.SQLException;
+
+
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-
 import java.util.Date;
+
 
 /**
 	This object manages one transaction, the current one.
@@ -25,14 +27,17 @@ public class TransactionManager
 	private Payment myPayment;
 	private PreparedStatement pstatement;
 	private Statement statement;
-	Connection connection;
+	private Connection connection;
+	
+	private SQLhelper mySQLhelper;
 	
 	
 	/**
-		This constructor does nothing right now.
+		Constructor stuff
 	*/
 	public TransactionManager()
 	{
+		mySQLhelper = new SQLhelper();
 	}
 	
 	/**
@@ -58,86 +63,15 @@ public class TransactionManager
 		</ul>
 		
 	*/
-	public void process() throws IllegalStateException
+	public void process() throws IllegalStateException, SQLException, ClassNotFoundException
 	{
 		if (myTransaction.isPaid() == false)
 		{
 			throw new IllegalStateException("The invoice has not been paid, not saving info.");
 		}
-		int transactionID = myTransaction.getInvoiceID();
-		Date transactionDate = myTransaction.getDate();
-		//ArrayList<TransactionItem> items;
-//int paymentAmount;
-		String paymentMethod = myTransaction.getPaymentMethod();
-		//int subtotalInCents = myTransaction.getSubTotal();
-		//int taxInCents = myTransaction.getTax();
-		//boolean paid = myTransaction.isPaid();
-		//private Customer account; // the customer account being worked on 
-		//String customerFirstName = myTransaction.getCustomerFirstName();
-		//String customerLastName = myTransaction.getCustomerLastName();
-		String customerID = myTransaction.getCustomerID();
-		//String employeeFirstName = myTransaction.getEmployeeName();
-		String employeeID = myTransaction.getEmployeeID();
-		int taxRate = myTransaction.getTaxRateAtTimeOfSale();
-		
-		insertInvoiceTable(transactionID, paymentMethod, transactionDate, customerID, employeeID, taxRate);
-		
+		mySQLhelper.insertInvoiceTable(myTransaction);
 	}
-	
-	/**
-		Method to insert transaction info into the db table.
-	*/
-	private void insertInvoiceTable(int invoiceID, String paymentMethod, Date dateTime, String customerID, String employeeID, int taxRate)
-	{
-		//convert java Date object into String format sql insert command expects
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentTime = sdf.format(dateTime).toString();
 
-		String queryString = "INSERT INTO invoice ("
-			+ "invoiceID,"
-			+ "paymentMethod,"
-			+ "dateTime,"
-			+ "customerID,"
-			+ "employeeID,"
-			+ "tax) "
-			+ "VALUES (?, ?, ?, ?, ?, ?)";
-			
-		initDB2(queryString);	
-		
-		pstatement.setInt(1, invoiceID);
-		pstatement.setString(2, paymentMethod);
-		pstatement.setString(3, currentTime);
-		pstatement.setString(4, customerID);
-		pstatement.setString(5, employeeID);
-		pstatement.setInt(6, taxRate);
-
-		pstatement.executeUpdate();
-		connection.close();
-	}
-	
-	/**
-		Init connection to the db and setup the PreparedStatement
-	*/
-	private void initDB2(String sql)
-	{
-		initDBcommon();
-		pstatement = connection.prepareStatement(sql);
-	}
-	/**
-		Init connection to the db and setup the Statement
-	*/
-	private void initDB()
-	{
-		initDBcommon();
-		statement = connection.createStatement();
-	}
-	private void initDBcommon()
-	{
-		Class.forName("com.mysql.jdbc.Driver");
-		String url = "jdbc:mysql://174.132.159.251:3306/kpoirier_CPSC2301?user=kpoirier_User&password=foobar";
-		connection = DriverManager.getConnection(url);
-	}
-	
 	/**
 		This prints a reciept as a String.
 		@return a String representing the reciept
@@ -154,9 +88,12 @@ public class TransactionManager
 		This adds a item to the current transaction.
 		@param barcode the item's barcode number.
 	*/
-	public void addItem(String barcode)
+	public void addItem(String barcode) throws Exception
 	{
-		TransactionItem myItem = someHelperMethod(barcode);
+		//TransactionItem myItem = someHelperMethod(barcode);
+		// TODO find out who is working on a method that does this (get a item when given a barcode), for now, a dummy object will be made
+		
+		TempInventoryItem myItem = new TempInventoryItem();
 		myTransaction.addTransactionItem(myItem);
 	}
 	
@@ -195,31 +132,36 @@ public class TransactionManager
 		This method collects payment for the current transaction.
 		@param amount the amount of money collected from the customer.
 		@param payment no idea what this is (TODO: ask about class diagram)
+		@return no idea what this is suppose to return.
+		@throws SQLException if sql error.
+		@throws ClassNotFoundException if sql error.
+		@throws IllegalStateException if there are no items on the invoice.
 	*/
-	public int pay(int amount, String paymentMethod) throws IllegalStateException
+	public int pay(int amount, String paymentMethod) throws IllegalStateException, SQLException, ClassNotFoundException
 	{
-		int nextInvoiceID = getTotalNumberOfInvoices() + 1;
+		if (myTransaction.getNumberOfItems() == 0)
+		{
+			throw new IllegalStateException("There are no items on the Invoice.");
+		}
+	
+		// use these two lines if you want invoices to be numbered 1000 and up
+		// int starting = 999;
+		// int nextInvoiceID = mySQLhelper.getTotalNumberOfInvoices() + 1;
+		
+		int nextInvoiceID = mySQLhelper.getTotalNumberOfInvoices(SQLhelper.Transaction, "invoiceID") + 1;
 		Payment myPayment = new Payment(amount, paymentMethod);
 		myTransaction.markPaid(myPayment, nextInvoiceID);
+		return 411;
 	}
-	
 	/**
-		Gets the total number of invoices
-		@return the total number of invoices stored in the db.
+		Gets the total price that needs to be collected for this Transaction
+		@return total price for transaction in cents
+		@throws IlelgalStateException if the transaction has not been created with this.createTransaction()
 	*/
-	private int getTotalNumberOfInvoices()
+	public int getTotal() throws IllegalStateException
 	{
-		int total;
-		initDB();
-		ResultSet resultSet = statement.executeQuery("SELECT COUNT(invoiceID) FROM invoice");
-		while (resultSet.next())
-		{
-			total = Integer.parseInt(resultSet.getString(1));
-		}
-		connection.close();
-		return total;
+		if (myTransaction == null)
+			throw new IllegalStateException();
+		return myTransaction.getTotal();
 	}
-	
-
-
 }
