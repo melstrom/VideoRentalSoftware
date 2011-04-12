@@ -73,15 +73,14 @@ public class MovieManagement
     /**
      *
      */
-    public MovieManagement()
+    public MovieManagement() throws SQLException, ClassNotFoundException
     {
         try
         {
             this.setupConnection();
-        } catch
-        {
-            //some stuff here
-        } finally
+        } 
+
+        finally
         {
             connection.close();
         }
@@ -91,7 +90,7 @@ public class MovieManagement
      *
      * @param movie
      */
-    public MovieManagement(GeneralMovie movie)
+    public MovieManagement(GeneralMovie movie) throws SQLException, ClassNotFoundException
     {
         this.setupConnection();
         this.movie = movie;
@@ -486,13 +485,14 @@ public class MovieManagement
      * @param format the media format of the movie (VHS, DVD, Bluray)
      * @param barcode the unique identification of the individual movie copy
      */
-    public void addCopy(GeneralMovie generalMovie, String category, String format, String barcode)
+    public void addCopy(GeneralMovie generalMovie, String category, String format, String barcode) throws Exception
     {
         try
         {
             this.checkDuplicateBarcode(barcode);
             this.movie = generalMovie;
             String SKU = this.movie.getSKU();
+            //todo: implement barcodechecker METHOD instead of class
             barcode = BarCodeChecker.assign(SKU);   //no barcodechecker yet
 
             //Why do we need to add a price here? What does price have to do with individual movies?
@@ -501,7 +501,7 @@ public class MovieManagement
             //passed all tests, create the copy
             this.copy = new IndividualMovie(category, price, format, barcode, this.movie);
 
-        } //Catch here
+        }
         finally
         {
             connection.close();
@@ -512,7 +512,7 @@ public class MovieManagement
      * Changes the information of a movie
      * @param info contains the 7 required information to identify a movie
      */
-    public void editInfo(String[] info, GregorianCalendar releaseDate)
+    public void editInfo(String[] info, GregorianCalendar releaseDate) throws SQLException
     {
         try
         {
@@ -602,7 +602,7 @@ public class MovieManagement
 
         this.request = new MovieRequest(title, format, releaseDate, accountID);
         request.createQueue();
-        //createQueue does nothing, needs to be implemented (considering moving it here to implement)
+        //todo: createQueue does nothing, needs to be implemented (considering moving it here to implement)
     }
 
     /**
@@ -709,6 +709,7 @@ public class MovieManagement
             String test = info[i];
             if (test == null)
             {
+                //todo: create exception class
                 throw new MissingFieldException("Information fields cannot be empty.");
             }
         }
