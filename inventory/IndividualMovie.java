@@ -3,6 +3,7 @@
 * Sets and gets the individual movie object with price, format, category and bar-code by calling and setting methods.
 * @author Legen
 * @version 1.0 March 27, 2011
+*  matt: removed format, added condition
 */
 
 package inventory;
@@ -22,24 +23,23 @@ public class IndividualMovie extends GeneralMovie{
     * @param barcode the number uniquely identifies each movie and is broken into two parts
     * @param category the pricing category for the movie such as new release, or 7 day rental
     * @param price this cost of the rental in cents
-    * @param format is the type of movie format, such as DVD, VHS, Bluray
+    * @param condition the condition of the movie
     */
-   public IndividualMovie(String category, int price, String format, String barcode, GeneralMovie movie)throws java.lang.Exception
+   public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition)throws java.lang.Exception
    {
 	super(movie.getSKU(),movie.getTitle(),movie.getActors(),movie.getDirector(), movie.getProducer(),
 			movie.getReleaseDate(), movie.getSynopsis(), movie.getGenre(), movie.getRating(), 
-				movie.getStudio(), movie.getRetailPriceInCents(), movie.getLength());
-	
+				movie.getStudio(), movie.getRetailPriceInCents(), movie.getFormat(), movie.getLength());
+	this.condition = condition;
         setPrice(price);
-        setFormat(format);
         setCategory(category);
         setBarcode(barcode);
    }
    
     private String category;            //The categories for the movies such as new release, 7 day rental ect.
-    private int price;                  //The cost of renting the movie in cents
-    private String format;              //The format of the movie, such as vhs, bluray, dvd
+    private int price;                  //The cost of renting the movie in cents      
     private String barcode;             //The unique number code that is on each movie as barcodes
+    private String condition;
     public static final int ID_LENGTH = 9;
   
     /**
@@ -119,4 +119,20 @@ public class IndividualMovie extends GeneralMovie{
     {
     return barcode;
     }
+   /**
+   *  Set condition
+   * @param condition the condition of the movie ( / / / /)
+   */
+    public void setCondition(String condition)
+   {
+     this.condition = condition;
+   }
+   /**
+   * Get condition
+   * @return condition 
+   */
+    public String getCondition()
+   {
+     return condition;
+   }
 }

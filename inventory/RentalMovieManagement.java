@@ -23,7 +23,6 @@ import jdbconnection.JDBCConnection;
  *
  * Last updated: 1 April
  * @author Mitch
- * version 0.3
  *
  * TODO: add reserve method
  * TODO: add getAvailability(ArrayList<GeneralMovie> movies): ArrayList<String> method
@@ -44,7 +43,7 @@ public class RentalMovieManagement {
 
     public enum Status
     {
-        AVAILABLE, RENTED, OVERDUE, RESERVED
+        AVAILABLE, RENTED, OVERDUE
     }
     
 	/**
@@ -52,7 +51,7 @@ public class RentalMovieManagement {
      */
     public enum Condition
     {
-        GOOD, LOST, DAMAGED
+        GOOD, LOST, DAMAGED, RESERVED
     }
 
         /**
@@ -62,45 +61,7 @@ public class RentalMovieManagement {
     {
         NEW_RELEASE, SEVEN_DAY_RENTAL, FOR_SALE, DISCOUNT
     }
-    
-    /**
-     * This method finds the availability of the specified RentalMovie
-     * @param barcode the unique barcode number of the Rental Movie
-     * @return the status of the RentalMovie
-     * @pre The barcode number must correspond to a RentalMovie
-     * @throws MovieNotFoundException if the barcode number does not exist
-     * @throws SQLException if the RentalMovie information cannot be read from
-     * the database
-     */
-    public static String getStatusByBarcode(String barcodeNum)
-            throws MovieNotFoundException, SQLException
-    {
-     
-       RentalMovie rentalMovie = new RentalMovie();
-	  // RentalMovie rentalMovie  = search(barcodeNum);
-	    
-	    
-        return rentalMovie.getStatus();
-    }
 
-
-
-    /**
-     * This method finds the availability status of a specified RentalMovie.
-     * @param rentalMovie a reference to the Rental Movie we are interested in
-     * @return the status of the RentalMovie
-     * @throws MovieNotFoundException if the passed movie is null
-     */
-    private static String getStatusByMovie(RentalMovie rentalMovie)
-            throws MovieNotFoundException
-    {
-        if (rentalMovie == null)
-        {
-            throw new MovieNotFoundException("MovieNotFoundException: "
-                    + "No movie was supplied.");
-        }
-        return rentalMovie.getStatus();
-    }
 
     /**
      * This method gets the condition of a Rental Movie specified by its
@@ -167,7 +128,7 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException if the barcode cannot be found
      * @post one and only one row is changed
      */
-    private void setConditionByMovie(RentalMovie rentalMovie, String condition)
+    private void setConditionByMovie(RentalMovie IndividualMovie, String condition)
             throws IllegalArgumentException, SQLException,
                 MovieNotFoundException
     {
@@ -223,7 +184,7 @@ public class RentalMovieManagement {
         //Search search = new Search();
         //RentalMovie movie = search.previewIndividualMovie(barcodeNum);
 	RentalMovie movie = new RentalMovie();
-	rentMovieUpdateDatabase(movie, "VideoRental", "condition", Status.RENTED.name());
+	rentMovieUpdateDatabase(movie, "VideoRental", "condition", Condition.RENTED.name());
 
         Calendar today = Calendar.getInstance();
         dueDate.setTime(today.getTime());

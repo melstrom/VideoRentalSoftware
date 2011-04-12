@@ -21,7 +21,7 @@
  *
  *      @version 1.4
  *              - added in missing attributes:
- *                  producer, rating, studio, retailPriceInCents
+ *                  producer, rating, studio, retailPriceInCents, format
  */
 package inventory;
 import java.util.ArrayList;
@@ -112,7 +112,8 @@ public class GeneralMovie
 
 	
 
-    public String getFormat()
+
+   public String getFormat()
     {
         return format;
     }
@@ -230,7 +231,7 @@ public class GeneralMovie
     * Get rating
     *@return rating 
     */
-    public String getRating()
+    public final String getRating()
     {
 	    return rating;
     }
