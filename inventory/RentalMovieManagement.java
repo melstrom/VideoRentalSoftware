@@ -10,6 +10,7 @@ import inventory.MovieNotAvailableException;
 import inventory.GeneralMovie;
 import inventory.IndividualMovie;
 import inventory.RentalMovie;
+import inventory.Reservation;
 import account.CustomerNotFoundException;
 import account.Customer;
 import java.util.Calendar;
@@ -25,6 +26,11 @@ import jdbconnection.JDBCConnection;
  * @author Mitch
  *
  *
+ * Class usage sequence 
+ * 
+ *  RentalMovieManagement() -> setCurrentCopy(RentalMovie) -> action()
+ *  
+ *  special case: getAvailability(ArrayList<GeneralMovie> movies)
  */
 public class RentalMovieManagement {
 
@@ -37,8 +43,7 @@ public class RentalMovieManagement {
       JDBC = new JDBCConnection();
       connection = JDBC.getConnection();
     }
-    // methods
-
+    
     public enum Status
     {
         AVAILABLE, RENTED, OVERDUE
@@ -63,9 +68,18 @@ public class RentalMovieManagement {
     //Reservation 
     //--------------------------------------------------------------------------------------------------------------------------------
     
-    public void makeReservation(Customer customer, GeneralMovie movie)
+    public void makeReservation(Customer customer)
     {
-	
+	Calendar today = Calendar.getInstance();
+        dueDate.setTime(today.getTime());
+        dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE));
+	Reservation reservation = new Reservation (customer.getAccountID(), dueDate);
+	movie.reservationEnqueue(reservation);
+    }
+    
+    public void removeReservation()
+    {
+	movie.reservationDequeue();
     }
     
       /*  final protected void addReservation(Reservation reservation) throws SQLException
@@ -76,7 +90,6 @@ public class RentalMovieManagement {
                            +quote+reservation.getAccountID()+quote+comma //account id of the customer
                             +quote+reservation.getDate()+quote+");";//the date this movie is reserved
 
-       //executeQuery(query);
     }*/
     /**
      * Create remove reservation query
@@ -89,37 +102,43 @@ public class RentalMovieManagement {
         String query = "delete from "+table
                 +"where title ="+quote+title+quote
                  +";";
-       // executeQuery(query);
     }*/
     
     
     //Gets and sets
     //--------------------------------------------------------------------------------------------------------------------------------
    
+   public void setCurrentCopy(String barcode)
+   {
+	this.barcode = barcode;
+	//Search search = new search();
+	//movie = search.previewRentalMovie(barcode);
+   }
+   
+   public void setCurrentCopy(RentalMovie movie)
+   {
+	this.movie = movie;
+   }
 
     // TODO: Problem with putting category in VideoRental
     /**
      * Alternate call of editCopy(String,String[])
      * Changes the attributes of the RentalMovie to the specified ones.
      * If you don't want to change any attributes, then send them as null
-     * @param barcodeNum
      * @param category
      * @param format
      * @param condition
-     * @param status
      * @throws MovieNotFoundException
      * @throws SQLException
      */
-    public void editCopy(String barcodeNum, String category,
-            String format, String condition, String status)
+    public void editCopy(String category, String format, String condition)
             throws MovieNotFoundException, SQLException, java.lang.Exception
     {
      //   RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
         
-	RentalMovie movie = new RentalMovie();
-	setCategory(movie, category);
-        setFormat(movie, format);
-        setConditionByMovie(movie, condition);
+	setCategory(category);
+        setFormat(format);
+        setConditionByMovie(condition);
     }
         /**
      * This method updates all the attributes of the RentalMovie associated with
@@ -133,8 +152,8 @@ public class RentalMovieManagement {
      * If you don't want to change one, it should be null in the array
      * @throws SQLException
      * @throws MovieNotFoundException
-     */
-    public void editCopy(String barcodeNum, String[] info)
+     
+    public void editCopy(String[] info)
             throws SQLException, MovieNotFoundException, java.lang.Exception
     {
         final int EXPECTED_INFO_LENGTH = 4;
@@ -142,8 +161,8 @@ public class RentalMovieManagement {
         {
             throw new IllegalArgumentException("info length wrong");
         }
-        editCopy(barcodeNum, info[0], info[1], info[2], info[3]);
-    }
+        editCopy(info[0], info[1], info[2], info[3]);
+    }*/
 
 /**
     * 
@@ -152,6 +171,7 @@ public class RentalMovieManagement {
     public String [] getAvailability(ArrayList<GeneralMovie> movies)
     {
 	    //Search SKU and sum the total of lines from the result
+	    String [] arr = createGetAvailabilitySQL(movies);
 	    return new String[3];
     }
     
@@ -167,11 +187,9 @@ public class RentalMovieManagement {
      * because of lack of connection to the database.
      * @pre the barcode number must correspond to an existing RentalMovie
      */
-    public String getCondition(String barcodeNum)
+    public String getCondition()
             throws MovieNotFoundException, SQLException
     {
-	    //RentalMovie rentalMovie  = search(barcodeNum);
-	    RentalMovie movie = new RentalMovie(); 
         return movie.getCondition();
     }
 
@@ -187,14 +205,14 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException if the barcode cannot be found
      * @post one and only one row is changed
      */
-    private void setConditionByBarcode(String barcodeNum, String condition)
+    private void setConditionByBarcode(String condition)
             throws IllegalArgumentException, SQLException,
-                MovieNotFoundException
+                MovieNotFoundException, Exception
     {
         if (condition == null)
             return;
         Condition.valueOf(condition.toUpperCase());
-        String query = setConditionGenerateSQL(barcodeNum, condition);
+        String query = setConditionGenerateSQL(condition);
         int rowsChanged = updateDatabase(query);
         if (rowsChanged > 1)
         {
@@ -220,13 +238,10 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException if the barcode cannot be found
      * @post one and only one row is changed
      */
-    private void setConditionByMovie(RentalMovie IndividualMovie, String condition)
-            throws IllegalArgumentException, SQLException,
-                MovieNotFoundException
+    private void setConditionByMovie(String condition)
+            throws IllegalArgumentException, SQLException, Exception, MovieNotFoundException
     {
-	RentalMovie movie = new RentalMovie(); 
-        String barcodeNum = movie.getBarcode();
-        setConditionByBarcode(barcodeNum, condition);
+        setConditionByBarcode(condition);
     }
     
       /**
@@ -236,12 +251,11 @@ public class RentalMovieManagement {
      * @throws SQLException
      * @throws MovieNotFoundException
      */
-    public String getCategory(String barcodeNum)
+    public String getCategory()
             throws SQLException, MovieNotFoundException
     {
         //Search search = new Search();
         //RentalMovie movie = search.previewIndividualMovie(barcodeNum);
-	RentalMovie movie = new RentalMovie();
         return movie.getCategory();
     }
     
@@ -252,12 +266,10 @@ public class RentalMovieManagement {
      * @throws SQLException
      * @throws MovieNotFoundException
      */
-    public String getFormat(String barcodeNum)
+    public String getFormat()
             throws SQLException, MovieNotFoundException
     {
-        //Search search = new Search();
         //RentalMovie movie = search.previewIndividualMovie(barcodeNum);
-	    RentalMovie movie = new RentalMovie();
         return movie.getFormat();
     }
     
@@ -268,7 +280,7 @@ public class RentalMovieManagement {
      * @throws SQLException
      * @throws MovieNotFoundException
      */
-    public static String getTitle(String barcodeNum)
+    public static String getTitle()
             throws SQLException, MovieNotFoundException
     {
       //  Search search = new Search();
@@ -277,7 +289,7 @@ public class RentalMovieManagement {
         return movie.getTitle();
     }
     
-        private void setFormat(RentalMovie movie, String format)throws java.lang.Exception
+        private void setFormat(String format)throws java.lang.Exception
     {
 	    movie.setFormat(format);
 	    
@@ -291,11 +303,11 @@ public class RentalMovieManagement {
      * @throws IllegalArgumentException
      * @throws MovieNotFoundException
      */
-    private void setCategory(RentalMovie movie, String category)
-            throws SQLException, IllegalArgumentException, MovieNotFoundException
+    private void setCategory(String category)
+            throws SQLException, IllegalArgumentException, MovieNotFoundException, Exception
     {
         String barcodeID = movie.getBarcode();
-        changeCategory(barcodeID, category);
+        changeCategory(category);
         movie.setCategory(category);
 
     }    
@@ -316,14 +328,14 @@ public class RentalMovieManagement {
      * @throws CustomerNotFoundException if the customer does not exist
      * @throws MovieNotAvailableException if the movie is not available
      */
-    public GregorianCalendar rentWithBarcode(String barcodeNum, String memberID)
+    public GregorianCalendar rentWithBarcode(String memberID)
             throws MovieNotFoundException, CustomerNotFoundException,
-            MovieNotAvailableException, SQLException
+            MovieNotAvailableException, SQLException, Exception
     {
         //Search search = new Search();
         //RentalMovie movie = search.previewIndividualMovie(barcodeNum);
 	RentalMovie movie = new RentalMovie();
-	rentMovieUpdateDatabase(movie, "VideoRental", "condition", Condition.RENTED.name());
+	rentMovieUpdateDatabase("VideoRental", "condition", Condition.RENTED.name());
 
         Calendar today = Calendar.getInstance();
         dueDate.setTime(today.getTime());
@@ -347,9 +359,9 @@ public class RentalMovieManagement {
      * @throws MovieNotAvailableException if the movie is not available
      * @post the movie's status is changed to rented.
      */
-    private GregorianCalendar rentWithMovieInfo(RentalMovie movie, Customer customer)
+    private GregorianCalendar rentWithMovieInfo(Customer customer)
             throws MovieNotFoundException, CustomerNotFoundException,
-            MovieNotAvailableException, SQLException
+            MovieNotAvailableException, SQLException, Exception
     {
         if (movie == null || !movie.getCondition().equalsIgnoreCase("available"))
         {
@@ -363,10 +375,9 @@ public class RentalMovieManagement {
                     + " no Customer specified");
         }
 
-        rentMovieUpdateDatabase(movie, "VideoRental", "condition",
-                Status.RENTED.name());
+        rentMovieUpdateDatabase( "VideoRental", "condition", Status.RENTED.name());
         
-        rentMovieUpdateDatabase(movie, "VideoRental", "MemberID", "" + customer.getAccountID());
+        rentMovieUpdateDatabase("VideoRental", "MemberID", "" + customer.getAccountID());
 
 
         movie.setCondition(Status.RENTED.name());
@@ -385,12 +396,11 @@ public class RentalMovieManagement {
      * @param movie
      * @throws MovieNotFoundException if the movie is not found in the db
      */
-    private void rentMovieUpdateDatabase(RentalMovie movie, String tableName,
-            String attributeName, String setAttributeTo)
-            throws MovieNotFoundException, SQLException
+    private void rentMovieUpdateDatabase(String tableName, String attributeName, String setAttributeTo)
+            throws MovieNotFoundException, SQLException, Exception
     {
         String barcodeNum = movie.getBarcode();
-        String movieWhere = generateMovieWhere(barcodeNum);
+        String movieWhere = generateMovieWhere();
         
         String movieCommand = generateUpdateSQL(tableName, attributeName,
                 setAttributeTo, movieWhere);
@@ -414,19 +424,19 @@ public class RentalMovieManagement {
      * @throws IllegalArguementException if the barcode is not the right length
      * or the array is not length 2
      */
-    private void splitBarcode(String barcodeNum)
+    private void splitBarcode()
             throws IllegalArgumentException
     {
-        if (barcodeNum == null )
+        if (barcode == null )
             throw new IllegalArgumentException("IllegalArgumentException: Invalid barcode number");
 	
-	if(barcodeNum.length() > MAX_SKU_LENGTH)
+	if(barcode.length() > MAX_SKU_LENGTH)
 	{
-		SKU = barcodeNum.substring(0, MAX_SKU_LENGTH);
-		rentalID = barcodeNum.substring(MAX_SKU_LENGTH+1, barcodeNum.length());
+		SKU = barcode.substring(0, MAX_SKU_LENGTH);
+		rentalID = barcode.substring(MAX_SKU_LENGTH+1, barcode.length());
 	}
-	else if(barcodeNum.length() >= MIN_SKU_LENGTH && barcodeNum.length()<= MAX_SKU_LENGTH)
-	SKU = barcodeNum;
+	else if(barcode.length() >= MIN_SKU_LENGTH && barcode.length()<= MAX_SKU_LENGTH)
+	SKU = barcode;
     }
     
     /**
@@ -442,17 +452,17 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException
      * @throws IllegalArgumentException if the category is not a valid category
      */
-    public void changeCategory(String barcodeNum, String category)
-            throws SQLException, MovieNotFoundException
+    public void changeCategory(String category)
+            throws SQLException, MovieNotFoundException, Exception
     {
         Category cat = Category.valueOf((category.replaceAll(" ", "_")).toUpperCase());
         if (cat == Category.FOR_SALE)
         {
-            changeToSale(barcodeNum);
+            changeToSale();
             return;
         }
 
-        String where = generateMovieWhere(barcodeNum);
+        String where = generateMovieWhere();
         String command = generateUpdateSQL("VideoRental", "Category",
                 category.toLowerCase(), where);
         updateDatabase(command);
@@ -464,14 +474,14 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException
      * @throws SQLException
      */
-    private void changeToSaleSQL(String barcodeNum)
+    private void changeToSale()
             throws MovieNotFoundException, SQLException
     {
         //RentalMovie movie = (RentalMovie) Search.previewMovie(barcodeNum);
 
         // TODO: disallow if movie is not available or condition not good?
 	RentalMovie movie = new RentalMovie();
-        splitBarcode(barcodeNum);
+        splitBarcode();
         String[] deleteColumnNames = {"SKU", "rentalID"};
         String deleteQuery = generateDeleteSQL("VideoRental", deleteColumnNames);
         String[] insertColumnNames = { "condition", "SKU", "saleID" };
@@ -505,10 +515,8 @@ public class RentalMovieManagement {
      * @param condition
      * @return
      */
-    private String setConditionGenerateSQL(String barcodeNum, String condition)
+    private String setConditionGenerateSQL(String condition)
     {
-        splitBarcode(barcodeNum);
-
         String where = "(RentalID = '" + rentalID
                 + "' AND SKU = '" + SKU+ "')";
         String query = generateUpdateSQL("VideoRental", "Condition", condition, where);
@@ -521,9 +529,9 @@ public class RentalMovieManagement {
      * @param barcodeNum
      * @return
      */
-    private String generateMovieWhere(String barcodeNum)
+    private String generateMovieWhere()
     {
-        splitBarcode(barcodeNum);
+        splitBarcode();
         String where = "RentalID = '" + rentalID + "'"
                 + "AND SKU = '" + SKU+ "'";
         return where;
@@ -607,6 +615,10 @@ public class RentalMovieManagement {
         return command;
 
     }
+    private String [] createGetAvailabilitySQL(ArrayList<GeneralMovie> movies)
+    {
+	return new String[0];
+    }
     
          /**
      * This method sends an update query to the Database
@@ -614,13 +626,12 @@ public class RentalMovieManagement {
      * @return the number of rows affected.
      * @throws SQLException
      */
-    private int updateDatabase(String query)
-            throws SQLException
+    private int updateDatabase(String query) throws Exception, SQLException
     {        
         try
         {
-            java.sql.Statement statement = connection.createStatement();
-            return statement.executeUpdate(query);
+		int rows = JDBC.update(query);
+		return rows;
         }
         finally
         {
@@ -628,11 +639,13 @@ public class RentalMovieManagement {
         }
 
     }
+	private String barcode;
 	private String SKU;
 	private String rentalID;
         private JDBCConnection JDBC;
         private Connection connection;
 	private GregorianCalendar dueDate;
+	private RentalMovie movie;
         final private int rental_period= 7;
 	final public int RENTAL_ID_LENGTH = 9;
 	final public static int MIN_SKU_LENGTH = 10;
