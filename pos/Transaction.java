@@ -121,6 +121,11 @@ public class Transaction
 		this.employeeFirstName = employeeName;
 		this.employeeID = employeeID;
 		//this.transactionID = transactionID;
+		
+		paymentAmount = 0;
+	    subtotalInCents = 0; // this will be modified whenever addTransaction() is called
+	    taxInCents = 0;
+	    
 		this.taxPercent = taxPercent;
 		paid = false;
 		paymentMethod = "";
@@ -405,7 +410,7 @@ public class Transaction
 				<li>The total tax amount is updated.</li>
 			</ul>
 	*/
-	public void addTransactionItem(TransactionItem item) throws IllegalStateException
+	public void addTransactionItem(TransactionItem item) throws Exception
 	{
 		if (paid == true)
 		{
@@ -480,9 +485,14 @@ public class Transaction
 	/**
 		Gets the date of the transaction. The date of the transaction is set after payment is made and the transaction is finished.
 		@return the date the transaction was completed.
+		@throws IllegalStateException if the transaction has not been paid for (no payment == no transaction has happened).
 	*/
-	public Date getDate()
+	public Date getDate() throws IllegalStateException
 	{
+		if (this.isPaid() == false)
+		{
+			throw new IllegalStateException("The invoice has not been paid, no date set.");
+		}
 		return transactionDate;
 	}
 	
