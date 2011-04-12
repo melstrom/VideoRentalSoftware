@@ -148,7 +148,7 @@ public class TransactionManager
 		// int starting = 999;
 		// int nextInvoiceID = mySQLhelper.getTotalNumberOfInvoices() + 1;
 		
-		int nextInvoiceID = mySQLhelper.getTotalNumberOfInvoices(SQLhelper.Transaction, "invoiceID") + 1;
+		int nextInvoiceID = mySQLhelper.getTotalNumberOfRows(SQLhelper.Transaction, "invoiceID") + 1;
 		Payment myPayment = new Payment(amount, paymentMethod);
 		myTransaction.markPaid(myPayment, nextInvoiceID);
 		return 411;
