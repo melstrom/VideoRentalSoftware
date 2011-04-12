@@ -551,15 +551,15 @@ public class MovieManagement
             this.checkDuplicateBarcode(barcode);
             this.movie = generalMovie;
             String SKU = this.movie.getSKU();
-            //todo: implement barcodechecker METHOD instead of class
-            barcode = BarCodeChecker.assign(SKU);   //no barcodechecker yet
+            //TODO: implement barcodechecker METHOD instead of class
+            //barcode = BarCodeChecker.assign(SKU);   //no barcodechecker yet
 
             //Why do we need to add a price here? What does price have to do with individual movies?
             int price = 0;
+            String condition = "TESTING!!!!";
 
             //passed all tests, create the copy
-            this.copy = new IndividualMovie(category, price, format, barcode, this.movie);
-
+            this.copy = new IndividualMovie(category, price, barcode, movie, condition);
         }
         finally
         {
@@ -571,7 +571,7 @@ public class MovieManagement
      * Changes the information of a movie
      * @param info contains the 7 required information to identify a movie
      */
-    public void editInfo(String[] info, GregorianCalendar releaseDate) throws SQLException
+    public void editInfo(String[] info, GregorianCalendar releaseDate) throws SQLException, MissingFieldException
     {
         try
         {
@@ -585,18 +585,18 @@ public class MovieManagement
             String genre = info[5];
 
             //splits the actors into an array of actors
-            //String[] actorArray = actors.split(",");
+            String[] actorArray = actors.split(",");
 
             //movie.setSKU(SKU);                //GM does not have setSKU:allowed to edit at all?
             movie.setTitle(title);
-            movie.setActors(actors);
+            movie.setActors(actorArray);
             movie.setDirector(director);
             movie.setReleaseDate(releaseDate);  //GregorianCalendar
             movie.setSynopsis(synopsis);
-            //movie.setGenre(genre);              //missing setGenre in GM
+            movie.setGenre(genre);
 
             //UPDATE VideoInfo SET Title = movie.getTitle, Actors = movie.getActors...etc   WHERE SKU = SKU
-        } //Catch here
+        }
         finally
         {
             connection.close();
@@ -641,8 +641,10 @@ public class MovieManagement
 //            String format = resultSet.getString("Format");
             int customerID = resultSet.getInt("CustomerID");
             Date datetime = resultSet.getDate("datetime");
-            //Convert Date to GC;
+            //TODO: Convert Date to GC;
             //Database and entity object mismatch
+            String format = "TEST FORMAT";
+
             this.request = new MovieRequest(SKU, format, releaseDate, customerID);
             movieRequest.add(this.request);
         }
@@ -660,8 +662,8 @@ public class MovieManagement
         int accountID = account.getAccountID();
 
         this.request = new MovieRequest(title, format, releaseDate, accountID);
-        request.createQueue();
-        //todo: createQueue does nothing, needs to be implemented (considering moving it here to implement)
+        //request.createQueue();
+        //TODO: createQueue does nothing, needs to be implemented (considering moving it here to implement)
     }
 
     /**
@@ -675,8 +677,9 @@ public class MovieManagement
         String SKU = request.getSKU();
         int CustomerID = request.getAccountID();
 
-//        DELETE FROM madeSpecialOrders WHERE SKU=SKU and CustomerID=CustomerID
+        //DELETE FROM madeSpecialOrders WHERE SKU=SKU and CustomerID=CustomerID
         //Incomplete/wrong query; stub
+        //TODO: Needs quick lookover
 
         String query = this.generateQuery(table, "", table);
         ResultSet resultSet = statement.executeQuery(query);
@@ -730,8 +733,6 @@ public class MovieManagement
         try
         {
             ResultSet results = conn.getResults(query);
-
-
 //            if (found)
             if (results.next())
             {
@@ -761,14 +762,13 @@ public class MovieManagement
      * Tests whether inputs for movie info are NULLs
      * @param info
      */
-    private void checkNULLinfo(String[] info)
+    private void checkNULLinfo(String[] info) throws MissingFieldException
     {
         for (int i = 0; i < 6; i++)
         {
             String test = info[i];
             if (test == null)
             {
-                //todo: create exception class
                 throw new MissingFieldException("Information fields cannot be empty.");
             }
         }
@@ -781,7 +781,7 @@ public class MovieManagement
      */
     private void setupConnection() throws SQLException, ClassNotFoundException
     {
-        this.connection = JDBCConnection.getJDBCConnection();
-        this.statement = connection.createStatement();
+        connection = JDBCConnection.getJDBCConnection();
+        statement = connection.createStatement();
     }
 }
