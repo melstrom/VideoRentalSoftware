@@ -551,6 +551,21 @@ public class MovieManagement
             this.checkDuplicateBarcode(barcode);
             this.movie = generalMovie;
             String SKU = this.movie.getSKU();
+
+            //TODO: If we are adding copy, are we adding rental or sale? Assuming sale
+            String table = "TABLE";
+            String column = "SaleID";
+            String constraint = "";
+            String query = this.generateQuery(table, column, constraint);
+
+            ResultSet resultSet = statement.executeQuery(query);
+
+            resultSet.last();
+            int LastID = resultSet.getInt(0);
+            String newbarcode = "TEST";
+            //TODO: Convert Int to String
+            //int newbarcode = LastID;
+
             //TODO: implement barcodechecker METHOD instead of class
             //barcode = BarCodeChecker.assign(SKU);   //no barcodechecker yet
 
@@ -559,7 +574,7 @@ public class MovieManagement
             String condition = "TESTING!!!!";
 
             //passed all tests, create the copy
-            this.copy = new IndividualMovie(category, price, barcode, movie, condition);
+            this.copy = new IndividualMovie(category, price, newbarcode, movie, condition);
         }
         finally
         {
