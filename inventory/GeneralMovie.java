@@ -260,29 +260,7 @@ public class GeneralMovie
      * @param aReservation a reservation record
      * @throws SQLException
      */
-  /*  final protected void addReservation(Reservation reservation) throws SQLException
-    {
-        String table = "Reservation";
-        String query = "insert into "+table
-                +"values ("+quote+title+quote+comma //movie title
-                           +quote+reservation.getAccountID()+quote+comma //account id of the customer
-                            +quote+reservation.getDate()+quote+");";//the date this movie is reserved
 
-       //executeQuery(query);
-    }*/
-    /**
-     * Create remove reservation query
-     * @throws SQLException
-     */
-    /*
-    final protected void removeReservation() throws SQLException
-    {
-        String table = "Reservation";
-        String query = "delete from "+table
-                +"where title ="+quote+title+quote
-                 +";";
-       // executeQuery(query);
-    }*/
 
 
     /**

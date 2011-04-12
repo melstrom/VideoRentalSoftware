@@ -2,7 +2,7 @@ package pos;
 /**
 *	Penalty calculation class
 *	
-*	@auther mattp
+*	@author mattp
 *	@version 1.0 March 22, 2011
 *	@version 1.1 
 *		-changed setPenaltyPerDay() so it takes a double now
