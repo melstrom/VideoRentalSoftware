@@ -2,37 +2,38 @@ package pos;
 /**
 *	Penalty calculation class
 *	
-*	@auther mattp
+*	@author mattp
 *	@version 1.0 March 22, 2011
+*	@version 1.1 
+*		-changed setPenaltyPerDay() so it takes a double now
+*		-removed getName(), getTitle() and redundant stuff like that 		
+*		-fixed getPrice() so it returns a value in cents
 */
-public class Penalty implements TransactionItem
+import inventory.RentalMovie;
+public class Penalty
 {
 	/**
                 Constructor with 2 parameters
-		Initialize a penalty record
-		@param numberOfDays the number of days an item is overdue
+		Initialize a penalty 
+		@param numberOfDays the number of days the input movie is overdue
 		@param movie the movie that is overdue
 	*/
 	public Penalty(int numberOfDays, RentalMovie movie)
 	{
-		setPenaltyPerDay(movie.getMediaType());
 		this.numberOfDays = numberOfDays;
+		this.movie = movie;
+		setPenaltyPerDay(1);
 		calculate();
-		movieName = movie.getTitle();
 	}
 	/**
-		Set penalty per day according to media type
-		@param mediaType the media type of the item
+		Set penalty per day 
+		@param penaltyPerDay 
 	*/
-	private void setPenaltyPerDay(char mediaType)
+	private void setPenaltyPerDay(double penaltyPerDay)
 	{
-		switch(mediaType){
-			case 'd': penaltyPerDay = 1; break;
-			case 'v': penaltyPerDay = 1;	break;
-			case 'b': penaltyPerDay = 1; break;
-			default:	penaltyPerDay = 1; break;
-		}
+		this.penaltyPerDay = penaltyPerDay;
 	}
+
 	/**
 		Get overdue fee
 		@return overdueFee the total fee that is overdue
@@ -50,32 +51,15 @@ public class Penalty implements TransactionItem
 	}
 	
 	/**
-		Gets the price in cents of this item (aka the over due fee amount)
+		Gets overdue fee in cents of this item
 		@return the price of this item in cents.
 	*/	
 	public int getPrice()
 	{
-		return (int)getOverdueFee();
+		return (int)(getOverdueFee()*100);
 	}
-	/**
-		Gets the name of the movie this penalty is for.
-		@return the name of the movie this penalty is for
-	*/
-	public String getName()
-	{
-		return movieName;
-	}
-	/**
-		Gets the type the item is (example: Promo, Rental movie, Penalty, SaleMovie).
-		@return the type this item is (Penalty).
-	*/
-	public String getType()
-	{
-		return type;
-	}
-	
-	private String type = "Penalty";
-	private String movieName;
+
+	private RentalMovie movie;
 	private double overdueFee;
 	private int numberOfDays;
 	private double penaltyPerDay;

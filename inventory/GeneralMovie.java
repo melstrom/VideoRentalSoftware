@@ -21,13 +21,13 @@
  *
  *      @version 1.4
  *              - added in missing attributes:
- *                  producer, rating, studio, retailPriceInCents
+ *                  producer, rating, studio, retailPriceInCents, format
+ *     
  */
 package inventory;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-//import java.sql.ResultSet;
-//import jdbconnection.JDBCConnection;
+
 
 public class GeneralMovie
 {
@@ -69,7 +69,7 @@ public class GeneralMovie
 	    String rating,
             String studio,
             int retailPriceInCents,
-           // String format,
+            String format,
             int runtime)
             throws Exception
     {
@@ -85,7 +85,7 @@ public class GeneralMovie
         this.retailPriceInCents = retailPriceInCents;
 	setRating(rating);
         setGenre(genre);
-       // setFormat(format);
+        setFormat(format);
         this.runtime = runtime;
     }
 
@@ -112,14 +112,15 @@ public class GeneralMovie
 
 	
 
-   /* public String getFormat()
+
+   public String getFormat()
     {
         return format;
-    }*/
+    }
 
 
 
-    /*public final void setFormat(String format) throws Exception
+    public final void setFormat(String format) throws Exception
     {
        /* String tableName = "formats";
         String query =
@@ -142,10 +143,10 @@ public class GeneralMovie
         {
             connection.closeConnection();
         }
-        
+        */
         this.format = format;
 
-    }*/
+    }
 
 
 
@@ -230,7 +231,7 @@ public class GeneralMovie
     * Get rating
     *@return rating 
     */
-    public String getRating()
+    public final String getRating()
     {
 	    return rating;
     }
@@ -259,29 +260,7 @@ public class GeneralMovie
      * @param aReservation a reservation record
      * @throws SQLException
      */
-  /*  final protected void addReservation(Reservation reservation) throws SQLException
-    {
-        String table = "Reservation";
-        String query = "insert into "+table
-                +"values ("+quote+title+quote+comma //movie title
-                           +quote+reservation.getAccountID()+quote+comma //account id of the customer
-                            +quote+reservation.getDate()+quote+");";//the date this movie is reserved
 
-       //executeQuery(query);
-    }*/
-    /**
-     * Create remove reservation query
-     * @throws SQLException
-     */
-    /*
-    final protected void removeReservation() throws SQLException
-    {
-        String table = "Reservation";
-        String query = "delete from "+table
-                +"where title ="+quote+title+quote
-                 +";";
-       // executeQuery(query);
-    }*/
 
 
     /**
@@ -493,17 +472,6 @@ public class GeneralMovie
         throw new IllegalArgumentException("Not a valid genre");
     }
 
-
-
-    /**
-    * testing class
-    
-    public String getAll()
-    {	    			
-	    return getSKU()+" "+getTitle()+" "+getDirector()
-			+" "+getReleaseDate().get(releaseDate.YEAR)+" "+getSynopsis();
-    }*/
-
     private String title;
     private String SKU;
     private String studio;
@@ -514,6 +482,7 @@ public class GeneralMovie
     private int runtime;
     private ArrayList <Reservation> reservations;
     final private int ACTOR_COUNT=1;
+    public static final int MIN_SKU_LENGTH = 10;
     public static final int MAX_SKU_LENGTH = 25;
     public static final int INFO_ID_LENGTH = 9;
     private String producer;

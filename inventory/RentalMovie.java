@@ -26,10 +26,9 @@ public class RentalMovie extends IndividualMovie{
     * @param condition The physical condition of the movie, states as a string whether its damaged, good, scratched etc
     * @param movie inherited movie information
     */
-    public RentalMovie(String condition, String status, IndividualMovie movie)
-   {
-    	this.condition = condition;
-        this.status = status;
+    public RentalMovie(int rentalPeriod, IndividualMovie movie) throws java.lang.Exception
+    {
+        this.rentalPeriod = rentalPeriod;
 	setSKU(movie.getSKU());
         setTitle(movie.getTitle());
         setActors(movie.getActors());
@@ -48,42 +47,30 @@ public class RentalMovie extends IndividualMovie{
 	setGenre(movie.getGenre());
     }
    
-    private String status;              //The status of the movie, if it is store "rent" or is out "rented out" or reserved
-    private String condition;           //The physical condition of the movie, states as a string whether its damaged, good, scratched etc
+
     public static final int ID_LENGTH = IndividualMovie.ID_LENGTH;
-    /**
-    *Set or change the status for the individual movie which can be rented out, rent ,or reserved
-    *@param aStatus is the rental status of the movie, three states rent, rented out, and reserved
-    */
-    public void setStatus(String aStatus)
-    {
-    		this.status = aStatus;
-    }
-   
-    /**
-    *Get the status for the individual movie which can be rented out, rent,or reserved
-    *@return status
-    */
-    public String getStatus()
-    {
-    	return status;
-    }
+    private int rentalPeriod;
   
-    /**
-    *Set the condition for the individual movie which can be damaged, good, or scratched
-    *@param condition is the condition of the movie
-    */
-    public void setCondition(String condition)
-    {
-    	this.condition = condition;
-    }
+  /**
+  * Set rental period for this movie
+  * @param rentalPeriod the rental period for this movie
+  */
+   public void setRentalPeriod(int rentalPeriod)
+  {
+    this.rentalPeriod = rentalPeriod;
+  }
+  /**
+ * Get rental period 
+ * @return rental period
+ */
+  public int getRentalPeriod()
+  {
+    return rentalPeriod;
+  }
+
+  
+
    
-    /**
-    *Get the condition for the individual movie which can be damaged, good, or scratched
-    *@return condition
-    */
-    public String getCondition()
-    {
-    	return condition;
-    }
+  
+
 }

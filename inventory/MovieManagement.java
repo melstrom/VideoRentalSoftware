@@ -73,15 +73,14 @@ public class MovieManagement
     /**
      *
      */
-    public MovieManagement()
+    public MovieManagement() throws SQLException, ClassNotFoundException
     {
         try
         {
             this.setupConnection();
-        } catch
-        {
-            //some stuff here
-        } finally
+        } 
+
+        finally
         {
             connection.close();
         }
@@ -91,7 +90,7 @@ public class MovieManagement
      *
      * @param movie
      */
-    public MovieManagement(GeneralMovie movie)
+    public MovieManagement(GeneralMovie movie) throws SQLException, ClassNotFoundException
     {
         this.setupConnection();
         this.movie = movie;
@@ -172,12 +171,28 @@ public class MovieManagement
     {
         String table = "videoInfo";
         String column = "InfoID";
-        String constraint = makeConstraint(movie);
+        //String constraint = makeConstraint(movie);
+        String constraint = makePreparedConstraint(movie);
         String query = JDBCConnection.makeQuery(table, column, constraint);
         JDBCConnection conn = new JDBCConnection();
         try
         {
-            ResultSet result = conn.getResults(query);
+            //ResultSet result = conn.getResults(query);
+
+
+            String title =  movie.getTitle();
+            String director = movie.getDirector();
+            String producer = movie.getProducer();
+            String studio = movie.getStudio();
+            String synopsis = movie.getSynopsis();
+            String rating = movie.getRating();
+            String genre = movie.getGenre();
+
+            int numParameters = 7;
+            String[] parameters = 
+                {title, director, producer, studio, synopsis, rating, genre};
+
+            ResultSet result = conn.getResults(query, numParameters, parameters);
             if (result.next())
             {
                 int infoID = result.getInt(column);
@@ -192,6 +207,37 @@ public class MovieManagement
         {
             conn.closeConnection();
         }
+    }
+
+
+
+    private static String makePreparedConstraint(GeneralMovie movie)
+    {
+        java.util.Calendar releaseDate = movie.getReleaseDate();
+        int runtime = movie.getLength();
+        String[] actors = movie.getActors();
+        String constraint = "";
+
+        constraint += "Title = ?";
+        constraint += " AND ";
+        constraint += makeActorConstraint(actors);
+        constraint += " AND ";
+        constraint += "director = ?";
+        constraint += " AND ";
+        constraint += "Producer = ?";
+        constraint += " AND ";
+        constraint += "studio = ?";
+        constraint += " AND ";
+        constraint += "Description = ?";
+        constraint += " AND ";
+        constraint += "Rating = ?";        
+        constraint += " AND ";
+        constraint += "releaseDate = '"+makeReleaseDateString(releaseDate)+"'";
+        constraint += " AND ";
+        constraint += "Genre = ?";
+        constraint += " AND ";
+        constraint += "length = '"+runtime+"'";
+        return constraint;
     }
 
 
@@ -260,13 +306,13 @@ public class MovieManagement
         int actorIndex = 0; // start from the first actor
         String actorConstraint = "(";
         actorConstraint = actorConstraint
-                + "actors LIKE '%"+actors[actorIndex]+"%' ";
+                + "actors LIKE '%"+actors[actorIndex].replaceAll("'","")+"%' ";
         actorIndex++;
         while (actorIndex < numActors)
         {
             actorConstraint += "AND ";
             actorConstraint = actorConstraint
-                    + "actors LIKE '%"+actors[actorIndex]+"%' ";
+                    + "actors LIKE '%"+actors[actorIndex].replaceAll("'","")+"%' ";
             actorIndex++;
         }
         actorConstraint += ")";
@@ -383,19 +429,27 @@ public class MovieManagement
             actorsString += ", ";
             actorsString += actors[i];
         }
+        actorsString = actorsString.replaceAll("'","");
 
         String tableName = "videoInfo";
 
+
+        
         String[][] videoInfo =
         {
             {"InfoID", "Title", "Actors", "director", "Producer","studio",
                      "Description", "Rating", "releaseDate", "Genre", "length"
             },
-
+/*
             {
                "" + infoID, title, actorsString, director, producer,
                        studio, synopsis, rating, makeReleaseDateString(releaseDate),
                        genre, length
+            }*/
+            {
+               "" + infoID, null, actorsString, null, null,
+                       null, null, null, makeReleaseDateString(releaseDate),
+                       null, length
             }
         };
 
@@ -403,7 +457,11 @@ public class MovieManagement
         JDBCConnection conn = new JDBCConnection();
         try
         {
-            int linesChanged = conn.update(query);
+            int numParameters = 7;
+            String[] parameters = {title, director, producer, studio, synopsis,
+                rating, genre};
+
+            int linesChanged = conn.update(query, numParameters, parameters);
             if (linesChanged > 1)
             {
                 // throw new SQLException("" + linesChanged + "rows were changed");
@@ -486,22 +544,23 @@ public class MovieManagement
      * @param format the media format of the movie (VHS, DVD, Bluray)
      * @param barcode the unique identification of the individual movie copy
      */
-    public void addCopy(GeneralMovie generalMovie, String category, String format, String barcode)
+    public void addCopy(GeneralMovie generalMovie, String category, String format, String barcode) throws Exception
     {
         try
         {
             this.checkDuplicateBarcode(barcode);
             this.movie = generalMovie;
             String SKU = this.movie.getSKU();
-            barcode = BarCodeChecker.assign(SKU);   //no barcodechecker yet
+            //TODO: implement barcodechecker METHOD instead of class
+            //barcode = BarCodeChecker.assign(SKU);   //no barcodechecker yet
 
             //Why do we need to add a price here? What does price have to do with individual movies?
             int price = 0;
+            String condition = "TESTING!!!!";
 
             //passed all tests, create the copy
-            this.copy = new IndividualMovie(category, price, format, barcode, this.movie);
-
-        } //Catch here
+            this.copy = new IndividualMovie(category, price, barcode, movie, condition);
+        }
         finally
         {
             connection.close();
@@ -512,7 +571,7 @@ public class MovieManagement
      * Changes the information of a movie
      * @param info contains the 7 required information to identify a movie
      */
-    public void editInfo(String[] info, GregorianCalendar releaseDate)
+    public void editInfo(String[] info, GregorianCalendar releaseDate) throws SQLException, MissingFieldException
     {
         try
         {
@@ -526,18 +585,18 @@ public class MovieManagement
             String genre = info[5];
 
             //splits the actors into an array of actors
-            //String[] actorArray = actors.split(",");
+            String[] actorArray = actors.split(",");
 
             //movie.setSKU(SKU);                //GM does not have setSKU:allowed to edit at all?
             movie.setTitle(title);
-            movie.setActors(actors);
+            movie.setActors(actorArray);
             movie.setDirector(director);
             movie.setReleaseDate(releaseDate);  //GregorianCalendar
             movie.setSynopsis(synopsis);
-            //movie.setGenre(genre);              //missing setGenre in GM
+            movie.setGenre(genre);
 
             //UPDATE VideoInfo SET Title = movie.getTitle, Actors = movie.getActors...etc   WHERE SKU = SKU
-        } //Catch here
+        }
         finally
         {
             connection.close();
@@ -582,8 +641,10 @@ public class MovieManagement
 //            String format = resultSet.getString("Format");
             int customerID = resultSet.getInt("CustomerID");
             Date datetime = resultSet.getDate("datetime");
-            //Convert Date to GC;
+            //TODO: Convert Date to GC;
             //Database and entity object mismatch
+            String format = "TEST FORMAT";
+
             this.request = new MovieRequest(SKU, format, releaseDate, customerID);
             movieRequest.add(this.request);
         }
@@ -601,8 +662,8 @@ public class MovieManagement
         int accountID = account.getAccountID();
 
         this.request = new MovieRequest(title, format, releaseDate, accountID);
-        request.createQueue();
-        //createQueue does nothing, needs to be implemented (considering moving it here to implement)
+        //request.createQueue();
+        //TODO: createQueue does nothing, needs to be implemented (considering moving it here to implement)
     }
 
     /**
@@ -616,8 +677,9 @@ public class MovieManagement
         String SKU = request.getSKU();
         int CustomerID = request.getAccountID();
 
-//        DELETE FROM madeSpecialOrders WHERE SKU=SKU and CustomerID=CustomerID
+        //DELETE FROM madeSpecialOrders WHERE SKU=SKU and CustomerID=CustomerID
         //Incomplete/wrong query; stub
+        //TODO: Needs quick lookover
 
         String query = this.generateQuery(table, "", table);
         ResultSet resultSet = statement.executeQuery(query);
@@ -671,8 +733,6 @@ public class MovieManagement
         try
         {
             ResultSet results = conn.getResults(query);
-
-
 //            if (found)
             if (results.next())
             {
@@ -702,7 +762,7 @@ public class MovieManagement
      * Tests whether inputs for movie info are NULLs
      * @param info
      */
-    private void checkNULLinfo(String[] info)
+    private void checkNULLinfo(String[] info) throws MissingFieldException
     {
         for (int i = 0; i < 6; i++)
         {
@@ -721,7 +781,7 @@ public class MovieManagement
      */
     private void setupConnection() throws SQLException, ClassNotFoundException
     {
-        this.connection = JDBCConnection.getJDBCConnection();
-        this.statement = connection.createStatement();
+        connection = JDBCConnection.getJDBCConnection();
+        statement = connection.createStatement();
     }
 }
