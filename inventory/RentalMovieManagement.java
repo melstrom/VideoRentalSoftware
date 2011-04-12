@@ -28,7 +28,7 @@ import jdbconnection.JDBCConnection;
  *
  * Class usage sequence 
  * 
- *  RentalMovieManagement() -> setCurrentCopy(RentalMovie) -> action()
+ *  RentalMovieManagement() -> setCurrentCopy(RentalMovie / String barcode) -> action()
  *  
  *  special case: getAvailability(ArrayList<GeneralMovie> movies)
  */
