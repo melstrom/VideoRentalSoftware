@@ -1,5 +1,5 @@
 package account;
-// TODO: sepearate account attribute into employee and customer
+//TODO: most methods are missing proper queries
 
 /**
  * Account Manager class
@@ -15,16 +15,19 @@ package account;
  */
 import java.sql.SQLException;
 import java.sql.Connection;
+import java.sql.Statement;
 import jdbconnection.JDBCConnection;
 
-public class AccountManagement {
+public class AccountManagement
+{
 
     /**
      * Default constructor with no parameters
      */
-    public AccountManagement() throws SQLException, ClassNotFoundException {
+    public AccountManagement() throws SQLException, ClassNotFoundException
+    {
         JDBC = new JDBCConnection();
-        connection = JDBCConnection.getConnection();
+        //connection = JDBCConnection.getJDBCConnection();
     }
 
     /**
@@ -37,9 +40,21 @@ public class AccountManagement {
      * @param phoneNum the phone number of the user
      */
     public void createEmployee(String position, int accountID, String Fname, String Lname, String address, String phoneNum)
-            throws SQLException, java.lang.Exception {
-        if (!isDuplicatedID(accountID, "employee")) {
+            throws SQLException, java.lang.Exception
+    {
+        if (!isDuplicatedID(accountID, "employee"))
+        {
             account = new Employee(position, accountID, Fname, Lname, address, phoneNum);
+            try
+            {
+                st = JDBC.createStatement();
+                //TODO: Write the correct insert - consult Kristan
+                String SQL = "INSERT INTO employee ()value();";
+                st.executeUpdate(SQL);
+            } finally
+            {
+                JDBC.closeConnection();
+            }
         }
     }
 
@@ -53,9 +68,21 @@ public class AccountManagement {
      * @param phoneNum the phone number of the user
      */
     public void createCustomer(String DL, int accountID, String Fname, String Lname, String address, String phoneNum)
-            throws SQLException, java.lang.Exception {
-        if (!isDuplicatedID(accountID, "customer")) {
+            throws SQLException, java.lang.Exception
+    {
+        if (!isDuplicatedID(accountID, "customer"))
+        {
             account = new Customer(generateBarcode(), DL, accountID, Fname, Lname, address, phoneNum);
+            try
+            {
+                st = JDBC.createStatement();
+                //TODO: Write the correct insert - consult Kristan
+                String SQL = "INSERT INTO customer ()value();";
+                st.executeUpdate(SQL);
+            } finally
+            {
+                JDBC.closeConnection();
+            }
         }
     }
 
@@ -63,7 +90,14 @@ public class AccountManagement {
      * Generate membership barcode
      * @return barcode
      */
-    private String generateBarcode() {
+    private String generateBarcode() throws SQLException
+    {
+        //TODO: implement logic; find last ID and assign next
+        //SELECT account FROM customer/employee
+        //ResultSet rs = st.execute(SQL);
+        //rs.last();
+        //LastID = rs.getString(1) 1=columnIndex
+        //Convert into INT, +1, convert to string
         String barcode = "101";
         return barcode;
     }
@@ -73,11 +107,14 @@ public class AccountManagement {
      * @param aAccount the account
      * @param accountType the type of the account
      */
-    public void editAccount(Object aAccount, String accountType) {
-        if (accountType.equals("employee")) {
+    public void editAccount(Object aAccount, String accountType)
+    {
+        if (accountType.equals("employee"))
+        {
             Employee employee = (Employee) aAccount;
             account = employee;
-        } else if (accountType.equals("customer")) {
+        } else if (accountType.equals("customer"))
+        {
             Customer customer = (Customer) aAccount;
             account = customer;
         }
@@ -91,10 +128,16 @@ public class AccountManagement {
      * @throws SQLException 
      */
     private boolean isDuplicatedID(int ID, String accountType)
-            throws SQLException, ClassNotFoundException, java.lang.Exception {
-        //todo: generate correct query
-        String table = accountType, column = accountType + "ID", query = "";
-        return JDBC.update(query) > 0;
+            throws SQLException, ClassNotFoundException, java.lang.Exception
+    {
+        //TODO: generate correct query
+        String table = accountType;
+        String column = accountType;
+        int constraint = ID;
+        String query = "SELECT " + column + " FROM " + table + " WHERE " + accountType + "ID = " + constraint;
+        Statement statement = connection.createStatement();
+        boolean result = statement.execute(query);
+        return result;
     }
 
     /**
@@ -102,7 +145,8 @@ public class AccountManagement {
      * @param loginID the log in ID/username of the account
      * @param password the password of the account
      */
-    public void setLogin(String loginID, String password) {
+    public void setLogin(String loginID, String password)
+    {
         account.setLogin(loginID, password);
     }
 
@@ -113,7 +157,8 @@ public class AccountManagement {
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void setPersonalInfo(String Fname, String Lname, String address, String phoneNum) {
+    public void setPersonalInfo(String Fname, String Lname, String address, String phoneNum)
+    {
         account.setPersonalInfo(Fname, Lname, address, phoneNum);
     }
 
@@ -125,7 +170,8 @@ public class AccountManagement {
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void setPersonalInfo(String DL, String Fname, String Lname, String address, String phoneNum) {
+    public void setPersonalInfo(String DL, String Fname, String Lname, String address, String phoneNum)
+    {
         Customer customer = (Customer) account;
         customer.setPersonalInfo(Fname, Lname, address, phoneNum);
         customer.setDL(DL);
@@ -135,14 +181,16 @@ public class AccountManagement {
     /**
      * Change the status of the account (Active/Inactive)
      */
-    public void changeStatus() {
+    public void changeStatus()
+    {
         account.changeStatus();
     }
 
     /**
      * Promote an employee to manager
      */
-    public void promoteEmployee() {
+    public void promoteEmployee()
+    {
         Employee employee = (Employee) account;
         employee.setPosition("Manager");
         account = employee;
@@ -151,7 +199,8 @@ public class AccountManagement {
     /**
      * Demote a manager to employee
      */
-    public void demoteManager() {
+    public void demoteManager()
+    {
         Employee employee = (Employee) account;
         employee.setPosition("Employee");
         account = employee;
@@ -159,4 +208,5 @@ public class AccountManagement {
     private Account account;
     private JDBCConnection JDBC;
     private Connection connection;
+    private Statement st;
 }
