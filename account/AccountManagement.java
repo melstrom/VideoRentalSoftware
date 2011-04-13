@@ -47,13 +47,17 @@ public class AccountManagement
     {
         if (!isDuplicatedID(accountID, "employee"))
         {
+            //TODO: Find last accountID
+            //TODO: Find last employeeID
             account = new Employee(position, accountID, Fname, Lname, address, phoneNum);
             try
             {
                 st = JDBC.createStatement();
                 //TODO: Write the correct insert - consult Kristan
-                String SQL = "INSERT INTO employee ()value();";
-                st.executeUpdate(SQL);
+                String employeeInsert = "INSERT INTO employee ()value();";
+                String accountInsert = "INSERT INTO account ()value();";
+                st.executeUpdate(employeeInsert);
+                st.executeUpdate(accountInsert);
             } finally
             {
                 JDBC.closeConnection();
@@ -137,7 +141,7 @@ public class AccountManagement
         String table = accountType;
         String column = accountType;
         int constraint = ID;
-        String query = "SELECT " + column + " FROM " + table + " WHERE " + accountType + "ID = " + constraint;
+        String query = "SELECT " + column + "ID FROM " + table + " WHERE " + column + "ID = " + constraint;
         Statement statement = connection.createStatement();
         boolean result = statement.execute(query);
         return result;

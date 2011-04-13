@@ -553,6 +553,7 @@ public class MovieManagement
             String SKU = this.movie.getSKU();
 
             //TODO: If we are adding copy, are we adding rental or sale? Assuming sale
+            //TODO: Move into new method called findLastBarcode START
             String table = "TABLE";
             String column = "SaleID";
             String constraint = "";
@@ -563,6 +564,7 @@ public class MovieManagement
             resultSet.last();
             int LastID = resultSet.getInt(0);
             String newbarcode = "TEST";
+            //TODO:Move into new method called findLastBarcode END
             //TODO: Convert Int to String
             //int newbarcode = LastID;
 
