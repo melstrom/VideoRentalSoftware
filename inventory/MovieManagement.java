@@ -746,11 +746,11 @@ public class MovieManagement
         }
     }
 
-    private int generateNewID() throws SQLException
+    private int generateNewID(String type) throws SQLException
     {
         String table = "TABLE";
         //TODO: Make generic for sale or rental
-        String column = "SaleID";
+        String column = type+"ID";
         String constraint = "";
         String query = this.generateQuery(table, column, constraint);
         ResultSet resultSet = statement.executeQuery(query);
@@ -766,7 +766,8 @@ public class MovieManagement
         //this.checkDuplicateBarcode(barcode);
         this.movie = generalMovie;
         String SKU = this.movie.getSKU();
-        int newSaleID = this.generateNewID();
+        String type = "Sale";
+        int newSaleID = this.generateNewID(type);
 
         //Prepare INSERT SQL
         String table = "videoSale";
@@ -784,7 +785,8 @@ public class MovieManagement
         //this.checkDuplicateBarcode(barcode);
         this.movie = generalMovie;
         String SKU = this.movie.getSKU();
-        int newRentalID = this.generateNewID();
+        String type = "rental";
+        int newRentalID = this.generateNewID(type);
 
         //Prepare INSERT SQL
         String table = "videoRental";
