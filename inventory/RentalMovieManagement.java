@@ -56,7 +56,7 @@ public class RentalMovieManagement {
      */
     public enum Condition
     {
-        GOOD, LOST, DAMAGED, RESERVED, AVAILABLE, RENTED, OVERDUE
+        GOOD, LOST, BROKEN, RESERVED, AVAILABLE, RENTED, OVERDUE
     }
 
         /**
@@ -73,16 +73,23 @@ public class RentalMovieManagement {
     
     public void makeReservation(Customer customer)
     {
-	Calendar today = Calendar.getInstance();
-        dueDate.setTime(today.getTime());
-        dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE));
-	Reservation reservation = new Reservation (customer.getAccountID(), dueDate);
-	movie.reservationEnqueue(reservation);
+        if(!movie.getCondition().equals(Condition.RESERVED.getName())
+        {
+            Calendar today = Calendar.getInstance();
+            dueDate.setTime(today.getTime());
+            dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE));
+            Reservation reservation = new Reservation (customer.getAccountID(), dueDate);
+            movie.reservationEnqueue(reservation);
+            generateReservationQuery(customer.getAccountID());
+        }
+        else
+            throw MovieNotAvailableException;
     }
     
     public void removeReservation()
     {
-	movie.reservationDequeue();
+	    movie.reservationDequeue();
+        generateRemoveReservationQuery();
     }
     
       /*  final protected void addReservation(Reservation reservation) throws SQLException
@@ -148,7 +155,7 @@ public class RentalMovieManagement {
     public void editCopy(String category, String format, String condition)
             throws MovieNotFoundException, SQLException, java.lang.Exception
     {
-	setCategory(category);
+    	setCategory(category);
         setFormat(format);
         setCondition(condition);
     }
@@ -231,8 +238,8 @@ public class RentalMovieManagement {
     
     public void getRentalPeriod()
     {
-	String period = getRentalPeriodSQL();
-	rentalPeriod = Integer.parseInt(period); 
+	    String period = getRentalPeriodSQL();
+	    rentalPeriod = Integer.parseInt(period); 
     }
     
       /**
@@ -274,17 +281,22 @@ public class RentalMovieManagement {
         return movie.getTitle();
     }
     
-        private void setFormat(String format)throws java.lang.Exception
+    private void setFormat(String format)throws java.lang.Exception
     {
 	    if(format!= null)
 	    {
-		for(int i = 0; i < formats.length; i++)
-		{
-			if(format.equals(formats[i]))
-			movie.setFormat(format);
-		}
+            for(int i = 0; i < formats.length; i++)
+            {
+                if(format.equals(formats[i]))
+                movie.setFormat(format);
+            }
 	    }
     }	
+    
+    public int getPenalty()
+    {
+        return 0;
+    }
 
     /**
      * Synonym for changeCategory
@@ -322,14 +334,19 @@ public class RentalMovieManagement {
             throws MovieNotFoundException, CustomerNotFoundException,
             MovieNotAvailableException, SQLException, Exception
     {
-	
-	rentMovieUpdateDatabase("VideoRental", "condition", Condition.RENTED.name());
+	    
+        if(movie.getPenalty()==0)
+        {
+    	    rentMovieUpdateDatabase("VideoRental", "condition", Condition.RENTED.name());
 
-        Calendar today = Calendar.getInstance();
-        dueDate.setTime(today.getTime());
-        dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE)+rentalPeriod);
-
-	return dueDate;
+            Calendar today = Calendar.getInstance();
+            dueDate.setTime(today.getTime());
+            dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE)+rentalPeriod);
+        }
+        else
+        return;
+        
+	    return dueDate;
     }
 
 
@@ -351,28 +368,33 @@ public class RentalMovieManagement {
             throws MovieNotFoundException, CustomerNotFoundException,
             MovieNotAvailableException, SQLException, Exception
     {
-        if (movie == null || !movie.getCondition().equalsIgnoreCase("available"))
+        if(movie.getPenalty()==0)
         {
-            throw new MovieNotAvailableException("MovieNotAvailableException:"
-                    + " movie is not available");
-        }
-
-        if (customer == null)
-        {
-            throw new CustomerNotFoundException("CustomerDoesNotExistException:"
-                    + " no Customer specified");
-        }
-
-        rentMovieUpdateDatabase( "VideoRental", "condition", Status.RENTED.name());
-        
-        rentMovieUpdateDatabase("VideoRental", "MemberID", "" + customer.getAccountID());
-
-
-        movie.setCondition(Status.RENTED.name());
-
-        Calendar today = Calendar.getInstance();
-        dueDate.setTime(today.getTime());
-        dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE)+rentalPeriod);
+            if (movie == null || !movie.getCondition().equalsIgnoreCase("available"))
+            {
+                throw new MovieNotAvailableException("MovieNotAvailableException:"
+                        + " movie is not available");
+            }
+    
+            if (customer == null)
+            {
+                throw new CustomerNotFoundException("CustomerDoesNotExistException:"
+                        + " no Customer specified");
+            }
+    
+            rentMovieUpdateDatabase( "VideoRental", "condition", Status.RENTED.name());
+            
+            rentMovieUpdateDatabase("VideoRental", "MemberID", "" + customer.getAccountID());
+    
+    
+            movie.setCondition(Status.RENTED.name());
+    
+            Calendar today = Calendar.getInstance();
+            dueDate.setTime(today.getTime());
+            dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE)+rentalPeriod);
+            }
+        else
+        return;
         return dueDate;
     }
 
@@ -417,22 +439,33 @@ public class RentalMovieManagement {
         if (barcode == null )
             throw new IllegalArgumentException("IllegalArgumentException: Invalid barcode number");
 	
-	if(barcode.length() > MAX_SKU_LENGTH)
-	{
-		SKU = barcode.substring(0, MAX_SKU_LENGTH);
-		rentalID = barcode.substring(MAX_SKU_LENGTH+1, barcode.length());
-	}
-	else if(barcode.length() >= MIN_SKU_LENGTH && barcode.length()<= MAX_SKU_LENGTH)
-	SKU = barcode;
+        if(barcode.length() > MAX_SKU_LENGTH)
+        {
+            rentalID = barcode.substring(barcode.length());
+            SKU = barcode.substring(0, barcode.length());
+        }
+        else if(barcode.length() >= MIN_SKU_LENGTH && barcode.length()<= MAX_SKU_LENGTH)
+        SKU = barcode;
     }
     
 
 
 //SQL
 //--------------------------------------------------------------------------------------------------------------------------------  
+    private void generateReservationQuery(int accountID)
+    {
+        String where = "SKU ="+quote +SKU+quote   
+    }
+    
+    private void generateRemoveReservationQuery()
+    {
+    }
+    
+    
+    
     private String getRentalPeriodSQL()
     {
-	return "";
+	    return "";
     }
     
     /**
@@ -444,12 +477,16 @@ public class RentalMovieManagement {
     private void changeToSaleSQL()
             throws MovieNotFoundException, SQLException
     {
-        // TODO: disallow if movie is not available or condition not good?
-        String[] deleteColumnNames = {"SKU", "rentalID"};
-        String deleteQuery = generateDeleteSQL("VideoRental", deleteColumnNames);
-        String[] insertColumnNames = { "condition", "SKU", "saleID" };
-        String[] values = { movie.getCondition(), SKU, rentalID };
-        String insertQuery = generateInsertSQL("VideoSales", insertColumnNames, values);
+        if(!movie.getCondition().equals(Condition.BROKEN.getName()))
+        {
+            //add new line in sales table, remove from rentals table
+            String[] deleteColumnNames = {"SKU", "rentalID"};
+            String deleteQuery = generateDeleteSQL("VideoRental", deleteColumnNames);
+            String[] insertColumnNames = { "condition", "SKU", "saleID" };
+            String[] values = { movie.getCondition(), SKU, rentalID };
+            String insertQuery = generateInsertSQL("VideoSales", insertColumnNames, values);
+        
+        }
         
     }
     
@@ -479,7 +516,7 @@ public class RentalMovieManagement {
         String where = generateMovieWhere();
         String command = generateUpdateSQL("VideoRental", "Category",
                 category.toLowerCase(), where);
-        updateDatabase(command);
+         updateDatabase(command);
         // TODO: check for number of rows changed
     }
     /**
@@ -531,8 +568,7 @@ public class RentalMovieManagement {
     {
         String query = "DELETE FROM "+tableName+" WHERE ";
        
-            query = query + columns[0] + " = '"+SKU+"'"
-                    + " AND "+columns[1] +" = '"+rentalID+"'";
+            
           
         
         return query;
@@ -609,18 +645,19 @@ public class RentalMovieManagement {
     {        
         try
         {
-		int rowsChanged = JDBC.update(query);
-		if (rowsChanged > 1)
-		{
-			throw new SQLException("SQLException: database corrupted");
-		}
-		if (rowsChanged < 1)
-		{
+            int rowsChanged = JDBC.update(query);
+            if (rowsChanged > 1)
+		    {
+			    throw new SQLException("SQLException: database corrupted");
+		    }
+		    if (rowsChanged < 1)
+		    {
+                
 			throw new MovieNotFoundException("MovieNotFoundException: "
 				+ "cannot find barcode number");
-		}
+		    }
 		
-		return rowsChanged;
+		    return rowsChanged;
         }
         finally
         {
@@ -632,14 +669,15 @@ public class RentalMovieManagement {
 	private String barcode;
 	private String SKU;
 	private String rentalID;
-        private JDBCConnection JDBC;
-        private Connection connection;
+    private JDBCConnection JDBC;
+    private Connection connection;
 	private GregorianCalendar dueDate;
 	private RentalMovie movie;
-        private int rentalPeriod;
+    private int rentalPeriod;
 	final public int RENTAL_ID_LENGTH = 9;
 	final public static int MIN_SKU_LENGTH = 10;
 	final public int MAX_SKU_LENGTH = 18;
 	final char quote = '\'';
+    final char comma = ',';
 
 }
