@@ -128,6 +128,7 @@ public class RequestMovieDialog extends javax.swing.JDialog {
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
         // TODO add your handling code here:
         localUIC.PopRequestDone();
+        this.setVisible(false);
 }//GEN-LAST:event_confirmButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed

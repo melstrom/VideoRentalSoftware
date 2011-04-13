@@ -39,6 +39,7 @@ public class UiController {
      */
     public void startUI(){
       currFrame = new CustomerFrame(this);
+      //currFrame = new EmployeeFrame();
       currFrame.setVisible(true);
     }
     /**

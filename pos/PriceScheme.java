@@ -1,83 +1,74 @@
-package pos;
 import java.sql.*;
-//import JDBCConnect; //kristan's stuff
-import java.io.IOException;
+import java.util.ArrayList;
 
 /**
- *This is the class that implements the price scheme table in the database.
- * A sample of the price scheme table in the database:
- *
- * Category_Name    VHS     DVD     Blu-ray
- * New Release       3       4         6
- * 7 Days Rental     1       2         4
- * Weekly Special    1      2.5        4
- * For Sale          4      25         45
- *
- * The object of the PriceScheme class will store the prices and also the
- * category names. In this example, attribute int[][] price will be
- *        [0]  [1] [2]
- * [0]     3    4   6
- * [1]     1    2   4
- * [2]     1    2.5 4
- * [3]     4    25  45
- * Attribute String[] scheme will be:
- *      [0]             [1]                    [2]              [3]
- * "New Release"    "7 Days Rental"     "Weekly Special"    "For Sale"
- * Attribute String[] format will be:
- * [0]      [1]      [2]
- * VHS      DVD     Blu-ray
- *
- * User PLEASE notice the number scheme of the arrays and the number scheme of
- * the table in database are not the same.
- *
- *Also, there is also a chance that a price is empty(null).
- *
- * Also keep in mind that the price is in cents, not in dollar, even though the
- * example above has prices less than 100.
- *
- * @author kevin
+This class contains the information of prices and the information of categories
+and formats.
+@author kevin
  */
 public class PriceScheme
 {
     /**
-     * This constructor will extract all the information of the table
-     * PriceScheme and store it into the PriceScheme object.
-     * @throws SQLException If there is anything wrong with the database, this exception will be thrown.
+    This constructor will extract the prices of each kind of category for each
+    format; they will be stored into the price attribute.
+    The information of categories will be extracted from the catagories table and
+    stored into the array list of category.
+    The information of formats will be extracted from the format table and stored
+    into the array list of format.
+
+    This class does NOT guarentee that every category of a format has a price.
+    This means that some column in the prices attribute may be 0.
+     @throws SQLException If there is anything wrong with the database, this exception will be thrown.
      */
     public PriceScheme()
             throws SQLException
     {
-        /*
-         * Kristan's connection stuff here
-         */
+	category = new ArrayList<String>();
+	format = new ArrayList<String>();
+        JDBCConnection conn = new JDBCConnection();
+	conn.getConnection();
         try
         {
-            PreparedStatement stat = conn.prepareStatement("SELECT * FROM PriceScheme");
-            ResultSet result = stat.executeQuery();
-            ResultSetMetaData metaData = result.getMetaData();
+                //find out the categories first
+		PreparedStatement stat = conn.prepareStatement("SELECT * FROM catagories;");
+		boolean hasResult = stat.execute();
+		if(hasResult)
+		{
+                    ResultSet catResults = stat.getResultSet();
+                    while(catResults.next())
+                        category.add(catResults.getString(1).trim().toLowerCase());
+		}
+                else
+                    throw new SQLException("Catagories table in the database is empty.");
 
-            //Configure numOfCols
-            int numOfCols = metaData.getColumnCount()-1; // because the first column
-                                                     //is the name of the format.
+                //find out the formats.
+                stat = conn.prepareStatement("SELECT * FROM format;");
+                hasResult = stat.execute();
+                if(hasResult)
+                {
+                    ResultSet formResults = stat.getResultSet();
+                    while(formResults.next())
+                        format.add(formResults.getString(1).trim().toLowerCase());
+                }
+                else
+                    throw new SQLException("Format table in the database is empty.");
 
-            //Configure format
-            for(int i = 0; i< numOfCols; i++)
-                formats[i] = metaData.getColumnLabel(i + 2);
-
-            //Configure category
-            ResultSet tempResult = result;
-            int numOfRows = 0;
-            while(tempResult.next())
-                category[numOfRows++] = result.getString(1).toLowerCase();
-                //the first column of the table is the name of the category
-
-            //Configure prices
-            prices = new int[numOfRows][numOfCols];
-            for(int i = 0; i < numOfRows; i++)
-                for(int j = 0; result.next(); j++)
-                    prices[i][j] = result.getInt(j + 2);
-                    //the index number for the ResultSet's get method is 2
-                    //larger than the index of column at this case
+                //finally, find out the prices.
+                prices = new int [category.size()][format.size()];
+                stat = conn.prepareStatement("SELECT * FROM pricing;");
+                hasResult = stat.execute();
+                if(hasResult)
+                {
+                    ResultSet priceResults = stat.getResultSet();
+                    while(priceResults.next())
+                    {
+                        int x = category.indexOf(priceResults.getString(2).trim().toLowerCase());
+                        int y = format.indexOf(priceResults.getString(3).trim().toLowerCase());
+                        prices[x][y] = priceResults.getInt(1);
+                    }
+                }
+                else
+                    throw new SQLException("Pricing table in the database is empty.");
         }
         finally
         {
@@ -85,130 +76,58 @@ public class PriceScheme
         }
     }
 
-
     /**
-     *This method will return the price of the movie with corresponding category
-     * and format defined.
-     * @param cat the name of the category of the IndividualMovie
-     * @param form the name of the media(format) of the IndividualMovie
-     * @return int the price in cents
-     * @throws IOException If the parameter that is passed to this method cannot
-     * be found in the arrays (category and format), then IOException will be
-     * thrown indicates that the name(s) is(are) wrong
-     */
-    /*public int getPrice(String cat, String form)
-            throws IOException
-    {
-        int row = 0;
-        int col = 0;
-        boolean isCatCorrect = false;
-        boolean isFormCorrect = false;
-int
-        //examine the correctness of input cat
-        for(; row < category.length; row++)
-            if(category[row].equals(cat))
-            {
-                isCatCorrect = true;
-                break;
-            }
-
-        //examine the correctness of input med
-        for(; col < formats.length; col++)
-            if(formats[col].equals(form))
-            {
-                isFormCorrect = true;
-                break;
-            }
-
-        if(isCatCorrect && isFormCorrect)
-        //when both the string cat and med exist in the array category and format
-            return prices[row][col];
-        else
-        //if any or both of them is false
-            throw new IOException("Name of the Category or/and Format is not correct.");
-    }*/
-
-    /**
-     *This method takes the index number of the array prices, and return the
-     * value in that particular entry. Make sure you know the index number well
-     * when using this method, because misunderstanding cannot be detected.
-     * @param cat the number of the row, also can be think as the index of category
-     * @param med the number of the columns, also can be think as the index of format
-     * @return int the price in cents
-     * @throws IOException If the cat and/or med is larger than the length of the
-     * arrays, this exception will be thrown.
+     * This method return the price with the index numbers provided.
+     * @param cat the index number that identify the category
+     * @param form the index number that identify the format;
+     * @return the price
      */
     public int getPrice(int cat, int form)
-            throws IOException
     {
-        if(cat <= category.length && form <= formats.length)
-            return prices[cat][form];
-        else
-            throw new IOException("Index number out of bound");
+        return prices[cat][form];
     }
 
     /**
-     * The Category_Name attribute with corresponding index number of the table
-     * PriceScheme will be returned. Pay attention to the number that pass to
-     * the method. The first category starts at 0 for this method; whereas, in
-     * the database, the first attribute starts at 1.
-     * @param cat The index number of the record
-     * @return String The name of the category
-     * @throws IOException If the number passed to this method exceed the boundary
-     * of the array category
+     * For the PriceSchemeManagement to find out the index number a category.
+     * -1 will be returned if it is not found.
+     * @param cat the name of the category.
+     * @return
      */
-    public String getCategoryName(int cat)
-            throws IOException
+    public int getIndexOfCategory(String cat)
     {
-        if(cat < category.length)
-            return category[cat];
-        else
-            throw new IOException("Index number out of bound");
+        return category.indexOf(cat.trim().toLowerCase());
     }
 
-    /**
-     * The name of the column in the PriceScheme table in the database. Pay
-     * attention to the number that pass to this method. The first column/element
-     * starts at 0; whereas, in the database, it starts at 1.
-     * @param form The index number for the array that the caller method want to
-     * know
-     * @return String The name of the format.
-     * @throws IOException If the number passed to this method exceed the boundary
-     * of the array format
+   /**
+     * For the PriceSchemeManagement to find out the index number a format.
+     * -1 will be returned if it is not found.
+     * @param form the name of the format.
+     * @return
      */
-    public String getFormatName(int form)
-            throws IOException
+    public int getIndexOfFormat(String form)
     {
-        if(form < formats.length)
-            return formats[form];
-        else
-            throw new IOException("Index number out of bound");
+        return format.indexOf(form.trim().toLowerCase());
     }
 
     /**
-     *Ordinary getter method that get the number of category stored in the database.
-     *This method can also be used to obtain the number of records/rows in the
-     * PriceScheme table in the database.
-     * @return int the number of categories
+     * Return how many categories, in other words, how many columns of the prices
+     * @return the number of categories
      */
     public int getNumOfCategory()
     {
-        return category.length;
+        return category.size();
     }
 
     /**
-     *Ordinary getter method that get the number of format stored in the database.
-     * This method can also be used to obtain the number of columns in the PriceScheme
-     * table in the database.
-     * @return int the number of formats.
+     * Return how many format, in other words, how many rows of the prices
+     * @return the number of format.
      */
     public int getNumOfFormats()
     {
-        return formats.length;
+        return format.size();
     }
 
     private int[][] prices;
-    private String[] category;
-    private String[] formats;
+    private ArrayList<String> category;
+    private ArrayList<String> format;
 }
-

@@ -24,6 +24,6 @@ public class InventoryProxy implements proxy.Inventory {
     {
         RentalMovieManagement rentalMovieManagement = new RentalMovieManagement();
         //todo: update method call after method implementation
-        rentalMovieManagement.makeReservation(customer, movie);
+        rentalMovieManagement.makeReservation(customer);
     }
 }

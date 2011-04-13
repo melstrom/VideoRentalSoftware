@@ -210,6 +210,7 @@ public class SQLhelper
 	{
 		Class.forName("com.mysql.jdbc.Driver");
 		String url = "jdbc:mysql://174.132.159.251:3306/kpoirier_CPSC2301?user=kpoirier_User&password=foobar";
+//		String url = "jdbc:mysql://192.168.0.16:3306/storedb?user=videoStore&password=over9000";
 		connection = DriverManager.getConnection(url); // this can throw SQLException
 	}
 	

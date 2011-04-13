@@ -111,13 +111,9 @@ public static Connection getConnection()
    * @return
    * @throws SQLException
    */
-  public Statement prepareStatement()
+  public PreparedStatement prepareStatement(String command)
     throws SQLException{
-      //try{
-          st = conn.createStatement();
-     // }
-      //catch(Exception egg){System.err.println(egg.getMessage());}
-      return st;
+return conn.prepareStatement(command);
   }
   
     /**

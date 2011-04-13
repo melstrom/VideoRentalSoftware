@@ -1,5 +1,4 @@
 package account;
-//TODO: most methods are missing proper queries
 
 /**
  * Account Manager class
@@ -12,6 +11,10 @@ package account;
  *	-added barcodeGenerator (incomplete)
  *	-added JDBCConnetion package
  *	-fixed demote(), promote() and editAccount()
+ *
+ * April 11
+ * -added SQL statements; needs revision, see TODOs
+ * //TODO: most methods are missing proper queries
  */
 import java.sql.SQLException;
 import java.sql.Connection;

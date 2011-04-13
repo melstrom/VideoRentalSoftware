@@ -148,6 +148,7 @@ public class ReseveMovieDialog extends javax.swing.JDialog {
     private void ReserveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReserveButtonActionPerformed
         // TODO add your handling code here:
         localUIC.PopReservationDone();
+        this.setVisible(false);
 }//GEN-LAST:event_ReserveButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
