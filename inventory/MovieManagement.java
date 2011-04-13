@@ -78,9 +78,7 @@ public class MovieManagement
         try
         {
             this.setupConnection();
-        } 
-
-        finally
+        } finally
         {
             connection.close();
         }
@@ -103,32 +101,31 @@ public class MovieManagement
     /*
     public void createGeneralMovie(String[] info, GregorianCalendar releaseDate)
     {
-        String SKU = info[0];
-        try
-        {
-            this.checkNULLinfo(info);
-            this.checkDuplicateSKU(SKU);
-            String title = info[1];
-            String actors = info[2];
-            String director = info[3];
-            //String releaseDate = info[4];     //use Calendar type at UI to eliminate conversion
-            String synopsis = info[4];
-            String genre = info[5];
-            //splits the actors into an array of actors
-            //String[] actorArray = actors.split(",");
+    String SKU = info[0];
+    try
+    {
+    this.checkNULLinfo(info);
+    this.checkDuplicateSKU(SKU);
+    String title = info[1];
+    String actors = info[2];
+    String director = info[3];
+    //String releaseDate = info[4];     //use Calendar type at UI to eliminate conversion
+    String synopsis = info[4];
+    String genre = info[5];
+    //splits the actors into an array of actors
+    //String[] actorArray = actors.split(",");
 
 
-            this.movie = new GeneralMovie(SKU, title, actors, director, releaseDate, synopsis); //pass in actors? or actorArray?
+    this.movie = new GeneralMovie(SKU, title, actors, director, releaseDate, synopsis); //pass in actors? or actorArray?
 
-            //INSERT INTO VideoInfo VALUES (SKU, title, director, releaseDate, actors, synopsis)
-        } //Catch here
-        finally
-        {
-            connection.close();
-        }
+    //INSERT INTO VideoInfo VALUES (SKU, title, director, releaseDate, actors, synopsis)
+    } //Catch here
+    finally
+    {
+    connection.close();
+    }
     }*/
-
-     /**
+    /**
      * Adds a GeneralMovie to the database by inserting into the videoInfo
      * and physicalVideo tables.  It first searches to see if the information
      * contained in the GeneralMovie object
@@ -155,7 +152,6 @@ public class MovieManagement
 
     }
 
-
     /**
      * This method looks at the attributes of a GeneralMovie and tries to
      * find matches in the attributes of the videoInfo table.  If it finds an
@@ -180,7 +176,7 @@ public class MovieManagement
             //ResultSet result = conn.getResults(query);
 
 
-            String title =  movie.getTitle();
+            String title = movie.getTitle();
             String director = movie.getDirector();
             String producer = movie.getProducer();
             String studio = movie.getStudio();
@@ -189,27 +185,25 @@ public class MovieManagement
             String genre = movie.getGenre();
 
             int numParameters = 7;
-            String[] parameters = 
-                {title, director, producer, studio, synopsis, rating, genre};
+            String[] parameters =
+            {
+                title, director, producer, studio, synopsis, rating, genre
+            };
 
             ResultSet result = conn.getResults(query, numParameters, parameters);
             if (result.next())
             {
                 int infoID = result.getInt(column);
                 return infoID;
-            }
-            else
+            } else
             {
                 return null;
             }
-        }
-        finally
+        } finally
         {
             conn.closeConnection();
         }
     }
-
-
 
     private static String makePreparedConstraint(GeneralMovie movie)
     {
@@ -230,17 +224,15 @@ public class MovieManagement
         constraint += " AND ";
         constraint += "Description = ?";
         constraint += " AND ";
-        constraint += "Rating = ?";        
+        constraint += "Rating = ?";
         constraint += " AND ";
-        constraint += "releaseDate = '"+makeReleaseDateString(releaseDate)+"'";
+        constraint += "releaseDate = '" + makeReleaseDateString(releaseDate) + "'";
         constraint += " AND ";
         constraint += "Genre = ?";
         constraint += " AND ";
-        constraint += "length = '"+runtime+"'";
+        constraint += "length = '" + runtime + "'";
         return constraint;
     }
-
-
 
     /**
      * Makes the constraint string for searching for videoInfo
@@ -252,7 +244,7 @@ public class MovieManagement
     {
 
         //String SKU = movie.getSKU();
-        String title =  movie.getTitle();
+        String title = movie.getTitle();
         String[] actors = movie.getActors();
         String director = movie.getDirector();
         String producer = movie.getProducer();
@@ -265,29 +257,27 @@ public class MovieManagement
         String constraint = "";
         //constraint = "SKU = '"+SKU+"'";
         //constraint += " AND ";
-        constraint += "Title = '"+title+"'";
+        constraint += "Title = '" + title + "'";
         constraint += " AND ";
         constraint += makeActorConstraint(actors);
         constraint += " AND ";
-        constraint += "director = '"+director+"'";
+        constraint += "director = '" + director + "'";
         constraint += " AND ";
-        constraint += "Producer = '"+producer+"'";
+        constraint += "Producer = '" + producer + "'";
         constraint += " AND ";
-        constraint += "studio = '"+studio+"'";
+        constraint += "studio = '" + studio + "'";
         constraint += " AND ";
-        constraint += "Description = '"+synopsis+"'";
+        constraint += "Description = '" + synopsis + "'";
         constraint += " AND ";
-        constraint += "Rating = '"+rating+"'";
+        constraint += "Rating = '" + rating + "'";
         constraint += " AND ";
-        constraint += "releaseDate = '"+makeReleaseDateString(releaseDate)+"'";
+        constraint += "releaseDate = '" + makeReleaseDateString(releaseDate) + "'";
         constraint += " AND ";
-        constraint += "Genre = '"+genre+"'";
+        constraint += "Genre = '" + genre + "'";
         constraint += " AND ";
-        constraint += "length = '"+runtime+"'";
+        constraint += "length = '" + runtime + "'";
         return constraint;
     }
-
-
 
     /**
      * Creates a string of the form
@@ -306,20 +296,18 @@ public class MovieManagement
         int actorIndex = 0; // start from the first actor
         String actorConstraint = "(";
         actorConstraint = actorConstraint
-                + "actors LIKE '%"+actors[actorIndex].replaceAll("'","")+"%' ";
+                + "actors LIKE '%" + actors[actorIndex].replaceAll("'", "") + "%' ";
         actorIndex++;
         while (actorIndex < numActors)
         {
             actorConstraint += "AND ";
             actorConstraint = actorConstraint
-                    + "actors LIKE '%"+actors[actorIndex].replaceAll("'","")+"%' ";
+                    + "actors LIKE '%" + actors[actorIndex].replaceAll("'", "") + "%' ";
             actorIndex++;
         }
         actorConstraint += ")";
         return actorConstraint;
     }
-
-
 
     /**
      * retrieves a string of form YYYY-MM-DD from the Calendar object
@@ -336,8 +324,6 @@ public class MovieManagement
         return datetime;
     }
 
-
-
     /**
      * This method finds the next unused infoID number and returns it.
      * @pre the infoIDs are below maximum
@@ -348,7 +334,7 @@ public class MovieManagement
     {
         int currentHighestID = getHighestID("videoInfo", "InfoID");
         int newHighestID = currentHighestID + 1;
-        if (newHighestID > Math.pow(10,GeneralMovie.INFO_ID_LENGTH + 1))
+        if (newHighestID > Math.pow(10, GeneralMovie.INFO_ID_LENGTH + 1))
         {
 
             throw new MovieLimitReachedException("Cannot add movie information."
@@ -356,8 +342,6 @@ public class MovieManagement
         }
         return newHighestID;
     }
-
-
 
     /**
      * This method finds the highest ID number that currently exists
@@ -368,7 +352,7 @@ public class MovieManagement
      */
     private static int getHighestID(String table, String column) throws Exception
     {
-        String query = JDBCConnection.makeQuery(table, "MAX("+column+")", null);
+        String query = JDBCConnection.makeQuery(table, "MAX(" + column + ")", null);
         JDBCConnection conn = new JDBCConnection();
         try
         {
@@ -379,22 +363,18 @@ public class MovieManagement
                 if (result.wasNull())
                 {
                     return (int) Math.pow(10, GeneralMovie.INFO_ID_LENGTH);
-                }
-                else
+                } else
                 {
                     return result.getInt(1);
                 }
             }
-             
-        }
-        finally
+
+        } finally
         {
             conn.closeConnection();
         }
         return -1; // should never get here
     }
-
-
 
     /**
      * This method adds information to the videoInfo table in the database
@@ -408,7 +388,9 @@ public class MovieManagement
     {
 
         if (movie == null)
+        {
             throw new IllegalArgumentException("No movie provided");
+        }
         String title = movie.getTitle();
         String[] actors = movie.getActors();
         String director = movie.getDirector();
@@ -422,34 +404,37 @@ public class MovieManagement
 
 
         if (actors == null || actors.length < 1)
+        {
             throw new IllegalArgumentException("No actors provided");
+        }
         String actorsString = actors[0];
         for (int i = 1; i < actors.length; i++)
         {
             actorsString += ", ";
             actorsString += actors[i];
         }
-        actorsString = actorsString.replaceAll("'","");
+        actorsString = actorsString.replaceAll("'", "");
 
         String tableName = "videoInfo";
 
 
-        
+
         String[][] videoInfo =
         {
-            {"InfoID", "Title", "Actors", "director", "Producer","studio",
-                     "Description", "Rating", "releaseDate", "Genre", "length"
-            },
-/*
             {
-               "" + infoID, title, actorsString, director, producer,
-                       studio, synopsis, rating, makeReleaseDateString(releaseDate),
-                       genre, length
+                "InfoID", "Title", "Actors", "director", "Producer", "studio",
+                "Description", "Rating", "releaseDate", "Genre", "length"
+            },
+            /*
+            {
+            "" + infoID, title, actorsString, director, producer,
+            studio, synopsis, rating, makeReleaseDateString(releaseDate),
+            genre, length
             }*/
             {
-               "" + infoID, null, actorsString, null, null,
-                       null, null, null, makeReleaseDateString(releaseDate),
-                       null, length
+                "" + infoID, null, actorsString, null, null,
+                null, null, null, makeReleaseDateString(releaseDate),
+                null, length
             }
         };
 
@@ -458,28 +443,27 @@ public class MovieManagement
         try
         {
             int numParameters = 7;
-            String[] parameters = {title, director, producer, studio, synopsis,
-                rating, genre};
+            String[] parameters =
+            {
+                title, director, producer, studio, synopsis,
+                rating, genre
+            };
 
             int linesChanged = conn.update(query, numParameters, parameters);
             if (linesChanged > 1)
             {
                 // throw new SQLException("" + linesChanged + "rows were changed");
                 // undo the update
-            }
-            else if (linesChanged == 0)
+            } else if (linesChanged == 0)
             {
                 throw new java.sql.SQLException("Updates were not completed");
             }
-        }
-        finally
+        } finally
         {
             conn.closeConnection();
         }
 
     }
-
-
 
     /**
      * This method adds a physical video to the database tables
@@ -495,9 +479,14 @@ public class MovieManagement
         String retailPriceInCents = "" + movie.getRetailPriceInCents();
 
         String tableName = "physicalVideo";
-        String[][] information = {
-            { "SKU", "Format", "InfoID", "RetailPrice" },
-            { SKU, format, ""+infoID, retailPriceInCents }
+        String[][] information =
+        {
+            {
+                "SKU", "Format", "InfoID", "RetailPrice"
+            },
+            {
+                SKU, format, "" + infoID, retailPriceInCents
+            }
         };
 
         String insert = JDBCConnection.makeInsert(tableName, information);
@@ -509,19 +498,15 @@ public class MovieManagement
             {
                 // throw new SQLException("" + linesChanged + "rows were changed");
                 // undo the update
-            }
-            else if (linesChanged == 0)
+            } else if (linesChanged == 0)
             {
                 throw new java.sql.SQLException("Updates were not completed");
             }
-        }
-        finally
+        } finally
         {
             conn.closeConnection();
         }
     }
-
-
 
 //    final protected void addNewTitle() throws SQLException
 //    {
@@ -544,39 +529,20 @@ public class MovieManagement
      * @param format the media format of the movie (VHS, DVD, Bluray)
      * @param barcode the unique identification of the individual movie copy
      */
-    public void addCopy(GeneralMovie generalMovie, String category, String format, String barcode) throws Exception
+    public void addCopy(GeneralMovie generalMovie, String type) throws SQLException
     {
         try
         {
-            this.checkDuplicateBarcode(barcode);
-            this.movie = generalMovie;
-            String SKU = this.movie.getSKU();
+            if (type.equals("sale"))
+            {
+                this.addSaleMovie(generalMovie);
+            }
 
-            //TODO: If we are adding copy, are we adding rental or sale? Assuming sale
-            String table = "TABLE";
-            String column = "SaleID";
-            String constraint = "";
-            String query = this.generateQuery(table, column, constraint);
-
-            ResultSet resultSet = statement.executeQuery(query);
-
-            resultSet.last();
-            int LastID = resultSet.getInt(0);
-            String newbarcode = "TEST";
-            //TODO: Convert Int to String
-            //int newbarcode = LastID;
-
-            //TODO: implement barcodechecker METHOD instead of class
-            //barcode = BarCodeChecker.assign(SKU);   //no barcodechecker yet
-
-            //Why do we need to add a price here? What does price have to do with individual movies?
-            int price = 0;
-            String condition = "TESTING!!!!";
-
-            //passed all tests, create the copy
-            this.copy = new IndividualMovie(category, price, newbarcode, movie, condition);
-        }
-        finally
+            if (type.equals("rental"))
+            {
+                this.addRentalMovie(generalMovie);
+            }
+        } finally
         {
             connection.close();
         }
@@ -611,8 +577,7 @@ public class MovieManagement
             movie.setGenre(genre);
 
             //UPDATE VideoInfo SET Title = movie.getTitle, Actors = movie.getActors...etc   WHERE SKU = SKU
-        }
-        finally
+        } finally
         {
             connection.close();
         }
@@ -738,7 +703,7 @@ public class MovieManagement
 
         String table = "physicalVideo";
         String column = "SKU";
-        String constraint = "SKU = '"+barcode.replaceAll("'","")+"'";
+        String constraint = "SKU = '" + barcode.replaceAll("'", "") + "'";
 
         //String query = generateQuery(table, column, barcode);
         String query = JDBCConnection.makeQuery(table, column, constraint);
@@ -753,8 +718,7 @@ public class MovieManagement
             {
                 throw new MovieExistsException("This copy already exists (in the database)");
             }
-        }
-        finally
+        } finally
         {
             conn.closeConnection();
         }
@@ -787,6 +751,58 @@ public class MovieManagement
                 throw new MissingFieldException("Information fields cannot be empty.");
             }
         }
+    }
+
+    private int generateNewID() throws SQLException
+    {
+        String table = "TABLE";
+        //TODO: Make generic for sale or rental
+        String column = "SaleID";
+        String constraint = "";
+        String query = this.generateQuery(table, column, constraint);
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.last();
+        int LastID = resultSet.getInt(0);
+        int newID = LastID + 1;
+
+        return newID;
+    }
+
+    private String addSaleMovie(GeneralMovie generalMovie) throws SQLException
+    {
+        //this.checkDuplicateBarcode(barcode);
+        this.movie = generalMovie;
+        String SKU = this.movie.getSKU();
+        int newSaleID = this.generateNewID();
+
+        //Prepare INSERT SQL
+        String table = "videoSale";
+        String condition = "available";
+        String category = "for sale";
+        String query = "INSERT INTO " + table + " (SaleID, condition, catagory, SKU " + "VALUES (" + newSaleID + "," + condition + "," + category + "," + SKU + ")";
+        statement.executeUpdate(query);
+
+        String newBarCode = SKU + newSaleID;
+        return newBarCode;
+    }
+
+    private String addRentalMovie(GeneralMovie generalMovie) throws SQLException
+    {
+        //this.checkDuplicateBarcode(barcode);
+        this.movie = generalMovie;
+        String SKU = this.movie.getSKU();
+        int newRentalID = this.generateNewID();
+
+        //Prepare INSERT SQL
+        String table = "videoRental";
+        String condition = "available";
+        String category = "7 day";
+        String query = "INSERT INTO " + table + " (RentalID, condition, catagory, SKU " + "VALUES (" + newRentalID + "," + condition + "," + category + "," + SKU + ")";
+        statement.executeUpdate(query);
+
+
+        String newBarCode = SKU + newRentalID;
+        return newBarCode;
     }
 
     /**
