@@ -149,8 +149,8 @@ public class MovieManagement
         if (infoID == null)
         {
             infoID = nextInfoID();
+            addVideoInfo(infoID, movie);
         }
-        addVideoInfo(infoID, movie);
         addPhysicalVideo(infoID, movie);
 
     }

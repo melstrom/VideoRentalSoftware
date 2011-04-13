@@ -639,15 +639,68 @@ public class RentalMovieManagement {
         }
 
     }
-	private String barcode;
-	private String SKU;
-	private String rentalID;
-        private JDBCConnection JDBC;
-        private Connection connection;
-	private GregorianCalendar dueDate;
-	private RentalMovie movie;
-        final private int rental_period= 7;
-	final public int RENTAL_ID_LENGTH = 9;
-	final public static int MIN_SKU_LENGTH = 10;
-	final public int MAX_SKU_LENGTH = 18;
+
+
+
+
+    public static Calendar getPickupDate(RentalMovie movie)
+            throws SQLException, ClassNotFoundException
+    {
+
+    }
+
+
+
+    /**
+     * This method finds the number of available copies of a GeneralMovie
+     * @param movie the movie whose number of copies you are interested in
+     * @return a non-negative number indicating the number of copies available
+     * or a negative number if the store does not carry any copies.
+     * @throws MovieNotFoundException if the movie passed is not known to
+     * the video store
+     *
+     */
+    public static int getAvailableCopies(GeneralMovie movie)
+            throws MovieNotFoundException, SQLException, ClassNotFoundException
+    {
+        String SKU = movie.getSKU();
+        String query =
+                JDBCConnection.makeQuery("videoRental", "COUNT(*)", "videoRental.condition = 'available'");
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            ResultSet result = connection.getResults(query);
+            if (!result.next())
+            {
+                return -1;
+            }
+            Integer numAvailableCopies = result.getInt(1);
+            if (result.wasNull())
+            {
+                return -1;
+            }
+            return numAvailableCopies;
+
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+    }
+
+
+
+
+
+    private String barcode;
+    private String SKU;
+    private String rentalID;
+    private JDBCConnection JDBC;
+    private Connection connection;
+    private GregorianCalendar dueDate;
+    private RentalMovie movie;
+    final private int rental_period= 7;
+    final public int RENTAL_ID_LENGTH = 9;
+    final public static int MIN_SKU_LENGTH = 10;
+    final public int MAX_SKU_LENGTH = 18;
 }
