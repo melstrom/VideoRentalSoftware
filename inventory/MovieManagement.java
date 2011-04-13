@@ -75,13 +75,7 @@ public class MovieManagement
      */
     public MovieManagement() throws SQLException, ClassNotFoundException
     {
-        try
-        {
             this.setupConnection();
-        } finally
-        {
-            connection.close();
-        }
     }
 
     /**
@@ -537,7 +531,6 @@ public class MovieManagement
             {
                 this.addSaleMovie(generalMovie);
             }
-
             if (type.equals("rental"))
             {
                 this.addRentalMovie(generalMovie);
