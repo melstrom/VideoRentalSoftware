@@ -37,7 +37,7 @@ public class Address
         String country,
         String postalCode) throws SQLException, ClassNotFoundException
     {
-	mySQLhelper = new SQLhelper;
+	mySQLhelper = new SQLhelper();
 //	this.addressID = addresssID;
 	this.addressID = 1 + mySQLhelper.getTotalNumberOfRows(addressTable, addressKey);
 	this.houseNumber = houseNumber;

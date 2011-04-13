@@ -111,24 +111,25 @@ public static Connection getConnection()
    * @return
    * @throws SQLException
    */
-  public PreparedStatement prepareStatement(String command)
+ 
+/*  public PreparedStatement prepareStatement(String command)
     throws SQLException{
 return conn.prepareStatement(command);
-  }
+  }*/
   
     /**
    *
    * @return
    * @throws SQLException
    */
-  public Statement prepareStatement(String command)
+  /*public Statement prepareStatement(String command)
     throws SQLException{
       //try{
           st = conn.prepareStatement(command);
      // }
       //catch(Exception egg){System.err.println(egg.getMessage());}
       return st;
-  }
+  }*/
 
   
   
