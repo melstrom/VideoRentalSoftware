@@ -529,20 +529,19 @@ public class MovieManagement
      * @param format the media format of the movie (VHS, DVD, Bluray)
      * @param barcode the unique identification of the individual movie copy
      */
-    public void addCopy(GeneralMovie generalMovie, String category, String barcode, String type) throws Exception
+    public void addCopy(GeneralMovie generalMovie, String type) throws SQLException
     {
         try
         {
             if (type.equals("sale"))
             {
-                this.addSaleMovie(generalMovie, category, barcode);
+                this.addSaleMovie(generalMovie);
             }
 
             if (type.equals("rental"))
             {
-                this.addRentalMovie();
+                this.addRentalMovie(generalMovie);
             }
-
         } finally
         {
             connection.close();
@@ -769,36 +768,41 @@ public class MovieManagement
         return newID;
     }
 
-    private void addSaleMovie(GeneralMovie generalMovie, String category, String barcode) throws Exception
+    private String addSaleMovie(GeneralMovie generalMovie) throws SQLException
     {
-        this.checkDuplicateBarcode(barcode);
+        //this.checkDuplicateBarcode(barcode);
         this.movie = generalMovie;
         String SKU = this.movie.getSKU();
+        int newSaleID = this.generateNewID();
 
-        //TODO: If we are adding copy, are we adding rental or sale? Assuming sale
-        int newID = this.generateNewID();
-
-        //Why do we need to add a price here? What does price have to do with individual movies?
-        int price = 0;
+        //Prepare INSERT SQL
+        String table = "videoSale";
         String condition = "available";
-        //String category = "for sale";
-        String newBarCode = SKU + newID;
-        //passed all tests, create the copy
-        this.copy = new IndividualMovie(category, price, newBarCode, movie, condition);
+        String category = "for sale";
+        String query = "INSERT INTO " + table + " (SaleID, condition, catagory, SKU " + "VALUES (" + newSaleID + "," + condition + "," + category + "," + SKU + ")";
+        statement.executeUpdate(query);
+
+        String newBarCode = SKU + newSaleID;
+        return newBarCode;
     }
 
-    private void addRentalMovie()
+    private String addRentalMovie(GeneralMovie generalMovie) throws SQLException
     {
-        this.checkDuplicateBarcode(barcode);
+        //this.checkDuplicateBarcode(barcode);
         this.movie = generalMovie;
         String SKU = this.movie.getSKU();
-        
-        int newID = this.generateNewID();
-        String newBarCode = SKU + newID;
-        
-        //TODO: Add rental period
-        int rentalPeriod = 0;
-        RentalMovie rentalMovie = new RentalMovie(rentalPeriod);
+        int newRentalID = this.generateNewID();
+
+        //Prepare INSERT SQL
+        String table = "videoRental";
+        String condition = "available";
+        String category = "7 day";
+        String query = "INSERT INTO " + table + " (RentalID, condition, catagory, SKU " + "VALUES (" + newRentalID + "," + condition + "," + category + "," + SKU + ")";
+        statement.executeUpdate(query);
+
+
+        String newBarCode = SKU + newRentalID;
+        return newBarCode;
     }
 
     /**
