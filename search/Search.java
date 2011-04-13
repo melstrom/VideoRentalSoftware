@@ -12,6 +12,9 @@ import inventory.IndividualMovie;
 import inventory.MovieNotFoundException;
 import inventory.RentalMovie;
 import jdbconnection.JDBCConnection;
+import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 
 /**
@@ -229,6 +232,9 @@ public class Search
      * 11 April: Mitch
      * - redid the sql
      *
+     * 12 April: Mitch
+     * - it works for GeneralMovie, sorting out some issues with IndividualMovie
+     *
      * @param title The title of the movie.
      * @param actors A list of actors who are in the movie. Multiple actors should be separated by commas.
      * @param director The director of the movie
@@ -249,10 +255,10 @@ public class Search
             String query = generateMovieQuery(title, actors, director);
             int numParameters = 0;
             ArrayList<String> parameterList = new ArrayList<String>();
-            if (title != null)
+            if (title != null && title.trim().length() > 0)
             {
                 numParameters++;
-                parameterList.add(title);
+                parameterList.add(pad(title.trim()));
             }
             if (actors != null)
             {
@@ -260,18 +266,25 @@ public class Search
 
                 for (String actor : actorList)
                 {
-                    parameterList.add(actor.trim());
-                    numParameters++;
+                    if (actor != null && actor.trim().length() > 0)
+                    {
+                        parameterList.add(pad(actor.trim()));
+                        numParameters++;
+                    }
                 }
             }
-            if (director != null)
+            if (director != null && director.trim().length() > 0)
             {
                 numParameters++;
-                parameterList.add(director);
+                parameterList.add(pad(director.trim()));
             }
             if (numParameters == 0)
                 throw new IllegalArgumentException("Must provide at least one search term");
             String[] parameters = new String[numParameters];
+            for (int i = 0; i < numParameters; i++)
+            {
+                parameters[i] = parameterList.get(i);
+            }
             ResultSet result = connection.getResults(query, numParameters, parameters);
             ArrayList<GeneralMovie> searchResults = new ArrayList<GeneralMovie>();
             if (result.next())
@@ -317,6 +330,19 @@ public class Search
         {
             return searchResults;
         }*/
+    }
+
+
+
+    /**
+     * Pads a string with wildcard % symbols so that we can search for
+     * matches that only contain the term instead of equalling exactly
+     * @param str
+     * @return
+     */
+    private static String pad(String str)
+    {
+        return "%" + str + "%";
     }
 
 
@@ -415,7 +441,7 @@ public class Search
         // adding the query forms of the non-null parameters to the array list
         if (title != null)
         {
-            searchCriteria.add("videoInfo.title = ?");
+            searchCriteria.add("videoInfo.title LIKE ?");
         }
         
         
@@ -430,7 +456,7 @@ public class Search
         }
         if (director != null)
         {
-            searchCriteria.add("videoInfo.director = ?");
+            searchCriteria.add("videoInfo.director LIKE ?");
         }
 
         int numSearchCriteria = searchCriteria.size();
@@ -470,7 +496,7 @@ public class Search
      */
     public static GeneralMovie previewMovie(String barcodeID)
             throws MovieNotFoundException, SQLException,
-            IllegalArgumentException, ClassNotFoundException
+            IllegalArgumentException, ClassNotFoundException, Exception
     {
         int barcodeLength = barcodeID.length();
         GeneralMovie movie;
@@ -509,7 +535,7 @@ public class Search
      */
     private static IndividualMovie previewIndividualMovie(String barcodeID)
             throws MovieNotFoundException, SQLException, 
-            IllegalArgumentException, ClassNotFoundException
+            IllegalArgumentException, ClassNotFoundException, Exception
     {
         //String SKU = barcodeID.substring(0, GeneralMovie.SKU_LENGTH);
         //String copyNum = barcodeID.substring(GeneralMovie.SKU_LENGTH);
@@ -604,11 +630,12 @@ public class Search
      * @throws ClassNotFoundException
      */
     private static GeneralMovie previewGeneralMovie(String barcodeID)
-            throws SQLException, MovieNotFoundException, ClassNotFoundException
+            throws SQLException, MovieNotFoundException, ClassNotFoundException,
+            Exception
     {
-        String query = "SELECT * FROM VideoInfo, PhysicalVideo "
-                + "WHERE VideoInfo.InfoID = PhysicalVideo.InfoID "
-                + "AND PhysicalVideo.SKU = '" + barcodeID + "'";
+        String query = "SELECT * FROM videoInfo, physicalVideo "
+                + "WHERE videoInfo.InfoID = physicalVideo.InfoID "
+                + "AND physicalVideo.SKU = '" + barcodeID + "'";
         
         Connection connection = JDBCConnection.getConnection();
         try
@@ -624,11 +651,19 @@ public class Search
             String title = results.getString("Title");
             String actors = results.getString("Actors");
             String director = results.getString("Director");
-            int releaseDate = results.getInt("ReleaseDate");
-            String synopsis = results.getString("Synopsis");
+            String producer = results.getString("Producer");
+            Date releaseDate = results.getDate("releaseDate");
+            String synopsis = results.getString("Description");
+            String studio = results.getString("studio");
             String rating = results.getString("Rating");
             String genre = results.getString("Genre");
-            String publisher = results.getString("Publisher");
+
+            int retailPriceInCents = results.getInt("RetailPrice");
+            String format = results.getString("Format");
+            int length = results.getInt("length");
+
+            GregorianCalendar releaseCalendar = new GregorianCalendar();
+            releaseCalendar.setTime(releaseDate);
 
             if (results.next())
             {
@@ -637,7 +672,7 @@ public class Search
             }
             String[] actorList = actors.split(", ");
 
-
+/*
             // the format of releaseDate is YYYYMMDD, or an 8 digit integer
             // To get its four most significant digits, we want to get rid of
             // the four least significant, so divide it by 10^4
@@ -649,11 +684,26 @@ public class Search
             int day = (releaseDate % 100);
             java.util.GregorianCalendar release =
                     new java.util.GregorianCalendar(year, month, day);
+ *
+ */
             // copy and pasted GeneralMovie signature
-            //public GeneralMovie(String SKU, String title, String actors, String director, GregorianCalendar releaseDate, String synopsis)
-            return new GeneralMovie(barcodeID, title, actorList, director, release, synopsis);
-            // TODO: rating, genre, publisher fields in GeneralMovie
-            // TODO: maybe actorList is just a single string delimited by ,
+//            public GeneralMovie
+//            (String SKU,
+//            String title,
+//            String[] actors,
+//            String director,
+//            String producer,
+//            GregorianCalendar releaseDate,
+//            String synopsis,
+//            String genre,
+//	    String rating,
+//            String studio,
+//            int retailPriceInCents,
+//            String format,
+//            int runtime)
+            return new GeneralMovie(barcodeID, title, actorList, director, 
+                    producer, releaseCalendar, synopsis, genre,
+                    rating, studio, retailPriceInCents, format, length);
         } // end try
 
         finally
@@ -828,11 +878,7 @@ public class Search
      */
     private static ResultSet searchRentalsGetSQLResult(String query,
             String title, String[] actors, String director, Integer memberID)
-<<<<<<< HEAD
-            throws SQLException
-=======
             throws SQLException, ClassNotFoundException
->>>>>>> origin/master
     {
         ArrayList<String> searchTerms = consolidateSearchTerms(title, actors,
                 director, memberID);
@@ -841,10 +887,6 @@ public class Search
             return null;
         }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
         Connection connection = JDBCConnection.getConnection();
         try
         {
@@ -1081,7 +1123,8 @@ public class Search
      * is called on a closed result set
      */
     private static ArrayList<GeneralMovie> browseResultsList(ResultSet result)
-            throws SQLException
+            throws SQLException, MovieNotFoundException, ClassNotFoundException,
+            Exception
     {
         ArrayList<GeneralMovie> resultsList = new ArrayList<GeneralMovie>();
         while (result.next())

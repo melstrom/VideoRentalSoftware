@@ -1,5 +1,4 @@
 
-package jdbconnection;
 
 //package com.devdaily.sqlprocessortests;
 
@@ -47,14 +46,14 @@ public class JDBCConnectTest
   private void doSelectTest()
   {
     System.out.println("[OUTPUT FROM SELECT]");
-    String query = "SELECT * FROM Reservation";
+    String query = "SELECT * FROM physicalVideo";
     try
     {
       Statement st = conn.createStatement();
       ResultSet rs = st.executeQuery(query);
       while (rs.next())
       {
-        String s = rs.getString("dateTime");
+        String s = rs.getString("SKU");
         //float n = rs.getFloat("PRICE");
         System.out.println(s + "   ");
       }
@@ -109,7 +108,6 @@ public class JDBCConnectTest
   }
 }
 /*
-=======
 package jdbconnection;
 
 //package com.devdaily.sqlprocessortests;

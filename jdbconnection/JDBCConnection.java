@@ -111,12 +111,26 @@ public static Connection getConnection()
    * @return
    * @throws SQLException
    */
-  public PreparedStatement prepareStatement(String command)
+ 
+/*  public PreparedStatement prepareStatement(String command)
     throws SQLException{
 return conn.prepareStatement(command);
-  }
+  }*/
   
-  
+    /**
+   *
+   * @return
+   * @throws SQLException
+   */
+  /*public Statement prepareStatement(String command)
+    throws SQLException{
+      //try{
+          st = conn.prepareStatement(command);
+     // }
+      //catch(Exception egg){System.err.println(egg.getMessage());}
+      return st;
+  }*/
+
   
   
     /**
@@ -212,7 +226,7 @@ return conn.prepareStatement(command);
      *
      *
      */
-    public ResultSet getResults(String query) throws Exception
+    public ResultSet getResults(String query) throws SQLException, ClassNotFoundException
     {
         //System.out.println(query); // TESTING
         ResultSet result = null;
@@ -237,7 +251,7 @@ return conn.prepareStatement(command);
      * @throws SQLException if a connection to the database cannot be made
      */
     public ResultSet getResults(String query, int numParameters,
-            String[] parameters) throws Exception
+            String[] parameters) throws SQLException, ClassNotFoundException
     {
         ResultSet result = null;
         PreparedStatement statement = conn.prepareStatement(query);
@@ -258,7 +272,7 @@ return conn.prepareStatement(command);
      * @return
      * @throws Exception
      */
-    public int update(String query) throws Exception
+    public int update(String query) throws SQLException, ClassNotFoundException
     {
         int linesChanged = 0;
         Statement statement = conn.prepareStatement(query);

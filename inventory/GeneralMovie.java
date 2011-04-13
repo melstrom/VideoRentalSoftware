@@ -91,6 +91,57 @@ public class GeneralMovie
 
 
 
+    /**
+     * Constructor of GeneralMovie
+     * takes 12 parameters
+     * @param SKU
+     * @param title
+     * @param actors
+     * @param director
+     * @param producer
+     * @param releaseDate
+     * @param synopsis
+     * @param genre
+     * @param rating
+     * @param studio
+     * @param retailPriceInCents
+     * @param format
+     */
+
+    public GeneralMovie
+            (String SKU,
+            String title,
+            String actors,
+            String director,
+            String producer,
+            GregorianCalendar releaseDate,
+            String synopsis,
+            String genre,
+	    String rating,
+            String studio,
+            int retailPriceInCents,
+            String format,
+            int runtime)
+            throws Exception
+    {
+        reservations = new ArrayList<Reservation>();
+        this.title = title;
+        this.SKU = SKU;
+	this.director = director;
+        this.actors = actors.split(",");
+        this.synopsis = synopsis;
+	this.studio = studio;
+	this.releaseDate = releaseDate;
+        this.producer = producer;
+        this.retailPriceInCents = retailPriceInCents;
+	setRating(rating);
+        setGenre(genre);
+        setFormat(format);
+        this.runtime = runtime;
+    }
+
+
+
     public int getLength()
     {
         return runtime;
