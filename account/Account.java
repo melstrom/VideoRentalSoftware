@@ -21,7 +21,10 @@ package account;
  */
 public abstract class Account
 {
+    // accountID is the barcode number on the customers card, or the employee's id
+    // in the db, the customer barcode is customerID and employee's id is employeeID
     private int accountID;
+
     private String loginID;
     private String Fname;
     private String Lname;

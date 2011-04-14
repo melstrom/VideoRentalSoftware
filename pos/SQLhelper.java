@@ -81,6 +81,9 @@ public class SQLhelper
 	/**
 	 * Method to add a customer to the database.
 	 * @param theAddress an Address object that has not been saved
+	 * @param theAccount an Account object that has not been saved
+	 */
+	public addCustomer(Address theAddress, Account theAccount, Customer theCustomer)
 	
 	/**
 	 * Method to insert a Address into the db
