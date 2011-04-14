@@ -547,17 +547,47 @@ public class RentalMovieManagement {
     
     /**
      * This method splits a barcode into its SKU and rentalID 
+     * @param barcode the full barcode of a movie
+     * @param splitBarcode a working array where the two halves of the split
+     * barcode will be written
+     * @return splitBarcode will contain SKU in its first index, and the 
+     * rentalID or saleID portion of the barcode in the second index.  If there
+     * is not rentalID or saleID, null will be written there.
      * @throws IllegalArguementException
      * @pre barcode is set/not null
+     * @pre splitBarcode has length 2, the first index is used to store the SKU
+     * and the second index will be used to store the rentalID or saleID
      * @post if the barcode is longer than MAX_SKU_LENGTH, it is split into rentalID and SKU
      * @post if the barcode is between MIN_SKU_LENGTH and MAX_SKU_LENGTH, barcode is assign to SKU
      */
-    private void splitBarcode()
+    private static void splitBarcode(String barcode, String[] splitBarcode)
             throws IllegalArgumentException
     {
         if (barcode == null )
             throw new IllegalArgumentException("IllegalArgumentException: Invalid barcode number");
-	
+        int barcodeLength = barcode.length();
+        final int SKU_INDEX = 0;
+        final int COPY_NUM_INDEX = 1;
+        if (barcodeLength >= GeneralMovie.MIN_SKU_LENGTH
+                && barcodeLength <= GeneralMovie.MAX_SKU_LENGTH)
+        {
+            splitBarcode[SKU_INDEX] = barcode;
+            splitBarcode[COPY_NUM_INDEX] = null;
+        }
+        else if (barcodeLength <= GeneralMovie.MAX_SKU_LENGTH + IndividualMovie.ID_LENGTH)
+        {
+            
+            int copyNumStartIndex = barcodeLength - IndividualMovie.ID_LENGTH;
+            String copyNum = barcode.substring(copyNumStartIndex);
+            String SKU = barcode.substring(0, copyNumStartIndex);
+            splitBarcode[SKU_INDEX] = SKU;
+            splitBarcode[COPY_NUM_INDEX] = copyNum;
+        }
+        else
+        {
+            throw new IllegalArgumentException("Not a valid barcode");
+        }
+	/*
         if(barcode.length() > MAX_SKU_LENGTH)
         {
             rentalID = barcode.substring(barcode.length());
@@ -565,6 +595,39 @@ public class RentalMovieManagement {
         }
         else if(barcode.length() >= MIN_SKU_LENGTH && barcode.length()<= MAX_SKU_LENGTH)
         SKU = barcode;
+         * 
+         */
+    }
+    
+    
+    
+    /**
+     * 
+     * @throws IllegalArgumentException
+     */
+    private void splitBarcode()
+            throws IllegalArgumentException
+    {
+        int barcodeLength = barcode.length();
+        if (barcodeLength >= GeneralMovie.MIN_SKU_LENGTH
+                && barcodeLength <= GeneralMovie.MAX_SKU_LENGTH)
+        {
+            SKU = barcode;
+            rentalID = null;
+        }
+        else if (barcodeLength <= GeneralMovie.MAX_SKU_LENGTH + IndividualMovie.ID_LENGTH)
+        {
+
+            int copyNumStartIndex = barcodeLength - IndividualMovie.ID_LENGTH;
+            String copyNum = barcode.substring(copyNumStartIndex);
+            String SKU = barcode.substring(0, copyNumStartIndex);
+            this.SKU = SKU;
+            rentalID = copyNum;
+        }
+        else
+        {
+            throw new IllegalArgumentException("Not a valid barcode");
+        }
     }
 
     /**
