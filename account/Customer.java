@@ -21,7 +21,7 @@ public class Customer extends Account
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public Customer (String barcode, String DL, int accountID, String Fname, String Lname, String address, String phoneNum)
+    public Customer (String barcode, String DL, int accountID, String Fname, String Lname, Address address, String phoneNum)
     {
         super(accountID, Fname, Lname, address,phoneNum);
         this.DL = DL;

@@ -218,6 +218,24 @@ return conn.prepareStatement(command);
 
 
     /**
+     * creates an update query.
+     * @pre no parameter may be null
+     * @param tableName
+     * @param set
+     * @param constraint
+     * @return
+     */
+    public static String makeUpdate(String tableName, String set, String constraint)
+    {
+        String update = "UPDATE "+tableName+" "+
+                "SET "+set+" "+
+                "WHERE "+constraint;
+        return update;
+    }
+
+
+
+    /**
      * This method gets the results of an SQL query that you provide
      * @param query a SELECT FROM WHERE query
      * @return the results of the query
@@ -291,10 +309,10 @@ return conn.prepareStatement(command);
      * @param numParameters the number of ?s to fill in
      * @param parameters what to fill the ?s in with
      * @return the number of lines changed
-     * @throws Exception
+     * @throws SQLException if the database cannot be found
      */
     public int update(String query, int numParameters, String[] parameters)
-            throws Exception
+            throws SQLException, ClassNotFoundException
     {
        
         int linesChanged = 0;
