@@ -13,14 +13,13 @@ package account;
  *	-fixed demote(), promote() and editAccount()
  *
  * April 11
- * -added SQL statements; needs revision, see TODOs
- * //TODO: most methods are missing proper queries
+ * -added incomplete SQL statements; needs revision, see TODOs
+ * -most methods are missing proper queries
  *
  * April 14
- * Peter
- * TODO: Finish SQL queries for createEmployee
- * TODO: Finish SQL queries for createCustomer
- * TODO: Complete implementation for generateNewID
+ * First pass: SQL queries for createEmployee
+ * First pass: SQL queries for createCustomer
+ * Completed implementation for generateNewID
  *
  * Moved all unused methods to bottom
  * Changed name from generateBarcode to generateNewID
@@ -28,10 +27,16 @@ package account;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.sql.ResultSet;
 import jdbconnection.JDBCConnection;
 
 public class AccountManagement
 {
+
+    private Account account;
+    private JDBCConnection JDBC;
+    private Connection connection;
+    private Statement st;
 
     /**
      * Default constructor with no parameters
@@ -51,26 +56,28 @@ public class AccountManagement
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void createEmployee(String position, int accountID, String Fname, String Lname, String address, String phoneNum)
+    public void createEmployee(String employeeID, String position, String Fname, String Lname, String address, String phoneNum)
             throws SQLException, java.lang.Exception
     {
-        if (!isDuplicatedID(accountID, "employee"))
+        int accountID = this.generateNewAccountID();
+        account = new Employee(position, accountID, Fname, Lname, address, phoneNum);
+        try
         {
-            //TODO: Find last accountID
-            //TODO: Find last employeeID
-            account = new Employee(position, accountID, Fname, Lname, address, phoneNum);
-            try
-            {
-                st = JDBC.createStatement();
-                //TODO: Write the correct insert - consult Kristan
-                String employeeInsert = "INSERT INTO employee ()value();";
-                String accountInsert = "INSERT INTO account ()value();";
-                st.executeUpdate(employeeInsert);
-                st.executeUpdate(accountInsert);
-            } finally
-            {
-                JDBC.closeConnection();
-            }
+            st = JDBC.createStatement();
+            String accountInsert = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
+                    + accountID + ","
+                    + addressID + ","
+                    + firstName + ","
+                    + lastName + ")";
+            String employeeInsert = "INSERT INTO employee (employeeID, accountID) value("
+                    + employeeID + ","
+                    + accountID + ")";
+            st.executeUpdate(accountInsert);
+            st.executeUpdate(employeeInsert);
+        }
+        finally
+        {
+            JDBC.closeConnection();
         }
     }
 
@@ -83,39 +90,84 @@ public class AccountManagement
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void createCustomer(String DL, int accountID, String Fname, String Lname, String address, String phoneNum)
+    public void createCustomer(String customerID, String DL, String Fname, String Lname, String address, String phoneNum)
             throws SQLException, java.lang.Exception
     {
-        if (!isDuplicatedID(accountID, "customer"))
+        int accountID = this.generateNewAccountID();
+        account = new Customer(customerID, DL, accountID, Fname, Lname, address, phoneNum);
+        try
         {
-            account = new Customer(generateBarcode(), DL, accountID, Fname, Lname, address, phoneNum);
-            try
-            {
-                st = JDBC.createStatement();
-                //TODO: Write the correct insert - consult Kristan
-                String SQL = "INSERT INTO customer ()value();";
-                st.executeUpdate(SQL);
-            } finally
-            {
-                JDBC.closeConnection();
-            }
+            st = JDBC.createStatement();
+            String accountInsert = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
+                    + accountID + ","
+                    + addressID + ","
+                    + firstName + ","
+                    + lastName + ")";
+            String customerInsert = "INSERT INTO customer (customerID, accountID) value("
+                    + customerID + ","
+                    + accountID + ")";
+            st.executeUpdate(accountInsert);
+            st.executeUpdate(customerInsert);
+        }
+        finally
+        {
+            JDBC.closeConnection();
         }
     }
 
     /**
-     * Generates a new ID for adding a new customer or employee
-     * @return barcode
+     * @param accountType The account type to generate a new ID for (employee or customer)
+     * @return A new ID for a customer or employee
+     * @throws SQLException
      */
-    private String generateNewID() throws SQLException
+    public int generateNewID(String accountType) throws SQLException
     {
-        //TODO: implement logic; find last ID and assign next
         //SELECT account FROM customer/employee
         //ResultSet rs = st.execute(SQL);
         //rs.last();
         //LastID = rs.getString(1) 1=columnIndex
         //Convert into INT, +1, convert to string
-        String barcode = "101";
-        return barcode;
+        try
+        {
+        st = JDBC.createStatement();
+        String table = accountType;
+        String column = accountType + "ID";
+        String SQL = "SELECT " + column + " FROM " + table;
+        ResultSet rs = st.executeQuery(SQL);
+        rs.last();
+        int LastID = rs.getInt(column);
+        int newID = LastID + 1;
+        return newID;
+        }
+                finally
+        {
+            JDBC.closeConnection();
+        }
+    }
+
+    /**
+     * Prepares for creating a new account by generating the next accountID
+     * @return The next accountID in the
+     * @throws SQLException
+     */
+    private int generateNewAccountID() throws SQLException
+    {
+        try
+        {
+        st = JDBC.createStatement();
+        String table = "account";
+        String column = "accountID";
+        String SQL = "SELECT " + column + " FROM" + table;
+        ResultSet rs = st.executeQuery(SQL);
+        rs.last();
+        int LastAccountID = rs.getInt(column);
+        int newAccountID = LastAccountID + 1;
+        return newAccountID;
+        }
+                finally
+        {
+            JDBC.closeConnection();
+        }
     }
 
     /**
@@ -137,26 +189,26 @@ public class AccountManagement
     }
 
     /**
-     * Set personal information with 4 attributes
+     * Edits personal information with 4 attributes
      * @param Fname the first name of the user
      * @param Lname the last name of the user
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void setPersonalInfo(String Fname, String Lname, String address, String phoneNum)
+    public void editPersonalInfo(String Fname, String Lname, String address, String phoneNum)
     {
         account.setPersonalInfo(Fname, Lname, address, phoneNum);
     }
 
     /**
-     * Set personal information with 5 attributes
+     * Edits personal information with 5 attributes
      * @param DL the driver license id of the customer
      * @param Fname the first name of the user
      * @param Lname the last name of the user
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void setPersonalInfo(String DL, String Fname, String Lname, String address, String phoneNum)
+    public void editPersonalInfo(String DL, String Fname, String Lname, String address, String phoneNum)
     {
         Customer customer = (Customer) account;
         customer.setPersonalInfo(Fname, Lname, address, phoneNum);
@@ -183,12 +235,7 @@ public class AccountManagement
         employee.setPosition("Employee");
         account = employee;
     }
-    private Account account;
-    private JDBCConnection JDBC;
-    private Connection connection;
-    private Statement st;
 }
-
 //    /**
 //     * Check if an account id already exists in the database
 //     * @param ID an account ID
@@ -199,7 +246,7 @@ public class AccountManagement
 //    private boolean isDuplicatedID(int ID, String accountType)
 //            throws SQLException, ClassNotFoundException, java.lang.Exception
 //    {
-//        //TODO: generate correct query
+//        //TODO.: generate correct query
 //        String table = accountType;
 //        String column = accountType;
 //        int constraint = ID;
@@ -208,8 +255,6 @@ public class AccountManagement
 //        boolean result = statement.execute(query);
 //        return result;
 //    }
-
-
 //    /**
 //     * Set log in information
 //     * @param loginID the log in ID/username of the account
@@ -219,8 +264,6 @@ public class AccountManagement
 //    {
 //        account.setLogin(loginID, password);
 //    }
-
-
 //    /**
 //     * Change the status of the account (Active/Inactive)
 //     */
