@@ -15,6 +15,11 @@ package account;
  * April 11
  * -added SQL statements; needs revision, see TODOs
  * //TODO: most methods are missing proper queries
+ *
+ * April 14
+ * Peter
+ * TODO: Finish SQL queries for createEmployee
+ * TODO: Finish SQL queries for createCustomer
  */
 import java.sql.SQLException;
 import java.sql.Connection;
