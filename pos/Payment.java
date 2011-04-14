@@ -2,6 +2,7 @@ package pos;
 
 /**
 	An object representing a payment.
+	@author Peter
 */
 
 public class Payment
@@ -15,7 +16,7 @@ public class Payment
 	//@param requiredAmount the amount required in cents for the transaction.
 	
 	/**
-		Constructs a Cash payment with attributes required and collected payment.
+		Constructs a Cash payment.
 		
 		@param collectedAmount the amount the customer is paying in cents.
 		@param paymentMethod the method the customer is paying with.
@@ -28,7 +29,7 @@ public class Payment
 	
 	/**
 		Gets the amount the payment was in cents.
-		@return the amount in cents.
+		@return the collected amount in cents.
 	*/
 	public int getAmount()
 	{
