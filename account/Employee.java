@@ -42,6 +42,7 @@ public class Employee extends Account
      * @param Lname the last name of the user
      * @param address the address of the user
      * @param phoneNum the phone number of the user
+     * @param employeeID the employee's id
      */
     public Employee (String position, int accountID, String Fname, String Lname, Address address, String phoneNum, int employeeID)
     {
