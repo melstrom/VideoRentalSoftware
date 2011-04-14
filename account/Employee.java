@@ -28,6 +28,7 @@ public class Employee extends Account
      */
     public Employee (String position, int accountID, String Fname, String Lname, Address address, String phoneNum)
     {
+        //public Account(int accountID, String Fname, String Lname, Address address, String phoneNum)
         super(accountID, Fname, Lname, address,phoneNum);
         this.position = position;
     }
@@ -42,7 +43,7 @@ public class Employee extends Account
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public Employee (String position, int accountID, String Fname, String Lname, String address, String phoneNum, int employeeID)
+    public Employee (String position, int accountID, String Fname, String Lname, Address address, String phoneNum, int employeeID)
     {
         super(accountID, Fname, Lname, address,phoneNum);
 		this.employeeID = employeeID;

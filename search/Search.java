@@ -14,6 +14,7 @@ import inventory.RentalMovie;
 import jdbconnection.JDBCConnection;
 import java.util.Date;
 import java.util.Calendar;
+import java.io.IOException;
 import java.util.GregorianCalendar;
 import account.Address;
 import account.Employee;
@@ -631,7 +632,7 @@ public class Search
      */
     public static GeneralMovie previewMovie(String barcodeID)
             throws MovieNotFoundException, SQLException,
-            IllegalArgumentException, ClassNotFoundException
+            IllegalArgumentException, ClassNotFoundException, IOException
     {
         int barcodeLength = barcodeID.length();
         GeneralMovie movie;
@@ -668,24 +669,27 @@ public class Search
      * @throws SQLException
      * @throws IllegalArgumentException
      */
-    private static IndividualMovie previewIndividualMovie(String barcodeID)
+    public static IndividualMovie previewIndividualMovie(String barcodeID)
             throws MovieNotFoundException, SQLException, 
             IllegalArgumentException, ClassNotFoundException,
             java.io.IOException
     {
-        int barcodeLength = barcodeID.length();
-        int copyNumStartIndex = barcodeLength - IndividualMovie.ID_LENGTH;
-        String copyNum = barcodeID.substring(copyNumStartIndex);
-        String SKU = barcodeID.substring(0, copyNumStartIndex);
+        String[] splitBarcode = { null, null };
+        inventory.RentalMovieManagement.splitBarcode(barcodeID, splitBarcode);
+        String SKU = splitBarcode[0];
+        String copyNum = splitBarcode[1];
+        if (copyNum == null)
+        {
+            throw new IllegalArgumentException("Not an individual movie");
+        }
 
         GeneralMovie generalMovie = previewGeneralMovie(SKU);
         
         
-        String rentalQuery = "SELECT * FROM RentalVideo, PhysicalVideo,"
-                + " WHERE RentalVideo.SKU = ? AND RentalVideo.rentalID = ?";
-        String saleQuery = "SELECT * FROM SaleVideo, PhysicalVideo,"
-                + " WHERE SaleVideo.SKU = ? AND SaleVideo.rentalID = ?";
-
+        String rentalQuery = "SELECT * FROM videoRental, physicalVideo"
+                + " WHERE videoRental.SKU = ? AND videoRental.rentalID = ?";
+        String saleQuery = "SELECT * FROM videoSale, physicalVideo"
+                + " WHERE videoSale.SKU = ? AND videoSale.saleID = ?";
         Connection conn = JDBCConnection.getConnection();
         try
         {
@@ -695,7 +699,8 @@ public class Search
             statement.setString(parameterIndex, SKU);
             parameterIndex++;
             statement.setString(parameterIndex, copyNum);
-            ResultSet result = statement.executeQuery(rentalQuery);
+            //ResultSet result = statement.executeQuery(rentalQuery);
+            ResultSet result = statement.executeQuery();
             if (result.next())
             {
 //                String isNull = result.getString(1);
@@ -720,17 +725,18 @@ public class Search
             {
                 result.close();
                 statement.close();
-                statement = conn.prepareStatement(saleQuery);
+                statement = conn.prepareStatement(rentalQuery);
                 parameterIndex = 1;
                 // reset parameter index
                 statement.setString(parameterIndex, SKU);
                 parameterIndex++;
                 statement.setString(parameterIndex, copyNum);
-                result = statement.executeQuery(saleQuery);
+                result = statement.executeQuery();
                 if (result.next())
                 {
                     String category = result.getString("videoRental.catagory");
                     String format = result.getString("physicalVideo.format");
+                    System.out.println(format); // TESTING
                     String condition = result.getString("videoRental.condition");
                     PriceSchemeManagement priceScheme = new PriceSchemeManagement();
                     int priceInCents = priceScheme.getPrice(category, format);
@@ -738,6 +744,7 @@ public class Search
 
                     IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
                     RentalMovie rentalMovie = new RentalMovie(rentalPeriod, individualMovie);
+                    return rentalMovie;
                 // copy and pasted signature for RentalMovie
                 //public RentalMovie(int rentalPeriod, IndividualMovie movie)
                 }

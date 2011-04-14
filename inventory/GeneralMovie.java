@@ -533,7 +533,7 @@ public class GeneralMovie
     private ArrayList <Reservation> reservations;
     final private int ACTOR_COUNT=1;
     public static final int MIN_SKU_LENGTH = 10;
-    public static final int MAX_SKU_LENGTH = 25;
+    public static final int MAX_SKU_LENGTH = 18;
     public static final int INFO_ID_LENGTH = 9;
     private String producer;
     private String rating;
