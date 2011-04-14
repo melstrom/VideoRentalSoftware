@@ -125,6 +125,15 @@ public abstract class Account
         this.address = address;
     }
     /**
+     * Method to get the phone number
+     * return the phone number as a String
+     */
+    protected String getPhoneNum()
+    {
+	return phoneNum;
+    }
+
+    /**
      * Set phone number
      * @param phoneNum the phone number of the user
      */
