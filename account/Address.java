@@ -165,6 +165,16 @@ public class Address
     }
     
     /**
+     * Returns if this Address is already saved in the database.
+     * @returns true if the address is saved already
+     */
+    public boolean isSaved()
+    {
+	return saved;
+    }
+
+
+    /**
     	Updates the postal code for the Address; the address should be saved before doing updates to the object.
     	@param postalCode the postal code of the address
     	@throws ClassNotFoundException if JDBC driver is not in CLASSPATH
