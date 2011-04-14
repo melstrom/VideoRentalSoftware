@@ -19,19 +19,15 @@ public class Test_Employee
 	Address empAddress = new Address(223, "Cambie st.", "Vancouver", "B.C.", "Canada", "V6V 1V1");
 
 
-
-
-
-
-
-
 	String position = "slave";
 	int accountID = 5;
+	int employeeID = 6;
 	String firstName = "Tom";
 	String lastName = "Smith";
 	//String address = "4321 Electric Ave.";
 	String phoneNum = "604-555-9876";
-	Employee myEmployee = new Employee(position, accountID, firstName, lastName, empAddress, phoneNum);
+	Employee myEmployee = new Employee(position, accountID, firstName, lastName, empAddress, phoneNum, employeeID);
+
     }
 
 }

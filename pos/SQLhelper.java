@@ -78,6 +78,9 @@ public class SQLhelper
 		return total;
 	}
 	
+	/**
+	 * Method to add a customer to the database.
+	 * @param theAddress an Address object that has not been saved
 	
 	/**
 	 * Method to insert a Address into the db
