@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-//import search.Search;
+import search.Search;
 import inventory.MovieNotFoundException;
 import inventory.MovieNotAvailableException;
 import inventory.GeneralMovie;
@@ -15,6 +15,8 @@ import account.CustomerNotFoundException;
 import account.Customer;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Date;
+import java.util.Locale;
 import jdbconnection.JDBCConnection;
 
 /**
@@ -207,6 +209,64 @@ public class RentalMovieManagement {
        
     }
     
+    
+    
+    /**
+     * This method finds the rental period in days of a particular movie,
+     * given its barcode number.
+     * @param barcode the barcode of the IndividualMovie, or the SKU of a
+     * GeneralMovie
+     * @return -1 if it is not a proper ID
+     * @throws SQLException
+     * @throws MovieNotFoundException
+     * @throws ClassNotFoundException
+     * @throws Exception
+     */
+    public static int getRentalPeriod(String barcode)
+            throws SQLException, MovieNotFoundException, ClassNotFoundException
+    {
+        String category;
+        String query = JDBCConnection.makeQuery("catagories", 
+                "catagories.rentalLength", 
+                "catagories.catagory = ?");
+        if (barcode.length() < GeneralMovie.MIN_SKU_LENGTH)
+        {
+            return -1;
+        }
+        else if (barcode.length() <= GeneralMovie.MAX_SKU_LENGTH)
+        {
+            category = getGeneralMovieCategory(barcode);
+        }
+        else
+        {
+            IndividualMovie movie = (IndividualMovie) Search.previewMovie(barcode);
+            category = movie.getCategory();
+        }
+
+        if (category == null)
+        {
+            return -1;
+        }
+
+        int numParam = 1;
+        String[] params = { category };
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            ResultSet result = connection.getResults(query, numParam, params);
+            result.next();
+            int rentalPeriod = result.getInt(1);
+            return rentalPeriod;
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+    }
+
+
+
+
     public void getRentalPeriod() throws SQLException, MovieNotFoundException, Exception
     {
 	    String period = getRentalPeriodQuery();
@@ -225,6 +285,46 @@ public class RentalMovieManagement {
     {
         return movie.getCategory();
     }
+
+
+
+    /**
+     * Finds the category that a GeneralMovie's rental copies belong to.
+     * @pre A GeneralMovie does not have rental copies belonging to more than
+     * one category.  It may have for sale copies, however.
+     * @param SKU the SKU of the GeneralMovie
+     * @return null if no rental copies exist, or the category that the 
+     * rental copies belong to
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    private static String getGeneralMovieCategory(String SKU)
+            throws SQLException, ClassNotFoundException
+    {
+        String query = JDBCConnection.makeQuery("videoRental",
+                "videoRental.catagory",
+                "videoRental.SKU = ? AND NOT videoRental.catagory = ?");
+        int numParam = 2;
+        String[] param = { SKU, "for sale" };
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            ResultSet result = connection.getResults(query, numParam, param);
+            result.next();
+            if (result.wasNull())
+            {
+                return null;
+            }
+            return result.getString(1);
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+    }
+
+
+
     
     /**
      * Gets the format of the specified movie
@@ -644,41 +744,230 @@ public class RentalMovieManagement {
 
 
 
-    public GregorianCalendar getPickupDate(RentalMovie movie)
-            throws SQLException, ClassNotFoundException
+    public static void reserve(Customer customer, RentalMovie movie, GregorianCalendar pickUpDate)
+            throws MovieNotFoundException, ClassNotFoundException, SQLException
     {
-        return new GregorianCalendar();
+        // TODO: check for customer holds
+        int accountID = customer.getAccountID();
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            if (movie.getCondition().equalsIgnoreCase("available"))
+            {
+                String query = JDBCConnection.makeUpdate("rentalMovie", "condition = ?", "rentalID = ?");
+                String condition = "reserved";
+                String rentalID = movie.getBarcode().replaceAll(movie.getSKU(), "");
+                int numParam = 2;
+                String[] params = { condition, rentalID };
+                connection.update(query, numParam, params);
+                movie.setCondition(condition);
+            }
+            else
+            {
+                String dateTime = "" + pickUpDate.get(Calendar.YEAR) + "-";
+                dateTime = dateTime + pickUpDate.get(Calendar.MONTH) + "-";
+                dateTime = dateTime + pickUpDate.get(Calendar.DATE);
+                String[][] information = {
+                    {"dateTime", "madeReservations.SKU", "customerID"},
+                    {dateTime, movie.getSKU(), "" + accountID}
+                };
+                String query = JDBCConnection.makeInsert("madeReservations", information);
+                connection.update(query);
+            }
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+    }
+
+
+
+
+    /**
+     * This method gets the first available pick up day for a rental movie.
+     * It does not make any reservations.
+     * @param SKU the SKU of the movie you want to reserve
+     * @return null if the SKU passed does not correspond to any rental movies,
+     * otherwise the first available pick up date.
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws MovieNotFoundException
+     * @throws MovieNotAvailableException
+     */
+    public GregorianCalendar getPickupDate(String SKU)
+            throws SQLException, ClassNotFoundException, MovieNotFoundException,
+            MovieNotAvailableException
+    {
+        int numTotalRentalCopies = getTotalRentalCopies(SKU);
+        if (numTotalRentalCopies < 1)
+        {
+            throw new MovieNotAvailableException("There are no copies available" +
+                    " for rental or reservation");
+        }
+        int numAvailableCopies = getAvailableCopies(SKU);
+        if (numAvailableCopies > 0)
+        {
+            return new GregorianCalendar(); // the pick up day is today
+        }
+
+        ArrayList<Reservation> reservations = getReservations(SKU);
+        int numReservations = reservations.size();
+        
+        int rentalPeriod = getRentalPeriod(SKU);
+        
+        if (rentalPeriod < 1)
+        {
+            return null;
+            // should never get here
+        }
+        
+        ArrayList<GregorianCalendar> dueDates = new ArrayList<GregorianCalendar>();
+        for (Reservation reservation : reservations)
+        {
+            GregorianCalendar dueDate = reservation.getDate();
+            dueDates.add(dueDate);
+        }
+
+        while (numReservations >= numTotalRentalCopies)
+        {
+            for (GregorianCalendar dueDate : dueDates)
+            {
+                dueDate.add(GregorianCalendar.DATE, rentalPeriod + RentalMovie.RENTAL_HOLD_PERIOD + 1);
+                // the extra 1 is because the pick up day should be 1 day after the movie is returned
+            }
+            numReservations -= numTotalRentalCopies;
+        }
+        
+        return dueDates.get(numReservations);
     }
 
 
 
     /**
-     * This method finds the number of available copies of a GeneralMovie
+     * This method creates a list of Reservation objects for the GeneralMovie
+     * that the SKU belongs to.  Check the size of the arraylist after it is
+     * returned in case there are 0 reservations.
+     * TODO: needs testing
+     * @param SKU
+     * @return an arraylist of reservation objects
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public static ArrayList<Reservation> getReservations(String SKU)
+            throws SQLException, ClassNotFoundException
+    {
+        String query = JDBCConnection.makeQuery("madeReservations",
+                "madeReservations.dateTime, madeReservations.accountID",
+                "madeReservations.SKU = ?");
+        int numParam = 1;
+        String[] params = { SKU };
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            ResultSet results = connection.getResults(query, numParam, params);
+            ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+            while (results.next())
+            {
+                Date date = results.getDate("madeReservations.dateTime");
+                GregorianCalendar calendar = new GregorianCalendar();
+                calendar.setTime(date);
+                int accountID = results.getInt("madeReservations.accountID");
+                Reservation reservation = new Reservation(accountID, calendar);
+                reservations.add(reservation);
+            }
+            return reservations;
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+    }
+
+
+
+    /**
+     * This method finds the total number of rentalCopies in the store.  It
+     * considers anything that is not lost, broken, overdue, or for sale to be
+     * a valid contributing member to the total.
+     * @param SKU the SKU of the movie
+     * @return -1 if no such SKU exists, or else the number of total copies
+     * @throws MovieNotFoundException
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public static int getTotalRentalCopies(String SKU)
+            throws MovieNotFoundException, SQLException, ClassNotFoundException
+    {
+
+        if (!exists(SKU))
+        {
+            return -1;
+        }
+
+        String query = JDBCConnection.makeQuery("videoRental",
+                "COUNT(*)",
+                "(NOT videoRental.condition = ?) " +
+                "AND (NOT videoRental.condition = ?) " +
+                "AND (NOT videoRental.condition = ?) " +
+                "AND (NOT videoRental.catagory = ?) " +
+                "AND (videoRental.SKU = ?)");
+
+        int numParam = 5;
+        String[] params = { "broken", "lost", "overdue", "for sale", SKU };
+
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            ResultSet result = connection.getResults(query, numParam, params);
+            result.next();
+            return result.getInt(1);
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+    }
+
+
+
+    /**
+     * This method finds the number of available copies of a GeneralMovie,
+     * given that GeneralMovie's SKU
+     * @param SKU the SKU of the GeneralMovie
      * @return a non-negative number indicating the number of copies available
      * or a negative number if the store does not carry any copies.
      * @throws MovieNotFoundException if the movie passed is not known to
      * the video store
      *
      */
-    public int getAvailableCopies()
+    public static int getAvailableCopies(String SKU)
             throws MovieNotFoundException, SQLException, ClassNotFoundException
     {
-        String SKU = movie.getSKU();
         String query =
-                JDBCConnection.makeQuery("videoRental", "COUNT(*)", "videoRental.condition = 'available'");
+                JDBCConnection.makeQuery("videoRental",
+                "COUNT(*)",
+                "videoRental.SKU = ? AND videoRental.condition = ?");
+        if (!exists(SKU))
+        {
+            return -1;
+        }
         JDBCConnection connection = new JDBCConnection();
         try
         {
-            ResultSet result = connection.getResults(query);
-            if (!result.next())
-            {
-                return -1;
-            }
+            String[] parameters = { SKU, "available" };
+            int numParameters = 2;
+            ResultSet result = connection.getResults(query, numParameters, parameters);
+//            if (!result.next())
+//            {
+//                return -1;
+//            }
+            result.next();
             Integer numAvailableCopies = result.getInt(1);
-            if (result.wasNull())
-            {
-                return -1;
-            }
+//            if (result.wasNull())
+//            {
+//                return -1;
+//            }
             return numAvailableCopies;
 
         }
@@ -686,6 +975,51 @@ public class RentalMovieManagement {
         {
             connection.closeConnection();
         }
+    }
+
+
+
+    /**
+     * This method finds out if a GeneralMovie is known to the database.
+     * @param SKU the unique SKU of the GeneralMovie
+     * @return true if it exists, false if it does not
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public static boolean exists(String SKU)
+            throws SQLException, ClassNotFoundException
+    {
+        String query = JDBCConnection.makeQuery("physicalVideo", "COUNT(*)", "physicalVideo.SKU = ?");
+        int numParam = 1;
+        String[] params = { SKU };
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            ResultSet result = connection.getResults(query, numParam, params);
+            result.next();
+            int numFound = result.getInt(1);
+            return (numFound > 0);
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+    }
+    
+    
+    /**
+     * This method finds the number of available copies of a GeneralMovie
+     * @param movie the GeneralMovie
+     * @return a non-negative number indicating the number of copies available
+     * or a negative number if the store does not carry any copies.
+     * @throws MovieNotFoundException if the movie passed is not known to
+     * the video store
+     *
+     */
+    public static int getAvailableCopies(GeneralMovie movie)
+            throws MovieNotFoundException, SQLException, ClassNotFoundException
+    {
+        return getAvailableCopies(movie.getSKU());
     }
 
 

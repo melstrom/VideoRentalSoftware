@@ -118,4 +118,17 @@ public class IndividualMovie extends GeneralMovie{
    {
      return condition;
    }
+
+
+
+    /**
+     * This method gets the copy number of the IndividualMovie.  It corresponds
+     * to either the saleID or rentalID in the database.  It has package access.
+     * @return the copy number of the IndividualMovie object
+     */
+    String getCopyNum()
+    {
+        String copyNum = barcode.replaceAll(getSKU(), "");
+        return copyNum;
+    }
 }

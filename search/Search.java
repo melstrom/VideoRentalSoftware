@@ -15,6 +15,8 @@ import jdbconnection.JDBCConnection;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import account.Address;
+import account.Employee;
 
 
 /**
@@ -91,19 +93,16 @@ public class Search
         {
             String query = generateCustomerQuery(lastName, phoneNum);
             PreparedStatement statement = connection.prepareStatement(query);
-            if (lastName != null)
-            {
-                statement.setString(1, lastName);
-            }
-            
+            System.out.println(query); // TESTING
             ResultSet result = statement.executeQuery(query);
-
+            //ResultSet result = statement.executeQuery("SELECT customer.customerID FROM customer, account WHERE account.lastName LIKE '%c%' AND account.accountID = customer.accountID");
             
             while (result.next())
             {
-                String matchingAccountID = result.getString("accountID");
+                String matchingAccountID = result.getString("customer.customerID");
                 int matchingAccountID_int = Integer.parseInt(matchingAccountID);
                 matchingMembers.add(getCustomer(matchingAccountID_int));
+                System.out.println(getCustomer(matchingAccountID_int).getFname()); // TESTING
             }
             result.close();
         } // end try
@@ -139,9 +138,9 @@ public class Search
             return null;
         }
 
-        String query = "SELECT accountID FROM customer WHERE ";
-        String nameQuery = "lName = ?";
-        String phoneNumQuery = "phone = ";
+        String query = "SELECT customer.customerID FROM customer, account WHERE ";
+        String nameQuery = "account.lastName LIKE '" + pad(lastName.replaceAll("'", ""))+"'";
+        String phoneNumQuery = "account.phoneNum LIKE ";
 
         if (lastName != null && phoneNum == null)
         {
@@ -149,7 +148,7 @@ public class Search
         }
         else if (phoneNum != null && lastName == null)
         {          
-            phoneNumQuery += phoneNum;
+            phoneNumQuery += pad(phoneNum);
             query += phoneNumQuery;      
         }
         else
@@ -157,6 +156,7 @@ public class Search
             phoneNumQuery += phoneNum;
             query += nameQuery + " AND " + phoneNumQuery;
         }
+        query += " AND account.accountID = customer.accountID";
         return query;
     }
 
@@ -174,46 +174,91 @@ public class Search
      * @throws SQLException if a connection with the database cannot be made
      * @throws ClassNotFoundException if the driver cannot be found
      *
-     * TODO: find out length of memberID and check to make the sure the
-     * pass parameter matches
      */
     
     public static Customer getCustomer(int memberID)
             throws SQLException, ClassNotFoundException
     {
-        Connection connection = JDBCConnection.getConnection();
+        JDBCConnection conn = new JDBCConnection();
+        //Connection connection = JDBCConnection.getConnection();
         try
         {
-            Statement statement = connection.createStatement();
-            String query = "SELECT * FROM Customer WHERE accountID = '"
-                    + memberID + "'";
-            ResultSet result = statement.executeQuery(query);
-            if (result.next())
-            {
-                String firstName = result.getString("fName");
-                String lastName = result.getString("lName");
-                String address = result.getString("address");
-                String driversLicenseNum = result.getString("dlsin");
-                String phoneNum = result.getString("phone");
-                String altPhoneNum = result.getString("altPhone");
+//            Statement statement = connection.createStatement();
+//            String query = "SELECT * FROM Customer WHERE accountID = '"
+//                    + memberID + "'";
+//            ResultSet result = statement.executeQuery(query);
+//            if (result.next())
+//            {
+//                String firstName = result.getString("fName");
+//                String lastName = result.getString("lName");
+//                String address = result.getString("address");
+//                String driversLicenseNum = result.getString("dlsin");
+//                String phoneNum = result.getString("phone");
+//                String altPhoneNum = result.getString("altPhone");
+//
+//
+//                result.close();
+//                return new Customer(""+memberID, driversLicenseNum, memberID,
+//                        firstName, lastName
+//                // copy and pasted signature from the Customer class
+//                //public Customer (String barcode, String DL, int accountID,
+//                //String Fname, String Lname, Address address, String phoneNum)
+//            } // end if
+//            else
+//            {
+//                result.close();
+//                return null;
+//            }
+            
+                String query = conn.makeQuery("address, account, customer", 
+                        null, 
+                        "address.addressID = account.addressID " +
+                        "AND account.accountID = customer.accountID " +
+                        "AND customer.customerID = ?");
+                int numParam = 1;
+                String[] params = { "" + memberID };
+                ResultSet result = conn.getResults(query, numParam, params);
+                if (!result.next())
+                {
+                    return null;
+                }
+                String barcode = "" + memberID;
+                String driversLicense = result.getString("customer.driversLicense");
+                String firstName = result.getString("account.firstName");
+                String lastName = result.getString("account.lastName");
+                String phoneNum = result.getString("account.phoneNum");
 
+                // copy and pasted address constructor
+//                public Address(
+//                    int houseNumber,
+//                    String streetName,
+//                    String city,
+//                    String province,
+//                    String country,
+//                    String postalCode)
 
-                result.close();
-                return new Customer(driversLicenseNum, memberID, firstName,
-                        lastName, address, phoneNum);
+                int houseNumber = result.getInt("address.houseNumber");
+                String streetName = result.getString("address.streetName");
+                String city = result.getString("address.city");
+                String province = result.getString("address.province");
+                String country = result.getString("address.country");
+                String postalCode = result.getString("address.postalCode");
+                int addressID = result.getInt("address.addressID");
+
+                Address address = new Address(addressID, houseNumber, streetName,
+                        city, province, country, postalCode);
+
+                return new Customer(barcode, driversLicense, memberID,
+                        firstName, lastName, address, phoneNum);
                 // copy and pasted signature from the Customer class
-                //Customer(String DL, int accountID, String Fname,
-                //String Lname, String address, String phoneNum)
-            } // end if
-            else
-            {
-                result.close();
-                return null;
-            }
+                //public Customer (String barcode, String DL, int accountID,
+                //String Fname, String Lname, Address address, String phoneNum)
+                
         }// end try
         finally
         {
-            connection.close();
+            //connection.close();
+            conn.closeConnection();
         }
     }
 
@@ -496,7 +541,7 @@ public class Search
      */
     public static GeneralMovie previewMovie(String barcodeID)
             throws MovieNotFoundException, SQLException,
-            IllegalArgumentException, ClassNotFoundException, Exception
+            IllegalArgumentException, ClassNotFoundException
     {
         int barcodeLength = barcodeID.length();
         GeneralMovie movie;
@@ -535,7 +580,7 @@ public class Search
      */
     private static IndividualMovie previewIndividualMovie(String barcodeID)
             throws MovieNotFoundException, SQLException, 
-            IllegalArgumentException, ClassNotFoundException, Exception
+            IllegalArgumentException, ClassNotFoundException
     {
         //String SKU = barcodeID.substring(0, GeneralMovie.SKU_LENGTH);
         //String copyNum = barcodeID.substring(GeneralMovie.SKU_LENGTH);
@@ -630,8 +675,7 @@ public class Search
      * @throws ClassNotFoundException
      */
     private static GeneralMovie previewGeneralMovie(String barcodeID)
-            throws SQLException, MovieNotFoundException, ClassNotFoundException,
-            Exception
+            throws SQLException, MovieNotFoundException, ClassNotFoundException
     {
         String query = "SELECT * FROM videoInfo, physicalVideo "
                 + "WHERE videoInfo.InfoID = physicalVideo.InfoID "
