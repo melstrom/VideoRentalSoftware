@@ -12,6 +12,15 @@ package inventory;
 
 public class RentalMovie extends IndividualMovie{
 
+    
+    public static final int ID_LENGTH = IndividualMovie.ID_LENGTH;
+    public static final int RENTAL_HOLD_PERIOD = 3;
+    // period of time a rental movie is held for before it goes back to rental circulation
+
+    private int rentalPeriod;
+
+
+
     /**
      * Empty constructor
      */
@@ -48,8 +57,6 @@ public class RentalMovie extends IndividualMovie{
     }
    
 
-    public static final int ID_LENGTH = IndividualMovie.ID_LENGTH;
-    private int rentalPeriod;
   
   /**
   * Set rental period for this movie

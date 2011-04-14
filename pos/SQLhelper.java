@@ -2,6 +2,8 @@
 package pos;
 //import pos.Transaction;
 import account.Address;
+import account.Employee;
+import java.util.ArrayList;
 
 // sql stuff
 import java.lang.ClassNotFoundException;
@@ -30,6 +32,25 @@ public class SQLhelper
 	public static final String GENERALMOVIE_TABLE_PK = "InfoID";
 	public static final String ADDRESS_TABLE_NAME = "address";
 	public static final String ADDRESS_TABLE_PK = "addressID";
+	public static final String EMPLOYEE_TABLE_NAME = "employee";
+	public static final String EMPLOYEE_TABLE_PK = "employeeID";
+	public static final String ACCOUNT_TABLE_NAME = "account";
+	public static final String ACCOUNT_TABLE_PK = "accountID";
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
 
 	private Statement statement;
 	private PreparedStatement pstatement;
@@ -156,7 +177,7 @@ public class SQLhelper
 		
 		rs.next();
 		
-		return new Address(
+		Address myAddress = new Address(
 			addressID,
 			rs.getInt("houseNumber"),
 			rs.getString("streetName"),
@@ -164,7 +185,56 @@ public class SQLhelper
 			rs.getString("province"),
 			rs.getString("country"),
 			rs.getString("postalCode"));
+		closeConnection();
+		
+		return myAddress;
 	}
+	
+	/**
+		Method to get an ArrayList of all employees in the database.
+		@throws ClassNotFoundException if JDBC driver is not in CLASSPATH
+		@throws SQLException if a database access error occurs or this method is called on a closed connection or no results
+	*/
+	public ArrayList<Employee> getAllEmployees() throws ClassNotFoundException, SQLException
+	{
+        ArrayList<Employee> allEmployees = new ArrayList<Employee>();
+        String queryString = "SELECT "
+        	+ "position, "
+        	+ "employee.accountID, "
+        	+ "firstName, "
+        	+ "lastName, "
+        	+ "houseNumber, "
+        	+ "streetName, "
+        	+ "city, "
+        	+ "province, "
+        	+ "postalCode, "
+        	+ "country, "
+        	+ "phoneNum "
+        	+ "FROM employee, account, address WHERE employee.accountID=account.accountID AND account.accountID=address.addressID";
+        
+        
+        setupStatement();
+        ResultSet resultSet = statement.executeQuery(queryString);
+        while (resultSet.next())
+        {
+        	String position = resultSet.getString("position");
+        	int accountID = resultSet.getInt("accountID");
+        	String firstName = resultSet.getString("firstName");
+        	String lastName = resultSet.getString("lastName");
+        	String houseNumber = resultSet.getString("houseNumber");
+        	String streetName = resultSet.getString("streetName");
+        	String city = resultSet.getString("city");
+        	String province = resultSet.getString("province");
+        	String postalCode = resultSet.getString("postalCode");
+        	String country = resultSet.getString("country");
+        	String phoneNum = resultSet.getString("phoneNum");
+        	
+        	String address =  houseNumber +" "+ streetName +", "+ city +", "+ province +", "+ postalCode +", "+ country;
+        	
+        	allEmployees.add(new Employee(position, accountID, firstName, lastName, address, phoneNum));
+        }
+		return allEmployees;
+    }
 	
 	/**
 		Method to insert transaction info into the db table.

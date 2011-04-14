@@ -71,7 +71,6 @@ public class GeneralMovie
             int retailPriceInCents,
             String format,
             int runtime)
-            throws Exception
     {
         reservations = new ArrayList<Reservation>();
         this.title = title;
@@ -171,7 +170,7 @@ public class GeneralMovie
 
 
 
-    public final void setFormat(String format) throws Exception
+    public final void setFormat(String format)
     {
        /* String tableName = "formats";
         String query =

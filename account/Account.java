@@ -19,6 +19,18 @@ package account;
  */
 public abstract class Account
 {
+    private int accountID;
+    private String loginID;
+    private String Fname;
+    private String Lname;
+    private String phoneNum;
+    private Address address;
+    private String password;
+    private boolean status;
+
+
+    public static final int ID_LENGTH = 9;
+
     /**
      * Account default constructor
      * @param accountID the account ID of the user
@@ -27,7 +39,7 @@ public abstract class Account
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public Account(int accountID, String Fname, String Lname, String address, String phoneNum)
+    public Account(int accountID, String Fname, String Lname, Address address, String phoneNum)
     {
         this.accountID = accountID;
         this.Fname = Fname;
@@ -53,7 +65,7 @@ public abstract class Account
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void setPersonalInfo(String Fname, String Lname, String address, String phoneNum)
+    public void setPersonalInfo(String Fname, String Lname, Address address, String phoneNum)
     {
         setFname(Fname);
         setLname(Lname);
@@ -104,7 +116,7 @@ public abstract class Account
      * Set address
      * @param address the address of the user
      */
-    protected void setAddress(String address)
+    protected void setAddress(Address address)
     {
         this.address = address;
     }
@@ -144,7 +156,7 @@ public abstract class Account
      * Get address
      * @return address the address of the user
      */
-    public String getAddress()
+    public Address getAddress()
     {
         return address;
     }
@@ -164,15 +176,4 @@ public abstract class Account
     {
         return status;
     }
-    private int accountID;
-    private String loginID;
-    private String Fname;
-    private String Lname;
-    private String phoneNum;
-    private String address;
-    private String password;
-    private boolean status;
-
-
-    public static final int ID_LENGTH = 9;
 }

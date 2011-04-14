@@ -1,5 +1,6 @@
 package pos;
 
+
 /*
 todos/decisions
 - when will transactionID be set? when payment is made or when transaction is completed?
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Date;
 /**
 	A point of sales transaction.
+	@author Peter
 	@see "class diagram from SRS+SDD from teamMitch"
 */
 

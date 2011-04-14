@@ -7,6 +7,7 @@ import java.lang.ClassNotFoundException;
 import java.sql.SQLException;
 /**
     This Address holds the info about an address.
+    @author Peter
 */
 public class Address
 {
@@ -184,7 +185,11 @@ public class Address
 	private void check(String theVariable) throws IllegalStateException
 	{
 		if (saved == false)
+		{
 			throw new IllegalStateException(theVariable + " can not be updated because the address is not in the database");
+			// maybe delete above line and save it if it is not saved.
+			// saveInDB();
+		}
 	}
 
 

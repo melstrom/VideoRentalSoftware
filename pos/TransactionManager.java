@@ -20,6 +20,7 @@ import java.util.Date;
 
 /**
 	This object manages one transaction, the current one.
+	@author Peter
 */
 public class TransactionManager
 {
