@@ -5,6 +5,7 @@ package account;
  *
  *      Stores basic information of an account
  *      @author mattp
+ *      @author Peter
  *	@version 1.0 March 30, 2011
  *      changed it to be an abstract class: Mitch
 	@version 1.1 April 2
@@ -15,6 +16,7 @@ package account;
  *          - made the constant with the length of an account ID as 9 to prevent
  *              integer overflow (2^32 - 1 = ~2e9, so ID numbers of 1e8 - 9e8
  *              are safe)
+ *      - commented out methods and attributes to do with status
 		
  */
 public abstract class Account
@@ -26,7 +28,7 @@ public abstract class Account
     private String phoneNum;
     private Address address;
     private String password;
-    private boolean status;
+//    private boolean status;
 
 
     public static final int ID_LENGTH = 9;
@@ -46,7 +48,7 @@ public abstract class Account
         this.Lname = Lname;
         this.address = address;
         this.phoneNum = phoneNum;
-        status = true;
+ //       status = true;
     }
     /**
      * Set log in information
@@ -72,14 +74,14 @@ public abstract class Account
         setAddress(address);
         setPhoneNum(phoneNum);
     }
-    /**
+    /*
      * Set status of the account 
      * @param status the status of the account(Active/Inactive)
-     */
     public void changeStatus()
     {
         status = !status;
     }
+    */
     /**
      * Set password
      * @param password the password of the account
@@ -168,12 +170,12 @@ public abstract class Account
     {
         return password;
     }
-    /**
+/*
      * Get status
      * @return status the status of the account (True = Active/False = Inactive)
-     */
     public boolean getStatus()
     {
         return status;
     }
+    */
 }

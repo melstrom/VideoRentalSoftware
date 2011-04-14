@@ -10,15 +10,37 @@
  */
 
 package ui;
-
+import java.util.ArrayList;
+import java.util.Vector;
+import search.Search;
+import account.*;
 /**
  *
  * @author alby
  */
 public class EmployeeFrame extends javax.swing.JFrame {
 
+    private ArrayList<Employee> employeeInfoObj;
+    private Vector<Vector<String>> data;
+    private Vector<String> header;
+    private Search searcher = new Search();
     /** Creates new form EmployeeFrame */
-    public EmployeeFrame() {
+    public EmployeeFrame()throws Exception {
+        int width = 2;
+        employeeInfoObj = searcher.getAllEmployees();
+        for(int i = 0; i < employeeInfoObj.size(); i++){
+           Vector<String> secondRow = new Vector<String>();
+           for(int j = 0; j < width; j++){
+               secondRow.add("" + employeeInfoObj.get(j).getEmployeeID());
+               secondRow.add(employeeInfoObj.get(j).getPosition());
+           }
+           data.add(secondRow);
+        }
+        
+        header = new Vector<String>();
+        header.add("Name");
+        header.add("Position");
+
         initComponents();
     }
 
@@ -36,19 +58,49 @@ public class EmployeeFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
+        customerIdField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        customerInfoPanel = new javax.swing.JPanel();
+        nameLabel = new javax.swing.JLabel();
+        customerIDLabel = new javax.swing.JLabel();
+        penaltyCustomerLabel = new javax.swing.JLabel();
+        statusCustomerLabel = new javax.swing.JLabel();
+        addressCustomerLabel = new javax.swing.JLabel();
+        nameField = new javax.swing.JTextField();
+        idField = new javax.swing.JTextField();
+        idField1 = new javax.swing.JTextField();
+        idField2 = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        barcodeField2 = new javax.swing.JTextField();
+        barcodeLabel = new javax.swing.JLabel();
+        checkInButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
+        promoteEmpButton = new javax.swing.JButton();
+        DemoteEmpButton = new javax.swing.JButton();
+        holdtablejScrollPane = new javax.swing.JScrollPane();
+        namePositionTable = new javax.swing.JTable();
+        addEmpButton = new javax.swing.JButton();
+        RemoveEmpButton = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel1.setText("Customer ID:");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -64,15 +116,106 @@ public class EmployeeFrame extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jTextField1.setText("jTextField1");
+        customerIdField1.setText("12345");
 
         jButton1.setText("Search");
 
-        jLabel2.setText("First Name");
+        customerInfoPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jTextField2.setText("jTextField2");
+        nameLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        nameLabel.setText("Name:");
 
-        jLabel3.setText("Last Name");
+        customerIDLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        customerIDLabel.setText("CustomerID:");
+
+        penaltyCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        penaltyCustomerLabel.setText("Penalty:");
+
+        statusCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        statusCustomerLabel.setText("Status:");
+
+        addressCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        addressCustomerLabel.setText("Address:");
+
+        nameField.setEditable(false);
+        nameField.setText("Customer Name");
+        nameField.setFocusable(false);
+
+        idField.setEditable(false);
+        idField.setText("12345678");
+        idField.setFocusable(false);
+
+        idField1.setEditable(false);
+        idField1.setText("$123");
+        idField1.setFocusable(false);
+
+        idField2.setEditable(false);
+        idField2.setFocusable(false);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setEditable(false);
+        jTextArea1.setRows(5);
+        jScrollPane3.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout customerInfoPanelLayout = new javax.swing.GroupLayout(customerInfoPanel);
+        customerInfoPanel.setLayout(customerInfoPanelLayout);
+        customerInfoPanelLayout.setHorizontalGroup(
+            customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(customerInfoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(customerInfoPanelLayout.createSequentialGroup()
+                        .addComponent(nameLabel)
+                        .addGap(53, 53, 53)
+                        .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(addressCustomerLabel))
+                    .addGroup(customerInfoPanelLayout.createSequentialGroup()
+                        .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(customerIDLabel)
+                            .addComponent(penaltyCustomerLabel)
+                            .addComponent(statusCustomerLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(idField2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(idField1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        customerInfoPanelLayout.setVerticalGroup(
+            customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(customerInfoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(customerInfoPanelLayout.createSequentialGroup()
+                        .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(nameLabel)
+                            .addComponent(addressCustomerLabel)
+                            .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(customerIDLabel)
+                            .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(penaltyCustomerLabel)
+                            .addComponent(idField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(statusCustomerLabel)
+                            .addComponent(idField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        barcodeField2.setText("12345678");
+
+        barcodeLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        barcodeLabel.setText("Barcode:");
+
+        checkInButton.setText("Check In");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -81,19 +224,21 @@ public class EmployeeFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 511, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
+                        .addGap(26, 26, 26)
+                        .addComponent(customerIdField1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
                         .addComponent(jButton1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
+                    .addComponent(customerInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel3))
-                .addContainerGap(180, Short.MAX_VALUE))
+                        .addComponent(barcodeLabel)
+                        .addGap(26, 26, 26)
+                        .addComponent(barcodeField2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(checkInButton)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,31 +246,63 @@ public class EmployeeFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(customerIdField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(customerInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addGap(70, 70, 70)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(barcodeLabel)
+                    .addComponent(barcodeField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkInButton))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Check In", jPanel1);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 701, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 474, Short.MAX_VALUE)
-        );
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(jTable3);
+
+        jPanel2.add(jScrollPane4);
+
+        jLabel2.setText("jLabel2");
+        jPanel2.add(jLabel2);
+
+        jTextField1.setText("jTextField1");
+        jPanel2.add(jTextField1);
+
+        jLabel3.setText("jLabel3");
+        jPanel2.add(jLabel3);
+
+        jTextField2.setText("jTextField2");
+        jPanel2.add(jTextField2);
+
+        jLabel4.setText("jLabel4");
+        jPanel2.add(jLabel4);
+
+        jButton6.setText("jButton6");
+        jPanel2.add(jButton6);
+
+        jButton7.setText("jButton7");
+        jPanel2.add(jButton7);
+
+        jButton8.setText("jButton8");
+        jPanel2.add(jButton8);
+
+        jButton9.setText("jButton9");
+        jPanel2.add(jButton9);
 
         jTabbedPane1.addTab("Check Out", jPanel2);
 
@@ -137,7 +314,7 @@ public class EmployeeFrame extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 474, Short.MAX_VALUE)
+            .addGap(0, 515, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Membership", jPanel3);
@@ -150,20 +327,61 @@ public class EmployeeFrame extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 474, Short.MAX_VALUE)
+            .addGap(0, 515, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Inventory", jPanel4);
+
+        promoteEmpButton.setText("Promote");
+
+        DemoteEmpButton.setText("Demote");
+
+        namePositionTable.setModel(new javax.swing.table.DefaultTableModel(
+            data,header
+        ));
+        holdtablejScrollPane.setViewportView(namePositionTable);
+
+        addEmpButton.setText("Add");
+
+        RemoveEmpButton.setText("Remove");
+        RemoveEmpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RemoveEmpButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 701, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(holdtablejScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(DemoteEmpButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(promoteEmpButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RemoveEmpButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addEmpButton, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
+                .addContainerGap(221, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 474, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(addEmpButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(RemoveEmpButton)
+                        .addGap(5, 5, 5)
+                        .addComponent(promoteEmpButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DemoteEmpButton))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(holdtablejScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(145, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Employee", jPanel5);
@@ -176,28 +394,36 @@ public class EmployeeFrame extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 474, Short.MAX_VALUE)
+            .addGap(0, 515, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("tab6", jPanel6);
+        jTabbedPane1.addTab("Main", jPanel6);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 706, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
+
+        pricePanel = new ui.PriceSchemePanel();
+        jTabbedPane1.addTab("Price Scheme", pricePanel);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void RemoveEmpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveEmpButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RemoveEmpButtonActionPerformed
 
     /**
     * @param args the command line arguments
@@ -205,16 +431,37 @@ public class EmployeeFrame extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                try{
                 new EmployeeFrame().setVisible(true);
+                }catch(Exception E){}
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton DemoteEmpButton;
+    private javax.swing.JButton RemoveEmpButton;
+    private javax.swing.JButton addEmpButton;
+    private javax.swing.JLabel addressCustomerLabel;
+    private javax.swing.JTextField barcodeField2;
+    private javax.swing.JLabel barcodeLabel;
+    private javax.swing.JButton checkInButton;
+    private javax.swing.JLabel customerIDLabel;
+    private javax.swing.JTextField customerIdField1;
+    private javax.swing.JPanel customerInfoPanel;
+    private javax.swing.JScrollPane holdtablejScrollPane;
+    private javax.swing.JTextField idField;
+    private javax.swing.JTextField idField1;
+    private javax.swing.JTextField idField2;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -222,10 +469,21 @@ public class EmployeeFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private ui.PriceSchemePanel pricePanel;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField nameField;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JTable namePositionTable;
+    private javax.swing.JLabel penaltyCustomerLabel;
+    private javax.swing.JButton promoteEmpButton;
+    private javax.swing.JLabel statusCustomerLabel;
     // End of variables declaration//GEN-END:variables
 
 }

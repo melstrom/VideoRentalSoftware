@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace min="28" pref="28" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="genreTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="producerTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="directorTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="actorTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="studioTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lengthTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ratingTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="supplierTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="yearTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="titleTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="skuAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="mediaTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="mediaTypeAddNewTitleTextField" pref="210" max="32767" attributes="1"/>
+                          <Component id="skuAddNewTitleTextField" alignment="0" pref="210" max="32767" attributes="1"/>
+                          <Component id="titleAddNewTitleTextField" alignment="0" pref="210" max="32767" attributes="1"/>
+                          <Component id="lengthAddNewTitleTextField" alignment="0" pref="210" max="32767" attributes="1"/>
+                          <Component id="ratingAddNewTitleTextField" alignment="0" pref="210" max="32767" attributes="1"/>
+                          <Component id="studioAddNewTitleTextField" alignment="0" pref="210" max="32767" attributes="1"/>
+                          <Component id="actorsAddNewTitleTextField" alignment="0" pref="210" max="32767" attributes="1"/>
+                          <Component id="directorAddNewTitleTextField" alignment="0" pref="210" max="32767" attributes="1"/>
+                          <Component id="producerAddNewTitleTextField" alignment="0" pref="210" max="32767" attributes="1"/>
+                          <Component id="genreAddNewTitleTextField" alignment="0" pref="210" max="32767" attributes="1"/>
+                          <Component id="yearAddNewTitleSpinner" alignment="0" min="-2" pref="83" max="-2" attributes="0"/>
+                          <Component id="supplierAddNewTitleTextField" alignment="0" pref="210" max="32767" attributes="1"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="infoTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" pref="272" max="32767" attributes="1"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="255" max="32767" attributes="0"/>
+              <Component id="saveAddNewTitleButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+              <Component id="CancelAddNewTitleButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="titleTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="titleAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="skuAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="skuAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="mediaTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="mediaTypeAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="yearAddNewTitleSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="yearTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="supplierAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="supplierTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="genreTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="genreAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="producerTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="producerAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="directorTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="directorAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="actorTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="actorsAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="studioTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="studioAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="ratingTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ratingAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lengthTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lengthAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jScrollPane1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="infoTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="CancelAddNewTitleButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="saveAddNewTitleButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="titleTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Title"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="yearTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Year"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="supplierTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Supplier"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="infoTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Description"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="titleAddNewTitleTextField">
+    </Component>
+    <Component class="javax.swing.JSpinner" name="yearAddNewTitleSpinner">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+        <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="yearAddNewTitleSpinner.setModel(new SpinnerNumberModel(2011, 1888, 3000, 1));"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JTextField" name="supplierAddNewTitleTextField">
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextArea" name="descriptionAddNewTitleTextArea">
+          <Properties>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="rows" type="int" value="5"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JButton" name="CancelAddNewTitleButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Cancel"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CancelAddNewTitleButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="saveAddNewTitleButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Save"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="genreTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Genre"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="producerTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Producer"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="actorTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Actors"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="studioTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Studio"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="ratingTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Rating"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lengthTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Length"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="directorTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Director"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="genreAddNewTitleTextField">
+    </Component>
+    <Component class="javax.swing.JTextField" name="producerAddNewTitleTextField">
+    </Component>
+    <Component class="javax.swing.JTextField" name="directorAddNewTitleTextField">
+    </Component>
+    <Component class="javax.swing.JTextField" name="actorsAddNewTitleTextField">
+    </Component>
+    <Component class="javax.swing.JTextField" name="studioAddNewTitleTextField">
+    </Component>
+    <Component class="javax.swing.JTextField" name="ratingAddNewTitleTextField">
+    </Component>
+    <Component class="javax.swing.JTextField" name="lengthAddNewTitleTextField">
+    </Component>
+    <Component class="javax.swing.JLabel" name="skuAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="SKU"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="mediaTypeAddNewTitleLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Media Type"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="skuAddNewTitleTextField">
+    </Component>
+    <Component class="javax.swing.JTextField" name="mediaTypeAddNewTitleTextField">
+    </Component>
+  </SubComponents>
+</Form>

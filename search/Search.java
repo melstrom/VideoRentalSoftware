@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import account.Address;
 import account.Employee;
-
+import pos.*;
 
 /**
  * The Search class is a utility class that searches the database for Movies,
@@ -93,7 +93,6 @@ public class Search
         {
             String query = generateCustomerQuery(lastName, phoneNum);
             PreparedStatement statement = connection.prepareStatement(query);
-            System.out.println(query); // TESTING
             ResultSet result = statement.executeQuery(query);
             //ResultSet result = statement.executeQuery("SELECT customer.customerID FROM customer, account WHERE account.lastName LIKE '%c%' AND account.accountID = customer.accountID");
             
@@ -102,7 +101,6 @@ public class Search
                 String matchingAccountID = result.getString("customer.customerID");
                 int matchingAccountID_int = Integer.parseInt(matchingAccountID);
                 matchingMembers.add(getCustomer(matchingAccountID_int));
-                System.out.println(getCustomer(matchingAccountID_int).getFname()); // TESTING
             }
             result.close();
         } // end try
@@ -175,7 +173,6 @@ public class Search
      * @throws ClassNotFoundException if the driver cannot be found
      *
      */
-    
     public static Customer getCustomer(int memberID)
             throws SQLException, ClassNotFoundException
     {
@@ -183,33 +180,6 @@ public class Search
         //Connection connection = JDBCConnection.getConnection();
         try
         {
-//            Statement statement = connection.createStatement();
-//            String query = "SELECT * FROM Customer WHERE accountID = '"
-//                    + memberID + "'";
-//            ResultSet result = statement.executeQuery(query);
-//            if (result.next())
-//            {
-//                String firstName = result.getString("fName");
-//                String lastName = result.getString("lName");
-//                String address = result.getString("address");
-//                String driversLicenseNum = result.getString("dlsin");
-//                String phoneNum = result.getString("phone");
-//                String altPhoneNum = result.getString("altPhone");
-//
-//
-//                result.close();
-//                return new Customer(""+memberID, driversLicenseNum, memberID,
-//                        firstName, lastName
-//                // copy and pasted signature from the Customer class
-//                //public Customer (String barcode, String DL, int accountID,
-//                //String Fname, String Lname, Address address, String phoneNum)
-//            } // end if
-//            else
-//            {
-//                result.close();
-//                return null;
-//            }
-            
                 String query = conn.makeQuery("address, account, customer", 
                         null, 
                         "address.addressID = account.addressID " +
@@ -260,6 +230,126 @@ public class Search
             //connection.close();
             conn.closeConnection();
         }
+    }
+    
+    
+    
+    /**
+     * This method retrieves the Employee account with the provided member ID from
+     * the database.  Depends on both the Employee class and the employee
+     * table in the database.
+     *
+     *
+     * @param employeeID the unique identifying number of the member
+     * @return the member's account, or null if the member ID did not match any
+     * records
+     * @throws SQLException if a connection with the database cannot be made
+     * @throws ClassNotFoundException if the driver cannot be found
+     *
+     */
+    public static Employee getEmployee(int employeeID)
+            throws SQLException, ClassNotFoundException
+    {
+        JDBCConnection conn = new JDBCConnection();
+        //Connection connection = JDBCConnection.getConnection();
+        try
+        {
+                String query = conn.makeQuery("address, account, employee", 
+                        null, 
+                        "address.addressID = account.addressID " +
+                        "AND account.accountID = employee.accountID " +
+                        "AND employee.employeeID = ?");
+                int numParam = 1;
+                String[] params = { "" + employeeID };
+                ResultSet result = conn.getResults(query, numParam, params);
+                if (!result.next())
+                {
+                    return null;
+                }
+                String barcode = "" + employeeID;
+                String position = result.getString("employee.position");
+                String firstName = result.getString("account.firstName");
+                String lastName = result.getString("account.lastName");
+                String phoneNum = result.getString("account.phoneNum");
+
+                // copy and pasted address constructor
+//                public Address(
+//                    int houseNumber,
+//                    String streetName,
+//                    String city,
+//                    String province,
+//                    String country,
+//                    String postalCode)
+
+                int houseNumber = result.getInt("address.houseNumber");
+                String streetName = result.getString("address.streetName");
+                String city = result.getString("address.city");
+                String province = result.getString("address.province");
+                String country = result.getString("address.country");
+                String postalCode = result.getString("address.postalCode");
+                int addressID = result.getInt("address.addressID");
+
+                Address address = new Address(addressID, houseNumber, streetName,
+                        city, province, country, postalCode);
+
+                return new Employee(position, employeeID, firstName, lastName,
+                        address, phoneNum);
+                // copy and pasted signature from the Employee class
+                //public Employee (String position, int accountID, String Fname, String Lname, Address address, String phoneNum)
+                
+        }// end try
+        finally
+        {
+            //connection.close();
+            conn.closeConnection();
+        }
+    }
+    
+    
+    
+    /**
+		Method to get an ArrayList of all employees in the database.
+		@throws ClassNotFoundException if JDBC driver is not in CLASSPATH
+		@throws SQLException if a database access error occurs or this method is called on a closed connection or no results
+	*/
+	public static ArrayList<Employee> getAllEmployees()
+                throws ClassNotFoundException, SQLException
+	{
+        ArrayList<Employee> allEmployees = new ArrayList<Employee>();
+        String queryString = JDBCConnection.makeQuery("employee, account, address",
+                null, 
+                "employee.accountID=account.accountID AND account.accountID=address.addressID");
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            ResultSet resultSet = connection.getResults(queryString);
+            while (resultSet.next())
+            {
+                    String position = resultSet.getString("position");
+                    int accountID = resultSet.getInt("accountID");
+                    String firstName = resultSet.getString("firstName");
+                    String lastName = resultSet.getString("lastName");
+                    int houseNumber = resultSet.getInt("houseNumber");
+                    String streetName = resultSet.getString("streetName");
+                    String city = resultSet.getString("city");
+                    String province = resultSet.getString("province");
+                    String postalCode = resultSet.getString("postalCode");
+                    String country = resultSet.getString("country");
+                    String phoneNum = resultSet.getString("phoneNum");
+                    int addressID = resultSet.getInt("address.addressID");
+
+                    Address address = new Address(addressID, houseNumber, streetName,
+                        city, province, country, postalCode);
+
+                    allEmployees.add(new Employee(position, accountID, firstName, lastName, address, phoneNum));
+            }
+            return allEmployees;
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+        
     }
 
 
@@ -580,11 +670,9 @@ public class Search
      */
     private static IndividualMovie previewIndividualMovie(String barcodeID)
             throws MovieNotFoundException, SQLException, 
-            IllegalArgumentException, ClassNotFoundException
+            IllegalArgumentException, ClassNotFoundException,
+            java.io.IOException
     {
-        //String SKU = barcodeID.substring(0, GeneralMovie.SKU_LENGTH);
-        //String copyNum = barcodeID.substring(GeneralMovie.SKU_LENGTH);
-        
         int barcodeLength = barcodeID.length();
         int copyNumStartIndex = barcodeLength - IndividualMovie.ID_LENGTH;
         String copyNum = barcodeID.substring(copyNumStartIndex);
@@ -610,51 +698,56 @@ public class Search
             ResultSet result = statement.executeQuery(rentalQuery);
             if (result.next())
             {
-                String isNull = result.getString(1);
-                if (!result.wasNull())
-                {
+//                String isNull = result.getString(1);
+//                if (!result.wasNull())
+//                {
                     
-                    String category = result.getString("SaleVideo.category");
-                    //String format = result.getString("PhysicalVideo.format");
-                    String condition = result.getString("SaleVideo.condition");
+                    String category = result.getString("videoSale.category");
+                    String format = result.getString("physicalVideo.format");
+                    String condition = result.getString("videoSale.condition");
 
-                    // need to call PriceScheme and get the price
 
                     // copy and pasted IndividualMovie constructor:
-                    //public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition)
-                    return new IndividualMovie(generalMovie, category, format,
-                            condition, barcodeID);
-                    // TODO: fix this call to comply with the constructor of IndividualMovie
+                    //   public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition
+
+                    PriceSchemeManagement priceScheme = new PriceSchemeManagement();
+                    int priceInCents = priceScheme.getPrice(category, format);
+                    IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
+                    return individualMovie;
+//                }
+            }
+            else
+            {
+                result.close();
+                statement.close();
+                statement = conn.prepareStatement(saleQuery);
+                parameterIndex = 1;
+                // reset parameter index
+                statement.setString(parameterIndex, SKU);
+                parameterIndex++;
+                statement.setString(parameterIndex, copyNum);
+                result = statement.executeQuery(saleQuery);
+                if (result.next())
+                {
+                    String category = result.getString("videoRental.catagory");
+                    String format = result.getString("physicalVideo.format");
+                    String condition = result.getString("videoRental.condition");
+                    PriceSchemeManagement priceScheme = new PriceSchemeManagement();
+                    int priceInCents = priceScheme.getPrice(category, format);
+                    int rentalPeriod = PriceSchemeManagement.getRentalPeriod(category);
+
+                    IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
+                    RentalMovie rentalMovie = new RentalMovie(rentalPeriod, individualMovie);
+                // copy and pasted signature for RentalMovie
+                //public RentalMovie(int rentalPeriod, IndividualMovie movie)
                 }
-            
                 else
                 {
-                    result.close();
-                    statement.close();
-                    statement = conn.prepareStatement(saleQuery);
-                    parameterIndex = 1;
-                    // reset parameter index
-                    statement.setString(parameterIndex, SKU);
-                    parameterIndex++;
-                    statement.setString(parameterIndex, copyNum);
-                    result = statement.executeQuery(saleQuery);
-                    if (result.next())
-                    {
-                        String category = result.getString("SaleVideo.category");
-                        String format = result.getString("PhysicalVideo.format");
-                        String condition = result.getString("SaleVideo.condition");
-                        return new IndividualMovie(generalMovie, category, format,
-                                condition, barcodeID);
-                    // copy and pasted signature for RentalMovie
-                    //public RentalMovie(int rentalPeriod, IndividualMovie movie)
-                    }
-                    else
-                    {
-                        throw new MovieNotFoundException("MovieNotFoundException:"
-                                + " could not find that barcode");
-                    }
-
+                    throw new MovieNotFoundException("MovieNotFoundException:"
+                            + " could not find that barcode");
                 }
+
+
             }
         }
         finally

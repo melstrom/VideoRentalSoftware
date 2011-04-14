@@ -112,10 +112,10 @@ public static Connection getConnection()
    * @throws SQLException
    */
  
-/*  public PreparedStatement prepareStatement(String command)
+  public PreparedStatement prepareStatement(String command)
     throws SQLException{
-return conn.prepareStatement(command);
-  }*/
+        return conn.prepareStatement(command);
+  }
   
     /**
    *
