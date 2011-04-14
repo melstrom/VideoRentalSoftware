@@ -79,11 +79,32 @@ public class SQLhelper
 	}
 	
 	/**
-	 * Method to add a customer to the database.
-	 * @param theAddress an Address object that has not been saved
+	 * Method to add a customer or employee to the database.
 	 * @param theAccount an Account object that has not been saved
+	 * @throws IllegalStateException if the customer or employee is already in the db (based on dl for customer and based on ph for employee)
 	 */
-	public addCustomer(Address theAddress, Account theAccount, Customer theCustomer)
+	public void createAccount(Account theAccount)
+	{
+	    if (employee)
+	    {
+		insertNewEmployee(theAccount);
+	    }
+	    else
+	    {
+		insertNewCustomer(theAccount);
+	    }
+
+	}
+
+	/**
+	 * Method to add a customer to the database.
+	 * @param theCustomer the customer account to add to the database
+	 * @throws IllegalStateException if the customer is already in the database (based on dl)
+	 */
+	private void insertNewCustomer(Customer theCustomer)
+	{
+
+	}
 	
 	/**
 	 * Method to insert a Address into the db
