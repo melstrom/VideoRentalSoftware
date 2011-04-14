@@ -5,6 +5,7 @@ import account.Customer;
 import java.util.Date;
 /**
  * This is a inventory item that the store carries with it's own unique barcode number; The classes that should implement this interface include: physical video, refund, penalty, lost movie, discount.
+ 	@author Peter
  */
 public interface TransactionItem
 {

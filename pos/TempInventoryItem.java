@@ -2,6 +2,7 @@ package pos;
 
 /**
 	this is a temporary stub object so that unit testing of TransactionManager can be done.
+	@author Peter
 */
 
 public class TempInventoryItem implements TransactionItem
