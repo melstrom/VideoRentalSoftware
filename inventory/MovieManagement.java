@@ -12,6 +12,11 @@ import java.sql.ResultSet;
 import jdbconnection.JDBCConnection;
 
 /**
+ * Apr 13
+ *  -added queries for addRequestMovie(), removeRequestMovie(), createGeneralMovie()
+ *  -createGeneralMovie() takes 13 attributes
+ *  -added internal comments
+ *  -converted Date and Calendar to GregorianCalendar
  * April 9 (Saturday)
  * -changes to match changes in other classes
  * -issues:
@@ -71,7 +76,7 @@ public class MovieManagement
     private static Statement statement;
 
     /**
-     *
+     * Default constructor
      */
     public MovieManagement() throws SQLException, ClassNotFoundException
     {
@@ -79,8 +84,8 @@ public class MovieManagement
     }
 
     /**
-     *
-     * @param movie
+     * Constructor takes a parameter
+     * @param movie a movie to be managed
      */
     public MovieManagement(GeneralMovie movie) throws SQLException, ClassNotFoundException
     {
@@ -92,33 +97,48 @@ public class MovieManagement
      * Constructs a new movie as part of the movie catalog
      * @param info contains the 7 required information to identify a movie
      */
-    /*
-    public void createGeneralMovie(String[] info, GregorianCalendar releaseDate)
+    
+    public void createGeneralMovie(String SKU,
+            String title,
+            String[] actors,
+            String director,
+            String producer,
+            GregorianCalendar releaseDate,
+            String synopsis,
+            String genre,
+	    String rating,
+            String studio,
+            int retailPrice,
+            String format,
+            int runtime)throws MissingFieldException,SQLException, MovieExistsException, java.lang.Exception
     {
-    String SKU = info[0];
+
     try
     {
-    this.checkNULLinfo(info);
     this.checkDuplicateSKU(SKU);
-    String title = info[1];
-    String actors = info[2];
-    String director = info[3];
-    //String releaseDate = info[4];     //use Calendar type at UI to eliminate conversion
-    String synopsis = info[4];
-    String genre = info[5];
-    //splits the actors into an array of actors
-    //String[] actorArray = actors.split(",");
+ 
+    this.movie = new GeneralMovie(SKU,title,actors,director,producer,releaseDate, synopsis,
+                     genre,rating,studio,retailPrice,format, runtime);
+    String actorsList="";
+    for(int i=0; i<actors.length; i++)
+    actorsList +=actors[i]+",";
 
 
-    this.movie = new GeneralMovie(SKU, title, actors, director, releaseDate, synopsis); //pass in actors? or actorArray?
-
-    //INSERT INTO VideoInfo VALUES (SKU, title, director, releaseDate, actors, synopsis)
+    String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
+    String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
+    String query = generateInsertSQL("videoInfo",columns, values );
+    statement.executeUpdate(query);
+    String columns1[]= {"SKU","Format","InfoID","RentalPrice"};
+    String values1[] = {SKU,format, SKU, ""+retailPrice};
+    query = generateInsertSQL("physicalVideo",columns1, values1);
+    statement.executeUpdate(query);
     } //Catch here
     finally
     {
     connection.close();
     }
-    }*/
+    }
+    
     /**
      * Adds a GeneralMovie to the database by inserting into the videoInfo
      * and physicalVideo tables.  It first searches to see if the information
@@ -198,10 +218,14 @@ public class MovieManagement
             conn.closeConnection();
         }
     }
-
+    /**
+     * Generic method to create a constraint for a movie
+     * @param movie
+     * @return a constraint
+     */
     private static String makePreparedConstraint(GeneralMovie movie)
     {
-        java.util.Calendar releaseDate = movie.getReleaseDate();
+        java.util.GregorianCalendar releaseDate = movie.getReleaseDate();
         int runtime = movie.getLength();
         String[] actors = movie.getActors();
         String constraint = "";
@@ -234,7 +258,7 @@ public class MovieManagement
      * @return
      * TODO: use PreparedStatement to prevent escaping queries with '
      */
-    private static String makeConstraint(GeneralMovie movie)
+   /*private static String makeConstraint(GeneralMovie movie)
     {
 
         //String SKU = movie.getSKU();
@@ -271,7 +295,7 @@ public class MovieManagement
         constraint += " AND ";
         constraint += "length = '" + runtime + "'";
         return constraint;
-    }
+    }*/
 
     /**
      * Creates a string of the form
@@ -309,11 +333,11 @@ public class MovieManagement
      * @param releaseDate
      * @return
      */
-    private static String makeReleaseDateString(Calendar releaseDate)
+    private static String makeReleaseDateString(GregorianCalendar releaseDate)
     {
-        String year = "" + releaseDate.get(Calendar.YEAR);
-        String month = "-" + releaseDate.get(Calendar.MONTH);
-        String day = "-" + releaseDate.get(Calendar.DATE);
+        String year = "" + releaseDate.get(GregorianCalendar.YEAR);
+        String month = "-" + releaseDate.get(GregorianCalendar.MONTH);
+        String day = "-" + releaseDate.get(GregorianCalendar.DATE);
         String datetime = year + month + day;
         return datetime;
     }
@@ -341,7 +365,7 @@ public class MovieManagement
      * This method finds the highest ID number that currently exists
      * @pre The ID number is an integer
      * @pre The ID number has a minimum value of 100000000
-     * @return
+     * @return the highest ID
      * @throws Exception
      */
     private static int getHighestID(String table, String column) throws Exception
@@ -392,7 +416,7 @@ public class MovieManagement
         String studio = movie.getStudio();
         String synopsis = movie.getSynopsis();
         String rating = movie.getRating();
-        java.util.Calendar releaseDate = movie.getReleaseDate();
+        java.util.GregorianCalendar releaseDate = movie.getReleaseDate();
         String genre = movie.getGenre();
         String length = "" + movie.getLength();
 
@@ -461,8 +485,8 @@ public class MovieManagement
 
     /**
      * This method adds a physical video to the database tables
-     * @param infoID
-     * @param movie
+     * @param infoID the id for a physical video
+     * @param movie a movie
      * @throws Exception
      */
     private static void addPhysicalVideo(int infoID, GeneralMovie movie)
@@ -502,25 +526,11 @@ public class MovieManagement
         }
     }
 
-//    final protected void addNewTitle() throws SQLException
-//    {
-//        String table = "Videoinfo";
-//        String query = "insert into" + table
-//                + "values (" + quote + "" + quote + comma//infoID
-//                + quote + title + quote + comma
-//                + quote + director + quote + comma
-//                + quote + releaseDate.get(releaseDate.YEAR) + releaseDate.get(releaseDate.MONTH) + releaseDate.get(releaseDate.DATE) + quote + comma
-//                + quote + actors + quote + comma
-//                + quote + synopsis + quote + comma
-//                + quote + SKU + quote
-//                + ");";
-//
-//        executeQuery(query);
-//    }
+
     /**
      * Constructs a new single copy of a movie
      * @param category the category the movie belongs to (need to find out more about this)
-     * @param format the media format of the movie (VHS, DVD, Bluray)
+     * @param format the media format of the movie (VHS, DVD, Blu-ray)
      * @param barcode the unique identification of the individual movie copy
      */
     public void addCopy(GeneralMovie generalMovie, String type) throws SQLException
@@ -561,7 +571,7 @@ public class MovieManagement
             //splits the actors into an array of actors
             String[] actorArray = actors.split(",");
 
-            //movie.setSKU(SKU);                //GM does not have setSKU:allowed to edit at all?
+         
             movie.setTitle(title);
             movie.setActors(actorArray);
             movie.setDirector(director);
@@ -589,7 +599,8 @@ public class MovieManagement
 //        return quantity;
 //    }
     /**
-     * 
+     *  Get an arrayList of MovieRequests
+     *  @return an arrayList of MovieRequests
      */
     public ArrayList<MovieRequest> getRequest() throws SQLException
     {
@@ -614,8 +625,8 @@ public class MovieManagement
 //            String format = resultSet.getString("Format");
             int customerID = resultSet.getInt("CustomerID");
             Date datetime = resultSet.getDate("datetime");
-            //TODO: Convert Date to GC;
-            //Database and entity object mismatch
+            GregorianCalendar releaseDate = new GregorianCalendar();
+            releaseDate.setTime(datetime);
             String format = "TEST FORMAT";
 
             this.request = new MovieRequest(SKU, format, releaseDate, customerID);
@@ -623,8 +634,12 @@ public class MovieManagement
         }
         return movieRequest;
     }
-
-    public void addRequest(IndividualMovie copy, Customer account)
+    /**
+     * Add a request to request list
+     * @param copy
+     * @param account
+     */
+    public void addRequest(IndividualMovie copy, Customer account)throws SQLException
     {
         //String title, String format, Date releaseDate, CustomerAccount requestAcc
         this.copy = copy;
@@ -635,8 +650,58 @@ public class MovieManagement
         int accountID = account.getAccountID();
 
         this.request = new MovieRequest(title, format, releaseDate, accountID);
-        //request.createQueue();
+        createRequest(copy, account);
         //TODO: createQueue does nothing, needs to be implemented (considering moving it here to implement)
+       // madeSpecialOrders customerID SKU
+    }
+    /**
+     * Create query for special order
+     * @param copy
+     * @param account
+     * @throws SQLException
+     */
+    private void createRequest(IndividualMovie copy, Customer account)throws SQLException
+    {
+        String tablename = "madeSpecialOrders";
+        String columns[] = {"datetime", "SKU", "customerID"};
+        Calendar today = Calendar.getInstance();
+        today.setTime(today.getTime());
+        String time = makeReleaseDateString((GregorianCalendar)today);
+        String values[] = {time,copy.getSKU(),""+account.getAccountID()};
+        String query = generateInsertSQL(tablename, columns, values);
+        statement.executeUpdate(query);
+        
+    }
+    /**
+     * Generate generic insert queries
+     * @param tableName
+     * @param columnNames
+     * @param values
+     * @return a query
+     */
+    private String generateInsertSQL(String tableName, String[] columnNames, String[] values)
+    {
+
+        String query = "INSERT INTO "+tableName+" (";
+        for (int i = 0; i < columnNames.length; i++)
+        {
+            query += columnNames[i];
+            if (i != columnNames.length - 1)
+            {
+                query += ", ";
+            }
+        }
+        query += ") VALUES (";
+        for (int i = 0; i < values.length; i++)
+        {
+            query = query + "'"+values[i]+"'";
+            if (i != values.length - 1)
+            {
+                query += ", ";
+            }
+        }
+        query += ")";
+        return query;
     }
 
     /**
@@ -650,11 +715,8 @@ public class MovieManagement
         String SKU = request.getSKU();
         int CustomerID = request.getAccountID();
 
-        //DELETE FROM madeSpecialOrders WHERE SKU=SKU and CustomerID=CustomerID
-        //Incomplete/wrong query; stub
-        //TODO: Needs quick lookover
+        String query = "DELETE FROM+ "+ table+ " WHERE SKU= '"+SKU +"' and " + "CustomerID= '"+CustomerID+"'";
 
-        String query = this.generateQuery(table, "", table);
         ResultSet resultSet = statement.executeQuery(query);
         resultSet.deleteRow();
     }
@@ -722,7 +784,7 @@ public class MovieManagement
      * @param table The table being queried
      * @param column The column the query will return
      * @param constraint The constraint of the query
-     * @return
+     * @return a query
      */
     private static String generateQuery(String table, String column, String constraint)
     {
@@ -732,7 +794,7 @@ public class MovieManagement
 
     /**
      * Tests whether inputs for movie info are NULLs
-     * @param info
+     * @param info any attribute
      */
     private void checkNULLinfo(String[] info) throws MissingFieldException
     {
@@ -745,14 +807,19 @@ public class MovieManagement
             }
         }
     }
-
+    /**
+     * Generate a rental/sale ID
+     * @param type the ID type
+     * @return an ID
+     * @throws SQLException
+     * @pre type is rental/sale
+     */
     private int generateNewID(String type) throws SQLException
     {
         String table = "TABLE";
-        //TODO: Make generic for sale or rental
         String column = type+"ID";
         String constraint = "";
-        String query = this.generateQuery(table, column, constraint);
+        String query = generateQuery(table, column, constraint);
         ResultSet resultSet = statement.executeQuery(query);
         resultSet.last();
         int LastID = resultSet.getInt(0);
@@ -760,7 +827,12 @@ public class MovieManagement
 
         return newID;
     }
-
+    /**
+     * Add a line to videoSale table
+     * @param generalMovie
+     * @return a barcode for this saleMovie
+     * @throws SQLException
+     */
     private String addSaleMovie(GeneralMovie generalMovie) throws SQLException
     {
         //this.checkDuplicateBarcode(barcode);
@@ -779,7 +851,12 @@ public class MovieManagement
         String newBarCode = SKU + newSaleID;
         return newBarCode;
     }
-
+    /**
+     * Add a line to videoSale table
+     * @param generalMovie
+     * @return a barcode for this rentalMovie
+     * @throws SQLException
+     */
     private String addRentalMovie(GeneralMovie generalMovie) throws SQLException
     {
         //this.checkDuplicateBarcode(barcode);
