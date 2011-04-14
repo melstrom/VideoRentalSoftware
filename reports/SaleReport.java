@@ -1,8 +1,8 @@
-package reports;
-
-import java.util.Date;
+pacakge reports;
+import java.util.GregorianCalendar;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
   This is an entity object of the ReportPackage.
@@ -44,23 +44,30 @@ public class SaleReport
      * set here. As mentioned above, there will be no setter methods.
      *
      * @post all the attributes will be set.
-     * @param Date startDate the starting date of the report.
-     * @param Date endDate the ending date of the report.
+     * @param GregorianCalendar startDate the starting date of the report.
+     * @param GregorianCalendar endDate the ending date of the report.
      * @throws SQLException database error.
      */
-    public SaleReport(Date startDate, Date endDate)
-            throws SQLException
+    public SaleReport(GregorianCalendar startDate, GregorianCalendar endDate)
+            throws SQLException, ClassNotFoundException
     {
         this.startDate = startDate;
         this.endDate = endDate;
 
         JDBCConnection conn = new JDBCConnection();
-        conn.getConnction();
+        conn.getConnection();
         try
         {
+            String sDateString = "" + startDate.get(startDate.YEAR) + "-" +
+                    (startDate.get(startDate.MONTH) + 1) + "-" +
+                    startDate.get(startDate.DATE);
+            String eDateString = "" + endDate.get(endDate.YEAR) + "-" +
+                    (endDate.get(endDate.MONTH) + 1) + "-" +
+                    endDate.get(endDate.DATE);
+            
             PreparedStatement stat = conn.prepareStatement("SELECT * FROM invoice"
-                    + "WHERE dateTime >= " + startDate.toString() + " AND "
-                    + "dateTime <= " + endDate.toString() + ";");
+                    + " WHERE dateTime BETWEEN '" + sDateString + "' AND '"
+                    + eDateString + "';");
             boolean hasResult = stat.execute();
             if(hasResult)
             {
@@ -115,7 +122,7 @@ public class SaleReport
         }
         finally
         {
-            conn.close();
+            conn.closeConnection();
         }
     }
 
@@ -133,18 +140,18 @@ public class SaleReport
      */
     private void analyzeCashInvoices(ArrayList<String> cashInvoiceIDs,
             ArrayList<String> cashInvoiceTaxRate)
-            throws SQLException
+            throws SQLException, ClassNotFoundException
     {
         JDBCConnection conn = new JDBCConnection();
         conn.getConnection();
         try
         {
             //prepare the SQL command
-            String command = "SELCT * FROM item WHERE invoiceID = ";
+            String command = "SELECT * FROM item WHERE invoiceID = ";
             int i = 0;
             for(; i < cashInvoiceIDs.size()-1; i++)
                 command += cashInvoiceIDs.get(i) + " OR invoiceID = ";
-            command += cashInvoiceIDs.get(++i) + ";";
+            command += cashInvoiceIDs.get(i) + ";";
             //execute it.
             PreparedStatement stat = conn.prepareStatement(command);
             boolean hasResult = stat.execute();
@@ -154,7 +161,7 @@ public class SaleReport
 
                 while(results.next())
                 {
-                    if(results.getString(2).trim().toLowerCase().equals("return"))
+                    if(results.getString(2).trim().toLowerCase().equals("refund"))
                         //the second field of the item table is the "type" attribute
                         //the "type" attribute indicate the what kind of transaction item
                         //it is.
@@ -167,7 +174,7 @@ public class SaleReport
                         this.cashDebit += results.getInt(3);
                         //The tax that the customer paid before also needed to
                         //be returned to the customer.
-                        this.returnedTax += results.getInt(3) * (Integer.parseInt(cashInvoiceTaxRate.get(cashInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.returnedTax += results.getInt(3) * (Double.parseDouble(cashInvoiceTaxRate.get(cashInvoiceIDs.indexOf(results.getString(8))))/100);
                             //the 8th field of the item table is the invoiceID. I need to get the invoiceID to find the index of the tax rate inside the arraylist
                             //cashInvoiceTaxRate. And because I can't create ArrayList<int>, I use ArrayList<String> instead. As a result, I need to parse it into
                             //int again.
@@ -176,7 +183,7 @@ public class SaleReport
                     {
                         this.penalty += results.getInt(3);
                         this.cashCredit += results.getInt(3);
-                        this.incomeTax += results.getInt(3) * (Integer.parseInt(cashInvoiceTaxRate.get(cashInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.incomeTax += results.getInt(3) * (Double.parseDouble(cashInvoiceTaxRate.get(cashInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                     else if(results.getString(2).trim().toLowerCase().equals("promo"))
                     {
@@ -187,13 +194,13 @@ public class SaleReport
                     {
                         this.rentalsIncome += results.getInt(3);
                         this.cashCredit += results.getInt(3);
-                        this.incomeTax += results.getInt(3) * (Integer.parseInt(cashInvoiceTaxRate.get(cashInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.incomeTax += results.getInt(3) * (Double.parseDouble(cashInvoiceTaxRate.get(cashInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                     else if(results.getString(2).trim().toLowerCase().equals("sale"))
                     {
                         this.salesIncome += results.getInt(3);
                         this.cashCredit += results.getInt(3);
-                        this.incomeTax += results.getInt(3) * (Integer.parseInt(cashInvoiceTaxRate.get(cashInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.incomeTax += results.getInt(3) * (Double.parseDouble(cashInvoiceTaxRate.get(cashInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                 }
             }
@@ -201,7 +208,7 @@ public class SaleReport
         }
         finally
         {
-            conn.close();
+            conn.closeConnection();
         }
     }
 
@@ -219,17 +226,17 @@ public class SaleReport
      */
     private void analyzeDebitInvoices(ArrayList<String> debitInvoiceIDs,
             ArrayList<String> debitInvoiceTaxRate)
-            throws SQLException
+            throws SQLException, ClassNotFoundException
     {
         JDBCConnection conn = new JDBCConnection();
         conn.getConnection();
         try
         {
-            String command = "SELCT * FROM item WHERE invoiceID = ";
+            String command = "SELECT * FROM item WHERE invoiceID = ";
             int i = 0;
             for(; i < debitInvoiceIDs.size()-1; i++)
                 command += debitInvoiceIDs.get(i) + " OR invoiceID = ";
-            command += debitInvoiceIDs.get(++i) + ";";
+            command += debitInvoiceIDs.get(i) + ";";
             PreparedStatement stat = conn.prepareStatement(command);
             boolean hasResult = stat.execute();
             if(hasResult)
@@ -238,17 +245,17 @@ public class SaleReport
 
                 while(results.next())
                 {
-                    if(results.getString(2).trim().toLowerCase().equals("return"))
+                    if(results.getString(2).trim().toLowerCase().equals("refund"))
                     {
                         this.refund += results.getInt(3);
                         this.debitDebit += results.getInt(3);
-                        this.returnedTax += results.getInt(3) * (Integer.parseInt(debitInvoiceTaxRate.get(debitInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.returnedTax += results.getInt(3) * (Double.parseDouble(debitInvoiceTaxRate.get(debitInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                     else if(results.getString(2).trim().toLowerCase().equals("penalty"))
                     {
                         this.penalty += results.getInt(3);
                         this.debitCredit += results.getInt(3);
-                        this.incomeTax += results.getInt(3) * (Integer.parseInt(debitInvoiceTaxRate.get(debitInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.incomeTax += results.getInt(3) * (Double.parseDouble(debitInvoiceTaxRate.get(debitInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                     else if(results.getString(2).trim().toLowerCase().equals("promo"))
                     {
@@ -259,13 +266,13 @@ public class SaleReport
                     {
                         this.rentalsIncome += results.getInt(3);
                         this.debitCredit += results.getInt(3);
-                        this.incomeTax += results.getInt(3) * (Integer.parseInt(debitInvoiceTaxRate.get(debitInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.incomeTax += results.getInt(3) * (Double.parseDouble(debitInvoiceTaxRate.get(debitInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                     else if(results.getString(2).trim().toLowerCase().equals("sale"))
                     {
                         this.salesIncome += results.getInt(3);
                         this.debitCredit += results.getInt(3);
-                        this.incomeTax += results.getInt(3) * (Integer.parseInt(debitInvoiceTaxRate.get(debitInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.incomeTax += results.getInt(3) * (Double.parseDouble(debitInvoiceTaxRate.get(debitInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                 }
             }
@@ -273,7 +280,7 @@ public class SaleReport
         }
         finally
         {
-            conn.close();
+            conn.closeConnection();
         }
     }
 
@@ -291,17 +298,17 @@ public class SaleReport
      */
     private void analyzeCreditInvoices(ArrayList<String> creditInvoiceIDs,
             ArrayList<String> creditInvoiceTaxRate)
-            throws SQLException
+            throws SQLException, ClassNotFoundException
     {
         JDBCConnection conn = new JDBCConnection();
         conn.getConnection();
         try
         {
-            String command = "SELCT * FROM item WHERE invoiceID = ";
+            String command = "SELECT * FROM item WHERE invoiceID = ";
             int i = 0;
             for(; i < creditInvoiceIDs.size()-1; i++)
                 command += creditInvoiceIDs.get(i) + " OR invoiceID = ";
-            command += creditInvoiceIDs.get(++i) + ";";
+            command += creditInvoiceIDs.get(i) + ";";
             PreparedStatement stat = conn.prepareStatement(command);
             boolean hasResult = stat.execute();
             if(hasResult)
@@ -310,17 +317,17 @@ public class SaleReport
 
                 while(results.next())
                 {
-                    if(results.getString(2).trim().toLowerCase().equals("return"))
+                    if(results.getString(2).trim().toLowerCase().equals("refund"))
                     {
                         this.refund += results.getInt(3);
                         this.creditDebit += results.getInt(3);
-                        this.returnedTax += results.getInt(3) * (Integer.parseInt(creditInvoiceTaxRate.get(creditInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.returnedTax += results.getInt(3) * (Double.parseDouble(creditInvoiceTaxRate.get(creditInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                     else if(results.getString(2).trim().toLowerCase().equals("penalty"))
                     {
                         this.penalty += results.getInt(3);
                         this.creditCredit += results.getInt(3);
-                        this.incomeTax += results.getInt(3) * (Integer.parseInt(creditInvoiceTaxRate.get(creditInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.incomeTax += results.getInt(3) * (Double.parseDouble(creditInvoiceTaxRate.get(creditInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                     else if(results.getString(2).trim().toLowerCase().equals("promo"))
                     {
@@ -331,13 +338,13 @@ public class SaleReport
                     {
                         this.rentalsIncome += results.getInt(3);
                         this.creditCredit += results.getInt(3);
-                        this.incomeTax += results.getInt(3) * (Integer.parseInt(creditInvoiceTaxRate.get(creditInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.incomeTax += results.getInt(3) * (Double.parseDouble(creditInvoiceTaxRate.get(creditInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                     else if(results.getString(2).trim().toLowerCase().equals("sale"))
                     {
                         this.salesIncome += results.getInt(3);
                         this.creditCredit += results.getInt(3);
-                        this.incomeTax += results.getInt(3) * (Integer.parseInt(creditInvoiceTaxRate.get(creditInvoiceIDs.indexOf(results.getString(8))))/100);
+                        this.incomeTax += results.getInt(3) * (Double.parseDouble(creditInvoiceTaxRate.get(creditInvoiceIDs.indexOf(results.getString(8))))/100);
                     }
                 }
             }
@@ -345,7 +352,7 @@ public class SaleReport
         }
         finally
         {
-            conn.close();
+            conn.closeConnection();
         }
     }
 
@@ -353,7 +360,7 @@ public class SaleReport
      * Ordinary getter method for startDate
      * @return Date the starting date of the report object
      */
-    public Date getStartDate()
+    public GregorianCalendar getStartDate()
     {
         return this.startDate;
     }
@@ -362,7 +369,7 @@ public class SaleReport
      * Ordinary getter method for endDate
      * @return Date the ending date of the report object
      */
-    public Date getEndDate()
+    public GregorianCalendar getEndDate()
     {
         return this.endDate;
     }
@@ -575,8 +582,8 @@ public class SaleReport
                 creditDebit))/100;
     }
 
-    private Date startDate;
-    private Date endDate;
+    private GregorianCalendar startDate;
+    private GregorianCalendar endDate;
     private int rentalsIncome = 0;
     private int salesIncome = 0;
     private int penalty = 0;
