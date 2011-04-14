@@ -25,7 +25,7 @@ public class IndividualMovie extends GeneralMovie{
     * @param price this cost of the rental in cents
     * @param condition the condition of the movie
     */
-   public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition)throws java.lang.Exception
+   public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition)
    {
 	super(movie.getSKU(),movie.getTitle(),movie.getActors(),movie.getDirector(), movie.getProducer(),
 			movie.getReleaseDate(), movie.getSynopsis(), movie.getGenre(), movie.getRating(), 
