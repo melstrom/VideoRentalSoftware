@@ -1,3 +1,4 @@
+package pos;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class PriceScheme
      @throws SQLException If there is anything wrong with the database, this exception will be thrown.
      */
     public PriceScheme()
-            throws SQLException
+            throws SQLException, ClassNotFoundException
     {
 	category = new ArrayList<String>();
 	format = new ArrayList<String>();
@@ -42,7 +43,7 @@ public class PriceScheme
                     throw new SQLException("Catagories table in the database is empty.");
 
                 //find out the formats.
-                stat = conn.prepareStatement("SELECT * FROM format;");
+                stat = conn.prepareStatement("SELECT * FROM formats;");
                 hasResult = stat.execute();
                 if(hasResult)
                 {
@@ -72,7 +73,7 @@ public class PriceScheme
         }
         finally
         {
-            conn.close();
+            conn.closeConnection();
         }
     }
 

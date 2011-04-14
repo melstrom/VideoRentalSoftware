@@ -5,6 +5,9 @@
 
 package ui;
 
+import jdbconnection.JDBCConnection;
+
+import java.sql.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -37,10 +40,10 @@ public class UiController {
     /**
      * Start UI
      */
-    public void startUI(){
-      currFrame = new CustomerFrame(this);
-      //currFrame = new EmployeeFrame();
-      currFrame.setVisible(true);
+    public void startUI()throws Exception{
+      //currFrame = new CustomerFrame(this);
+            currFrame = new EmployeeFrame();
+            currFrame.setVisible(true);
     }
     /**
      * Change modeID.
@@ -49,7 +52,6 @@ public class UiController {
     public void setMode(int modeID){
         mode = modeID;
     }
-
 
     /**
      * Pop-up an warming message login fail
