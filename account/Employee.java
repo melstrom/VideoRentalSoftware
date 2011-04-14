@@ -19,7 +19,7 @@ public class Employee extends Account
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public Employee (String position, int accountID, String Fname, String Lname, String address, String phoneNum)
+    public Employee (String position, int accountID, String Fname, String Lname, Address address, String phoneNum)
     {
         super(accountID, Fname, Lname, address,phoneNum);
         this.position = position;
