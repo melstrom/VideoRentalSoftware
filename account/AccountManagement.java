@@ -20,6 +20,7 @@ package account;
  * First pass: SQL queries for createEmployee
  * First pass: SQL queries for createCustomer
  * Completed implementation for generateNewID
+ * Added helper methods
  *
  * Moved all unused methods to bottom
  * Changed name from generateBarcode to generateNewID
@@ -56,10 +57,11 @@ public class AccountManagement
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void createEmployee(String employeeID, String position, String Fname, String Lname, String address, String phoneNum)
+    public void createEmployee(String employeeID, String position, String Fname, String Lname, Address address, String phoneNum)
             throws SQLException, java.lang.Exception
     {
         int accountID = this.generateNewAccountID();
+        int addressID = this.generateAddressID();
         account = new Employee(position, accountID, Fname, Lname, address, phoneNum);
         try
         {
@@ -67,8 +69,8 @@ public class AccountManagement
             String accountInsert = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
                     + accountID + ","
                     + addressID + ","
-                    + firstName + ","
-                    + lastName + ")";
+                    + Fname + ","
+                    + Lname + ")";
             String employeeInsert = "INSERT INTO employee (employeeID, accountID) value("
                     + employeeID + ","
                     + accountID + ")";
@@ -90,10 +92,11 @@ public class AccountManagement
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void createCustomer(String customerID, String DL, String Fname, String Lname, String address, String phoneNum)
+    public void createCustomer(String customerID, String DL, String Fname, String Lname, Address address, String phoneNum)
             throws SQLException, java.lang.Exception
     {
         int accountID = this.generateNewAccountID();
+        int addressID = this.generateAddressID();
         account = new Customer(customerID, DL, accountID, Fname, Lname, address, phoneNum);
         try
         {
@@ -101,8 +104,8 @@ public class AccountManagement
             String accountInsert = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
                     + accountID + ","
                     + addressID + ","
-                    + firstName + ","
-                    + lastName + ")";
+                    + Fname + ","
+                    + Lname + ")";
             String customerInsert = "INSERT INTO customer (customerID, accountID) value("
                     + customerID + ","
                     + accountID + ")";
@@ -170,6 +173,19 @@ public class AccountManagement
         }
     }
 
+    private int generateAddressID () throws SQLException
+    {
+        st = JDBC.createStatement();
+        String table = "address";
+        String column = "addressID";
+        String SQL = "SELECT " + column + " FROM" + table;
+        ResultSet rs = st.executeQuery(SQL);
+        rs.last();
+        int LastAccountID = rs.getInt(column);
+        int newAccountID = LastAccountID + 1;
+        return newAccountID;
+    }
+
     /**
      * Edit an existing account
      * @param aAccount the account
@@ -195,7 +211,7 @@ public class AccountManagement
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void editPersonalInfo(String Fname, String Lname, String address, String phoneNum)
+    public void editPersonalInfo(String Fname, String Lname, Address address, String phoneNum)
     {
         account.setPersonalInfo(Fname, Lname, address, phoneNum);
     }
@@ -208,7 +224,7 @@ public class AccountManagement
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void editPersonalInfo(String DL, String Fname, String Lname, String address, String phoneNum)
+    public void editPersonalInfo(String DL, String Fname, String Lname, Address address, String phoneNum)
     {
         Customer customer = (Customer) account;
         customer.setPersonalInfo(Fname, Lname, address, phoneNum);

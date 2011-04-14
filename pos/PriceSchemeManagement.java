@@ -1,9 +1,6 @@
-package pos;
 import java.io.IOException;
 import java.sql.*;
-import jdbconnection.JDBCConnection;
-import inventory.*;
-import search.*;
+import java.util.ArrayList;
 
 /**
  This class is the control object of the class PriceScheme.
@@ -172,6 +169,21 @@ public class PriceSchemeManagement
             }
         }
     }
+    
+    public int[][] getAllPrices()
+    {
+        return PRICE_SCHEME.getAllPrices();
+    }
+    
+    public ArrayList<String> getAllCategories()
+    {
+        return PRICE_SCHEME.getAllCategories();
+    }
+    
+    public ArrayList<String> getAllFormats()
+    {
+        return PRICE_SCHEME.getAllFormats();
+    }
 
     /**
      * A private helper method to test whether the name category exist in the
@@ -206,62 +218,6 @@ public class PriceSchemeManagement
         finally
         {
             conn.closeConnection();
-        }
-    }
-
-
-
-
-    /**
-     * This method finds the rental period in days of a particular movie,
-     * given its barcode number.
-     * @param barcode the barcode of the IndividualMovie, or the SKU of a
-     * GeneralMovie
-     * @return -1 if it is not a proper ID
-     * @throws SQLException
-     * @throws MovieNotFoundException
-     * @throws ClassNotFoundException
-     * @throws Exception
-     */
-    public static int getRentalPeriod(String barcode)
-            throws SQLException, MovieNotFoundException, ClassNotFoundException
-    {
-        String category;
-        String query = JDBCConnection.makeQuery("catagories",
-                "catagories.rentalLength",
-                "catagories.catagory = ?");
-        if (barcode.length() < GeneralMovie.MIN_SKU_LENGTH)
-        {
-            return -1;
-        }
-        else if (barcode.length() <= GeneralMovie.MAX_SKU_LENGTH)
-        {
-            category = RentalMovieManagement.getGeneralMovieCategory(barcode);
-        }
-        else
-        {
-            IndividualMovie movie = (IndividualMovie) Search.previewMovie(barcode);
-            category = movie.getCategory();
-        }
-
-        if (category == null)
-        {
-            return -1;
-        }
-
-        int numParam = 1;
-        String[] params = { category };
-        JDBCConnection connection = new JDBCConnection();
-        try
-        {
-            ResultSet result = connection.getResults(query, numParam, params);
-            result.next();
-            int rentalPeriod = result.getInt(1);
-            return rentalPeriod;
-        }
-        finally
-        {
-            connection.closeConnection();
         }
     }
     
