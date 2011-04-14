@@ -20,6 +20,10 @@ package account;
  * Peter
  * TODO: Finish SQL queries for createEmployee
  * TODO: Finish SQL queries for createCustomer
+ * TODO: Complete implementation for generateNewID
+ *
+ * Moved all unused methods to bottom
+ * Changed name from generateBarcode to generateNewID
  */
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -99,10 +103,10 @@ public class AccountManagement
     }
 
     /**
-     * Generate membership barcode
+     * Generates a new ID for adding a new customer or employee
      * @return barcode
      */
-    private String generateBarcode() throws SQLException
+    private String generateNewID() throws SQLException
     {
         //TODO: implement logic; find last ID and assign next
         //SELECT account FROM customer/employee
@@ -130,36 +134,6 @@ public class AccountManagement
             Customer customer = (Customer) aAccount;
             account = customer;
         }
-    }
-
-    /**
-     * Check if an account id already exists in the database
-     * @param ID an account ID
-     * @param userType the type of user (employee/customer)
-     * @return boolean
-     * @throws SQLException 
-     */
-    private boolean isDuplicatedID(int ID, String accountType)
-            throws SQLException, ClassNotFoundException, java.lang.Exception
-    {
-        //TODO: generate correct query
-        String table = accountType;
-        String column = accountType;
-        int constraint = ID;
-        String query = "SELECT " + column + "ID FROM " + table + " WHERE " + column + "ID = " + constraint;
-        Statement statement = connection.createStatement();
-        boolean result = statement.execute(query);
-        return result;
-    }
-
-    /**
-     * Set log in information
-     * @param loginID the log in ID/username of the account
-     * @param password the password of the account
-     */
-    public void setLogin(String loginID, String password)
-    {
-        account.setLogin(loginID, password);
     }
 
     /**
@@ -191,14 +165,6 @@ public class AccountManagement
     }
 
     /**
-     * Change the status of the account (Active/Inactive)
-     */
-    public void changeStatus()
-    {
-        account.changeStatus();
-    }
-
-    /**
      * Promote an employee to manager
      */
     public void promoteEmployee()
@@ -222,3 +188,43 @@ public class AccountManagement
     private Connection connection;
     private Statement st;
 }
+
+//    /**
+//     * Check if an account id already exists in the database
+//     * @param ID an account ID
+//     * @param userType the type of user (employee/customer)
+//     * @return boolean
+//     * @throws SQLException
+//     */
+//    private boolean isDuplicatedID(int ID, String accountType)
+//            throws SQLException, ClassNotFoundException, java.lang.Exception
+//    {
+//        //TODO: generate correct query
+//        String table = accountType;
+//        String column = accountType;
+//        int constraint = ID;
+//        String query = "SELECT " + column + "ID FROM " + table + " WHERE " + column + "ID = " + constraint;
+//        Statement statement = connection.createStatement();
+//        boolean result = statement.execute(query);
+//        return result;
+//    }
+
+
+//    /**
+//     * Set log in information
+//     * @param loginID the log in ID/username of the account
+//     * @param password the password of the account
+//     */
+//    public void setLogin(String loginID, String password)
+//    {
+//        account.setLogin(loginID, password);
+//    }
+
+
+//    /**
+//     * Change the status of the account (Active/Inactive)
+//     */
+//    public void changeStatus()
+//    {
+//        account.changeStatus();
+//    }
