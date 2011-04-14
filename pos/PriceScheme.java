@@ -1,7 +1,7 @@
 package pos;
 import java.sql.*;
 import java.util.ArrayList;
-import jdbconnection.JDBCConnection;
+import jdbconnection.*;
 
 /**
 This class contains the information of prices and the information of categories
@@ -127,6 +127,21 @@ public class PriceScheme
     public int getNumOfFormats()
     {
         return format.size();
+    }
+    
+    public int[][] getAllPrices()
+    {
+        return this.prices;
+    }
+    
+    public ArrayList<String> getAllCategories()
+    {
+        return this.category;
+    }
+    
+    public ArrayList<String> getAllFormats()
+    {
+        return this.format;
     }
 
     private int[][] prices;

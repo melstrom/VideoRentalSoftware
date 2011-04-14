@@ -883,7 +883,7 @@ public class Search
             String[] actors,
             String director,
             Integer memberID)
-            throws SQLException
+            throws SQLException, ClassNotFoundException
     {
         String query =
                 searchRentalsGenerateQuery(title, actors, director, memberID);
@@ -1153,7 +1153,9 @@ public class Search
      * @param genre the genre of movie that we should view
      * @return a list of all videos in that genre
      * @throws SQLException if a connection with the database cannot be made
+     * @deprecated
      */
+    /*
     public static ArrayList<GeneralMovie> browse(Genre genre)
             throws SQLException
     {
@@ -1164,6 +1166,8 @@ public class Search
         result.close();
         return browseResults;
     }
+     *
+     */
     
     
     
@@ -1173,7 +1177,9 @@ public class Search
      * 
      * @param genre the genre enumeration to convert
      * @return a string representing the genre.
+     * @deprecated
      */
+    /*
     private static String generateGenreStr(Genre genre)
     {
         String genreStr;
@@ -1209,6 +1215,8 @@ public class Search
         } // end switch
         return genreStr;
     }
+     *
+     */
 
 
 
@@ -1218,7 +1226,9 @@ public class Search
      *
      * @param genreStr the genre to be browsed.
      * @return the SQL query asking for all GeneralMovies in the specified genre
+     * @deprecated
      */
+    /*
     private static String generateBrowseQuery(String genreStr)
     {
         String query = "SELECT physicalVideo.SKU " +
@@ -1227,6 +1237,8 @@ public class Search
                 " AND videoInfo.infoID = physicalVideo.infoID";
         return query;
     }
+     *
+     */
 
 
 
@@ -1238,7 +1250,9 @@ public class Search
      * @param query the SQL query to send to the database
      * @return the results of the query
      * @throws SQLException
+     * @deprecated
      */
+    /*
     private static ResultSet browseGetSQLResult(String query)
             throws SQLException
     {
@@ -1254,6 +1268,8 @@ public class Search
             connection.close();
         }
     }
+     *
+     */
 
 
 
@@ -1265,7 +1281,9 @@ public class Search
      * @return a list of GeneralMovies that were in the results
      * @throws SQLException if a database access error occurs or this method
      * is called on a closed result set
+     * @deprecated
      */
+    /*
     private static ArrayList<GeneralMovie> browseResultsList(ResultSet result)
             throws SQLException, MovieNotFoundException, ClassNotFoundException,
             Exception
@@ -1278,6 +1296,8 @@ public class Search
         }
         return resultsList;
     }
+     *
+     */
 
 
 
