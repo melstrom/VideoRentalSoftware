@@ -57,7 +57,7 @@ public class AccountManagement
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void createEmployee(String employeeID, String position, String Fname, String Lname, Address address, String phoneNum)
+    public void createEmployee(int employeeID, String position, String Fname, String Lname, Address address, String phoneNum)
             throws SQLException, java.lang.Exception
     {
         int accountID = this.generateNewAccountID();
@@ -92,7 +92,7 @@ public class AccountManagement
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public void createCustomer(String customerID, String DL, String Fname, String Lname, Address address, String phoneNum)
+    public void createCustomer(int customerID, String DL, String Fname, String Lname, Address address, String phoneNum)
             throws SQLException, java.lang.Exception
     {
         int accountID = this.generateNewAccountID();
