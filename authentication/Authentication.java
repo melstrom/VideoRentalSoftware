@@ -4,6 +4,8 @@ package authentication;
 *	
 *	@author mattp
 *	@version 1.0 March 22, 2011
+*	@author Peter
+* 	- added method to get username at albert's request 
 */
 public class Authentication
 {
@@ -65,6 +67,19 @@ public class Authentication
 		}*/
 		return false;
 	}
+	/**
+	 * Returns the user name
+	 * @return the user name that is currently logged in
+	 * @throws IllegalStateException if no user is currently logged in
+	 */
+	public String getUsername() throws IllegalStateException
+	{
+	    if (account == null)
+		throw new IllegalStateException("No user is currently logged in.");
+
+	    return account.getFname();
+	}
+
 	
 	private boolean isLoggedIn;
 	private Account account;
