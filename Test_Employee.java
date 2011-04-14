@@ -1,9 +1,9 @@
 /*
- * Status: working
+ * Status: Employee class not working
  */
 
 /**
- * This is a small program to create an instance of Employee
+ * This is a small program to test Employee class
  * @author Peter
  */
 import account.Employee;
@@ -14,7 +14,7 @@ public class Test_Employee
 {
     public static void main(String[] args) throws Throwable
     {
-//	SQLhelper mySQLhelper = new SQLhelper();
+	SQLhelper mySQLhelper = new SQLhelper();
 
 	Address empAddress = new Address(223, "Cambie st.", "Vancouver", "B.C.", "Canada", "V6V 1V1");
 
@@ -27,7 +27,6 @@ public class Test_Employee
 
 	String position = "slave";
 	int accountID = 5;
-	int employeeID = 7;
 	String firstName = "Tom";
 	String lastName = "Smith";
 	//String address = "4321 Electric Ave.";
