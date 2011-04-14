@@ -1,6 +1,11 @@
+package pos;
+
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import jdbconnection.*;
+import inventory.*;
+import search.*;
 
 /**
  This class is the control object of the class PriceScheme.
@@ -220,6 +225,61 @@ public class PriceSchemeManagement
             conn.closeConnection();
         }
     }
+
+
+    /**
+    * This method finds the rental period in days of a particular movie,
+    * given its barcode number.
+    * @param barcode the barcode of the IndividualMovie, or the SKU of a
+    * GeneralMovie
+    * @return -1 if it is not a proper ID
+    * @throws SQLException
+    * @throws MovieNotFoundException
+    * @throws ClassNotFoundException
+    * @throws Exception
+    */
+    public static int getRentalPeriod(String barcode)
+            throws SQLException, MovieNotFoundException, ClassNotFoundException,
+            IOException
+    {
+        String category;
+        String query = JDBCConnection.makeQuery("catagories",
+                "catagories.rentalLength",
+                "catagories.catagory = ?");
+        if (barcode.length() < GeneralMovie.MIN_SKU_LENGTH)
+        {
+            return -1;
+        }
+        else if (barcode.length() <= GeneralMovie.MAX_SKU_LENGTH)
+        {
+            category = RentalMovieManagement.getGeneralMovieCategory(barcode);
+        }
+        else
+        {
+            IndividualMovie movie = (IndividualMovie) Search.previewMovie(barcode);
+            category = movie.getCategory();
+        }
+
+        if (category == null)
+        {
+            return -1;
+        }
+
+        int numParam = 1;
+        String[] params = { category };
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            ResultSet result = connection.getResults(query, numParam, params);
+            result.next();
+            int rentalPeriod = result.getInt(1);
+            return rentalPeriod;
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+    }
     
-    private PriceScheme PRICE_SCHEME;
+    private pos.PriceScheme PRICE_SCHEME;
 }

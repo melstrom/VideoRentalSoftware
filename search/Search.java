@@ -883,7 +883,7 @@ public class Search
             String[] actors,
             String director,
             Integer memberID)
-            throws SQLException
+            throws SQLException, ClassNotFoundException
     {
         String query =
                 searchRentalsGenerateQuery(title, actors, director, memberID);
