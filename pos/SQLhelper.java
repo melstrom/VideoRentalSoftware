@@ -195,6 +195,7 @@ public class SQLhelper
 		@throws ClassNotFoundException if JDBC driver is not in CLASSPATH
 		@throws SQLException if a database access error occurs or this method is called on a closed connection or no results
 	*/
+        /* moved this method to the search package
 	public ArrayList<Employee> getAllEmployees() throws ClassNotFoundException, SQLException
 	{
         ArrayList<Employee> allEmployees = new ArrayList<Employee>();
@@ -234,7 +235,7 @@ public class SQLhelper
         	allEmployees.add(new Employee(position, accountID, firstName, lastName, address, phoneNum));
         }
 		return allEmployees;
-    }
+    }*/
 	
 	/**
 		Method to insert transaction info into the db table.

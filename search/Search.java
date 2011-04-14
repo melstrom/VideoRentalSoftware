@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import account.Address;
 import account.Employee;
-
+import pos.*;
 
 /**
  * The Search class is a utility class that searches the database for Movies,
@@ -670,11 +670,9 @@ public class Search
      */
     private static IndividualMovie previewIndividualMovie(String barcodeID)
             throws MovieNotFoundException, SQLException, 
-            IllegalArgumentException, ClassNotFoundException
+            IllegalArgumentException, ClassNotFoundException,
+            java.io.IOException
     {
-        //String SKU = barcodeID.substring(0, GeneralMovie.SKU_LENGTH);
-        //String copyNum = barcodeID.substring(GeneralMovie.SKU_LENGTH);
-        
         int barcodeLength = barcodeID.length();
         int copyNumStartIndex = barcodeLength - IndividualMovie.ID_LENGTH;
         String copyNum = barcodeID.substring(copyNumStartIndex);
@@ -700,51 +698,56 @@ public class Search
             ResultSet result = statement.executeQuery(rentalQuery);
             if (result.next())
             {
-                String isNull = result.getString(1);
-                if (!result.wasNull())
-                {
+//                String isNull = result.getString(1);
+//                if (!result.wasNull())
+//                {
                     
-                    String category = result.getString("SaleVideo.category");
-                    //String format = result.getString("PhysicalVideo.format");
-                    String condition = result.getString("SaleVideo.condition");
+                    String category = result.getString("videoSale.category");
+                    String format = result.getString("physicalVideo.format");
+                    String condition = result.getString("videoSale.condition");
 
-                    // need to call PriceScheme and get the price
 
                     // copy and pasted IndividualMovie constructor:
-                    //public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition)
-                    return new IndividualMovie(generalMovie, category, format,
-                            condition, barcodeID);
-                    // TODO: fix this call to comply with the constructor of IndividualMovie
+                    //   public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition
+
+                    PriceSchemeManagement priceScheme = new PriceSchemeManagement();
+                    int priceInCents = priceScheme.getPrice(category, format);
+                    IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
+                    return individualMovie;
+//                }
+            }
+            else
+            {
+                result.close();
+                statement.close();
+                statement = conn.prepareStatement(saleQuery);
+                parameterIndex = 1;
+                // reset parameter index
+                statement.setString(parameterIndex, SKU);
+                parameterIndex++;
+                statement.setString(parameterIndex, copyNum);
+                result = statement.executeQuery(saleQuery);
+                if (result.next())
+                {
+                    String category = result.getString("videoRental.catagory");
+                    String format = result.getString("physicalVideo.format");
+                    String condition = result.getString("videoRental.condition");
+                    PriceSchemeManagement priceScheme = new PriceSchemeManagement();
+                    int priceInCents = priceScheme.getPrice(category, format);
+                    int rentalPeriod = PriceSchemeManagement.getRentalPeriod(category);
+
+                    IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
+                    RentalMovie rentalMovie = new RentalMovie(rentalPeriod, individualMovie);
+                // copy and pasted signature for RentalMovie
+                //public RentalMovie(int rentalPeriod, IndividualMovie movie)
                 }
-            
                 else
                 {
-                    result.close();
-                    statement.close();
-                    statement = conn.prepareStatement(saleQuery);
-                    parameterIndex = 1;
-                    // reset parameter index
-                    statement.setString(parameterIndex, SKU);
-                    parameterIndex++;
-                    statement.setString(parameterIndex, copyNum);
-                    result = statement.executeQuery(saleQuery);
-                    if (result.next())
-                    {
-                        String category = result.getString("SaleVideo.category");
-                        String format = result.getString("PhysicalVideo.format");
-                        String condition = result.getString("SaleVideo.condition");
-                        return new IndividualMovie(generalMovie, category, format,
-                                condition, barcodeID);
-                    // copy and pasted signature for RentalMovie
-                    //public RentalMovie(int rentalPeriod, IndividualMovie movie)
-                    }
-                    else
-                    {
-                        throw new MovieNotFoundException("MovieNotFoundException:"
-                                + " could not find that barcode");
-                    }
-
+                    throw new MovieNotFoundException("MovieNotFoundException:"
+                            + " could not find that barcode");
                 }
+
+
             }
         }
         finally
