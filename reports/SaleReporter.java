@@ -1,7 +1,6 @@
 package reports;
-
 import java.util.Date;
-import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.io.*;
 import java.sql.*;
 
@@ -33,50 +32,55 @@ public class SaleReporter
      * @throws IOException If the endDate of the report is later than the date
      * of reporting, this exception will be thrown.
      */
-    public void generateReoprt(Date startDate, Date endDate, String pathName)
-            throws SQLException, IOException
+    public void generateReport(GregorianCalendar startDate, GregorianCalendar endDate,
+                                String pathName)
+            throws SQLException, IOException, ClassNotFoundException
     {
-        if(isDateValid(endDate))
-        {
-            SaleReport report = new SaleReport(startDate, endDate);
-            PrintWriter reportFile = new PrintWriter(pathName);
-            reportFile.print("Sale Report from " + startDate.toString() + " to "
-                    + endDate.toString());
-            reportFile.println("\n" +
-                    "INCOME:\n" +
-                    "Rentals            $" + report.getRentalsIncome() + "\n" +
-                    "Sales:             $" + report.getSalesIncome() + "\n" +
-                    "Penalty            $" + report.getPenalty() + "\n" +
-                    "Sub Total:         $" + report.getTotalIncome() + "\n" +
-                    "Tax:               $" + report.getIncomeTax() + "\n" +
-                    "\n" +
-                    "Discounts and Refunds:\n" +
-                    "Discounts:         $" + report.getDiscount() + "\n" +
-                    "Refunds:           $" + report.getRefund() + "\n" +
-                    "Total detuctable:  $" + report.getDiscRefTotal() + "\n" +
-                    "Returned tax:      $" + report.getReturnTax() + "\n"+
-                    "\n" +
-                    "REVENUE:           $" + report.getRevenue() + "\n" +
-                    "TAX SHOULD PAY:    $" + report.getTaxShouldPay() + "\n"+
-                    "\n" +
-                    "Cash credit:       $" + report.getCashCredit() + "\n" +
-                    "Cash debit:        $" + report.getCashDebit() + "\n" +
-                    "CASH BALANCE:      $" + report.getCashBalance()+ "\n" +
-                    "Debit credit:      $" + report.getDebitCredit() + "\n" +
-                    "Debit debit:       $" + report.getDebitDebit()+ "\n" +
-                    "DEBIT BALANCE:     $" + report.getDebitBalance() +"\n" +
-                    "Credit credit:     $" + report.getCreditCredit() + "\n" +
-                    "Credit debit:      $" + report.getCreditDebit() + "\n" +
-                    "CREDIT BALANCE:    $" + report.getCreditBalance() + "\n" +
-                    "TOTAL BALANCE:     $" + report.getTotalBalance() + "\n" +
-                    "\n" +
-                    "Money          +/- $_______" + "\n\n" +
-                    "FINAL REVENUE OF THIS REPORT PERIOD:" + "\n" +
-                    "$_________");
-            reportFile.close();
-        }
-        else
-            throw new IOException("The end date cannot be later than today");
+        SaleReport report = new SaleReport(startDate, endDate);
+        File reportFile = new File(pathName);
+        if(!reportFile.exists())
+            reportFile.createNewFile();
+        PrintWriter reportWriter = new PrintWriter(reportFile);
+        String startDateString = "" + startDate.get(startDate.YEAR) + "-" +
+                                (startDate.get(startDate.MONTH) + 1 ) + "-" +
+                                startDate.get(startDate.DATE);
+        String endDateString = "" + endDate.get(endDate.YEAR) + "-" +
+                               (endDate.get(endDate.MONTH) + 1) + "-" +
+                               endDate.get(endDate.DATE);
+        reportWriter.print("Sale Report from " + startDateString + " to "
+                + endDateString);
+        reportWriter.println("\n" +
+                "INCOME:\n" +
+                "Rentals            $" + report.getRentalsIncome() + "\n" +
+                "Sales:             $" + report.getSalesIncome() + "\n" +
+                "Penalty            $" + report.getPenalty() + "\n" +
+                "Sub Total:         $" + report.getTotalIncome() + "\n" +
+                "Tax:               $" + report.getIncomeTax() + "\n" +
+                "\n" +
+                "Discounts and Refunds:\n" +
+                "Discounts:         $" + report.getDiscount() + "\n" +
+                "Refunds:           $" + report.getRefund() + "\n" +
+                "Total detuctable:  $" + report.getDiscRefTotal() + "\n" +
+                "Returned tax:      $" + report.getReturnTax() + "\n"+
+                "\n" +
+                "REVENUE:           $" + report.getRevenue() + "\n" +
+                "TAX SHOULD PAY:    $" + report.getTaxShouldPay() + "\n"+
+                "\n" +
+                "Cash credit:       $" + report.getCashCredit() + "\n" +
+                "Cash debit:        $" + report.getCashDebit() + "\n" +
+                "CASH BALANCE:      $" + report.getCashBalance()+ "\n" +
+                "Debit credit:      $" + report.getDebitCredit() + "\n" +
+                "Debit debit:       $" + report.getDebitDebit()+ "\n" +
+                "DEBIT BALANCE:     $" + report.getDebitBalance() +"\n" +
+                "Credit credit:     $" + report.getCreditCredit() + "\n" +
+                "Credit debit:      $" + report.getCreditDebit() + "\n" +
+                "CREDIT BALANCE:    $" + report.getCreditBalance() + "\n" +
+                "TOTAL BALANCE:     $" + report.getTotalBalance() + "\n" +
+                "\n" +
+                "Money          +/- $_______" + "\n\n" +
+                "FINAL REVENUE OF THIS REPORT PERIOD:" + "\n" +
+                "$_________");
+        reportWriter.close();
     }
 
     /**
@@ -85,10 +89,10 @@ public class SaleReporter
      * @param date the date that wanted to be examined.
      * @return true if the date is not later than "today", false otherwise.
      */
-    private boolean isDateValid(Date date)
+    private boolean isDateValid(GregorianCalendar date)
     {
-        Date today = Calendar.getInstance().getTime();
-        if(date.before(today))
+        GregorianCalendar now = new GregorianCalendar();
+        if(date.before(now))
             return true;
         else
             return false;

@@ -1,3 +1,4 @@
+package pos;
 import java.io.IOException;
 import java.sql.*;
 
@@ -15,7 +16,7 @@ import java.sql.*;
 public class PriceSchemeManagement
 {
     public PriceSchemeManagement()
-            throws SQLException
+            throws SQLException, ClassNotFoundException
     {
         PRICE_SCHEME = new PriceScheme();
     }
@@ -52,7 +53,7 @@ public class PriceSchemeManagement
      * @throws SQLException database error.
      */
     public void setPrice(String cat, String form, int price)
-            throws IOException, SQLException
+            throws IOException, SQLException, ClassNotFoundException
     {
         //examine whether the parameters are valid.
         int x = PRICE_SCHEME.getIndexOfCategory(cat.trim().toLowerCase());
@@ -62,22 +63,24 @@ public class PriceSchemeManagement
                     + "valid");
 
         JDBCConnection conn = new JDBCConnection();
-        conn.getConnction();
+        conn.getConnection();
         try
         {
-            PreparedStatement stat = conn.prepareStatement("UPDATE pricing "
-                    + "SET price = " + price
-                    + "WHERE catagory LIKE '" + cat.trim().toLowerCase() + "' AND "
-                    + "format LIKE '" + form.trim().toLowerCase() + "';");
+            String command = "UPDATE pricing "
+                    + " SET price=" + price
+                    + " WHERE catagory='" + cat.trim().toLowerCase() + "' AND "
+                    + "format='" + form.trim().toLowerCase() + "';";
+            System.out.println(command);//testing
+            PreparedStatement stat = conn.prepareStatement(command);
             boolean successful = stat.execute();
-            if(successful)
+            if(!successful)
                 PRICE_SCHEME = new PriceScheme();
             else
                 throw new SQLException("Setting price fails");
         }
         finally
         {
-            conn.close();
+            conn.closeConnection();
         }
     }
 
@@ -96,7 +99,7 @@ public class PriceSchemeManagement
      * @throws IOException any of the pre-condition is not satisfied.
      */
     public void addPrice(String cat, String form, int price)
-            throws SQLException, IOException
+            throws SQLException, IOException, ClassNotFoundException
     {
         if(price < 0)
             throw new IOException("Price cannot be less than 0.");
@@ -124,7 +127,7 @@ public class PriceSchemeManagement
             }
             finally
             {
-                conn.close();
+                conn.closeConnection();
             }
         }
     }
@@ -141,7 +144,7 @@ public class PriceSchemeManagement
      * @throws SQLException database error.
      */
     public void removePrice(String cat, String form)
-            throws SQLException
+            throws SQLException, ClassNotFoundException
     {
         if(isValid(cat.trim().toLowerCase(), form.trim().toLowerCase()))
         {
@@ -150,8 +153,8 @@ public class PriceSchemeManagement
             try
             {
                 PreparedStatement stat = conn.prepareStatement("DELEETE FROM pricing "
-                        + "WHERE catagory LIKE '" + cat.trim().toLowerCase() + "' AND "
-                        + "format LIKE '" + form.trim().toLowerCase() + "';");
+                        + "WHERE catagory = '" + cat.trim().toLowerCase() + "' AND "
+                        + "format = '" + form.trim().toLowerCase() + "';");
                 boolean foo = stat.execute(); // beware that even if I delete a
                                               // "row" that is not exist in the
                                               // table, I will still get the update
@@ -162,7 +165,7 @@ public class PriceSchemeManagement
             }
             finally
             {
-                conn.close();
+                conn.closeConnection();
             }
         }
     }
@@ -179,7 +182,7 @@ public class PriceSchemeManagement
      * relevant tables in the database.
      */
     private boolean isValid(String cat, String form)
-            throws SQLException
+            throws SQLException, ClassNotFoundException
     {
         JDBCConnection conn = new JDBCConnection();
         conn.getConnection();
@@ -199,7 +202,7 @@ public class PriceSchemeManagement
         }
         finally
         {
-            conn.close();
+            conn.closeConnection();
         }
     }
     
