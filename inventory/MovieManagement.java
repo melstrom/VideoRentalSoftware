@@ -13,7 +13,8 @@ import jdbconnection.JDBCConnection;
 
 /**
  * Apr 13
- *  -added queries for addRequestMovie(), removeRequestMovie()
+ *  -added queries for addRequestMovie(), removeRequestMovie(), createGeneralMovie()
+ *  -createGeneralMovie() takes 13 attributes
  *  -added internal comments
  *  -converted Date and Calendar to GregorianCalendar
  * April 9 (Saturday)
@@ -96,33 +97,48 @@ public class MovieManagement
      * Constructs a new movie as part of the movie catalog
      * @param info contains the 7 required information to identify a movie
      */
-    /*
-    public void createGeneralMovie(String[] info, GregorianCalendar releaseDate)
+    
+    public void createGeneralMovie(String SKU,
+            String title,
+            String[] actors,
+            String director,
+            String producer,
+            GregorianCalendar releaseDate,
+            String synopsis,
+            String genre,
+	    String rating,
+            String studio,
+            int retailPrice,
+            String format,
+            int runtime)throws MissingFieldException,SQLException, MovieExistsException, java.lang.Exception
     {
-    String SKU = info[0];
+
     try
     {
-    this.checkNULLinfo(info);
     this.checkDuplicateSKU(SKU);
-    String title = info[1];
-    String actors = info[2];
-    String director = info[3];
-    //String releaseDate = info[4];     //use Calendar type at UI to eliminate conversion
-    String synopsis = info[4];
-    String genre = info[5];
-    //splits the actors into an array of actors
-    //String[] actorArray = actors.split(",");
+ 
+    this.movie = new GeneralMovie(SKU,title,actors,director,producer,releaseDate, synopsis,
+                     genre,rating,studio,retailPrice,format, runtime);
+    String actorsList="";
+    for(int i=0; i<actors.length; i++)
+    actorsList +=actors[i]+",";
 
 
-    this.movie = new GeneralMovie(SKU, title, actors, director, releaseDate, synopsis); //pass in actors? or actorArray?
-
-    //INSERT INTO VideoInfo VALUES (SKU, title, director, releaseDate, actors, synopsis)
+    String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
+    String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
+    String query = generateInsertSQL("videoInfo",columns, values );
+    statement.executeUpdate(query);
+    String columns1[]= {"SKU","Format","InfoID","RentalPrice"};
+    String values1[] = {SKU,format, SKU, ""+retailPrice};
+    query = generateInsertSQL("physicalVideo",columns1, values1);
+    statement.executeUpdate(query);
     } //Catch here
     finally
     {
     connection.close();
     }
-    }*/
+    }
+    
     /**
      * Adds a GeneralMovie to the database by inserting into the videoInfo
      * and physicalVideo tables.  It first searches to see if the information
@@ -510,21 +526,7 @@ public class MovieManagement
         }
     }
 
-//    final protected void addNewTitle() throws SQLException
-//    {
-//        String table = "Videoinfo";
-//        String query = "insert into" + table
-//                + "values (" + quote + "" + quote + comma//infoID
-//                + quote + title + quote + comma
-//                + quote + director + quote + comma
-//                + quote + releaseDate.get(releaseDate.YEAR) + releaseDate.get(releaseDate.MONTH) + releaseDate.get(releaseDate.DATE) + quote + comma
-//                + quote + actors + quote + comma
-//                + quote + synopsis + quote + comma
-//                + quote + SKU + quote
-//                + ");";
-//
-//        executeQuery(query);
-//    }
+
     /**
      * Constructs a new single copy of a movie
      * @param category the category the movie belongs to (need to find out more about this)
@@ -569,7 +571,7 @@ public class MovieManagement
             //splits the actors into an array of actors
             String[] actorArray = actors.split(",");
 
-            //movie.setSKU(SKU);                //GM does not have setSKU:allowed to edit at all?
+         
             movie.setTitle(title);
             movie.setActors(actorArray);
             movie.setDirector(director);
@@ -817,7 +819,7 @@ public class MovieManagement
         String table = "TABLE";
         String column = type+"ID";
         String constraint = "";
-        String query = this.generateQuery(table, column, constraint);
+        String query = generateQuery(table, column, constraint);
         ResultSet resultSet = statement.executeQuery(query);
         resultSet.last();
         int LastID = resultSet.getInt(0);
