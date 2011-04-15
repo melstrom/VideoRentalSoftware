@@ -191,6 +191,7 @@ public class Search
                 String lastName = result.getString("account.lastName");
                 String phoneNum = result.getString("account.phoneNum");
 
+
                 // copy and pasted address constructor
 //                public Address(
 //                    int houseNumber,
@@ -210,7 +211,7 @@ public class Search
 
                 Address address = new Address(houseNumber, streetName,
                         city, province, country, postalCode);
-
+                            System.out.println(memberID);
                 return new Customer(driversLicense, memberID,
                         firstName, lastName, address, phoneNum);
                 // copy and pasted signature from the Customer class
@@ -365,7 +366,7 @@ public class Search
      */
     public static ArrayList<GeneralMovie> searchMovies(String searchTerm, String searchType)
             throws SQLException, ClassNotFoundException, MovieNotFoundException,
-            IOException
+            IOException,java.lang.Exception
     {
         if (searchType.equalsIgnoreCase("title"))
         {
@@ -415,7 +416,7 @@ public class Search
             String actors,
             String director)
             throws SQLException, ClassNotFoundException, MovieNotFoundException,
-            IOException
+            IOException, java.lang.Exception
     {
         JDBCConnection connection = new JDBCConnection();
         try
@@ -664,7 +665,7 @@ public class Search
      */
     public static GeneralMovie previewMovie(String barcodeID)
             throws MovieNotFoundException, SQLException,
-            IllegalArgumentException, ClassNotFoundException, IOException
+            IllegalArgumentException, ClassNotFoundException, IOException, java.lang.Exception
     {
         int barcodeLength = barcodeID.length();
         GeneralMovie movie;
@@ -704,7 +705,7 @@ public class Search
     public static IndividualMovie previewIndividualMovie(String barcodeID)
             throws MovieNotFoundException, SQLException, 
             IllegalArgumentException, ClassNotFoundException,
-            java.io.IOException
+            java.io.IOException, java.lang.Exception
     {
         String[] splitBarcode = { null, null };
         inventory.RentalMovieManagement.splitBarcode(barcodeID, splitBarcode);
@@ -714,7 +715,7 @@ public class Search
         {
             throw new IllegalArgumentException("Not an individual movie");
         }
-
+        System.out.println(SKU+" "+copyNum);
         GeneralMovie generalMovie = previewGeneralMovie(SKU);
         
         
@@ -775,6 +776,7 @@ public class Search
 
                     IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
                     RentalMovie rentalMovie = new RentalMovie(rentalPeriod, individualMovie);
+                    System.out.println(SKU+" "+copyNum);
                     return rentalMovie;
                 // copy and pasted signature for RentalMovie
                 //public RentalMovie(int rentalPeriod, IndividualMovie movie)
@@ -790,6 +792,7 @@ public class Search
         }
         finally
         {
+            
             conn.close();
         }
 
@@ -806,11 +809,12 @@ public class Search
      * @throws ClassNotFoundException
      */
     private static GeneralMovie previewGeneralMovie(String barcodeID)
-            throws SQLException, MovieNotFoundException, ClassNotFoundException
+            throws SQLException, MovieNotFoundException, ClassNotFoundException, java.lang.Exception
     {
+        System.out.println(barcodeID);
         String query = "SELECT * FROM videoInfo, physicalVideo "
                 + "WHERE videoInfo.InfoID = physicalVideo.InfoID "
-                + "AND physicalVideo.SKU = '" + barcodeID + "'";
+                + "AND physicalVideo.SKU = '" +barcodeID + "'";
         
         Connection connection = JDBCConnection.getConnection();
         try
@@ -915,7 +919,7 @@ public class Search
             String director,
             Integer memberID)
             throws SQLException, ClassNotFoundException, IOException,
-            MovieNotFoundException
+            MovieNotFoundException,java.lang.Exception
     {
         String query =
                 searchRentalsGenerateQuery(title, actors, director, memberID);
@@ -1177,7 +1181,7 @@ public class Search
     private static ArrayList<RentalMovie>
             searchRentalsResultsList(ResultSet result)
             throws SQLException, MovieNotFoundException, ClassNotFoundException,
-            IOException
+            IOException,java.lang.Exception
     {
         ArrayList<RentalMovie> rentalList = new ArrayList<RentalMovie>();
         while (result.next())
@@ -1208,7 +1212,7 @@ public class Search
      */
     
     public static ArrayList<GeneralMovie> browse(String genre)
-            throws SQLException, ClassNotFoundException, MovieNotFoundException
+            throws SQLException, ClassNotFoundException, MovieNotFoundException,java.lang.Exception
     {
         String query = JDBCConnection.makeQuery("videoInfo, physicalVideo", "physicalVideo.SKU", "videoInfo.genre = ? AND videoInfo.infoID = physicalVideo.infoID");
         JDBCConnection connection = new JDBCConnection();

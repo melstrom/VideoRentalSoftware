@@ -35,7 +35,7 @@ public class RentalMovie extends IndividualMovie{
     * @param condition The physical condition of the movie, states as a string whether its damaged, good, scratched etc
     * @param movie inherited movie information
     */
-    public RentalMovie(int rentalPeriod, IndividualMovie movie)
+    public RentalMovie(int rentalPeriod, IndividualMovie movie)throws java.lang.Exception
     {
         this.rentalPeriod = rentalPeriod;
 	setSKU(movie.getSKU());

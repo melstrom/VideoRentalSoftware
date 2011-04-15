@@ -240,7 +240,7 @@ public class PriceSchemeManagement
     */
     public static int getRentalPeriod(String barcode)
             throws SQLException, MovieNotFoundException, ClassNotFoundException,
-            IOException
+            IOException,java.lang.Exception
     {
         String category;
         String query = JDBCConnection.makeQuery("catagories",
