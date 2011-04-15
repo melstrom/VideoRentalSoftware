@@ -5,7 +5,7 @@ import inventory.MovieRequest;
 import inventory.GeneralMovie;
 import inventory.IndividualMovie;
 import inventory.RentalMovie;
-import inventory.SaleMovie;
+//import inventory.SaleMovie;
 import inventory.Reservation;
 public class TestMovies
 {
