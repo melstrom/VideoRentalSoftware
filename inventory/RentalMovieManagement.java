@@ -511,6 +511,7 @@ public class RentalMovieManagement {
 
 
 
+
     /**
      * This method checks out a RentalMovie to a particular customer.  It updates
      * the videoRental table in the database and calculates when the movie is due.
@@ -545,21 +546,21 @@ public class RentalMovieManagement {
         String tableName = "videoRental";
         String set = "videoRental.customerID = ?, videoRental.condition = ?, " +
                 "videoRental.checkout_time = NOW()";
-        String constraint = "videoRental.SKU = ?, videoRental.rentalID = ?";
+        String constraint = "videoRental.SKU = ? AND videoRental.rentalID = ?";
 
         String query = JDBCConnection.makeUpdate(tableName, set, constraint);
-        
+
         int numParam = 4;
         String[] params = { ""+customerID, "rented", SKU, rentalID };
-        
+
         int linesChanged = connection.update(query, numParam, params);
-        
+
         // assert(linesChagned == 1);
-        String select = "formats.rentalLength";
-        String from = "videoRental, formats";
-        String where = "formats.format = videoRental.format AND" +
+        String select = "catagories.rentalLength";
+        String from = "videoRental, catagories";
+        String where = "catagories.catagory = videoRental.catagory AND" +
                 " videoRental.rentalID = ?";
-        
+
         String rentalLengthQuery = JDBCConnection.makeQuery(from, select, where);
         numParam = 1;
         String[] param = { rentalID };
@@ -567,7 +568,7 @@ public class RentalMovieManagement {
         int rentalPeriod = 0;
         if (result.next())
         {
-            rentalPeriod = result.getInt("formats.rentalLength");
+            rentalPeriod = result.getInt("catagories.rentalLength");
         }
         else
         {
@@ -625,8 +626,9 @@ public class RentalMovieManagement {
     }
 
 
-    public void checkIn(Customer customer)throws SQLException, Exception,java.lang.Exception
+    public void checkIn(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
     {
+<<<<<<< HEAD
         if(!movie.getCondition().equals("available"))
         {
             checkInQuery(customer.getAccountID());
@@ -636,6 +638,9 @@ public class RentalMovieManagement {
         {
             throw new Exception("movie is already in stock");
         }
+=======
+        checkInQuery(customerID, barcode, newCondition);
+>>>>>>> 65e7b89b9ed1eb6e3e2a1250f51c5f900a7e839b
     }
     /**
      * Change a movie from type rental to sale
@@ -782,19 +787,22 @@ public class RentalMovieManagement {
         updateDatabase(query);
     }
 
-    private void checkInQuery(int customerID)throws SQLException, Exception,java.lang.Exception
+    private void checkInQuery(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
     {
         String tablename = "videoRental";
         String attribute = "videoRental.condition";
-        String attributeTo = "available";
-        String where = " where rentalID="+quote+rentalID+quote+" and SKU="+quote+SKU+quote;
+        String attributeTo = newCondition;
+        String where = " where rentalID="+quote+barcode.substring(barcode.length() - 9 )+quote+" and SKU="+quote+barcode.substring(0,barcode.length()-9)+quote;
         String query = generateUpdateSQL(tablename, attribute, attributeTo, where);
         updateDatabase(query);
-
-        tablename = "madeReservations";
-        where = " where customerID="+quote+customerID+quote+" and SKU="+quote+SKU+quote;
-        query = generateDeleteSQL(tablename,where);
-        updateDatabase(query);
+        /*
+        if(newCondition.trim().toLowerCase().equals("available"))
+        {
+            tablename = "madeReservations";
+            where = " where customerID="+quote+customerID+quote+" and SKU="+quote+SKU+quote;
+            query = generateDeleteSQL(tablename,where);
+            updateDatabase(query);
+        }*/
     }
     /**
      * Create a query to make a reservation
