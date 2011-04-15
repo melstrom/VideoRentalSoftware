@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.GregorianCalendar;
 import java.util.Date;
 
 /**
@@ -111,7 +112,7 @@ public class SQLhelper
 	 */
 	private int insertNewEmployee(Employee theEmployee, int accountID) throws ClassNotFoundException, IllegalStateException, SQLException
 	{
-	   // int employeePrimaryKey = 1 + getTotalNumberOfRows(EMPLOYEE_TABLE_NAME, EMPLOYEE_TABLE_PK);
+	    int employeePrimaryKey = 1 + getTotalNumberOfRows(EMPLOYEE_TABLE_NAME, EMPLOYEE_TABLE_PK);
 	   //              ^- the key will be found and set when the Customer or Employee object is created.
 	    String queryString = "INSERT INTO " + EMPLOYEE_TABLE_NAME + " ("
 		+ "employeeID,"
@@ -139,7 +140,7 @@ public class SQLhelper
 	    // todo add code to check if phone number exists
 	    //
 	    //
-	    //int customerPrimaryKey = 1 + getTotalNumberOfRows(CUSTOMER_TABLE_NAME, CUSTOMER_TABLE_PK);
+	    int customerPrimaryKey = 1 + getTotalNumberOfRows(CUSTOMER_TABLE_NAME, CUSTOMER_TABLE_PK);
 
 
 	    String queryString = "INSERT INTO " + CUSTOMER_TABLE_NAME + " ("
@@ -358,14 +359,14 @@ public class SQLhelper
 		// get info to insert into table
 		int invoiceID = transaction.getInvoiceID();
 		String paymentMethod = transaction.getPaymentMethod() ;
-		Date dateTime = transaction.getDate();
-		int customerID = Integer.parseInt(transaction.getCustomerID()) ;
-		int employeeID = Integer.parseInt(transaction.getEmployeeID()) ;
+		String dateTime = transaction.getDate();
+		int customerID = transaction.getCustomerID();
+		int employeeID = transaction.getEmployeeID() ;
 		int taxRate = transaction.getTaxRateAtTimeOfSale() ;
 		
 		//convert java Date object into String format sql insert command expects
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentTime = sdf.format(dateTime).toString();
+		//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//String currentTime = sdf.format(dateTime).toString();
 
 		String queryString = "INSERT INTO " + TRANSACTION_TABLE_NAME + " ("
 			+ "invoiceID,"
@@ -381,7 +382,7 @@ public class SQLhelper
 		
 		pstatement.setInt(1, invoiceID);
 		pstatement.setString(2, paymentMethod);
-		pstatement.setString(3, currentTime);
+		pstatement.setString(3, dateTime);
 		pstatement.setInt(4, customerID);
 		pstatement.setInt(5, employeeID);
 		pstatement.setInt(6, taxRate);

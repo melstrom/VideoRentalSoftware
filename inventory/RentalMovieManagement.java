@@ -30,9 +30,9 @@ import jdbconnection.JDBCConnection;
  *
  *-editor matt
  * Class usage - method call sequence
- * 
+ *
  *  RentalMovieManagement() -> setCurrentCopy(RentalMovie / String barcode) -> action()
- *  
+ *
  *  special case: getAvailability(ArrayList<GeneralMovie> movies)
  *
  * Program logic:
@@ -67,8 +67,8 @@ public class RentalMovieManagement {
       dueDate = new GregorianCalendar();
     }
 
-    
-    //Reservation 
+
+    //Reservation
     //--------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -84,12 +84,12 @@ public class RentalMovieManagement {
         {
             Calendar currentTime = Calendar.getInstance();
             today.setTime(currentTime.getTime());
-       
+
             today.set(today.get(today.YEAR),today.get(today.MONTH),today.get(today.DATE));
-            
+
             Reservation reservation = new Reservation (customer.getAccountID(), today);
            reservationQuery(""+customer.getAccountID());
-            
+
         }
         else
         {
@@ -114,9 +114,9 @@ public class RentalMovieManagement {
             throw new Exception("movie was not reserved");
         }
     }
-    
-    
-    
+
+
+
     //Gets and sets
     //--------------------------------------------------------------------------------------------------------------------------------
 
@@ -194,7 +194,7 @@ public class RentalMovieManagement {
         setCondition(condition);
     }
 
-    
+
     /**
      * This method gets the condition of a Rental Movie specified by its
      * barcode number.  Possible conditions are good, lost, and damaged.
@@ -228,7 +228,7 @@ public class RentalMovieManagement {
                 MovieNotFoundException, Exception
     {
         String original = movie.getCondition();
-        
+
         /*if(condition.equals(original))
         {
             throw new IllegalArgumentException("input selection is the current selection");
@@ -249,9 +249,9 @@ public class RentalMovieManagement {
 
 
     }
-    
-    
-    
+
+
+
     /**
      * This method finds the rental period in days of a particular movie,
      * given its barcode number.
@@ -263,12 +263,12 @@ public class RentalMovieManagement {
      * @throws ClassNotFoundException
      * @throws Exception
      */
-    public static int getRentalPeriod(String barcode) 
+    public static int getRentalPeriod(String barcode)
             throws SQLException, MovieNotFoundException, ClassNotFoundException,java.io.IOException,java.lang.Exception
     {
         String category;
-        String query = JDBCConnection.makeQuery("catagories", 
-                "catagories.rentalLength", 
+        String query = JDBCConnection.makeQuery("catagories",
+                "catagories.rentalLength",
                 "catagories.catagory = ?");
         if (barcode.length() < GeneralMovie.MIN_SKU_LENGTH)
         {
@@ -326,7 +326,7 @@ public class RentalMovieManagement {
      * @pre A GeneralMovie does not have rental copies belonging to more than
      * one category.  It may have for sale copies, however.
      * @param SKU the SKU of the GeneralMovie
-     * @return null if no rental copies exist, or the category that the 
+     * @return null if no rental copies exist, or the category that the
      * rental copies belong to
      * @throws SQLException
      * @throws ClassNotFoundException
@@ -344,7 +344,7 @@ public class RentalMovieManagement {
         try
         {
             ResultSet result = connection.getResults(query, numParam, param);
-            
+
             if (result.wasNull())
             {
                 return null;
@@ -352,7 +352,7 @@ public class RentalMovieManagement {
             else
               result.next();
             return result.getString(1);
-          
+
         }
         finally
         {
@@ -373,7 +373,7 @@ public class RentalMovieManagement {
     {
         return movie.getFormat();
     }
-    
+
     /**
      * This method gets the specified movie's title
      * @return
@@ -410,14 +410,14 @@ public class RentalMovieManagement {
                     setFormatQuery(format);
                 }
 	    }
-        
+
         if(movie.getFormat().equals(original))
         {
             throw new IllegalArgumentException("format must be DVD, Blu-ray or VHS");
         }
     }	*/
 
-    
+
     //method not implemented
     /**
      * Get the penalty of the customer
@@ -456,7 +456,7 @@ public class RentalMovieManagement {
         {
             throw new IllegalArgumentException("input selection is the current selection");
         }*/
-        
+
         for (int i = 0; i < categories.length; i++)
         {
             if(category.equals(categories[i]))
@@ -470,46 +470,10 @@ public class RentalMovieManagement {
         {
             throw new IllegalArgumentException("category must be 7 day, new release or for sale");
         }
-    }    
-    
+    }
+
     //General rental
     //--------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * This method rents out a RentalMovie, updating both the RentalMovie
-     * and the Customer's account in the database.
-     * @param barcodeNum the barcode number of the RentalMovie
-     * @param memberID the unique ID of the customer who is renting
-     * @return the due date of the movie
-     * @throws MovieNotFoundException if the movie does not exist
-     * @throws CustomerNotFoundException if the customer does not exist
-     * @throws MovieNotAvailableException if the movie is not available
-     * @throws SQLExeption
-     * @throws Exception
-     * @pre the memberID must correspond to an existing member
-     * @pre the movie's condition must be available
-     * @pre customer must pay off overdue penalties before checkout another movie
-     *//*
-    public GregorianCalendar checkOut(String memberID)
-            throws MovieNotFoundException, CustomerNotFoundException,
-            MovieNotAvailableException, SQLException, Exception
-    {
-
-                if(!movie.getCondition().equals("available"))
-                {
-                    throw new MovieNotAvailableException("movie not available");
-                }
-                checkOutQuery(memberID);
-
-                dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE)+rentalPeriod);
-                movie.setCondition("rented");
-      
-	    return dueDate;
-    }
-    */
-
-
-
 
 
     /**
@@ -531,6 +495,7 @@ public class RentalMovieManagement {
     public static GregorianCalendar checkOut(int customerID, String barcode, JDBCConnection connection)
             throws SQLException, ClassNotFoundException, MovieNotFoundException, IOException, java.lang.Exception
     {
+        // Checking for valid parameters
         if (customerID > Math.pow(10,Customer.ID_LENGTH)
                 || customerID < 0)
         {
@@ -546,21 +511,37 @@ public class RentalMovieManagement {
         }
 
 
-
-        Search search = new Search();
-        IndividualMovie aMovie = search.previewIndividualMovie(barcode);
-        if(!aMovie.getCondition().equals("available"))
-         {
-            throw new MovieNotAvailableException("movie is not available");
-         }
-
         String[] splitBarcode = { null, null };
         splitBarcode(barcode, splitBarcode);
         String SKU = splitBarcode[0];
         String rentalID = splitBarcode[1];
 
 
+        // Checking if the video is available for rental
+        String availabilityQuery = JDBCConnection.makeQuery("videoRental",
+                "videoRental.condition",
+                "videoRental.SKU = ? AND videoRental.rentalID = ?");
+        int numParam = 2;
+        String[] availabilityParam = { SKU, rentalID };
+        ResultSet availabilityResults = connection.getResults(availabilityQuery,
+                numParam,
+                availabilityParam);
+        if (availabilityResults.next())
+        {
+            if (! availabilityResults.getString("videoRental.condition").equalsIgnoreCase("available"))
+            {
+                throw new MovieNotAvailableException("The movie is not available for rental.");
+            }
+        }
+        else
+        {
+            throw new MovieNotFoundException("That barcode cannot be matched.");
+        }
 
+
+
+        // changing the videoRental table to have the customerID of the
+        // renting customer, and the condition of rented
         String tableName = "videoRental";
         String set = "videoRental.customerID = ?, videoRental.condition = ?, " +
                 "videoRental.checkout_time = NOW()";
@@ -568,7 +549,7 @@ public class RentalMovieManagement {
 
         String query = JDBCConnection.makeUpdate(tableName, set, constraint);
 
-        int numParam = 4;
+        numParam = 4;
         String[] params = { ""+customerID, "rented", SKU, rentalID };
 
         int linesChanged = connection.update(query, numParam, params);
@@ -599,66 +580,18 @@ public class RentalMovieManagement {
     }
 
 
-    /**
-     * This method rents out a RentalMovie, updating both the RentalMovie
-     * and the Customer's account in the database.
-     * @param movie the movie that you want to rent out
-     * @param customer the customer who is renting
-     * @return the due date of the movie
-     * @pre the barcode number must correspond to an existing movie
-     * @pre the memberID must correspond to an existing member
-     * @pre the movie's status must be available
-     * @throws MovieNotFoundException if the movie does not exist
-     * @throws CustomerNotFoundException if the customer does not exist
-     * @throws MovieNotAvailableException if the movie is not available
-     * @post the movie's status is changed to rented.
-     */
-    public GregorianCalendar checkOut(Customer customer)
-            throws MovieNotFoundException, CustomerNotFoundException,
-            MovieNotAvailableException, SQLException, Exception
-    {
-    
-        
-            if (movie == null || !movie.getCondition().equalsIgnoreCase("available"))
-            {
-                throw new MovieNotAvailableException("MovieNotAvailableException:"
-                        + " movie is not available");
-            }
-    
-            if (customer == null)
-            {
-                throw new CustomerNotFoundException("CustomerDoesNotExistException:"
-                        + " no Customer specified");
-            }
-    
-            checkOutQuery(""+customer.getAccountID());
-           
-    
-    
-            movie.setCondition("rented");
-  
-            
-            
-       dueDate.set(today.get(today.YEAR), today.get(today.MONTH), today.get(today.DATE+rentalPeriod));
-       return dueDate;
-    }
-
-
     public void checkIn(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
     {
-<<<<<<< HEAD
-        if(!movie.getCondition().equals("available"))
-        {
-            checkInQuery(customer.getAccountID());
-            movie.setCondition("available");
-        }
-        else
-        {
-            throw new Exception("movie is already in stock");
-        }
-=======
+//        if(!movie.getCondition().equals("available"))
+//        {
+//            checkInQuery(customer.getAccountID());
+//            movie.setCondition("available");
+//        }
+//        else
+//        {
+//            throw new Exception("movie is already in stock");
+//        }
         checkInQuery(customerID, barcode, newCondition);
->>>>>>> 65e7b89b9ed1eb6e3e2a1250f51c5f900a7e839b
     }
     /**
      * Change a movie from type rental to sale
@@ -682,18 +615,17 @@ public class RentalMovieManagement {
         movie.setCategory("7 day");
         changeToRentalQuery();
     }
-    
     //Utilities
-    //--------------------------------------------------------------------------------------------------------------------------------  
+    //--------------------------------------------------------------------------------------------------------------------------------
 
-    
-    
+
+
     /**
-     * This method splits a barcode into its SKU and rentalID 
+     * This method splits a barcode into its SKU and rentalID
      * @param barcode the full barcode of a movie
      * @param splitBarcode a working array where the two halves of the split
      * barcode will be written
-     * @return splitBarcode will contain SKU in its first index, and the 
+     * @return splitBarcode will contain SKU in its first index, and the
      * rentalID or saleID portion of the barcode in the second index.  If there
      * is not rentalID or saleID, null will be written there.
      * @throws IllegalArguementException
@@ -711,7 +643,7 @@ public class RentalMovieManagement {
         int barcodeLength = barcode.length();
         final int SKU_INDEX = 0;
         final int COPY_NUM_INDEX = 1;
-        if (barcodeLength >= GeneralMovie.INFO_ID_LENGTH 
+        if (barcodeLength >= GeneralMovie.INFO_ID_LENGTH
                 && barcodeLength <= GeneralMovie.MAX_SKU_LENGTH)
         {
             splitBarcode[SKU_INDEX] = barcode;
@@ -719,7 +651,7 @@ public class RentalMovieManagement {
         }
         else if (barcodeLength <= GeneralMovie.MAX_SKU_LENGTH + IndividualMovie.ID_LENGTH)
         {
-            
+
             int copyNumStartIndex = barcodeLength - IndividualMovie.ID_LENGTH;
             String copyNum = barcode.substring(copyNumStartIndex);
             String SKU = barcode.substring(0, copyNumStartIndex);
@@ -738,14 +670,14 @@ public class RentalMovieManagement {
         }
         else if(barcode.length() >= MIN_SKU_LENGTH && barcode.length()<= MAX_SKU_LENGTH)
         SKU = barcode;
-         * 
+         *
          */
     }
-    
-    
-    
+
+
+
     /**
-     * 
+     *
      * @throws IllegalArgumentException
      */
     private void splitBarcode()
@@ -768,7 +700,7 @@ public class RentalMovieManagement {
     }
 
     /**
-     * Set currentTime 
+     * Set currentTime
      */
     private void getCurrentTime()
     {
@@ -776,11 +708,11 @@ public class RentalMovieManagement {
          this.today = new GregorianCalendar();
          this.today.set(today.get(today.YEAR),today.get(today.MONTH),today.get(today.DATE));
     }
-    
+
 
 
 //SQL
-//--------------------------------------------------------------------------------------------------------------------------------  
+//--------------------------------------------------------------------------------------------------------------------------------
    /**
     * Create a query to check out a movie
     * @param accountID the accountID of the customer
@@ -796,7 +728,7 @@ public class RentalMovieManagement {
         String where =" where rentalID = "+quote+rentalID+quote;
         String query = generateUpdateSQL (table, "videoRental.condition", "rented", where);
         updateDatabase(query);
-    
+
         table = "madeReservations";
         String []columns = {"dateTime","SKU", "customerID"};
         String date = ""+today.get(today.YEAR)+"/"+today.get(today.MONTH)+"/"+today.get(today.DATE);
@@ -840,7 +772,7 @@ public class RentalMovieManagement {
        updateDatabase(query);
     }
     /**
-     * Create a query to remove a reservation 
+     * Create a query to remove a reservation
      * @param accountID the accountID of the customer
      * @throws SQLException
      * @throws Exception
@@ -854,12 +786,12 @@ public class RentalMovieManagement {
         String query = generateDeleteSQL(tablename, where);
         updateDatabase(query);
     }
-    
-    
+
+
     /**
      * Create a query to get the rental period (in days) for the currentMovie
      * @return result the number of days
-     * @throws SQLException 
+     * @throws SQLException
      * @throws Exception
      * @pre currentMovie is set /not null
      * @post an integer field received from the database
@@ -876,7 +808,7 @@ public class RentalMovieManagement {
 
         return result;
     }
-    
+
     /**
      * Changes a rental movie to a sale movie and updates the database
      * @param barcodeNum
@@ -906,7 +838,7 @@ public class RentalMovieManagement {
             query = generateInsertSQL(table, columnNames,values);
             updateDatabase(query);*/
         }
-        
+
     }
 
         /**
@@ -930,7 +862,7 @@ public class RentalMovieManagement {
             String where = " where rentalID="+quote+rentalID+quote+" and SKU="+quote+SKU+quote;
             String query = generateUpdateSQL(table, attribute, attributeTo, where);
             updateDatabase(query);
-            
+
             /*String[]columnNames = {"RentalID","condition","catagory", "SKU"};
             String[] values = { rentalID, movie.getCondition(), movie.getCategory(),SKU };
             table = "videoRental";
@@ -939,7 +871,7 @@ public class RentalMovieManagement {
         }
 
     }
-    
+
     /**
      * Sets the category of the currentMovie
      * @param category the category to change to
@@ -965,7 +897,7 @@ public class RentalMovieManagement {
                  updateDatabase(query);
             }
         }
-  
+
     }
     /**
      * Set the format of the currentMovie
@@ -986,8 +918,8 @@ public class RentalMovieManagement {
                 String where = " where rentalID="+quote+rentalID+quote;
                 String query = generateUpdateSQL(table, attribute,attributeTo, where);
                  updateDatabase(query);
-            
-        
+
+
 
     }*/
     /**
@@ -1020,7 +952,7 @@ public class RentalMovieManagement {
     }
 
 
-    
+
      /**
      * Generates a delete query
      * DELETE FROM tableName WHERE columns[0] = 'keys[0]' AND ... AND
@@ -1080,9 +1012,9 @@ public class RentalMovieManagement {
 
         System.out.println(query);
         return query;
-        
+
     }
-	
+
       /**
      * This method generates a simple sql query for updating a table
      * @param tableName the tablename
@@ -1142,11 +1074,11 @@ public class RentalMovieManagement {
 		    }
 		    if (rowsChanged < 1)
 		    {
-                
+
 			throw new MovieNotFoundException("MovieNotFoundException: "
 				+ "cannot find barcode number");
 		    }
-		
+
 		    return rowsChanged;
         }
         finally
@@ -1205,15 +1137,15 @@ public class RentalMovieManagement {
 
         ArrayList<Reservation> reservations = getReservations(SKU);
         int numReservations = reservations.size();
-        
+
         int rentalPeriod = getRentalPeriod(SKU);
-        
+
         if (rentalPeriod < 1)
         {
             return null;
             // should never get here
         }
-        
+
         ArrayList<GregorianCalendar> dueDates = new ArrayList<GregorianCalendar>();
         for (Reservation reservation : reservations)
         {
@@ -1230,7 +1162,7 @@ public class RentalMovieManagement {
             }
             numReservations -= numTotalRentalCopies;
         }
-        
+
         return dueDates.get(numReservations);
     }
 
@@ -1396,8 +1328,8 @@ public class RentalMovieManagement {
             connection.closeConnection();
         }
     }
-    
-    
+
+
     /**
      * This method finds the number of available copies of a GeneralMovie
      * @param movie the GeneralMovie
@@ -1422,7 +1354,7 @@ public class RentalMovieManagement {
     private String rentalID;
     private JDBCConnection JDBC;
     private Connection connection;
-    private GregorianCalendar dueDate; 
+    private GregorianCalendar dueDate;
     private GregorianCalendar today;
     private IndividualMovie movie;
     final public int RENTAL_ID_LENGTH = 9;
@@ -1436,3 +1368,75 @@ public class RentalMovieManagement {
     final char comma = ',';
 
 }
+
+/**
+//     * This method rents out a RentalMovie, updating both the RentalMovie
+//     * and the Customer's account in the database.
+//     * @param movie the movie that you want to rent out
+//     * @param customer the customer who is renting
+//     * @return the due date of the movie
+//     * @pre the barcode number must correspond to an existing movie
+//     * @pre the memberID must correspond to an existing member
+//     * @pre the movie's status must be available
+//     * @throws MovieNotFoundException if the movie does not exist
+//     * @throws CustomerNotFoundException if the customer does not exist
+//     * @throws MovieNotAvailableException if the movie is not available
+//     * @post the movie's status is changed to rented.
+//     */
+//    public GregorianCalendar checkOut(Customer customer)
+//            throws MovieNotFoundException, CustomerNotFoundException,
+//            MovieNotAvailableException, SQLException, Exception
+//    {
+//
+//
+//            if (movie == null || !movie.getCondition().equalsIgnoreCase("available"))
+//            {
+//                throw new MovieNotAvailableException("MovieNotAvailableException:"
+//                        + " movie is not available");
+//            }
+//
+//            if (customer == null)
+//            {
+//                throw new CustomerNotFoundException("CustomerDoesNotExistException:"
+//                        + " no Customer specified");
+//            }
+//
+//            checkOutQuery(""+customer.getAccountID());
+//
+//
+//
+//            movie.setCondition("rented");
+//
+//
+//
+//       dueDate.set(today.get(today.YEAR), today.get(today.MONTH), today.get(today.DATE+rentalPeriod));
+//       return dueDate;
+//    }
+//
+//
+//    public void checkIn(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
+//    {
+//        checkInQuery(customerID, barcode, newCondition);
+//    }
+//    /**
+//     * Change a movie from type rental to sale
+//     * @throws SQLException
+//     * @throws MovieNotFoundException
+//     * @throws java.lang.Exception
+//     */
+//    public void changeToSales()throws SQLException,MovieNotFoundException,java.lang.Exception
+//    {
+//        movie.setCategory("for sale");
+//        changeToSaleQuery();
+//    }
+//    /**
+//     * change a movie from type sale to rental
+//     * @throws SQLException
+//     * @throws MovieNotFoundException
+//     * @throws java.lang.Exception
+//     */
+//    public void changeToRental()throws SQLException,MovieNotFoundException,java.lang.Exception
+//    {
+//        movie.setCategory("7 day");
+//        changeToRentalQuery();
+//    }
