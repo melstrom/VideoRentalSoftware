@@ -489,7 +489,7 @@ public class RentalMovieManagement {
      * @pre the memberID must correspond to an existing member
      * @pre the movie's condition must be available
      * @pre customer must pay off overdue penalties before checkout another movie
-     */
+     *//*
     public GregorianCalendar checkOut(String memberID)
             throws MovieNotFoundException, CustomerNotFoundException,
             MovieNotAvailableException, SQLException, Exception
@@ -505,6 +505,75 @@ public class RentalMovieManagement {
                 movie.setCondition("rented");
       
 	    return dueDate;
+    }
+    */
+
+
+
+
+    /**
+     * This method checks out a RentalMovie to a particular customer.  It updates
+     * the videoRental table in the database and calculates when the movie is due.
+     * It does not check that the movie is available, or that the customer has
+     * no holds.
+     *
+     * @pre the customerID and barcode must exist in the database
+     * @pre the connection must be open
+     * @param customerID the unique customerID of the the customer who is
+     * renting the video
+     * @param barcode the full barcode of the RentalMovie being rented
+     * @param connection an open connection to the database
+     * @return the due date of the movie
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public static GregorianCalendar checkOut(int customerID, String barcode, JDBCConnection connection)
+            throws SQLException, ClassNotFoundException
+    {
+
+        // TODO: implement checks for holds on account, movies that are
+        // not available
+
+        String[] splitBarcode = { null, null };
+        splitBarcode(barcode, splitBarcode);
+        String SKU = splitBarcode[0];
+        String rentalID = splitBarcode[1];
+
+        String tableName = "videoRental";
+        String set = "videoRental.customerID = ?, videoRental.condition = ?, " +
+                "videoRental.checkout_time = NOW()";
+        String constraint = "videoRental.SKU = ?, videoRental.rentalID = ?";
+
+        String query = JDBCConnection.makeUpdate(tableName, set, constraint);
+        
+        int numParam = 4;
+        String[] params = { ""+customerID, "rented", SKU, rentalID };
+        
+        int linesChanged = connection.update(query, numParam, params);
+        
+        // assert(linesChagned == 1);
+        String select = "formats.rentalLength";
+        String from = "videoRental, formats";
+        String where = "formats.format = videoRental.format AND" +
+                " videoRental.rentalID = ?";
+        
+        String rentalLengthQuery = JDBCConnection.makeQuery(from, select, where);
+        numParam = 1;
+        String[] param = { rentalID };
+        ResultSet result = connection.getResults(rentalLengthQuery, numParam, param);
+        int rentalPeriod = 0;
+        if (result.next())
+        {
+            rentalPeriod = result.getInt("formats.rentalLength");
+        }
+        else
+        {
+            // throw new Exception("there's no format in the table");
+        }
+        GregorianCalendar dueDate = new GregorianCalendar();
+        dueDate.add(Calendar.DATE, rentalPeriod);
+
+        return dueDate;
     }
 
 

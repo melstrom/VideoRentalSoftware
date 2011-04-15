@@ -219,6 +219,7 @@ public static Connection getConnection()
 
     /**
      * creates an update query.
+     * The form is UPDATE tableName SET column = blah WHERE blah = blah
      * @pre no parameter may be null
      * @param tableName
      * @param set
