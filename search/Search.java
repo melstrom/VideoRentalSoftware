@@ -791,7 +791,7 @@ public class Search
                     String condition = result.getString("videoRental.condition");
                     PriceSchemeManagement priceScheme = new PriceSchemeManagement();
                     int priceInCents = priceScheme.getPrice(category, format);
-                    int rentalPeriod = PriceSchemeManagement.getRentalPeriod(category);
+                    int rentalPeriod = RentalMovieManagement.getRentalPeriod(category);
 
                     IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
                     RentalMovie rentalMovie = new RentalMovie(rentalPeriod, individualMovie);
