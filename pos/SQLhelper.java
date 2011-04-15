@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.GregorianCalendar;
 import java.util.Date;
 
 /**
@@ -358,14 +359,14 @@ public class SQLhelper
 		// get info to insert into table
 		int invoiceID = transaction.getInvoiceID();
 		String paymentMethod = transaction.getPaymentMethod() ;
-		Date dateTime = transaction.getDate();
-		int customerID = Integer.parseInt(transaction.getCustomerID()) ;
-		int employeeID = Integer.parseInt(transaction.getEmployeeID()) ;
+		String dateTime = transaction.getDate();
+		int customerID = transaction.getCustomerID();
+		int employeeID = transaction.getEmployeeID() ;
 		int taxRate = transaction.getTaxRateAtTimeOfSale() ;
 		
 		//convert java Date object into String format sql insert command expects
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentTime = sdf.format(dateTime).toString();
+		//java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//String currentTime = sdf.format(dateTime).toString();
 
 		String queryString = "INSERT INTO " + TRANSACTION_TABLE_NAME + " ("
 			+ "invoiceID,"
@@ -381,7 +382,7 @@ public class SQLhelper
 		
 		pstatement.setInt(1, invoiceID);
 		pstatement.setString(2, paymentMethod);
-		pstatement.setString(3, currentTime);
+		pstatement.setString(3, dateTime);
 		pstatement.setInt(4, customerID);
 		pstatement.setInt(5, employeeID);
 		pstatement.setInt(6, taxRate);
