@@ -3,7 +3,7 @@ package pos;
 
 import java.io.IOException;
 import java.sql.*;
-//import jdbconnection.JDBCConnection;
+import jdbconnection.JDBCConnection;
 /**
  *
  * @author xliu01
@@ -46,13 +46,23 @@ public class Discount implements TransactionItem
         return "" + barcode;
     }
 
-    public boolean updateItemInfoAtCheckOut(int invoiceID, JDBCConnection conn)
-                throws SQLException
+    public void updateItemInfoAtCheckOut(int invoiceID)
+                throws SQLException, ClassNotFoundException
     {
-        PreparedStatement stat = conn.prepareStatement("INSERT INTO item " +
-                "VALUES (((MAX(itemID))+1), 'promo', "+ (-1 * priceInCents) +
-                ", nul, " + barcode +", null, null, " + invoiceID + ");");
-        return !stat.execute();
+        JDBCConnection conn = new JDBCConnection();
+        conn.getConnection();
+        Statement stat = conn.createStatement();
+        String table = "item";
+        String column = "itemID";
+        String SQL = "SELECT " + column + " FROM " + table;
+        ResultSet rs = stat.executeQuery(SQL);
+        rs.last();
+        int LastAccountID = rs.getInt(column);
+        int newAccountID = LastAccountID + 1;
+
+        stat.executeQuery("INSERT INTO item VALUES ("+ newAccountID + ", promo, "
+                + priceInCents + "null," + barcode +", null, null," + invoiceID
+                +");");
     }
 
     private int priceInCents;

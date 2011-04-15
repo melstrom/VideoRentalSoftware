@@ -3,8 +3,8 @@ package pos;
 
 import java.sql.*;
 import java.io.IOException;
-import search.Search;
-import inventory.IndividualMovie;
+import search.*;
+import inventory.*;
 import jdbconnection.JDBCConnection;
 //import pos.PriceSchemeManagement;
 /**
@@ -14,9 +14,10 @@ import jdbconnection.JDBCConnection;
 public class MovieInterface implements TransactionItem
 {
     public MovieInterface(String barcode, PriceSchemeManagement PSM)
-            throws SQLException, ClassNotFoundException, IOException
+            throws SQLException, ClassNotFoundException, IOException,
+            MovieNotFoundException
     {
-        IndividualMovie movie = (IndividualMovie)(Search.preview(barcode));
+        IndividualMovie movie = (IndividualMovie)(Search.previewMovie(barcode));
         this.barcode = barcode;
         this.title = movie.getTitle();
         this.category = movie.getCategory();
@@ -48,39 +49,48 @@ public class MovieInterface implements TransactionItem
         return priceInCents;
     }
 
-    public void updateItemInfoAtCheckOut(int invoiceID, JDBCConnection conn)
-                throws SQLException
+    public void updateItemInfoAtCheckOut(int invoiceID)
+                throws SQLException,ClassNotFoundException
     {
+        JDBCConnection conn = new JDBCConnection();
+        conn.getConnection();
         // rental or sale movie has different query to execute
-        if(category.equals("for sale"))
+        try
         {
-            Statement stat = conn.createStatement();
+            if(category.equals("for sale"))
+            {
+                Statement stat = conn.createStatement();
 
-            String table = "item";
-            String column = "itemID";
-            String SQL = "SELECT " + column + " FROM " + table;
-            ResultSet rs = stat.executeQuery(SQL);
-            rs.last();
-            int largestItemID = rs.getInt(column);
+                String table = "item";
+                String column = "itemID";
+                String SQL = "SELECT " + column + " FROM " + table;
+                ResultSet rs = stat.executeQuery(SQL);
+                rs.last();
+                int largestItemID = rs.getInt(column);
 
-            stat.executeQuery("INSERT INTO item VALUES (" + largestItemID + ","
-                    + "'sale', "+ priceInCents +", '"+ barcode.substring(barcode.length() - 9)
-                    +"', null, '"+ category +"', null,"+ invoiceID +");");
+                stat.executeQuery("INSERT INTO item VALUES (" + largestItemID + ","
+                        + "'sale', "+ priceInCents +", '"+ barcode.substring(barcode.length() - 9)
+                        +"', null, '"+ category +"', null,"+ invoiceID +");");
+            }
+            else
+            {
+               Statement stat = conn.createStatement();
+
+                String table = "item";
+                String column = "itemID";
+                String SQL = "SELECT " + column + " FROM " + table;
+                ResultSet rs = stat.executeQuery(SQL);
+                rs.last();
+                int largestItemID = rs.getInt(column);
+
+                stat.executeQuery("INSERT INTO item VALUES (" + largestItemID + ", "
+                        + priceInCents + ", null, null, " + category + ", " +
+                        barcode.substring(barcode.length() - 9) + ", " + invoiceID +");");
+            }
         }
-        else
+        finally
         {
-           Statement stat = conn.createStatement();
-
-            String table = "item";
-            String column = "itemID";
-            String SQL = "SELECT " + column + " FROM " + table;
-            ResultSet rs = stat.executeQuery(SQL);
-            rs.last();
-            int largestItemID = rs.getInt(column);
-
-            stat.executeQuery("INSERT INTO item VALUES (" + largestItemID + ", "
-                    + priceInCents + ", null, null, " + category + ", " + 
-                    barcode.substring(barcode.length() - 9) + ", " + invoiceID +");");
+            conn.closeConnection();
         }
     }
 

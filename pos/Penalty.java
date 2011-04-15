@@ -3,14 +3,14 @@ package pos;
 
 import java.io.IOException;
 import java.sql.*;
-//import jdbconnection.JDBCConnection;
+import jdbconnection.JDBCConnection;
 /**
  *
  * @author xliu01
  */
-public class Penalty_1 implements TransactionItem
+public class Penalty implements TransactionItem
 {
-    public Penalty_1(int price)
+    public Penalty(int price)
             throws IOException
     {
         setPrice(price);
@@ -44,13 +44,21 @@ public class Penalty_1 implements TransactionItem
         this.priceInCents = price;
     }
 
-    public boolean updateItemInfoAtCheckOut(int invoiceID, JDBCConnection conn)
-            throws SQLException
+    public void updateItemInfoAtCheckOut(int invoiceID)
+            throws SQLException,ClassNotFoundException
     {
-        PreparedStatement stat = conn.prepareStatement("INSERT INTO item " +
-                "VALUES (((MAX(itemID))+1), 'penalty', "+ priceInCents +", null," +
-                " null, null, null, " + invoiceID + ");");
-        return !(stat.execute());
+        JDBCConnection conn = new JDBCConnection();
+        Statement stat = conn.createStatement();
+        String table = "item";
+        String column = "itemID";
+        String SQL = "SELECT " + column + " FROM " + table;
+        ResultSet rs = stat.executeQuery(SQL);
+        rs.last();
+        int LastAccountID = rs.getInt(column);
+        int newAccountID = LastAccountID + 1;
+
+        stat.executeQuery("INSERT INTO item VALUES (" + newAccountID + ", 'penalty', "
+                + priceInCents + ", null, null, null, null, " + invoiceID + ");");
     }
 
     private int priceInCents;
