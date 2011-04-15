@@ -13,7 +13,6 @@ public class Customer extends Account
 {
     /**
      * Default constructor of Customer
-     * @param barcode the barcode on customer's membership card
      * @param DL the driver license number of the user
      * @param accountID the accountID of the account
      * @param Fname the first name of the user
@@ -21,7 +20,7 @@ public class Customer extends Account
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
-    public Customer (String barcode, String DL, int accountID, String Fname, String Lname, Address address, String phoneNum)
+    public Customer (String DL, int accountID, String Fname, String Lname, Address address, String phoneNum)
     {
         super(accountID, Fname, Lname, address,phoneNum);
         this.DL = DL;

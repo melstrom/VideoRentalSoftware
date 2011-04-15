@@ -21,13 +21,16 @@ package account;
  */
 public abstract class Account
 {
+    // accountID is the barcode number on the customers card, or the employee's id
+    // in the db, the customer barcode is customerID and employee's id is employeeID
     private int accountID;
-    private String loginID;
+
+    //private String loginID; this is the accountID
     private String Fname;
     private String Lname;
     private String phoneNum;
     private Address address;
-    private String password;
+   // private String password;
 //    private boolean status;
 
 
@@ -50,16 +53,16 @@ public abstract class Account
         this.phoneNum = phoneNum;
  //       status = true;
     }
-    /**
+    /*
      * Set log in information
      * @param loginID the log in ID/username of the account
      * @param password the password of the account
-     */
     public void setLogin(String loginID, String password)
     {
         setPassword(password);
         setLoginID(loginID);
     }
+    */
     /**
      * Set personal information 
      * @param Fname the first name of the user
@@ -81,23 +84,22 @@ public abstract class Account
     {
         status = !status;
     }
-    */
+    
     /**
      * Set password
      * @param password the password of the account
-     */
+   
     protected void setPassword(String password)
     {
         this.password = password;
     }
-    /**
      * Set login ID
      * @param loginID the log in ID/username of the account
-     */
     protected void setLoginID(String loginID)
     {
         this.loginID = loginID;
     }
+    */
     /**
      * Set first name
      * @param Fname the first name of the user
@@ -122,6 +124,15 @@ public abstract class Account
     {
         this.address = address;
     }
+    /**
+     * Method to get the phone number
+     * return the phone number as a String
+     */
+    public String getPhoneNum()
+    {
+	return phoneNum;
+    }
+
     /**
      * Set phone number
      * @param phoneNum the phone number of the user
@@ -165,12 +176,10 @@ public abstract class Account
     /**
      * Get password
      * @return password the password of the account
-     */
     public String getPassword()
     {
         return password;
     }
-/*
      * Get status
      * @return status the status of the account (True = Active/False = Inactive)
     public boolean getStatus()
