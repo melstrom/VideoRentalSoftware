@@ -30,7 +30,7 @@ public class TransactionManager
 	private Statement statement;
 	private Connection connection;
 	private SQLhelper mySQLhelper;
-	final private double TAX_RATE = 0.12;
+	final private double TAX_RATE = 12;
 	
 	/**
 		Constructor stuff

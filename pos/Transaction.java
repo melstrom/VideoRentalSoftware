@@ -423,7 +423,7 @@ public class Transaction
 		items.add(item);
 		//System.out.println("Size 2: " + items.size());
 		subtotalInCents += item.getPrice();
-		taxInCents = (int)(taxPercent * subtotalInCents);
+		taxInCents = (int)(taxPercent /100 * subtotalInCents);
 	}
 	
 	/**
