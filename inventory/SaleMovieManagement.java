@@ -16,9 +16,10 @@ public class SaleMovieManagement
         conn.getConnection();
         try
         {
-            PreparedStatement stat = conn.prepareStatement("UPDATE videoSale SET"
-                    + " condition = 'sold' WHERE saleID = " +
-                    barcode.substring(barcode.length() - 9) + ";");
+            String SQL = "UPDATE videoSale SET"
+                    + " videoSale.condition = 'sold' WHERE saleID = " +
+                    barcode.substring(barcode.length() - 9) + ";";
+            PreparedStatement stat = conn.prepareStatement(SQL);
             int hasResult = stat.executeUpdate();
             if(hasResult != 0)
                 return;
