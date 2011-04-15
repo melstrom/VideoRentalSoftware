@@ -287,10 +287,10 @@ public class EmployeeFrame extends javax.swing.JFrame {
         jTabbedPane1.addTab("Inventory", inventoryPanel);
         employeePanel = new ui.EmployeePanel();
         jTabbedPane1.addTab("Employee", employeePanel);
-        othersPanel = new ui.OthersPanel();
-        jTabbedPane1.addTab("Others", othersPanel);
         pricePanel = new ui.PriceSchemePanel();
         jTabbedPane1.addTab("Price Scheme", pricePanel);
+        othersPanel = new ui.OthersPanel();
+        jTabbedPane1.addTab("Others", othersPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -429,8 +429,8 @@ public class EmployeeFrame extends javax.swing.JFrame {
     private ui.MembershipPanel membershipPanel;
     private ui.InventoryPanel inventoryPanel;
     private ui.EmployeePanel employeePanel;
-    private OthersPanel othersPanel;
     private ui.PriceSchemePanel pricePanel;
+    private OthersPanel othersPanel;
     // End of variables declaration//GEN-END:variables
 
 }

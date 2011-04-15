@@ -61,17 +61,23 @@ public class CheckOutPanel extends javax.swing.JPanel {
         jButton11 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         jTextField3.setEditable(false);
         jTextField3.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         jTextField3.setText("0.00");
+        add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 475, 95, -1));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel6.setText("Total");
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(182, 509, -1, -1));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel5.setText("HST");
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(189, 478, -1, -1));
 
         outOkButton.setText("OK");
+        add(outOkButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(223, 12, 100, -1));
 
         transactionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -100,6 +106,8 @@ public class CheckOutPanel extends javax.swing.JPanel {
         });
         transactionScrollPane.setViewportView(transactionTable);
 
+        add(transactionScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 41, 314, -1));
+
         outCustomerInfoPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         outPhoneField.setEditable(false);
@@ -107,7 +115,7 @@ public class CheckOutPanel extends javax.swing.JPanel {
         outNameLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         outNameLabel.setText("Name:");
 
-        outPhoneLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        outPhoneLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         outPhoneLabel.setText("Phone Number:");
 
         outPenalthField.setEditable(false);
@@ -118,10 +126,10 @@ public class CheckOutPanel extends javax.swing.JPanel {
         outNameField.setText("Customer Name");
         outNameField.setFocusable(false);
 
-        outPenaltyLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        outPenaltyLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         outPenaltyLabel.setText("Penalty:");
 
-        outLicenseLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        outLicenseLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         outLicenseLabel.setText("Driver's License:");
 
         outLicenseField.setEditable(false);
@@ -169,14 +177,19 @@ public class CheckOutPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        add(outCustomerInfoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(335, 11, 270, -1));
+
         outCIdField.setText("123456");
+        add(outCIdField, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 13, 124, -1));
 
         jTextField4.setEditable(false);
         jTextField4.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         jTextField4.setText("0.00");
+        add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 506, 95, -1));
 
-        outCIdLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        outCIdLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         outCIdLabel.setText("Customer ID:");
+        add(outCIdLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 15, -1, -1));
 
         jButton1.setText("Add Transaction");
 
@@ -208,9 +221,9 @@ public class CheckOutPanel extends javax.swing.JPanel {
                     .addComponent(jButton11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(16, 16, 16)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField2))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton2)
@@ -237,8 +250,8 @@ public class CheckOutPanel extends javax.swing.JPanel {
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton9)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -246,69 +259,7 @@ public class CheckOutPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(outCIdLabel)
-                        .addGap(5, 5, 5)
-                        .addComponent(outCIdField, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(outOkButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(transactionScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(outCustomerInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(outCIdLabel))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(outCIdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(outOkButton))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(transactionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(outCustomerInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(357, 153, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
 
