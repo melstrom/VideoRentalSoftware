@@ -206,16 +206,15 @@ public class Search
                 String province = result.getString("address.province");
                 String country = result.getString("address.country");
                 String postalCode = result.getString("address.postalCode");
-                int addressID = result.getInt("address.addressID");
+                //int addressID = result.getInt("address.addressID");
 
-                Address address = new Address(addressID, houseNumber, streetName,
+                Address address = new Address(houseNumber, streetName,
                         city, province, country, postalCode);
 
-                return new Customer(barcode, driversLicense, memberID,
+                return new Customer(driversLicense, memberID,
                         firstName, lastName, address, phoneNum);
                 // copy and pasted signature from the Customer class
-                //public Customer (String barcode, String DL, int accountID,
-                //String Fname, String Lname, Address address, String phoneNum)
+                //public Customer (String DL, int accountID, String Fname, String Lname, Address address, String phoneNum)
                 
         }// end try
         finally
@@ -280,9 +279,9 @@ public class Search
                 String province = result.getString("address.province");
                 String country = result.getString("address.country");
                 String postalCode = result.getString("address.postalCode");
-                int addressID = result.getInt("address.addressID");
+                //int addressID = result.getInt("address.addressID");
 
-                Address address = new Address(addressID, houseNumber, streetName,
+                Address address = new Address(houseNumber, streetName,
                         city, province, country, postalCode);
 
                 return new Employee(position, employeeID, firstName, lastName,
@@ -329,9 +328,9 @@ public class Search
                     String postalCode = resultSet.getString("postalCode");
                     String country = resultSet.getString("country");
                     String phoneNum = resultSet.getString("phoneNum");
-                    int addressID = resultSet.getInt("address.addressID");
+                    //int addressID = resultSet.getInt("address.addressID");
 
-                    Address address = new Address(addressID, houseNumber, streetName,
+                    Address address = new Address(houseNumber, streetName,
                         city, province, country, postalCode);
 
                     allEmployees.add(new Employee(position, accountID, firstName, lastName, address, phoneNum));
