@@ -584,7 +584,7 @@ public class RentalMovieManagement {
      * @post if the barcode is longer than MAX_SKU_LENGTH, it is split into rentalID and SKU
      * @post if the barcode is between MIN_SKU_LENGTH and MAX_SKU_LENGTH, barcode is assign to SKU
      */
-    private static void splitBarcode(String barcode, String[] splitBarcode)
+    public static void splitBarcode(String barcode, String[] splitBarcode)
             throws IllegalArgumentException
     {
         if (barcode == null )
