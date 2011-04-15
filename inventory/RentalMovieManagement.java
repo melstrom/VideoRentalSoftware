@@ -80,7 +80,7 @@ public class RentalMovieManagement {
      */
     public void makeReservation(Customer customer)throws SQLException, Exception
     {
-        if(!movie.getCondition().equals("reserved"))
+        if(movie.getCondition().equals("available"))
         {
             Calendar currentTime = Calendar.getInstance();
             today.setTime(currentTime.getTime());
@@ -90,6 +90,10 @@ public class RentalMovieManagement {
             Reservation reservation = new Reservation (customer.getAccountID(), today);
            reservationQuery(""+customer.getAccountID());
             
+        }
+        else
+        {
+            throw new Exception("movie not available");
         }
 
     }
@@ -103,7 +107,12 @@ public class RentalMovieManagement {
      */
     public void removeReservation(Customer customer)throws SQLException, Exception
     {
-            removeReservationQuery(customer.getAccountID());
+        if(movie.getCondition().equals("reserved"))
+        removeReservationQuery(customer.getAccountID());
+        else
+        {
+            throw new Exception("movie was not reserved");
+        }
     }
     
     
@@ -485,6 +494,11 @@ public class RentalMovieManagement {
             throws MovieNotFoundException, CustomerNotFoundException,
             MovieNotAvailableException, SQLException, Exception
     {
+
+                if(!movie.getCondition().equals("available"))
+                {
+                    throw new MovieNotAvailableException("movie not available");
+                }
                 checkOutQuery(memberID);
 
                 dueDate.set(dueDate.get(dueDate.YEAR),dueDate.get(dueDate.MONTH),dueDate.get(dueDate.DATE)+rentalPeriod);
@@ -541,7 +555,15 @@ public class RentalMovieManagement {
 
     public void checkIn(Customer customer)throws SQLException, Exception,java.lang.Exception
     {
-        checkInQuery(customer.getAccountID());
+        if(!movie.getCondition().equals("available"))
+        {
+            checkInQuery(customer.getAccountID());
+            movie.setCondition("available");
+        }
+        else
+        {
+            throw new Exception("movie is already in stock");
+        }
     }
     /**
      * Change a movie from type rental to sale
