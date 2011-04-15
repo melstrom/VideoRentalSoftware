@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import jdbconnection.JDBCConnection;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Apr 13
@@ -166,6 +169,95 @@ public class MovieManagement
         addPhysicalVideo(infoID, movie);
 
     }
+    
+    
+
+
+    /**
+     * This method creates new GeneralMovies in the Database
+     * given a .csv file name
+     * @param filename the filename. it must be a .csv file
+     * @throws IOException
+     * @throws Exception
+     */
+    public static void createGeneralMovie(String filename)
+            throws IOException, Exception
+    {
+        final int NON_ACTOR_FIELDS = 12;
+        // There are 12 non actor fields:
+        // SKU, title, releaseDate, studio, genre, director, 
+        // producer, rating, priceInDollars, length, format
+        // the rest of the fields are actors
+        final int SKU = 0;
+        final int TITLE = 1;
+        final int RELEASE_DATE = 2;
+        final int STUDIO = 3;
+        final int GENRE = 4;
+        final int DIRECTOR = 5;
+        final int PRODUCER = 6;
+        final int SYNOPSIS = 7;
+        final int RATING = 8;
+        final int PRICE_IN_DOLLARS = 9;
+        final int LENGTH = 10;
+        final int FORMAT = 11;
+        BufferedReader fin = new BufferedReader(new FileReader(filename));
+        String currentLine = "";
+        while ((currentLine = fin.readLine()) != null)
+        {
+            String[] fields = currentLine.split(",");
+            int numFields = fields.length;
+            int numActors = numFields - NON_ACTOR_FIELDS;
+            
+            String sku = fields[SKU];
+            String title = fields[TITLE];
+            int year = Integer.parseInt(fields[RELEASE_DATE]);
+            GregorianCalendar releaseDate = new GregorianCalendar();
+            releaseDate.set(Calendar.YEAR, year);
+            String studio = fields[STUDIO];
+            String genre = fields[GENRE];
+            String director = fields[DIRECTOR];
+            String producer = fields[PRODUCER];
+            String rating = fields[RATING];
+            double priceInDollars = Double.parseDouble(fields[PRICE_IN_DOLLARS]);
+            int priceInCents = (int) (priceInDollars * 100);
+            int length = Integer.parseInt(fields[LENGTH]);
+            String format = fields[FORMAT];
+            String synopsis = fields[SYNOPSIS];
+            
+            String[] actors = new String[numActors];
+            int fieldIndex = NON_ACTOR_FIELDS;
+            int actorIndex = 0;
+            while ( fieldIndex < numFields)
+            {
+                actors[actorIndex] = fields[fieldIndex];
+                actorIndex++;
+                fieldIndex++;
+            }
+            
+            
+            //public void createGeneralMovie(String SKU,
+//            String title,
+//            String[] actors,
+//            String director,
+//            String producer,
+//            GregorianCalendar releaseDate,
+//            String synopsis,
+//            String genre,
+//	    String rating,
+//            String studio,
+//            int retailPrice,
+//            String format,
+//            int runtime)
+            
+            createGeneralMovie(new GeneralMovie(sku, title, actors, director, producer, releaseDate,
+                    synopsis, genre, rating, studio, priceInCents, format, length));
+        }
+        
+    }
+    
+    
+    
+    
 
     /**
      * This method looks at the attributes of a GeneralMovie and tries to
