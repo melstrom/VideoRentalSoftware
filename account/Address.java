@@ -95,7 +95,7 @@ public class Address
 	}
 
 
-    /**
+    /*
      * This updates the house number of the address; the address should be saved before doing updates to the object.
      * @param houseNumber the house number of the address
      * @throws ClassNotFoundException if JDBC driver is not in CLASSPATH

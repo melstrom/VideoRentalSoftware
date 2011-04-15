@@ -128,7 +128,7 @@ public abstract class Account
      * Method to get the phone number
      * return the phone number as a String
      */
-    protected String getPhoneNum()
+    public String getPhoneNum()
     {
 	return phoneNum;
     }

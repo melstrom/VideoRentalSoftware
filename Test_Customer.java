@@ -9,10 +9,11 @@
  * @author Peter
  */
 import account.Employee;
+import account.Customer;
 import account.Address;
 import pos.SQLhelper;
 
-public class Test_Employee
+public class Test_Customer
 {
     public static void main(String[] args) throws Throwable
     {
@@ -24,12 +25,14 @@ public class Test_Employee
 	String position = "slave";
 	int accountID = 5;
 	int employeeID = 6;
-	String firstName = "Tom";
+	String firstName = "CustomerFName";
 	String lastName = "Smith";
 	//String address = "4321 Electric Ave.";
-	String phoneNum = "604-555-9876";
+	String phoneNum = "604-888-9876";
 	Employee myEmployee = new Employee(position, accountID, firstName, lastName, empAddress, phoneNum);
-	mySQLhelper.createAccount(myEmployee);
+	// any accountID given is not used, the constructor should not have that parameter. The db sets it.
+	Customer myCustomer = new Customer("DL GOES HERE", 666, "FFFF", "LLLL", empAddress, phoneNum); 
+	mySQLhelper.createAccount(myCustomer);
 
     }
 

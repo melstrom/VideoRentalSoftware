@@ -3,6 +3,8 @@ package pos;
 //import pos.Transaction;
 import account.Address;
 import account.Employee;
+import account.Customer;
+import account.Account;
 import java.util.ArrayList;
 
 // sql stuff
@@ -36,7 +38,8 @@ public class SQLhelper
 	public static final String EMPLOYEE_TABLE_PK = "employeeID";
 	public static final String ACCOUNT_TABLE_NAME = "account";
 	public static final String ACCOUNT_TABLE_PK = "accountID";
-	
+	public static final String CUSTOMER_TABLE_NAME = "customer";
+	public static final String CUSTOMER_TABLE_PK = "customerID";
 	
 	
 	
@@ -81,29 +84,103 @@ public class SQLhelper
 	/**
 	 * Method to add a customer or employee to the database.
 	 * @param theAccount an Account object that has not been saved
+	 * @return barcode the account id
 	 * @throws IllegalStateException if the customer or employee is already in the db (based on dl for customer and based on ph for employee)
 	 */
-	public void createAccount(Account theAccount)
+	public int createAccount(Account theAccount) throws ClassNotFoundException, IllegalStateException, SQLException
 	{
-	    if (employee)
+	    int addressPrimaryKey = insertAddressTable(theAccount.getAddress());
+            int accountPrimaryKey = insertAccountTable(addressPrimaryKey, theAccount.getFname(), theAccount.getLname(), theAccount.getPhoneNum());
+	    int barcode = 0;
+	    if (theAccount instanceof Employee)
 	    {
-		insertNewEmployee(theAccount);
+		barcode = insertNewEmployee((Employee)theAccount, accountPrimaryKey);
 	    }
-	    else
+	    else if (theAccount instanceof Customer)
 	    {
-		insertNewCustomer(theAccount);
+		barcode = insertNewCustomer((Customer)theAccount, accountPrimaryKey);
 	    }
+	    return barcode;
 
 	}
+	/**
+	 * Method to add employee info to the database.
+	 * @param theEmployee the employee you wish to add to the database
+	 * @return the primary key of hte tuple entry
+	 * @throws IllegalStateException if the employee is already in the db
+	 */
+	private int insertNewEmployee(Employee theEmployee, int accountID) throws ClassNotFoundException, IllegalStateException, SQLException
+	{
+	    int employeePrimaryKey = 1 + getTotalNumberOfRows(EMPLOYEE_TABLE_NAME, EMPLOYEE_TABLE_PK);
+	    String queryString = "INSERT INTO " + EMPLOYEE_TABLE_NAME + " ("
+		+ "employeeID,"
+		+ "accountID,"
+		+ "position"
+		+ ") VALUES (?, ?, ?)";
+	    setupPreparedStatement(queryString);
+	    pstatement.setInt(1, employeePrimaryKey);
+	    pstatement.setInt(2, accountID);
+	    pstatement.setString(3, theEmployee.getPosition());
+	    pstatement.executeUpdate();
+	    closeConnection();
+	    return employeePrimaryKey;
+	}
+
 
 	/**
 	 * Method to add a customer to the database.
 	 * @param theCustomer the customer account to add to the database
+	 * @return the primary key of the tuple
 	 * @throws IllegalStateException if the customer is already in the database (based on dl)
 	 */
-	private void insertNewCustomer(Customer theCustomer)
+	private int insertNewCustomer(Customer theCustomer, int accountID) throws ClassNotFoundException, IllegalStateException, SQLException
 	{
+	    // todo add code to check if phone number exists
+	    //
+	    //
+	    int customerPrimaryKey = 1 + getTotalNumberOfRows(CUSTOMER_TABLE_NAME, CUSTOMER_TABLE_PK);
 
+
+	    String queryString = "INSERT INTO " + CUSTOMER_TABLE_NAME + " ("
+		+ "customerID,"
+		+ "accountID,"
+		+ "driversLicense"
+		+ ") VALUES (?, ?, ?)";
+	    setupPreparedStatement(queryString);
+	    pstatement.setInt(1, customerPrimaryKey);
+	    pstatement.setInt(2, accountID);
+	    pstatement.setString(3, theCustomer.getDL());
+	    pstatement.executeUpdate();
+	    closeConnection();
+	    return customerPrimaryKey;
+	}
+	/**
+	 * Method to add account info to the db.
+	 * @param addressID the primary key of the new address
+	 * @param firstName the first name of the new account
+	 * @param lastName the last name of the new account
+	 * @param phoneNum the account's phone number
+	 * @return the accountID the primary key of the account tuple
+	 */
+	private int insertAccountTable(int addressID, String firstName, String lastName, String phoneNum) throws ClassNotFoundException, SQLException
+	{
+	    int accountID = 1 + getTotalNumberOfRows(ACCOUNT_TABLE_NAME, ACCOUNT_TABLE_PK);
+	    String queryString = "INSERT INTO " + ACCOUNT_TABLE_NAME + " ("
+		+ "accountID, "
+		+ "addressID, "
+		+ "firstName, "
+		+ "lastName, "
+		+ "phoneNum"
+		+ ") VALUES (?, ?, ?, ?, ?)";
+	    setupPreparedStatement(queryString);
+	    pstatement.setInt(1, accountID);
+	    pstatement.setInt(2, addressID);
+	    pstatement.setString(3, firstName);
+	    pstatement.setString(4, lastName);
+	    pstatement.setString(5, phoneNum);
+	    pstatement.executeUpdate();
+	    closeConnection();
+	    return accountID;
 	}
 	
 	/**
@@ -144,14 +221,13 @@ public class SQLhelper
 	    
 	    return addressID;
 	}
-	/**
+	/* removed this method cause Account object has a method to change the addresss when given an address object
 		Method to update info in the database of a Address
 		@throws ClassNotFoundException if JDBC driver is not in CLASSPATH
 		@throws SQLException if a database access error occurs or this method is called on a closed connection
-	*/
 	public void updateAddress(Address address) throws ClassNotFoundException, SQLException
 	{
-		int addressID = address.getAddressID();
+	     addressID = address.getAddressID();
 	    int houseNumber = address.getHouseNumber();
 	    String streetName = address.getStreetName();
 	    String city = address.getCity();
@@ -181,11 +257,11 @@ public class SQLhelper
 	    pstatement.executeUpdate();
 	    closeConnection();
 	}
-	/**
+	*/
+	/*
 		Method to get an Address when given the primary key.
 		@throws ClassNotFoundException if JDBC driver is not in CLASSPATH
 		@throws SQLException if a database access error occurs or this method is called on a closed connection or no results
-	*/
 	public Address getAddress(int addressID) throws ClassNotFoundException, SQLException
 	{
 		String queryString = "SELECT "
@@ -216,6 +292,7 @@ public class SQLhelper
 		
 		return myAddress;
 	}
+	*/
 	
 	/**
 		Method to get an ArrayList of all employees in the database.
