@@ -97,7 +97,7 @@ public class MovieManagement
      * Constructs a new movie as part of the movie catalog
      * @param info contains the 7 required information to identify a movie
      */
-    
+    //TODO: Check if SKU is less than 10 digits - if true, throw exception
     public void createGeneralMovie(String SKU,
             String title,
             String[] actors,
