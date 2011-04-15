@@ -1,6 +1,7 @@
 package pos;
 
-
+import jdbconnection.JDBCConnection;
+import java.sql.*;
 /*
 todos/decisions
 - when will transactionID be set? when payment is made or when transaction is completed?
@@ -50,7 +51,7 @@ public class Transaction
 {
 	private int transactionID; // transactionID is set when payment is made and is the next transactionID
 	// TODO: or should transactinID be set in constructor? what if a transaction is created and not paid (transaction is canceled)
-	private GregorianCalendar transactionDate; // date is set when payment is made
+	private String transactionDate; // date is set when payment is made
 	private ArrayList<TransactionItem> items;
 	
 	private int paymentAmount;
@@ -342,7 +343,20 @@ public class Transaction
 		transactionID = nextAvailableInvoiceID;
 		updateItemInfo();
 		setDate();
-		return ((double)amountDue)/100 - ((double)(getSubTotal() * getTax())/100);
+                JDBCConnection conn = new JDBCConnection();
+                conn.getConnection();
+                try
+                {
+                    System.out.print("customer id = "+customerID);
+                    String command = "INSERT INTO invoice VALUES(" + nextAvailableInvoiceID + ", '" + paymentMethod + "', '"+ transactionDate + "', "+ customerID + ", " + employeeID + ", 1, " + taxPercent + ");";
+                    PreparedStatement stat = conn.prepareStatement(command);
+                    stat.execute();
+                    return ((double)amountDue)/100 - ((double)(getSubTotal() * getTax())/100);
+                }
+                finally
+                {
+                    conn.closeConnection();
+                }
 	}
 	
 	
@@ -351,8 +365,8 @@ public class Transaction
 	*/
 	private void setDate()
 	{
-		
-		transactionDate = new GregorianCalendar();
+		GregorianCalendar cal = new GregorianCalendar();
+		transactionDate = "" + cal.get(cal.YEAR) + "-" + cal.get(cal.MONTH) + "-" + cal.get(cal.DATE);
 	}
 	/**
 		helper method to update the items info once it is checked out
@@ -424,6 +438,7 @@ public class Transaction
 		//System.out.println("Size 2: " + items.size());
 		subtotalInCents += item.getPrice();
 		taxInCents = (int)(taxPercent /100 * subtotalInCents);
+                //TODO: Ask Kvn about logic adding size
 	}
 	
 	/**
@@ -490,14 +505,7 @@ public class Transaction
 		@return the date the transaction was completed.
 		@throws IllegalStateException if the transaction has not been paid for (no payment == no transaction has happened).
 	*/
-	public String getDate() throws IllegalStateException
-	{
-		if (this.isPaid() == false)
-		{
-			throw new IllegalStateException("The invoice has not been paid, no date set.");
-		}
-		return "" + transactionDate.get(transactionDate.YEAR) + "-" + transactionDate.get(transactionDate.MONTH) + "-" + transactionDate.get(transactionDate.DATE);
-	}
+//
 	
 	/**
 		Gets the total tax ammount for the transaction in cents.
@@ -597,36 +605,36 @@ public class Transaction
 		Returns a String object representing this Transaction (for debuging).
 		@return a string representatin of this transaction.
 	*/
-	public String toString()
-	{
-		String newline = System.getProperty("line.separator");
-		String myTransaction = "Transaction ID: " + transactionID + newline;
-		myTransaction += "Date: " + getDate() + newline;
-		
-		myTransaction += "Number of Items: " + items.size() + newline;
-		
-		int i = 1;
-		if (items.size() != 0)
-			myTransaction += "      - Item Type - Item name - Item price" + newline;
-		for (i = 0; i < items.size(); i++)
-		{
-			myTransaction += "Item " + (i+1) + ": " + this.getItemType(i) + " - " + this.getItemName(i) + " - " + this.getItemPrice(i) + newline;
-		}
-		
-		if (paid)
-		{
-			myTransaction += "Paid: Yes" + newline;
-			myTransaction += "Method of Payment: " + paymentMethod + newline;
-			myTransaction += "Amount of money given (in cents): " + paymentAmount + newline;
-			myTransaction += "Change: " + (paymentAmount - subtotalInCents - taxInCents) + newline;
-		}
-		else
-		{
-			myTransaction += "Paid: No" + newline;
-		}
-		
-		return myTransaction;
-	}
+//	public String toString()
+//	{
+//		String newline = System.getProperty("line.separator");
+//		String myTransaction = "Transaction ID: " + transactionID + newline;
+//		myTransaction += "Date: " + getDate() + newline;
+//
+//		myTransaction += "Number of Items: " + items.size() + newline;
+//
+//		int i = 1;
+//		if (items.size() != 0)
+//			myTransaction += "      - Item Type - Item name - Item price" + newline;
+//		for (i = 0; i < items.size(); i++)
+//		{
+//			myTransaction += "Item " + (i+1) + ": " + this.getItemType(i) + " - " + this.getItemName(i) + " - " + this.getItemPrice(i) + newline;
+//		}
+//
+//		if (paid)
+//		{
+//			myTransaction += "Paid: Yes" + newline;
+//			myTransaction += "Method of Payment: " + paymentMethod + newline;
+//			myTransaction += "Amount of money given (in cents): " + paymentAmount + newline;
+//			myTransaction += "Change: " + (paymentAmount - subtotalInCents - taxInCents) + newline;
+//		}
+//		else
+//		{
+//			myTransaction += "Paid: No" + newline;
+//		}
+//
+//		return myTransaction;
+//	}
 
 	/**
 	 * This returns the tax rate at the time of the transaction as an integer (12 means 12 percent)(assumptions: only 1 tax).
