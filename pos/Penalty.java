@@ -18,7 +18,7 @@ public class Penalty implements TransactionItem
 
     public String getType()
     {
-        return new String("Penalty");
+        return "Penalty";
     }
 
     public String getName()
