@@ -170,8 +170,9 @@ public class TransactionManager
 		
 		int nextInvoiceID = mySQLhelper.getTotalNumberOfRows(SQLhelper.TRANSACTION_TABLE_NAME, SQLhelper.TRANSACTION_TABLE_PK) + 1;
 		//Payment myPayment = new Payment(amount, paymentMethod);
+                double change = myTransaction.markPaid(paymentMethod, amount, nextInvoiceID);
                 process();
-		return myTransaction.markPaid(paymentMethod, amount, nextInvoiceID);
+		return change;
 	}
 	/**
 		Gets the total price that needs to be collected for this Transaction
