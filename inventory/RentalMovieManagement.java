@@ -85,7 +85,9 @@ public class RentalMovieManagement {
         {
             Calendar currentTime = Calendar.getInstance();
             today.setTime(currentTime.getTime());
+       
             today.set(today.get(today.YEAR),today.get(today.MONTH),today.get(today.DATE));
+            
             Reservation reservation = new Reservation (customer.getAccountID(), today);
             //movie.reservationEnqueue(reservation);
            reservationQuery(""+customer.getAccountID());
@@ -266,7 +268,7 @@ public class RentalMovieManagement {
      * @throws Exception
      */
     public static int getRentalPeriod(String barcode) 
-            throws SQLException, MovieNotFoundException, ClassNotFoundException,java.io.IOException
+            throws SQLException, MovieNotFoundException, ClassNotFoundException,java.io.IOException,java.lang.Exception
     {
         String category;
         String query = JDBCConnection.makeQuery("catagories", 
@@ -349,7 +351,7 @@ public class RentalMovieManagement {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    private static String getGeneralMovieCategory(String SKU)
+    public static String getGeneralMovieCategory(String SKU)
             throws SQLException, ClassNotFoundException
     {
         String query = JDBCConnection.makeQuery("videoRental",
@@ -361,12 +363,15 @@ public class RentalMovieManagement {
         try
         {
             ResultSet result = connection.getResults(query, numParam, param);
-            result.next();
+            
             if (result.wasNull())
             {
                 return null;
             }
-            return result.getString(1);
+            else
+              result.next();
+           // return result.getString(1);
+            return "";
         }
         finally
         {
@@ -1088,7 +1093,7 @@ public class RentalMovieManagement {
      */
     public GregorianCalendar getPickupDate(GeneralMovie movie)
             throws SQLException, ClassNotFoundException, MovieNotFoundException,
-            MovieNotAvailableException,java.io.IOException
+            MovieNotAvailableException,java.io.IOException,java.lang.Exception
     {
         return getPickupDate(movie.getSKU());
     }
@@ -1109,7 +1114,7 @@ public class RentalMovieManagement {
      */
     public GregorianCalendar getPickupDate(String SKU)
             throws SQLException, ClassNotFoundException, MovieNotFoundException,
-            MovieNotAvailableException, java.io.IOException
+            MovieNotAvailableException, java.io.IOException, java.lang.Exception
     {
         int numTotalRentalCopies = getTotalRentalCopies(SKU);
         if (numTotalRentalCopies < 1)
