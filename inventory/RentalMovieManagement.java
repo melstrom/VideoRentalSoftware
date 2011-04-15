@@ -531,6 +531,22 @@ public class RentalMovieManagement {
     public static GregorianCalendar checkOut(int customerID, String barcode, JDBCConnection connection)
             throws SQLException, ClassNotFoundException, MovieNotFoundException, IOException, java.lang.Exception
     {
+        if (customerID > Math.pow(10,Customer.ID_LENGTH)
+                || customerID < 0)
+        {
+            throw new IllegalArgumentException("Not a valid customerID");
+        }
+        if (barcode == null)
+        {
+            throw new IllegalArgumentException("Not a valid barcode");
+        }
+        if (connection == null || connection.isClosed())
+        {
+            throw new IllegalArgumentException("Requires an open connection");
+        }
+
+
+
         Search search = new Search();
         IndividualMovie aMovie = search.previewIndividualMovie(barcode);
         if(!aMovie.getCondition().equals("available"))
@@ -542,6 +558,8 @@ public class RentalMovieManagement {
         splitBarcode(barcode, splitBarcode);
         String SKU = splitBarcode[0];
         String rentalID = splitBarcode[1];
+
+
 
         String tableName = "videoRental";
         String set = "videoRental.customerID = ?, videoRental.condition = ?, " +
