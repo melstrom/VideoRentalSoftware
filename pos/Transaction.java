@@ -326,7 +326,7 @@ public class Transaction
 		</ul>
 	
 	*/
-	public boolean markPaid(Payment payment, int nextAvailableInvoiceID) throws IllegalStateException
+	public boolean markPaid(Payment payment, int nextAvailableInvoiceID) throws IllegalStateException, Exception
 	{
 		if (paid == true)
 		{
@@ -358,6 +358,7 @@ public class Transaction
 		helper method to update the items info once it is checked out
 	*/	
 	private void updateItemInfo()
+                throws Exception
 	{
 		int total = items.size(); // total number of items	
 		int counter;
