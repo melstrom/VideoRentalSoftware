@@ -5,7 +5,7 @@ import java.sql.*;
 import java.io.IOException;
 import search.Search;
 import inventory.IndividualMovie;
-// jdbconnection.JDBCConnection;
+import jdbconnection.JDBCConnection;
 //import pos.PriceSchemeManagement;
 /**
  *
@@ -48,25 +48,39 @@ public class MovieInterface implements TransactionItem
         return priceInCents;
     }
 
-    public boolean updateItemInfoAtCheckOut(int invoiceID, JDBCConnection conn)
+    public void updateItemInfoAtCheckOut(int invoiceID, JDBCConnection conn)
                 throws SQLException
     {
         // rental or sale movie has different query to execute
         if(category.equals("for sale"))
         {
-            PreparedStatement stat = conn.prepareStatement("INSERT INTO item " +
-                    "VALUES (((MAX(itemID))+1), 'sale', " + priceInCents + ", "
-                    + barcode.substring(barcode.length() - 9) + ", null, '" +
-                    category + "', null, " + invoiceID + ");");
-            return !stat.execute();
+            Statement stat = conn.createStatement();
+
+            String table = "item";
+            String column = "itemID";
+            String SQL = "SELECT " + column + " FROM " + table;
+            ResultSet rs = stat.executeQuery(SQL);
+            rs.last();
+            int largestItemID = rs.getInt(column);
+
+            stat.executeQuery("INSERT INTO item VALUES (" + largestItemID + ","
+                    + "'sale', "+ priceInCents +", '"+ barcode.substring(barcode.length() - 9)
+                    +"', null, '"+ category +"', null,"+ invoiceID +");");
         }
         else
         {
-            PreparedStatement stat = conn.prepareStatement("INSERT INTO item " +
-                    " VALUES (((MAX(itemID) + 1), 'rental', "+ priceInCents + "," +
-                    " null, null, '"+ category +"', '" + barcode.substring(barcode.length() - 9) +
-                    "'," + invoiceID + " );");
-            return !stat.execute();
+           Statement stat = conn.createStatement();
+
+            String table = "item";
+            String column = "itemID";
+            String SQL = "SELECT " + column + " FROM " + table;
+            ResultSet rs = stat.executeQuery(SQL);
+            rs.last();
+            int largestItemID = rs.getInt(column);
+
+            stat.executeQuery("INSERT INTO item VALUES (" + largestItemID + ", "
+                    + priceInCents + ", null, null, " + category + ", " + 
+                    barcode.substring(barcode.length() - 9) + ", " + invoiceID +");");
         }
     }
 
