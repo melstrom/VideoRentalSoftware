@@ -49,7 +49,7 @@ public class TransactionManager
 		@param employeeID the employee's id.
 		@param taxPercent the percent the tax amount is as a double.
 	*/
-	public void createTransaction(String firstName, String lastName, String customerID, String employeeName, String employeeID)
+	public void createTransaction(String firstName, String lastName, int customerID, String employeeName, int employeeID)
 	{
 		myTransaction = new Transaction(firstName, lastName, customerID, employeeName, employeeID, TAX_RATE);
 	}

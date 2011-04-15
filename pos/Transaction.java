@@ -61,9 +61,9 @@ public class Transaction
 	//private Customer account; // the customer account being worked on 
 	private String customerFirstName;
 	private String customerLastName;
-	private String customerID;
+	private int customerID;
 	private String employeeFirstName;
-	private String employeeID;
+	private int employeeID;
 	private double taxPercent;
 	
 	
@@ -115,7 +115,7 @@ public class Transaction
 				<li>The transaction/invoice is associated with the customer</li>
 			</ul>
 	*/
-	public Transaction(String firstName, String lastName, String customerID, String employeeName, String employeeID, double taxPercent)
+	public Transaction(String firstName, String lastName, int customerID, String employeeName, int employeeID, double taxPercent)
 	{
 		this.customerFirstName = firstName;
 		this.customerLastName = lastName;
@@ -184,7 +184,7 @@ public class Transaction
 		Gets the customer's ID that is associated with this transaction.
 		@return the customer's ID.
 	*/
-	public String getCustomerID()
+	public int getCustomerID()
 	{
 		return customerID;
 	}
@@ -202,7 +202,7 @@ public class Transaction
 		Gets the employee's ID that handled this transaction.
 		@return the employee's ID name.
 	*/
-	public String getEmployeeID()
+	public int getEmployeeID()
 	{
 		return employeeID;
 	}
