@@ -336,13 +336,10 @@ public class RentalMovieManagement {
         {
             ResultSet result = connection.getResults(query, numParam, param);
             
-            if (result.wasNull())
-            {
-                return null;
-            }
+            if (result.next())
+                return result.getString(1);
             else
-              result.next();
-            return result.getString(1);
+                return null;
           
         }
         finally
@@ -528,19 +525,19 @@ public class RentalMovieManagement {
         String tableName = "videoRental";
         String set = "videoRental.customerID = ?, videoRental.condition = ?, " +
                 "videoRental.checkout_time = NOW()";
-        String constraint = "videoRental.SKU = ?, videoRental.rentalID = ?";
+        String constraint = "videoRental.SKU = ? AND videoRental.rentalID = ?";
 
         String query = JDBCConnection.makeUpdate(tableName, set, constraint);
         
         int numParam = 4;
         String[] params = { ""+customerID, "rented", SKU, rentalID };
-        
+
         int linesChanged = connection.update(query, numParam, params);
         
         // assert(linesChagned == 1);
-        String select = "formats.rentalLength";
-        String from = "videoRental, formats";
-        String where = "formats.format = videoRental.format AND" +
+        String select = "catagories.rentalLength";
+        String from = "videoRental, catagories";
+        String where = "catagories.catagory = videoRental.catagory AND" +
                 " videoRental.rentalID = ?";
         
         String rentalLengthQuery = JDBCConnection.makeQuery(from, select, where);
@@ -550,7 +547,7 @@ public class RentalMovieManagement {
         int rentalPeriod = 0;
         if (result.next())
         {
-            rentalPeriod = result.getInt("formats.rentalLength");
+            rentalPeriod = result.getInt("catagories.rentalLength");
         }
         else
         {
@@ -577,6 +574,7 @@ public class RentalMovieManagement {
      * @throws MovieNotAvailableException if the movie is not available
      * @post the movie's status is changed to rented.
      */
+    /*
     public GregorianCalendar checkOut(Customer customer)
             throws MovieNotFoundException, CustomerNotFoundException,
             MovieNotAvailableException, SQLException, Exception
@@ -607,7 +605,11 @@ public class RentalMovieManagement {
        return dueDate;
     }
 
+    */
 
+
+
+    
     public void checkIn(Customer customer)throws SQLException, Exception,java.lang.Exception
     {
         checkInQuery(customer.getAccountID());
