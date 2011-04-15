@@ -304,12 +304,15 @@ public class RentalMovieManagement {
         try
         {
             ResultSet result = connection.getResults(query, numParam, param);
-            result.next();
-            if (result.wasNull())
+            if (result.next())
+            {
+                return result.getString(1);
+
+            }
+            else
             {
                 return null;
             }
-            return result.getString(1);
         }
         finally
         {

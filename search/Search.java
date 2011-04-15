@@ -34,18 +34,10 @@ import pos.*;
  * Generating lists of Top 10 or most recent releases are to be implemented
  * at a later date, in Tier 3 functionality.
  * 
- * TODO: go through and make sure all the Class names and attributes and method
- * calls match.
- * TODO: make sure all SQL queries match the database tables
- *
- * Last updated:
- * 7 April
  *
  * @author Mitch
  * @version 0.2
  *
- * 7 April:
- * removed Sanitizer since PreparedStatement takes care of that already
  *
  *
  */
@@ -58,12 +50,12 @@ public class Search
      * carried by the video store.
      * TODO: decide maybe this is standalone enum, or mabye it goes in Movie class
      */
-    public enum Genre
+    /*public enum Genre
     {
         ACTION, COMEDY, DRAMA, FAMILY, HORROR, ROMANCE, SUSPENSE, WESTERN,
         SCIENCE_FICTION, MUSICAL, SILENT, FOREIGN, INDEPENDENT,
         DOCUMENTARY, TV_SERIES, MISC
-    }
+    }*/
 
 
     /**
@@ -354,6 +346,51 @@ public class Search
     }
 
 
+
+    /**
+     * This method will search for a movie by a specified attribute.
+     * The attributes searchable are title, director, actors, and genre.
+     * This method looks for a GeneralMovie and is intended to be used
+     * by customers.
+     *
+     *
+     * @param searchTerm the term that the user is searching for
+     * @param searchType the kind of search the user is making.  It can be
+     * either title, director, actors, or genre
+     * @return a list of movies that match the search criteria, or null if
+     * no movies are found, or null if the search type is not recognized.
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws MovieNotFoundException
+     * @throws IOException
+     */
+    public static ArrayList<GeneralMovie> searchMovies(String searchTerm, String searchType)
+            throws SQLException, ClassNotFoundException, MovieNotFoundException,
+            IOException
+    {
+        if (searchType.equalsIgnoreCase("title"))
+        {
+            return searchMovies(searchTerm, null, null);
+        }
+        else if (searchType.equalsIgnoreCase("actors"))
+        {
+            return searchMovies(null, searchTerm, null);
+        }
+        else if (searchType.equalsIgnoreCase("director"))
+        {
+            return searchMovies(null, null, searchTerm);
+        }
+        else if (searchType.equalsIgnoreCase("genre"))
+        {
+            return browse(searchTerm);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
     /**
      * This method searches the database for a GeneralMovie matching the passed
      * search criteria.  At least one of the fields must be filled in.
@@ -365,11 +402,6 @@ public class Search
      * a list of each individual RentalMovies wheras this method only returns
      * the general movie information shared by all copies with the same SKU.
      *
-     * 11 April: Mitch
-     * - redid the sql
-     *
-     * 12 April: Mitch
-     * - it works for GeneralMovie, sorting out some issues with IndividualMovie
      *
      * @param title The title of the movie.
      * @param actors A list of actors who are in the movie. Multiple actors should be separated by commas.
@@ -383,7 +415,8 @@ public class Search
             String title,
             String actors,
             String director)
-            throws SQLException, ClassNotFoundException, MovieNotFoundException, Exception
+            throws SQLException, ClassNotFoundException, MovieNotFoundException,
+            IOException
     {
         JDBCConnection connection = new JDBCConnection();
         try
@@ -736,7 +769,6 @@ public class Search
                 {
                     String category = result.getString("videoRental.catagory");
                     String format = result.getString("physicalVideo.format");
-                    System.out.println(format); // TESTING
                     String condition = result.getString("videoRental.condition");
                     PriceSchemeManagement priceScheme = new PriceSchemeManagement();
                     int priceInCents = priceScheme.getPrice(category, format);
@@ -883,15 +915,24 @@ public class Search
             String[] actors,
             String director,
             Integer memberID)
-            throws SQLException, ClassNotFoundException
+            throws SQLException, ClassNotFoundException, IOException,
+            MovieNotFoundException
     {
         String query =
                 searchRentalsGenerateQuery(title, actors, director, memberID);
-        ResultSet result = searchRentalsGetSQLResult(query, title, actors,
-                director, memberID);
-        ArrayList<RentalMovie> resultList = searchRentalsResultsList(result);
-        result.close();
-        return resultList;
+        Connection connection = JDBCConnection.getConnection();
+        try
+        {
+            ResultSet result = searchRentalsGetSQLResult(query, title, actors,
+                    director, memberID, connection);
+            ArrayList<RentalMovie> resultList = searchRentalsResultsList(result);
+            result.close();
+            return resultList;
+        }
+        finally
+        {
+            connection.close();
+        }
     }
 
 
@@ -929,18 +970,28 @@ public class Search
             String director,
             Integer memberID)
     {
-        String query = "SELECT videoRental.SKU, videoRental.rentalID WHERE ";
+//        String query = "SELECT videoRental.SKU, videoRental.rentalID " +
+//                "FROM videoRental, videoInfo, physicalVideo " +
+//                "WHERE ";
+
+        String selectQuery = "SELECT videoRental.SKU, videoRental.rentalID ";
+        String fromQuery = "FROM videoRental";
+        String whereQuery = "WHERE ";
 
         ArrayList<String> searchCriteria = new ArrayList<String>();
         ArrayList<String> whereClause = new ArrayList<String>();
 
-        String movieWhereClause = "(movieInfo.infoID = physicalVideo.infoID"
+        String movieFromClause = ", videoInfo, physicalVideo";
+        String customerFromClause = ", customer";
+        String movieWhereClause = "(videoInfo.infoID = physicalVideo.infoID"
                     + " AND physicalVideo.SKU = videoRental.SKU)";
+        String actorsWhereClause = "(customer.customerID = videoRental.customerID";
         boolean needsMovieWhereClause = false;
-        
+        boolean needsActorsWhereClause = false;
+
         if (title != null)
         {
-            searchCriteria.add("movieInfo.title = ? ");
+            searchCriteria.add("videoInfo.title LIKE ? ");
             needsMovieWhereClause = true;
         }
 
@@ -955,10 +1006,10 @@ public class Search
             int numActors = actors.length;
             if (numActors > 0)
             {
-                actorsQuery += "(movieInfo.actors LIKE ? ";
+                actorsQuery += "(videoInfo.actors LIKE ? ";
                 for (int i = 1; i < numActors; i++)
                 {
-                    actorsQuery += "OR movieInfo.actors LIKE ? ";
+                    actorsQuery += "OR videoInfo.actors LIKE ? ";
                 }
                 actorsQuery += ")";
             }
@@ -968,21 +1019,27 @@ public class Search
         
         if (director != null)
         {
-            searchCriteria.add("movieInfo.director = ? ");
+            searchCriteria.add("videoInfo.director LIKE ? ");
             needsMovieWhereClause = true;
         }
 
 
         if (memberID != null)
         {
-            searchCriteria.add("customer.customerID = ? ");
-            whereClause.add("customer.rentalID = videoRental.rentalID");
+            searchCriteria.add("customer.customerID LIKE ? ");
+            whereClause.add("videoRental.customerID = customer.customerID ");
+            fromQuery += customerFromClause;
         }
 
         if (needsMovieWhereClause)
         {
             whereClause.add(movieWhereClause);
+            fromQuery += movieFromClause;
         }
+
+        String query = selectQuery;
+        query += fromQuery;
+        query = query + " " + whereQuery;
 
         if (!searchCriteria.isEmpty())
         {
@@ -1021,7 +1078,8 @@ public class Search
      * @return
      */
     private static ResultSet searchRentalsGetSQLResult(String query,
-            String title, String[] actors, String director, Integer memberID)
+            String title, String[] actors, String director, Integer memberID
+            , Connection connection)
             throws SQLException, ClassNotFoundException
     {
         ArrayList<String> searchTerms = consolidateSearchTerms(title, actors,
@@ -1031,9 +1089,7 @@ public class Search
             return null;
         }
 
-        Connection connection = JDBCConnection.getConnection();
-        try
-        {
+        //Connection connection = JDBCConnection.getConnection();
 
             PreparedStatement statement = connection.prepareStatement(query);
             int numTerms = searchTerms.size();
@@ -1042,18 +1098,14 @@ public class Search
             {
                 if (searchTerms.get(i) != null)
                 {
-                    statement.setString(parameterIndex, searchTerms.get(i));
+                    statement.setString(parameterIndex, pad(searchTerms.get(i)));
                     parameterIndex++;
                 }
             } // end for
 
             ResultSet result = statement.executeQuery();
             return result;
-        }
-        finally
-        {
-            connection.close();
-        }
+        
 
     }
 
@@ -1094,13 +1146,13 @@ public class Search
         if (memberID != null)
         {
 
-            if (memberID >= Math.pow(1, account.Account.ID_LENGTH)
+            /*if (memberID >= Math.pow(1, account.Account.ID_LENGTH)
                     || memberID < Math.pow(1,account.Account.ID_LENGTH))
             {
                 throw new IllegalArgumentException("IllegalArgumentException:"
                         + " customer account ID must be "
                         +account.Account.ID_LENGTH+ " digits long");
-            }
+            }*/
 
             searchTerms.add("" + memberID);
         }
@@ -1125,7 +1177,8 @@ public class Search
      */
     private static ArrayList<RentalMovie>
             searchRentalsResultsList(ResultSet result)
-            throws SQLException
+            throws SQLException, MovieNotFoundException, ClassNotFoundException,
+            IOException
     {
         ArrayList<RentalMovie> rentalList = new ArrayList<RentalMovie>();
         while (result.next())
@@ -1153,21 +1206,32 @@ public class Search
      * @param genre the genre of movie that we should view
      * @return a list of all videos in that genre
      * @throws SQLException if a connection with the database cannot be made
-     * @deprecated
      */
-    /*
-    public static ArrayList<GeneralMovie> browse(Genre genre)
-            throws SQLException
+    
+    public static ArrayList<GeneralMovie> browse(String genre)
+            throws SQLException, ClassNotFoundException, MovieNotFoundException
     {
-        String genreStr = generateGenreStr(genre);
-        String query = generateBrowseQuery(genreStr);
-        ResultSet result = browseGetSQLResult(query);
-        ArrayList<GeneralMovie> browseResults = browseResultsList(result);
-        result.close();
-        return browseResults;
+        String query = JDBCConnection.makeQuery("videoInfo, physicalVideo", "physicalVideo.SKU", "videoInfo.genre = ? AND videoInfo.infoID = physicalVideo.infoID");
+        JDBCConnection connection = new JDBCConnection();
+        int numParam = 1;
+        String[] param = { genre };
+        try
+        {
+            ArrayList<GeneralMovie> movies = new ArrayList<GeneralMovie>();
+            ResultSet result = connection.getResults(query, numParam, param);
+            while(result.next())
+            {
+                String SKU = result.getString("physicalVideo.SKU");
+                movies.add(previewGeneralMovie(SKU));
+            }
+            return movies;
+            
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
     }
-     *
-     */
     
     
     

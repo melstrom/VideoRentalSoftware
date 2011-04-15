@@ -54,6 +54,7 @@ public class RentalMovie extends IndividualMovie{
 	setProducer(movie.getProducer());
         setLength(movie.getLength());
 	setGenre(movie.getGenre());
+        setCondition(movie.getCondition());
     }
    
 
