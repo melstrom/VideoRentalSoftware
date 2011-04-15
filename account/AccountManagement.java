@@ -66,14 +66,7 @@ public class AccountManagement
         try
         {
             st = JDBC.createStatement();
-            String addressInsert = "INSERT INTO address (addressID, houseNumber, streetName, city, province, country, postalCode) value ("
-                    + addressID + ","
-                    + address.getHouseNumber() + ",'"
-                    + address.getStreetName() + "','"
-                    + address.getCity() + "','"
-                    + address.getProvince() + "','"
-                    + address.getCity() + "','"
-                    + address.getPostalCode() + "')";
+            String addressInsert = this.createAddressInsertSQL(address, addressID);
             String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname);
             String employeeInsert = "INSERT INTO employee (employeeID, accountID, position) value("
                     + employeeID + ","
@@ -88,10 +81,6 @@ public class AccountManagement
             JDBC.closeConnection();
         }
     }
-
-    /**
-
-     */
 
     /**
      * Create a customer account
@@ -113,19 +102,13 @@ public class AccountManagement
         try
         {
             st = JDBC.createStatement();
-            String addressInsert = "INSERT INTO address (addressID, houseNumber, streetName, city, province, country, postalCode) value ("
-                    + addressID + ","
-                    + address.getHouseNumber() + ",'"
-                    + address.getStreetName() + "','"
-                    + address.getCity() + "','"
-                    + address.getProvince() + "','"
-                    + address.getCity() + "','"
-                    + address.getPostalCode() + "')";
+            String addressInsert = this.createAddressInsertSQL(address, addressID);
             String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname);
 
-            String customerInsert = "INSERT INTO customer (customerID, accountID) value("
+            String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense) value("
                     + customerID + ","
-                    + accountID + ")";
+                    + accountID + ",'"
+                    + DL + "')";
             st.executeUpdate(addressInsert);
             st.executeUpdate(accountInsert);
             st.executeUpdate(customerInsert);
@@ -201,13 +184,27 @@ public class AccountManagement
      */
     private String createAccountInsertSQL (int accountID, int addressID, String Fname, String Lname)
     {
-                    String SQL = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
-                    + accountID + ","
-                    + addressID + ",'"
-                    + Fname + "','"
-                    + Lname + "')";
+            String SQL = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
+            + accountID + ","
+            + addressID + ",'"
+            + Fname + "','"
+            + Lname + "')";
 
-                    return SQL;
+            return SQL;
+    }
+
+    private String createAddressInsertSQL (Address address, int addressID) throws SQLException
+    {
+        String SQL = "INSERT INTO address (addressID, houseNumber, streetName, city, province, country, postalCode) value ("
+        + addressID + ","
+        + address.getHouseNumber() + ",'"
+        + address.getStreetName() + "','"
+        + address.getCity() + "','"
+        + address.getProvince() + "','"
+        + address.getCity() + "','"
+        + address.getPostalCode() + "')";
+
+        return SQL;
     }
 
     /**
