@@ -63,7 +63,7 @@ public class TransactionManager
 		</ul>
 		
 	*/
-	public void process() throws IllegalStateException, SQLException, ClassNotFoundException
+	private void process() throws IllegalStateException, SQLException, ClassNotFoundException
 	{
 		if (myTransaction.isPaid() == false)
 		{
@@ -170,6 +170,7 @@ public class TransactionManager
 		
 		int nextInvoiceID = mySQLhelper.getTotalNumberOfRows(SQLhelper.TRANSACTION_TABLE_NAME, SQLhelper.TRANSACTION_TABLE_PK) + 1;
 		//Payment myPayment = new Payment(amount, paymentMethod);
+                process();
 		return myTransaction.markPaid(paymentMethod, amount, nextInvoiceID);
 	}
 	/**

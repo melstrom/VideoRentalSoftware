@@ -342,7 +342,7 @@ public class Transaction
 		transactionID = nextAvailableInvoiceID;
 		updateItemInfo();
 		setDate();
-		return amountDue - (getSubTotal() * getTax());
+		return ((double)amountDue)/100 - ((double)(getSubTotal() * getTax())/100);
 	}
 	
 	
