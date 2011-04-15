@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 import inventory.*;
-imoprt java.sql.*;
+import java.sql.*;
 /**
  *
  * @author kevin
@@ -11,7 +11,7 @@ imoprt java.sql.*;
 public class CheckInTest
 {
     public static void main(String[] args)
-            throws SQLException
+            throws SQLException, ClassNotFoundException,Exception
     {
         RentalMovieManagement rentalManager = new RentalMovieManagement();
         int customerID = 0;

@@ -741,8 +741,9 @@ public class RentalMovieManagement {
     private void checkInQuery(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
     {
         JDBCConnection conn = new JDBCConnection();
-        String command = "UPDATE videoRental SET condition = " + newCondition +
-                        " WHERE rentalID = " + barcode.substring(barcode.length()-9) + ";";
+        String command = "UPDATE videoRental SET videoRental.condition='" + newCondition +
+                        "' WHERE rentalID='" + barcode.substring(barcode.length()-9) + "';";
+        System.out.println(command);//testing
         PreparedStatement stat = conn.prepareStatement(command);
         stat.execute();
 
