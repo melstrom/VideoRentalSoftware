@@ -528,23 +528,27 @@ public class MovieManagement
     }
 
     /**
-     *
+     * Creates a new copy of a movie in the database
      * @param generalMovie
-     * @param type
+     * @param type The type of movie to default to (sale or rental)
+     * @return The generated barcode that uniquely identifies the copy (printed out and labelled on the copy)
      * @throws SQLException
      */
-    public void addCopy(GeneralMovie generalMovie, String type) throws SQLException
+    public String addCopy(GeneralMovie generalMovie, String type) throws SQLException
     {
+        String barcode = null;
         try
         {
             if (type.equals("sale"))
             {
-                this.addSaleMovie(generalMovie, type);
+                barcode = this.addSaleMovie(generalMovie, type);
             }
-            if (type.equals("rental"))
+            else
+                 if(type.equals("rental"))
             {
-                this.addRentalMovie(generalMovie, type);
+                barcode = this.addRentalMovie(generalMovie, type);
             }
+            return barcode;
         } finally
         {
             connection.close();
