@@ -100,9 +100,9 @@ public class Search
              */
 
             // New code, using getCustomer(ResultSet result)
-            Customer customer = getCustomer(result);
-            while (customer != null)
+            while (result.next())
             {
+                Customer customer = getCustomer(result);
                 matchingMembers.add(customer);
                 customer = getCustomer(result);
             }
@@ -229,7 +229,7 @@ public class Search
 
                 Address address = new Address(houseNumber, streetName,
                         city, province, country, postalCode);
-                            System.out.println(memberID);
+                
                 return new Customer(driversLicense, memberID,
                         firstName, lastName, address, phoneNum);
                 // copy and pasted signature from the Customer class
@@ -250,7 +250,7 @@ public class Search
      *
      * @pre the result must select all columns
      * @param the results of a query for customers
-     * @return the member's account, or null if the result set is empty
+     * @return the member's account, or null if the result set does not have next
      * @throws SQLException if a connection with the database cannot be made
      * @throws ClassNotFoundException if the driver cannot be found
      *
@@ -258,10 +258,13 @@ public class Search
     public static Customer getCustomer(ResultSet result)
             throws SQLException, ClassNotFoundException
     {
-            if (!result.next())
+            
+            if (result.isAfterLast())
             {
+                System.out.println("Is afer last"); // TESTING
                 return null;
             }
+            
             int memberID = result.getInt("customer.customerID");
             String driversLicense = result.getString("customer.driversLicense");
             String firstName = result.getString("account.firstName");
@@ -288,7 +291,6 @@ public class Search
 
             Address address = new Address(houseNumber, streetName,
                     city, province, country, postalCode);
-                        System.out.println(memberID);
             return new Customer(driversLicense, memberID,
                     firstName, lastName, address, phoneNum);
             // copy and pasted signature from the Customer class
@@ -528,6 +530,7 @@ public class Search
             }
             ResultSet result = connection.getResults(query, numParameters, parameters);
             ArrayList<GeneralMovie> searchResults = new ArrayList<GeneralMovie>();
+            /*
             if (result.next())
             {
                 String sku = result.getString("physicalVideo.SKU");
@@ -545,6 +548,12 @@ public class Search
             {
                 String sku = result.getString("physicalVideo.SKU");
                 searchResults.add(previewMovie(sku));
+            }
+             * */
+            while (result.next())
+            {
+                GeneralMovie aMovie = previewGeneralMovie(result);
+                searchResults.add(aMovie);
             }
             
             return searchResults;
@@ -587,67 +596,6 @@ public class Search
     }
 
 
-    /**
-     * This method queries the database for a GeneralMovie matching the passed
-     * search criteria.  It returns the results of the query.
-     *
-     * @param title The title of the movie
-     * @param actor An actor who was in the movie
-     * @param director The director of the movie
-     * @return the results of an SQL query for all movies or rental movies that
-     * match the search criteria
-     * @throws SQLException
-     * TODO: verify assumption that GeneralMovie infoID will be a String
-     * TODO: change to be able to search for multiple actors (low priority)
-     */
-    /*
-    private static ResultSet searchMoviesGetSQLResult(
-            String title,
-            String actor,
-            String director)
-            throws SQLException, ClassNotFoundException
-    {
-        String query = generateMovieQuery(title, actor, director);
-        if (query == null)
-        {
-            return null;
-        }
-
-        String[] searchTerms = {title, actor, director};
-
-        if (searchTerms[1] != null)
-        {
-            searchTerms[1] = "%" + searchTerms[1] + "%";
-            // padding the actor with wildcards before the search
-        }
-
-        Connection connection = JDBCConnection.getConnection();
-        try
-        {
-            PreparedStatement statement = connection.prepareStatement(query);
-            int numTerms = 3; // depends on number of parameters
-            int parameterIndex = 1; // SQL starts numbering indecies from 1
-            for (int i = 0; i < numTerms; i++)
-            {
-                if (searchTerms[i] != null)
-                {
-                    statement.setString(parameterIndex, searchTerms[i]);
-                    parameterIndex++;
-                }
-            } // end for
-
-            ResultSet result = statement.executeQuery();
-            return result;
-            
-        } // end try
-        finally
-        {
-            connection.close();
-        }
-
-    }*/
-
-
 
     /**
      * This is a helper method for searchMovies.  It generates an SQL query
@@ -674,7 +622,7 @@ public class Search
             String actor,
             String director)
     {
-        String query = "SELECT physicalVideo.SKU " +
+        String query = "SELECT * " +
                 "FROM videoInfo, physicalVideo " +
                 "WHERE ";
         ArrayList<String> searchCriteria = new ArrayList<String>();
@@ -766,7 +714,6 @@ public class Search
 
 
     /**
-     * BOOKMARK April 11
      * Returns an individual movie that matches the barcodeID
      * @param barcodeID
      * @return
@@ -787,7 +734,7 @@ public class Search
         {
             throw new IllegalArgumentException("Not an individual movie");
         }
-        System.out.println(SKU+" "+copyNum);
+        //System.out.println(SKU+" "+copyNum);
         GeneralMovie generalMovie = previewGeneralMovie(SKU);
         
         
@@ -848,7 +795,7 @@ public class Search
 
                     IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
                     RentalMovie rentalMovie = new RentalMovie(rentalPeriod, individualMovie);
-                    System.out.println(SKU+" "+copyNum);
+                    //System.out.println(SKU+" "+copyNum);
                     return rentalMovie;
                 // copy and pasted signature for RentalMovie
                 //public RentalMovie(int rentalPeriod, IndividualMovie movie)
@@ -871,6 +818,9 @@ public class Search
     }
     
     
+   
+    
+    
 
     /**
      * Creates a GenrealMovie object based on the SKU
@@ -883,7 +833,7 @@ public class Search
     private static GeneralMovie previewGeneralMovie(String barcodeID)
             throws SQLException, MovieNotFoundException, ClassNotFoundException, java.lang.Exception
     {
-        System.out.println(barcodeID);
+        //System.out.println(barcodeID);
         String query = "SELECT * FROM videoInfo, physicalVideo "
                 + "WHERE videoInfo.InfoID = physicalVideo.InfoID "
                 + "AND physicalVideo.SKU = '" +barcodeID + "'";
@@ -962,6 +912,96 @@ public class Search
             connection.close();
         }
         
+    }
+
+
+
+    /**
+     * Creates a GeneralMovie based on the result set.
+     * @pre the result must contain the columns for
+     * title
+     * actors
+     * director
+     * producer
+     * releaseDate
+     * description
+     * studio
+     * rating
+     * genre
+     * infoID
+     * SKU
+     * from the tables videoInfo and physicalVideo
+     * @param results the result of an sql query
+     * @return
+     * @throws SQLException if the database cannot connect
+     * @throws NullPointerException if one of the columns is missing
+     * @throws ClassNotFoundException if the driver is not found
+     */
+    private static GeneralMovie previewGeneralMovie(ResultSet results)
+            throws SQLException, ClassNotFoundException
+    {
+        //System.out.println(barcodeID);
+
+        if (results.isAfterLast())
+        {
+            return null;
+        }
+
+        String barcodeID = results.getString("physicalVideo.SKU");
+        String title = results.getString("videoInfo.Title");
+        String actors = results.getString("videoInfo.Actors");
+        String director = results.getString("videoInfo.Director");
+        String producer = results.getString("videoInfo.Producer");
+        Date releaseDate = results.getDate("videoInfo.releaseDate");
+        String synopsis = results.getString("videoInfo.Description");
+        String studio = results.getString("videoInfo.studio");
+        String rating = results.getString("videoInfo.Rating");
+        String genre = results.getString("videoInfo.Genre");
+
+        int retailPriceInCents = results.getInt("physicalVideo.RetailPrice");
+        String format = results.getString("physicalVideo.Format");
+        int length = results.getInt("videoInfo.length");
+
+        GregorianCalendar releaseCalendar = new GregorianCalendar();
+        releaseCalendar.setTime(releaseDate);
+
+
+        String[] actorList = actors.split(", ");
+
+/*
+        // the format of releaseDate is YYYYMMDD, or an 8 digit integer
+        // To get its four most significant digits, we want to get rid of
+        // the four least significant, so divide it by 10^4
+        int year = releaseDate / 10000;
+        // To get the month, divide by 10^2 to get rid of the first two
+        // digits, then mod it by 10^2 to get the months
+        int month = (releaseDate / 100) % 100;
+        // mod by 10^2 to get the days
+        int day = (releaseDate % 100);
+        java.util.GregorianCalendar release =
+                new java.util.GregorianCalendar(year, month, day);
+*
+*/
+        // copy and pasted GeneralMovie signature
+//            public GeneralMovie
+//            (String SKU,
+//            String title,
+//            String[] actors,
+//            String director,
+//            String producer,
+//            GregorianCalendar releaseDate,
+//            String synopsis,
+//            String genre,
+//	    String rating,
+//            String studio,
+//            int retailPriceInCents,
+//            String format,
+//            int runtime)
+        return new GeneralMovie(barcodeID, title, actorList, director,
+                producer, releaseCalendar, synopsis, genre,
+                rating, studio, retailPriceInCents, format, length);
+
+
     }
     
 
