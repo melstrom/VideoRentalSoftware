@@ -330,6 +330,18 @@ public static Connection getConnection()
 
 
     /**
+     * This checks if the JDBCConnection object is closed.
+     * @return true if closed,otherwise false
+     * @throws SQLException
+     */
+    public boolean isClosed() throws SQLException
+    {
+        return conn.isClosed();
+    }
+
+
+
+    /**
      * This method is used to re-open a database connection if you have closed it
      * @throws Exception
      */
