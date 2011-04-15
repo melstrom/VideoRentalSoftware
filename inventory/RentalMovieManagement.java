@@ -325,6 +325,7 @@ public class RentalMovieManagement {
     public static String getGeneralMovieCategory(String SKU)
             throws SQLException, ClassNotFoundException
     {
+        //TODO: fix query bug
         String query = JDBCConnection.makeQuery("videoRental",
                 "videoRental.catagory",
                 "videoRental.SKU = ? AND NOT videoRental.catagory = ?");
@@ -1119,7 +1120,6 @@ public class RentalMovieManagement {
      * This method creates a list of Reservation objects for the GeneralMovie
      * that the SKU belongs to.  Check the size of the arraylist after it is
      * returned in case there are 0 reservations.
-     * TODO: needs testing
      * @param SKU
      * @return an arraylist of reservation objects
      * @throws SQLException
