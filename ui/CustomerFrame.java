@@ -11,12 +11,15 @@
 
 package ui;
 import inventory.MovieNotFoundException;
+import inventory.RentalMovieManagement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import search.Search;
 
 
@@ -25,10 +28,32 @@ import search.Search;
  * @author alby
  * Edited by Kristan
  */
+
+
 public class CustomerFrame extends javax.swing.JFrame {
 
+
+    /*public class MyTableModel extends javax.swing.table.AbstractTableModel{
+
+        public int getRowCount() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        public int getColumnCount() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+
+
+}*/
+
+
     private UiController localUIC;
-    private Vector <Vector <String>> tableContent = new Vector<Vector<String>>();
+    private Vector <Vector <String>> tableContent;
     private Vector <String> header;
     final String[] sList =
         {
@@ -47,13 +72,15 @@ public class CustomerFrame extends javax.swing.JFrame {
      * @param UIC
      */
     public CustomerFrame() throws Exception {
-
+        MakeTable();
         initComponents();
+        
     }
     
-    public CustomerFrame(ui.UiController UIC) {
+    public CustomerFrame(ui.UiController UIC)throws Exception {
         localUIC = UIC;
         initComponents();
+        MakeTable();
     }
 
 
@@ -65,64 +92,102 @@ public class CustomerFrame extends javax.swing.JFrame {
     private Vector ReturnVector(ArrayList list){
         return new Vector(list);
     }
-    private void makeTable(){
-      String searchItem = searchField.getText();
-      String selectedItem = (String)searchComboBox.getSelectedItem();
-     // String query =  selectedItem +" = " + searchItem;
-        try {
-            ArrayList<inventory.GeneralMovie> result = Search.searchMovies(searchItem,null,null);
-            for (inventory.GeneralMovie movie : result)
-            {
-                System.out.println("Found something"); // TESTING
-                System.out.println("found "+ movie.getTitle()); // TESTING
-                Vector <String> row = new Vector<String>();
-                row.add(movie.getTitle());
-                row.add("" + movie.getReleaseDate().get(java.util.Calendar.YEAR));
-                row.add(movie.getDirector());
-                String actors = "";
-                for (String actor : movie.getActors())
-                {
-                    actors += actor;
-                    actors += ", ";
-                }
-                
-                actors = actors.trim().substring(0, actors.length() -2);
-                
-                row.add(actors);
-                System.out.println(actors); // TESTING
-                row.add(movie.getRating());
-                tableContent.add(row);
-            }
 
-           /* while (result.next()){
-                Vector <String> row = new Vector<String>();
-                row.add(result.getString(1));
-                row.add(result.getString(2));
-                row.add(result.getString(3));
-                row.add(result.getString(4));
-                row.add(result.getString(5));
-                tableContent.add(row);
-            }*/
-        } 
-        catch (SQLException ex) {
-            Logger.getLogger(CustomerFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CustomerFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        catch (MovieNotFoundException exception)
-        {
-            searchField.setText("Movie Not Found");
-        }
-      catch (Exception exception)
-      {
-          searchField.setText(exception.getMessage());
+    private void MakeTable(){
+
+      tableContent = new Vector<Vector <String>>();
+      for(int i = 0; i < 1; i++){
+          System.out.println("i = " + i);
+          Vector temp = new Vector <String>();
+          temp.add(" ");
+          temp.add(" ");
+          temp.add(" ");
+          temp.add(" ");
+          temp.add(" ");
+          tableContent.add(temp);
       }
+
       header = new Vector<String>();
       header.add("Title"); //Empid
       header.add("Release Date"); // employee name
       header.add("Director"); // employee position
       header.add("Actor(s)"); // employee department
       header.add("Rating"); // employee department
+      header.add("Format");
+      header.add("Availability");
+
+    }
+
+    private void UpdateTable() {
+      String searchItem = searchField.getText();
+      String selectedItem = (String)searchComboBox.getSelectedItem();
+      System.out.println("SearchItem: " + searchItem);
+      tableContent = new Vector<Vector <String>>();
+
+        DefaultTableModel table = (DefaultTableModel)jTable1.getModel();
+        while (table.getRowCount()>0)
+            table.removeRow(0);
+
+        try {
+            System.out.println("testestetsetset");
+            ArrayList<inventory.GeneralMovie> result = Search.searchMovies(searchItem, selectedItem);
+            
+            System.out.println(result.size());
+            for (int i = 0; i < result.size();i++) //inventory.GeneralMovie movie : result)
+            {
+                inventory.GeneralMovie singleMovie = (inventory.GeneralMovie)result.get(i);
+                System.out.println("result Size: " + singleMovie.getTitle());
+
+                Vector <String> row = new Vector<String>();
+                row.add(singleMovie.getTitle());
+                row.add("" + singleMovie.getReleaseDate().get(java.util.Calendar.YEAR));
+                row.add("" + singleMovie.getDirector());
+                System.out.println("Get Director: " + singleMovie.getDirector());
+                String actors = "";
+                for (String actor : singleMovie.getActors())
+                {
+                    actors += actor;
+                    actors += ", ";
+                }
+                actors = actors.trim().substring(0, actors.length() -2);
+                row.add("" + actors);
+                System.out.println("Get actors: " + actors);
+                row.add("" + singleMovie.getRating());
+                System.out.println("Get Rating: " + singleMovie.getRating());
+                row.add(singleMovie.getFormat());
+                if(RentalMovieManagement.getAvailableCopies(singleMovie)> 0)
+                    row.add(""+RentalMovieManagement.getAvailableCopies(singleMovie));
+                else if(RentalMovieManagement.getAvailableCopies(singleMovie)== 0)
+                    row.add("Rented");
+                else if(RentalMovieManagement.getAvailableCopies(singleMovie) < 0)
+                    row.add("Not in Store");
+                //tableContent.add(row);
+                table.addRow(row);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CustomerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (MovieNotFoundException ex) {
+            searchField.setText("Movie Not Found");
+        } catch (Exception ex) {System.out.print(ex.getMessage());ex.printStackTrace();}
+
+/*
+      header = new Vector<String>();
+      header.add("Title"); //Empid
+      header.add("Release Date"); // employee name
+      header.add("Director"); // employee position
+      header.add("Actor(s)"); // employee department
+      header.add("Rating"); // employee department
+      for(String i : header){
+       System.out.println("header: " + i);
+      }
+ */
+
+
+        table.fireTableStructureChanged();
+
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -155,7 +220,7 @@ public class CustomerFrame extends javax.swing.JFrame {
             }
         });
 
-        searchComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Title", "Director", "Actor" }));
+        searchComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Title", "Director", "Actors", "Genre" }));
         searchComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchComboBoxActionPerformed(evt);
@@ -186,101 +251,102 @@ public class CustomerFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable1.setAutoCreateColumnsFromModel(false);
+        jTable1.setAutoCreateColumnsFromModel(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            tableContent,header) );
-    jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-    jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            jTable1MouseClicked(evt);
-        }
-    });
-    jScrollPane1.setViewportView(jTable1);
+            tableContent, header
+        ));
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
 
-    RequestButton.setText("Request Movie");
-    RequestButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            RequestButtonActionPerformed(evt);
-        }
-    });
+        RequestButton.setText("Request Movie");
+        RequestButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RequestButtonActionPerformed(evt);
+            }
+        });
 
-    ReserveButton.setText("Reserve Movie");
-    ReserveButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            ReserveButtonActionPerformed(evt);
-        }
-    });
+        ReserveButton.setText("Reserve Movie");
+        ReserveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReserveButtonActionPerformed(evt);
+            }
+        });
 
-    javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-    jPanel3.setLayout(jPanel3Layout);
-    jPanel3Layout.setHorizontalGroup(
-        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-            .addContainerGap(539, Short.MAX_VALUE)
-            .addComponent(RequestButton)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(ReserveButton)
-            .addGap(18, 18, 18))
-    );
-    jPanel3Layout.setVerticalGroup(
-        jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(539, Short.MAX_VALUE)
+                .addComponent(RequestButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ReserveButton)
-                .addComponent(RequestButton))
-            .addContainerGap())
-    );
+                .addGap(18, 18, 18))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ReserveButton)
+                    .addComponent(RequestButton))
+                .addContainerGap())
+        );
 
-    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-    jPanel2.setLayout(jPanel2Layout);
-    jPanel2Layout.setHorizontalGroup(
-        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(jPanel2Layout.createSequentialGroup()
-            .addGap(29, 29, 29)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-            .addGap(30, 30, 30))
-        .addGroup(jPanel2Layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addContainerGap())
-    );
-    jPanel2Layout.setVerticalGroup(
-        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(jPanel2Layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-    );
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+                .addGap(30, 30, 30))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
-    jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24));
-    jLabel1.setText("Customer Search");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setText("Search-O-Film");
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-    getContentPane().setLayout(layout);
-    layout.setHorizontalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addContainerGap(308, Short.MAX_VALUE)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(288, 288, 288))
-        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-    );
-    layout.setVerticalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap())
-    );
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(308, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(288, 288, 288))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
-    pack();
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
@@ -293,8 +359,25 @@ public class CustomerFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       // TODO add your handling code here:
+ /*       java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try{
+                    new CustomerFrame().setVisible(true);
+                }catch(Exception e){}
+            }
+        });
+  *
+  */
+   // MyTableModel tableOfDoom;
+   // tableOfDoom = (MyTableModel) jTable1.getModel();
+   // jTable1.fireTableDataChanged();
+        UpdateTable();
+        DefaultTableModel table = (DefaultTableModel)jTable1.getModel();
+        table.fireTableStructureChanged();
+
+        //SearchTableModel
         
-makeTable();
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -320,7 +403,7 @@ makeTable();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try{
-                new CustomerFrame().setVisible(true);
+                    new CustomerFrame().setVisible(true);
                 }catch(Exception e){}
             }
         });
