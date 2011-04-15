@@ -63,13 +63,29 @@ public class TransactionManager
 		</ul>
 		
 	*/
-	private void process() throws IllegalStateException, SQLException, ClassNotFoundException
+	private void process() throws IllegalStateException, SQLException, ClassNotFoundException, MovieNotFoundException, Exception
 	{
 		if (myTransaction.isPaid() == false)
 		{
 			throw new IllegalStateException("The invoice has not been paid, not saving info.");
 		}
 		mySQLhelper.insertInvoiceTable(myTransaction);
+                RentalMovieManagement rentalManager = new RentalMovieManagement();
+                SaleMovieManagement saleManager = new SaleMovieManagement();
+                for(int i = 0 ; i < myTransaction.getNumberOfItems(); i++)
+                {
+                    TransactionItem item = myTransaction.getItem(i);
+                    if(item.getType().equals("for sale"))
+                    {
+                       saleManager.sell(item.getBarcode());
+                    }
+                    else if(item.getType().trim().toLowerCase().equals("new release")
+                            || item.getType().trim().toLowerCase().equals("7 day"))
+                    {
+                        rentalManager.setCurrentCopy(item.getBarcode());
+                        rentalManager.checkOut(Integer.toString(myTransaction.getCustomerID()));
+                    }
+                }
 	}
 
 	/**
