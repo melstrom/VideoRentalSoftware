@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
@@ -61,29 +61,28 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="RepostLostButton" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="inCIdLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                              <Component id="inCIdField" min="-2" pref="187" max="-2" attributes="0"/>
+                              <Component id="inCustIdField" min="-2" pref="187" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                              <Component id="inCOkButton" min="-2" pref="71" max="-2" attributes="0"/>
+                              <Component id="inCustOkButton" min="-2" pref="71" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" alignment="1" pref="681" max="32767" attributes="0"/>
                           <Component id="customerInfoPanel" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="barcodeLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="inBarcodeLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                              <Component id="barcodeField2" min="-2" pref="187" max="-2" attributes="0"/>
+                              <Component id="inBarcodeField" min="-2" pref="187" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                              <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
+                              <Component id="checkInComboBox" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="checkInButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jButton10" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="jScrollPane1" alignment="1" pref="681" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -95,22 +94,23 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="inCIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="inCIdField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="inCOkButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="inCustIdField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="inCustOkButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="customerInfoPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" pref="262" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="barcodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="barcodeField2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton10" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="inBarcodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="inBarcodeField" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="checkInButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="checkInComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="28" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" min="-2" pref="314" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="RepostLostButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -142,15 +142,18 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JTextField" name="inCIdField">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="12345"/>
-              </Properties>
+            <Component class="javax.swing.JTextField" name="inCustIdField">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="inCustIdFieldKeyTyped"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="inCOkButton">
+            <Component class="javax.swing.JButton" name="inCustOkButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="OK"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inCustOkButtonActionPerformed"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JPanel" name="customerInfoPanel">
               <Properties>
@@ -167,30 +170,32 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="phoneLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="penaltyCustomerLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="statusCustomerLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="inPhoneLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="inNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="inLicenseLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="47" max="32767" attributes="0"/>
+                          <EmptySpace pref="37" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="inLicenseField" alignment="0" pref="187" max="32767" attributes="1"/>
+                              <Component id="inNameField" alignment="0" pref="187" max="32767" attributes="1"/>
+                              <Component id="inPhoneField" alignment="0" max="32767" attributes="1"/>
+                          </Group>
+                          <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="idField1" alignment="0" pref="187" max="32767" attributes="1"/>
-                                      <Component id="nameField" alignment="0" pref="187" max="32767" attributes="1"/>
-                                      <Component id="phoneField" alignment="0" max="32767" attributes="1"/>
-                                  </Group>
-                                  <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
-                                  <Component id="addressCustomerLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jScrollPane3" pref="251" max="32767" attributes="0"/>
-                                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="inAddressLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
+                                  <Component id="inAddressScrollPane" pref="251" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
-                                  <Component id="idField2" min="-2" pref="187" max="-2" attributes="0"/>
-                                  <EmptySpace pref="348" max="32767" attributes="0"/>
+                                  <Component id="inPenaltyLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="86" max="32767" attributes="0"/>
+                                  <Component id="inMoneySignLabel" min="-2" pref="9" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="inPenaltyField" min="-2" pref="159" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -198,38 +203,36 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane3" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="inAddressScrollPane" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="nameField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="addressCustomerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="inNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="inNameField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="inAddressLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="phoneField" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="phoneLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="penaltyCustomerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="idField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="statusCustomerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="idField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="inPhoneField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="inPhoneLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="inLicenseLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="inLicenseField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="inPenaltyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="inPenaltyField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="inMoneySignLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="nameLabel">
+                <Component class="javax.swing.JLabel" name="inNameLabel">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="1"/>
@@ -237,7 +240,40 @@
                     <Property name="text" type="java.lang.String" value="Name:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="penaltyCustomerLabel">
+                <Component class="javax.swing.JTextField" name="inNameField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="inPhoneLabel">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Tahoma" size="11" style="1"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Phone Number:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="inPhoneField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="inLicenseLabel">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Tahoma" size="11" style="1"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Driver&apos;s License::"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="inLicenseField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="inPenaltyLabel">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="1"/>
@@ -245,15 +281,18 @@
                     <Property name="text" type="java.lang.String" value="Penalty:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="statusCustomerLabel">
+                <Component class="javax.swing.JLabel" name="inMoneySignLabel">
                   <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Tahoma" size="11" style="1"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Status:"/>
+                    <Property name="text" type="java.lang.String" value="$"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="addressCustomerLabel">
+                <Component class="javax.swing.JTextField" name="inPenaltyField">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="inAddressLabel">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="1"/>
@@ -261,34 +300,14 @@
                     <Property name="text" type="java.lang.String" value="Address:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="nameField">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="text" type="java.lang.String" value="Customer Name"/>
-                    <Property name="focusable" type="boolean" value="false"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="idField1">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="text" type="java.lang.String" value="$123"/>
-                    <Property name="focusable" type="boolean" value="false"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="idField2">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="focusable" type="boolean" value="false"/>
-                  </Properties>
-                </Component>
-                <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+                <Container class="javax.swing.JScrollPane" name="inAddressScrollPane">
                   <AuxValues>
                     <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
                   </AuxValues>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="jTextArea1">
+                    <Component class="javax.swing.JTextArea" name="inAddressTextArea">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="editable" type="boolean" value="false"/>
@@ -297,27 +316,15 @@
                     </Component>
                   </SubComponents>
                 </Container>
-                <Component class="javax.swing.JLabel" name="phoneLabel">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Tahoma" size="11" style="1"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Phone Number:"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="phoneField">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                  </Properties>
-                </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JTextField" name="barcodeField2">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="12345678"/>
-              </Properties>
+            <Component class="javax.swing.JTextField" name="inBarcodeField">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inBarcodeFieldActionPerformed"/>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="inBarcodeFieldKeyTyped"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="barcodeLabel">
+            <Component class="javax.swing.JLabel" name="inBarcodeLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="11" style="1"/>
@@ -329,13 +336,16 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Check In"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkInButtonActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton10">
+            <Component class="javax.swing.JButton" name="RepostLostButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Report Lost"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox1">
+            <Component class="javax.swing.JComboBox" name="checkInComboBox">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="2">
@@ -394,17 +404,28 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="inCustomerInfoPanel" min="-2" max="-2" attributes="0"/>
+                              <Component id="outCustomerInfoPanel" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jTextField1" alignment="1" max="32767" attributes="1"/>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="jTextField1" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="jButton7" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="jButton8" alignment="0" max="32767" attributes="1"/>
+                                  <Group type="102" alignment="0" attributes="1">
+                                      <Component id="jButton9" min="-2" pref="114" max="-2" attributes="1"/>
+                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jTextField2" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jButton2" min="-2" pref="60" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jComboBox2" min="-2" pref="148" max="-2" attributes="1"/>
+                                  </Group>
                                   <Component id="jButton11" alignment="1" max="32767" attributes="1"/>
-                                  <Component id="jButton7" alignment="1" pref="212" max="32767" attributes="1"/>
-                                  <Component id="jButton8" alignment="1" max="32767" attributes="1"/>
-                                  <Component id="jButton9" alignment="1" max="32767" attributes="1"/>
-                                  <Component id="jComboBox2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="jButton3" alignment="0" max="32767" attributes="1"/>
                               </Group>
                           </Group>
                       </Group>
@@ -435,25 +456,33 @@
                                   <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jTextField4" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="22" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="inCustomerInfoPanel" min="-2" max="-2" attributes="0"/>
+                              <Component id="outCustomerInfoPanel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jTextField1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jComboBox2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                               <Component id="jButton7" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jButton8" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton9" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="56" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jButton9" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jButton11" min="-2" pref="63" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jButton3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace pref="22" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -540,7 +569,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButton9">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Panelty"/>
+                <Property name="text" type="java.lang.String" value="Add Panelty"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
@@ -554,13 +583,17 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField3">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField4">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="text" type="java.lang.String" value="700"/>
               </Properties>
             </Component>
-            <Container class="javax.swing.JPanel" name="inCustomerInfoPanel">
+            <Container class="javax.swing.JPanel" name="outCustomerInfoPanel">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
@@ -575,21 +608,21 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="inNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="inPhoneLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="inPenaltyLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="inStatusLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="inLicenseLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="outNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="outPhoneLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="outPenaltyLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="outDLLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="outLicenseLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="inLicenseField" max="32767" attributes="1"/>
-                              <Component id="inStatusField" max="32767" attributes="1"/>
-                              <Component id="idField3" alignment="0" max="32767" attributes="1"/>
-                              <Component id="inPhoneField" alignment="0" max="32767" attributes="1"/>
+                              <Component id="outLicenseField" max="32767" attributes="1"/>
+                              <Component id="outDLField" max="32767" attributes="1"/>
+                              <Component id="outPenalthField" alignment="0" max="32767" attributes="1"/>
+                              <Component id="outPhoneField" alignment="0" max="32767" attributes="1"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                                  <Component id="inNameField" min="-2" pref="157" max="-2" attributes="1"/>
+                                  <Component id="outNameField" min="-2" pref="157" max="-2" attributes="1"/>
                               </Group>
                           </Group>
                           <EmptySpace pref="13" max="32767" attributes="0"/>
@@ -601,28 +634,28 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="inNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="inNameField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outNameField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="inPhoneField" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="inPhoneLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outPhoneField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outPhoneLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="idField3" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="inPenaltyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outPenalthField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outPenaltyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="inStatusField" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="inStatusLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outDLField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outDLLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="inLicenseLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="inLicenseField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outLicenseLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outLicenseField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -630,12 +663,12 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JTextField" name="inPhoneField">
+                <Component class="javax.swing.JTextField" name="outPhoneField">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="inNameLabel">
+                <Component class="javax.swing.JLabel" name="outNameLabel">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="1"/>
@@ -643,7 +676,7 @@
                     <Property name="text" type="java.lang.String" value="Name:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="inPhoneLabel">
+                <Component class="javax.swing.JLabel" name="outPhoneLabel">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="1"/>
@@ -651,27 +684,27 @@
                     <Property name="text" type="java.lang.String" value="Phone Number:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="idField3">
+                <Component class="javax.swing.JTextField" name="outPenalthField">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="text" type="java.lang.String" value="$123"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="inStatusField">
+                <Component class="javax.swing.JTextField" name="outDLField">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="inNameField">
+                <Component class="javax.swing.JTextField" name="outNameField">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="text" type="java.lang.String" value="Customer Name"/>
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="inPenaltyLabel">
+                <Component class="javax.swing.JLabel" name="outPenaltyLabel">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="1"/>
@@ -679,7 +712,7 @@
                     <Property name="text" type="java.lang.String" value="Penalty:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="inStatusLabel">
+                <Component class="javax.swing.JLabel" name="outDLLabel">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="1"/>
@@ -687,7 +720,7 @@
                     <Property name="text" type="java.lang.String" value="Status:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="inLicenseLabel">
+                <Component class="javax.swing.JLabel" name="outLicenseLabel">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="1"/>
@@ -695,7 +728,7 @@
                     <Property name="text" type="java.lang.String" value="Driver&apos;s License:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="inLicenseField">
+                <Component class="javax.swing.JTextField" name="outLicenseField">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                   </Properties>
@@ -722,6 +755,26 @@
                     <StringItem index="1" value="Discount 1"/>
                   </StringArray>
                 </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButton2">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&lt;-"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="jTextField2">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="jTextField2"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="$"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButton3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Reset"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -863,13 +916,22 @@
                               <Component id="inCIdLabel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Component id="inCIdField2" min="-2" pref="187" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                              <Component id="jComboBox4" min="-2" pref="64" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="inCOkButton2" min="-2" pref="71" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="jScrollPane2" alignment="1" pref="681" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="jButton12" min="-2" pref="117" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jButton6" min="-2" pref="127" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jButton14" min="-2" pref="117" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jButton15" min="-2" pref="127" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -883,16 +945,24 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="inCIdLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="inCIdField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jComboBox4" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="inCOkButton2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane6" min="-2" pref="345" max="-2" attributes="0"/>
-                      <EmptySpace pref="85" max="32767" attributes="0"/>
+                      <Component id="jScrollPane6" min="-2" pref="186" max="-2" attributes="0"/>
+                      <EmptySpace pref="7" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButton6" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton12" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButton6" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" min="-2" pref="178" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jButton14" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButton15" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -926,7 +996,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="11" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Barcode"/>
+                <Property name="text" type="java.lang.String" value="General Movie:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="inCOkButton2">
@@ -942,6 +1012,46 @@
             <Component class="javax.swing.JButton" name="jButton12">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Add"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="jComboBox4">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="4">
+                    <StringItem index="0" value="Item 1"/>
+                    <StringItem index="1" value="Item 2"/>
+                    <StringItem index="2" value="Item 3"/>
+                    <StringItem index="3" value="Item 4"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+            </Component>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTable" name="jTable2">
+                  <Properties>
+                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                      <Table columnCount="4" rowCount="4">
+                        <Column editable="true" title="Title 1" type="java.lang.Object"/>
+                        <Column editable="true" title="Title 2" type="java.lang.Object"/>
+                        <Column editable="true" title="Title 3" type="java.lang.Object"/>
+                        <Column editable="true" title="Title 4" type="java.lang.Object"/>
+                      </Table>
+                    </Property>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Component class="javax.swing.JButton" name="jButton14">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Add"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButton15">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Remove"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -1070,7 +1180,7 @@
                       <Component id="reportPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="190" max="32767" attributes="0"/>
+                      <EmptySpace pref="196" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1090,7 +1200,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="324" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="328" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -1114,7 +1224,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="324" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="328" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
