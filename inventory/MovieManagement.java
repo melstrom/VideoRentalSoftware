@@ -121,21 +121,22 @@ public class MovieManagement
                      genre,rating,studio,retailPrice,format, runtime);
     String actorsList="";
     for(int i=0; i<actors.length; i++)
+    {
     actorsList +=actors[i]+",";
-
+        }
 
     String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
     String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
     String query = generateInsertSQL("videoInfo",columns, values );
     statement.executeUpdate(query);
-    String columns1[]= {"SKU","Format","InfoID","RentalPrice"};
+    String columns1[]= {"SKU","Format","InfoID","RetailPrice"};
     String values1[] = {SKU,format, SKU, ""+retailPrice};
     query = generateInsertSQL("physicalVideo",columns1, values1);
     statement.executeUpdate(query);
-    } //Catch here
+    }
     finally
     {
-    connection.close();
+        connection.close();
     }
     }
     
@@ -526,12 +527,11 @@ public class MovieManagement
         }
     }
 
-
     /**
-     * Constructs a new single copy of a movie
-     * @param category the category the movie belongs to (need to find out more about this)
-     * @param format the media format of the movie (VHS, DVD, Blu-ray)
-     * @param barcode the unique identification of the individual movie copy
+     *
+     * @param generalMovie
+     * @param type
+     * @throws SQLException
      */
     public void addCopy(GeneralMovie generalMovie, String type) throws SQLException
     {
@@ -539,11 +539,11 @@ public class MovieManagement
         {
             if (type.equals("sale"))
             {
-                this.addSaleMovie(generalMovie);
+                this.addSaleMovie(generalMovie, type);
             }
             if (type.equals("rental"))
             {
-                this.addRentalMovie(generalMovie);
+                this.addRentalMovie(generalMovie, type);
             }
         } finally
         {
@@ -607,7 +607,7 @@ public class MovieManagement
         ArrayList<MovieRequest> movieRequest = new ArrayList<MovieRequest>();
         String table = "madeSpecialOrders";
         String column = "*";
-        String constraint = "*";
+        String constraint = null;
 
         String query = generateQuery(table, column, constraint);
 
@@ -651,8 +651,7 @@ public class MovieManagement
 
         this.request = new MovieRequest(title, format, releaseDate, accountID);
         createRequest(copy, account);
-        //TODO: createQueue does nothing, needs to be implemented (considering moving it here to implement)
-       // madeSpecialOrders customerID SKU
+
     }
     /**
      * Create query for special order
@@ -670,7 +669,6 @@ public class MovieManagement
         String values[] = {time,copy.getSKU(),""+account.getAccountID()};
         String query = generateInsertSQL(tablename, columns, values);
         statement.executeUpdate(query);
-        
     }
     /**
      * Generate generic insert queries
@@ -729,14 +727,14 @@ public class MovieManagement
     {
 
         //SELECT SKU FROM videoInfo WHERE SKU = 'newSKU#'
-        String table = "videoInfo";
+        String table = "physicalVideo";
         String column = "SKU";
-        String constraint = SKU;
+        String constraint = "WHERE SKU = '" + SKU + "'";
 
         String query = generateQuery(table, column, constraint);
         //String query = "SELECT " + column + " FROM " + table + " WHERE " + column + "='" + SKU + "'";
 
-        boolean found = statement.execute(query);
+        boolean found = !statement.execute(query);
 
         if (found == true)
         {
@@ -788,7 +786,7 @@ public class MovieManagement
      */
     private static String generateQuery(String table, String column, String constraint)
     {
-        String query = "SELECT " + column + " FROM " + table + " WHERE " + constraint;
+        String query = "SELECT " + column + " FROM " + table + " " + constraint;
         return query;
     }
 
@@ -814,15 +812,15 @@ public class MovieManagement
      * @throws SQLException
      * @pre type is rental/sale
      */
-    private int generateNewID(String type) throws SQLException
+    private int generateNewID(String type, String tableName) throws SQLException
     {
-        String table = "TABLE";
+        String table = tableName;
         String column = type+"ID";
-        String constraint = "";
+        String constraint = "ORDER BY "+type+"ID";
         String query = generateQuery(table, column, constraint);
         ResultSet resultSet = statement.executeQuery(query);
         resultSet.last();
-        int LastID = resultSet.getInt(0);
+        int LastID = resultSet.getInt(type+"ID");
         int newID = LastID + 1;
 
         return newID;
@@ -833,19 +831,17 @@ public class MovieManagement
      * @return a barcode for this saleMovie
      * @throws SQLException
      */
-    private String addSaleMovie(GeneralMovie generalMovie) throws SQLException
+    private String addSaleMovie(GeneralMovie generalMovie, String type) throws SQLException
     {
-        //this.checkDuplicateBarcode(barcode);
         this.movie = generalMovie;
         String SKU = this.movie.getSKU();
-        String type = "Sale";
-        int newSaleID = this.generateNewID(type);
+        String table = "videoSale";
+        int newSaleID = this.generateNewID(type, table);
 
         //Prepare INSERT SQL
-        String table = "videoSale";
         String condition = "available";
         String category = "for sale";
-        String query = "INSERT INTO " + table + " (SaleID, condition, catagory, SKU " + "VALUES (" + newSaleID + "," + condition + "," + category + "," + SKU + ")";
+        String query = "INSERT INTO " + table + " (videoSale.SaleID, videoSale.condition, videoSale.catagory, videoSale.SKU) " + "VALUES (" + newSaleID + ",'" + condition + "','" + category + "','" + SKU + "')";
         statement.executeUpdate(query);
 
         String newBarCode = SKU + newSaleID;
@@ -857,19 +853,17 @@ public class MovieManagement
      * @return a barcode for this rentalMovie
      * @throws SQLException
      */
-    private String addRentalMovie(GeneralMovie generalMovie) throws SQLException
+    private String addRentalMovie(GeneralMovie generalMovie, String type) throws SQLException
     {
-        //this.checkDuplicateBarcode(barcode);
         this.movie = generalMovie;
         String SKU = this.movie.getSKU();
-        String type = "rental";
-        int newRentalID = this.generateNewID(type);
+        String table = "videoRental";
+        int newRentalID = this.generateNewID(type, table);
 
         //Prepare INSERT SQL
-        String table = "videoRental";
         String condition = "available";
         String category = "7 day";
-        String query = "INSERT INTO " + table + " (RentalID, condition, catagory, SKU " + "VALUES (" + newRentalID + "," + condition + "," + category + "," + SKU + ")";
+        String query = "INSERT INTO " + table + " (videoRental.RentalID, videoRental.condition, videoRental.catagory, videoRental.SKU) " + "VALUES (" + newRentalID + ",'" + condition + "','" + category + "','" + SKU + "')";
         statement.executeUpdate(query);
 
 
