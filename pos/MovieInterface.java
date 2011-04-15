@@ -63,7 +63,7 @@ public class MovieInterface implements TransactionItem
 
                 String table = "item";
                 String column = "itemID";
-                String SQL = "SELECT " + column + " FROM " + table;
+                String SQL = "SELECT " + column + " FROM " + table +" GROUP BY "+column;
                 ResultSet rs = stat.executeQuery(SQL);
                 rs.last();
                 int largestItemID = rs.getInt(column)+1;
@@ -79,7 +79,7 @@ public class MovieInterface implements TransactionItem
 
                 String table = "item";
                 String column = "itemID";
-                String SQL = "SELECT " + column + " FROM " + table;
+                String SQL = "SELECT " + column + " FROM " + table +" GROUP BY "+column;
                 ResultSet rs = stat.executeQuery(SQL);
                 rs.last();
                 int largestItemID = rs.getInt(column)+1;
