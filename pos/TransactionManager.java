@@ -83,7 +83,7 @@ public class TransactionManager
                     else if(item.getType().trim().toLowerCase().equals("new release")
                             || item.getType().trim().toLowerCase().equals("7 day"))
                     {
-                        rentalManager.ckeckOut(myTransaction.getCustomerID(), item.getBarcode(), new JDBCConnection());
+                        rentalManager.checkOut(myTransaction.getCustomerID(), item.getBarcode(), new JDBCConnection());
                     }
                 }
 	}
