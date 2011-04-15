@@ -608,9 +608,9 @@ public class RentalMovieManagement {
     }
 
 
-    public void checkIn(Customer customer)throws SQLException, Exception,java.lang.Exception
+    public void checkIn(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
     {
-        checkInQuery(customer.getAccountID());
+        checkInQuery(customerID, barcode, newCondition);
     }
     /**
      * Change a movie from type rental to sale
@@ -757,19 +757,22 @@ public class RentalMovieManagement {
         updateDatabase(query);
     }
 
-    private void checkInQuery(int customerID)throws SQLException, Exception,java.lang.Exception
+    private void checkInQuery(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
     {
         String tablename = "videoRental";
         String attribute = "videoRental.condition";
-        String attributeTo = "available";
-        String where = " where rentalID="+quote+rentalID+quote+" and SKU="+quote+SKU+quote;
+        String attributeTo = newCondition;
+        String where = " where rentalID="+quote+barcode.substring(barcode.length() - 9 )+quote+" and SKU="+quote+barcode.substring(0,barcode.length()-9)+quote;
         String query = generateUpdateSQL(tablename, attribute, attributeTo, where);
         updateDatabase(query);
-
-        tablename = "madeReservations";
-        where = " where customerID="+quote+customerID+quote+" and SKU="+quote+SKU+quote;
-        query = generateDeleteSQL(tablename,where);
-        updateDatabase(query);
+        /*
+        if(newCondition.trim().toLowerCase().equals("available"))
+        {
+            tablename = "madeReservations";
+            where = " where customerID="+quote+customerID+quote+" and SKU="+quote+SKU+quote;
+            query = generateDeleteSQL(tablename,where);
+            updateDatabase(query);
+        }*/
     }
     /**
      * Create a query to make a reservation
