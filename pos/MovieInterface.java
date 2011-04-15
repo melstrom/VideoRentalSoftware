@@ -13,9 +13,9 @@ import jdbconnection.JDBCConnection;
  */
 public class MovieInterface implements TransactionItem
 {
-    public MovieInterface(String barcode, PriceSchemeManagement PSM)
+    public MovieInterface(String barcode)
             throws SQLException, ClassNotFoundException, IOException,
-            MovieNotFoundException
+            MovieNotFoundException, IllegalArgumentException, Exception
     {
         IndividualMovie movie = (IndividualMovie)(Search.previewMovie(barcode));
         this.barcode = barcode;
@@ -66,11 +66,12 @@ public class MovieInterface implements TransactionItem
                 String SQL = "SELECT " + column + " FROM " + table;
                 ResultSet rs = stat.executeQuery(SQL);
                 rs.last();
-                int largestItemID = rs.getInt(column);
+                int largestItemID = rs.getInt(column)+1;
 
-                stat.executeQuery("INSERT INTO item VALUES (" + largestItemID + ","
+                String query = "INSERT INTO item VALUES (" + largestItemID + ","
                         + "'sale', "+ priceInCents +", '"+ barcode.substring(barcode.length() - 9)
-                        +"', null, '"+ category +"', null,"+ invoiceID +");");
+                        +"', null, '"+ category +"', null,"+ invoiceID +");";
+                stat.executeUpdate(query);
             }
             else
             {
@@ -81,11 +82,12 @@ public class MovieInterface implements TransactionItem
                 String SQL = "SELECT " + column + " FROM " + table;
                 ResultSet rs = stat.executeQuery(SQL);
                 rs.last();
-                int largestItemID = rs.getInt(column);
+                int largestItemID = rs.getInt(column)+1;
 
-                stat.executeQuery("INSERT INTO item VALUES (" + largestItemID + ", "
-                        + priceInCents + ", null, null, " + category + ", " +
-                        barcode.substring(barcode.length() - 9) + ", " + invoiceID +");");
+                String query = "INSERT INTO item VALUES (" + largestItemID + ", "
+                        +"'rental',"+ priceInCents + ", null, null, '" + category + "', " +
+                        barcode.substring(barcode.length() - 9) + ", " + invoiceID +");";
+                stat.executeUpdate(query);
             }
         }
         finally
