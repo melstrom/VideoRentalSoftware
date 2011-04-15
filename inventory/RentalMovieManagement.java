@@ -346,13 +346,14 @@ public class RentalMovieManagement {
         {
             ResultSet result = connection.getResults(query, numParam, param);
 
-            if (result.wasNull())
+            if (result.next())
+            {
+                return result.getString(1);
+            }
+            else
             {
                 return null;
             }
-            else
-              result.next();
-            return result.getString(1);
 
         }
         finally
@@ -743,7 +744,7 @@ public class RentalMovieManagement {
         JDBCConnection conn = new JDBCConnection();
         String command = "UPDATE videoRental SET videoRental.condition='" + newCondition +
                         "' WHERE rentalID='" + barcode.substring(barcode.length()-9) + "';";
-        System.out.println(command);//testing
+        //System.out.println(command);//testing
         PreparedStatement stat = conn.prepareStatement(command);
         stat.execute();
 
