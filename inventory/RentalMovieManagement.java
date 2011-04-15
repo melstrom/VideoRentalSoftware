@@ -210,18 +210,7 @@ public class RentalMovieManagement {
         editCopy(info[0], info[1], info[2], info[3]);
     }*/
 
-    /**
-     * Get the availability of a list of general movies
-     * @param movies a list of movies
-     * @return a list of availabilities
-     * @post an array of availabilities in String
-     */
-    public String [] getAvailability(ArrayList<GeneralMovie> movies)
-    {
-	    //Search SKU and sum the total of lines from the result
-	    String [] arr = createGetAvailabilitySQL(movies);
-	    return new String[3];
-    }
+
     
     /**
      * This method gets the condition of a Rental Movie specified by its
