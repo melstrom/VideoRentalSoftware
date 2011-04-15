@@ -35,7 +35,8 @@ public interface TransactionItem
 	 * @param invoiceID the invoice number this item is on.
 	 * @pre the item should be paid for before calling this method.
 	 */
-	boolean updateItemInfoAtCheckOut(int invoiceID);
+	void updateItemInfoAtCheckOut(int invoiceID)
+                throws Exception;
 	//this method should probably be in some inventory item class.
 	//boolean updateItemInfoAtCheckIn(Date theDate, String barcode);
 }
