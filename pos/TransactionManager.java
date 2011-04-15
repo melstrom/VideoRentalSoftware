@@ -17,7 +17,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.Date;
 import java.util.Vector;
-
+import jdbconnection.JDBCConnection;
 
 /**
 	This object manages one transaction, the current one.
@@ -83,8 +83,7 @@ public class TransactionManager
                     else if(item.getType().trim().toLowerCase().equals("new release")
                             || item.getType().trim().toLowerCase().equals("7 day"))
                     {
-                        rentalManager.setCurrentCopy(item.getBarcode());
-                        rentalManager.checkOut(Integer.toString(myTransaction.getCustomerID()));
+                        rentalManager.ckeckOut(myTransaction.getCustomerID(), item.getBarcode(), new JDBCConnection());
                     }
                 }
 	}
