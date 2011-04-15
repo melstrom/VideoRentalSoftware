@@ -39,7 +39,7 @@ todo: update class diagram for transaction to version2
 
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.GregorianCalendar;
 /**
 	A point of sales transaction.
 	@author Peter
@@ -50,7 +50,7 @@ public class Transaction
 {
 	private int transactionID; // transactionID is set when payment is made and is the next transactionID
 	// TODO: or should transactinID be set in constructor? what if a transaction is created and not paid (transaction is canceled)
-	private Date transactionDate; // date is set when payment is made
+	private GregorianCalendar transactionDate; // date is set when payment is made
 	private ArrayList<TransactionItem> items;
 	
 	private int paymentAmount;
@@ -326,23 +326,23 @@ public class Transaction
 		</ul>
 	
 	*/
-	public boolean markPaid(Payment payment, int nextAvailableInvoiceID) throws IllegalStateException, Exception
+	public double markPaid(String payment, int amountDue,int nextAvailableInvoiceID) throws IllegalStateException, Exception
 	{
 		if (paid == true)
 		{
 			throw new IllegalStateException("Transaction has already been paid for.");
 		}
-		else if (payment.getAmount() < this.getSubTotal() + this.getTax())
+		else if (amountDue < this.getSubTotal() + this.getTax())
 		{
 			throw new IllegalStateException("Payment amount is not enough.");
 		}
 		paid = true;
-		paymentMethod = payment.getPaymentMethod();
-		paymentAmount = payment.getAmount();
+		paymentMethod = payment;
+		paymentAmount = amountDue;
 		transactionID = nextAvailableInvoiceID;
 		updateItemInfo();
 		setDate();
-		return true;
+		return amountDue - (getSubTotal() * getTax());
 	}
 	
 	
@@ -352,7 +352,7 @@ public class Transaction
 	private void setDate()
 	{
 		
-		transactionDate = new Date();
+		transactionDate = new GregorianCalendar();
 	}
 	/**
 		helper method to update the items info once it is checked out
@@ -490,13 +490,13 @@ public class Transaction
 		@return the date the transaction was completed.
 		@throws IllegalStateException if the transaction has not been paid for (no payment == no transaction has happened).
 	*/
-	public Date getDate() throws IllegalStateException
+	public String getDate() throws IllegalStateException
 	{
 		if (this.isPaid() == false)
 		{
 			throw new IllegalStateException("The invoice has not been paid, no date set.");
 		}
-		return transactionDate;
+		return "" + transactionDate.get(transactionDate.YEAR) + "-" + transactionDate.get(transactionDate.MONTH) + "-" + transactionDate.get(transactionDate.DATE);
 	}
 	
 	/**
@@ -601,7 +601,7 @@ public class Transaction
 	{
 		String newline = System.getProperty("line.separator");
 		String myTransaction = "Transaction ID: " + transactionID + newline;
-		myTransaction += "Date: " + transactionDate + newline;
+		myTransaction += "Date: " + getDate() + newline;
 		
 		myTransaction += "Number of Items: " + items.size() + newline;
 		

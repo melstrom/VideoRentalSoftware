@@ -8,8 +8,8 @@ package pos;
 
 import java.lang.ClassNotFoundException;
 import java.sql.SQLException;
-
-
+import inventory.*;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
@@ -29,9 +29,8 @@ public class TransactionManager
 	private PreparedStatement pstatement;
 	private Statement statement;
 	private Connection connection;
-	
 	private SQLhelper mySQLhelper;
-	
+	final private double TAX_RATE = 0.12;
 	
 	/**
 		Constructor stuff
@@ -50,9 +49,9 @@ public class TransactionManager
 		@param employeeID the employee's id.
 		@param taxPercent the percent the tax amount is as a double.
 	*/
-	public void createTransaction(String firstName, String lastName, String customerID, String employeeName, String employeeID, double taxPercent)
+	public void createTransaction(String firstName, String lastName, String customerID, String employeeName, String employeeID)
 	{
-		myTransaction = new Transaction(firstName, lastName, customerID, employeeName, employeeID, taxPercent);
+		myTransaction = new Transaction(firstName, lastName, customerID, employeeName, employeeID, TAX_RATE);
 	}
 	
 	/**
@@ -89,14 +88,34 @@ public class TransactionManager
 		This adds a item to the current transaction.
 		@param barcode the item's barcode number.
 	*/
-	public void addItem(String barcode) throws Exception
+	/*public void addItem(String barcode) throws Exception
 	{
 		//TransactionItem myItem = someHelperMethod(barcode);
 		// TODO find out who is working on a method that does this (get a item when given a barcode), for now, a dummy object will be made
 		
 		TempInventoryItem myItem = new TempInventoryItem();
 		myTransaction.addTransactionItem(myItem);
-	}
+	}*/
+        
+        public void addMovie(String barcode)
+                throws SQLException,ClassNotFoundException, IOException, 
+                       MovieNotFoundException, Exception
+        {
+            MovieInterface movie = new MovieInterface(barcode);
+            myTransaction.addTransactionItem(movie);
+        }
+
+        /*public void addDiscount()
+        {
+
+        }*/
+
+        public void addPenalty(int price)
+                throws IOException,Exception
+        {
+            Penalty pen = new Penalty(price);
+            myTransaction.addTransactionItem(pen);
+        }
 	
 	/**
 		This removes a item from the current transaction.
@@ -138,7 +157,7 @@ public class TransactionManager
 		@throws ClassNotFoundException if sql error.
 		@throws IllegalStateException if there are no items on the invoice.
 	*/
-	public int pay(int amount, String paymentMethod) throws IllegalStateException, SQLException, ClassNotFoundException
+	public double pay(String paymentMethod, int amount ) throws IllegalStateException, SQLException, ClassNotFoundException, Exception
 	{
 		if (myTransaction.getNumberOfItems() == 0)
 		{
@@ -150,9 +169,8 @@ public class TransactionManager
 		// int nextInvoiceID = mySQLhelper.getTotalNumberOfInvoices() + 1;
 		
 		int nextInvoiceID = mySQLhelper.getTotalNumberOfRows(SQLhelper.TRANSACTION_TABLE_NAME, SQLhelper.TRANSACTION_TABLE_PK) + 1;
-		Payment myPayment = new Payment(amount, paymentMethod);
-		myTransaction.markPaid(myPayment, nextInvoiceID);
-		return 411;
+		//Payment myPayment = new Payment(amount, paymentMethod);
+		return myTransaction.markPaid(paymentMethod, amount, nextInvoiceID);
 	}
 	/**
 		Gets the total price that needs to be collected for this Transaction
