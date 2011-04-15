@@ -78,8 +78,10 @@ public class Search
         if (searchType.equalsIgnoreCase("id"))
         {
             ArrayList<Customer> customerList = new ArrayList<Customer>();
-            Customer customer = getCustomer(Integer.parseInt(searchTerm));
+            int customerID = Integer.parseInt(searchTerm);
+            Customer customer = getCustomer(customerID);
             customerList.add(customer);
+            return customerList;
         }
         else if (searchType.equalsIgnoreCase("phone num"))
         {
@@ -93,8 +95,6 @@ public class Search
         {
             throw new IllegalArgumentException(searchType + " is not a valid search type");
         }
-        // never gets here
-        return null;
     }
     
     
