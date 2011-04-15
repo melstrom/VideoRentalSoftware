@@ -22,7 +22,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jTabbedPane1" min="-2" pref="706" max="-2" attributes="0"/>
+          <Component id="jTabbedPane1" min="-2" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -34,8 +34,8 @@
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="private ui.CheckOutPanel checkOutPanel;&#xa;private ui.MembershipPanel membershipPanel;&#xa;private ui.InventoryPanel inventoryPanel;&#xa;private ui.EmployeePanel employeePanel;&#xa;private OthersPanel othersPanel; &#xa;private ui.PriceSchemePanel pricePanel;"/>
-        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="checkOutPanel = new ui.CheckOutPanel();&#xa;jTabbedPane1.addTab(&quot;Chek Out&quot;, checkOutPanel);&#xa;membershipPanel = new ui.MembershipPanel();&#xa;jTabbedPane1.addTab(&quot;Membership&quot;, membershipPanel);&#xa;inventoryPanel = new ui.InventoryPanel();&#xa;jTabbedPane1.addTab(&quot;Inventory&quot;, inventoryPanel);&#xa;employeePanel = new ui.EmployeePanel();&#xa;jTabbedPane1.addTab(&quot;Employee&quot;, employeePanel);&#xa;othersPanel = new ui.OthersPanel();&#xa;jTabbedPane1.addTab(&quot;Others&quot;, othersPanel);&#xa;pricePanel = new ui.PriceSchemePanel();&#xa;jTabbedPane1.addTab(&quot;Price Scheme&quot;, pricePanel);"/>
+        <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="private ui.CheckOutPanel checkOutPanel;&#xa;private ui.MembershipPanel membershipPanel;&#xa;private ui.InventoryPanel inventoryPanel;&#xa;private ui.EmployeePanel employeePanel;&#xa;private ui.PriceSchemePanel pricePanel;&#xa;private OthersPanel othersPanel;"/>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="checkOutPanel = new ui.CheckOutPanel();&#xa;jTabbedPane1.addTab(&quot;Chek Out&quot;, checkOutPanel);&#xa;membershipPanel = new ui.MembershipPanel();&#xa;jTabbedPane1.addTab(&quot;Membership&quot;, membershipPanel);&#xa;inventoryPanel = new ui.InventoryPanel();&#xa;jTabbedPane1.addTab(&quot;Inventory&quot;, inventoryPanel);&#xa;employeePanel = new ui.EmployeePanel();&#xa;jTabbedPane1.addTab(&quot;Employee&quot;, employeePanel);&#xa;pricePanel = new ui.PriceSchemePanel();&#xa;jTabbedPane1.addTab(&quot;Price Scheme&quot;, pricePanel);&#xa;othersPanel = new ui.OthersPanel();&#xa;jTabbedPane1.addTab(&quot;Others&quot;, othersPanel);"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
@@ -55,56 +55,78 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                      <Component id="inCIdLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="26" pref="26" max="26" attributes="0"/>
+                      <Component id="inCustIdField" min="-2" pref="187" max="-2" attributes="0"/>
+                      <EmptySpace min="31" pref="31" max="31" attributes="0"/>
+                      <Component id="inCustOkButton" min="-2" pref="71" max="-2" attributes="0"/>
+                  </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="RepostLostButton" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="inCIdLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                              <Component id="inCustIdField" min="-2" pref="187" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                              <Component id="inCustOkButton" min="-2" pref="71" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="customerInfoPanel" alignment="0" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="inBarcodeLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <EmptySpace min="26" pref="26" max="26" attributes="0"/>
                               <Component id="inBarcodeField" min="-2" pref="187" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                              <EmptySpace min="9" pref="9" max="9" attributes="0"/>
                               <Component id="checkInComboBox" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace min="18" pref="18" max="18" attributes="0"/>
                               <Component id="checkInButton" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="checkInScrollPane" alignment="1" pref="681" max="32767" attributes="0"/>
+                          <Component id="checkInScrollPane" alignment="0" min="-2" pref="681" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="592" max="-2" attributes="0"/>
+                              <Component id="RepostLostButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="customerInfoPanel" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="inCIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="inCustIdField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="inCustOkButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="11" pref="11" max="11" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                              <Component id="inCIdLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="1" pref="1" max="1" attributes="0"/>
+                              <Component id="inCustIdField" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="inCustOkButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="customerInfoPanel" min="-2" max="-2" attributes="0"/>
+                      <Component id="customerInfoPanel" max="32767" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="inBarcodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="inBarcodeField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="checkInButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="checkInComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                              <Component id="inBarcodeLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="1" pref="1" max="1" attributes="0"/>
+                              <Component id="inBarcodeField" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="1" pref="1" max="1" attributes="0"/>
+                              <Component id="checkInComboBox" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="checkInButton" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="18" pref="18" max="18" attributes="0"/>
                       <Component id="checkInScrollPane" min="-2" pref="314" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="6" pref="6" max="6" attributes="0"/>
                       <Component id="RepostLostButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="334" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -154,32 +176,32 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="inPhoneLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="inNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="inLicenseLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace pref="55" max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="inLicenseField" alignment="0" pref="187" max="32767" attributes="1"/>
-                              <Component id="inNameField" alignment="0" pref="187" max="32767" attributes="1"/>
-                              <Component id="inPhoneField" alignment="0" max="32767" attributes="1"/>
-                          </Group>
-                          <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="inAddressLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
-                                  <Component id="inAddressScrollPane" pref="233" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="inPhoneLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="inNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="inLicenseLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace pref="69" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="inLicenseField" alignment="0" pref="187" max="32767" attributes="1"/>
+                                      <Component id="inNameField" alignment="0" pref="187" max="32767" attributes="1"/>
+                                      <Component id="inPhoneField" alignment="0" max="32767" attributes="1"/>
+                                  </Group>
                               </Group>
-                              <Group type="102" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
                                   <Component id="inPenaltyLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="68" max="32767" attributes="0"/>
+                                  <EmptySpace pref="129" max="32767" attributes="0"/>
                                   <Component id="inMoneySignLabel" min="-2" pref="9" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="inPenaltyField" min="-2" pref="159" max="-2" attributes="0"/>
+                                  <Component id="inPenaltyField" min="-2" pref="163" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                          <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
+                          <Component id="inAddressLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="inAddressScrollPane" pref="233" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -187,8 +209,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="inAddressScrollPane" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="inAddressScrollPane" alignment="0" min="-2" max="-2" attributes="1"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="inNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -200,17 +222,20 @@
                                       <Component id="inPhoneField" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="inPhoneLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="inLicenseLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="inLicenseField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="inPenaltyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="inPenaltyField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="inMoneySignLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="inLicenseLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="inLicenseField" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="inPenaltyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="inPenaltyField" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="inMoneySignLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="16" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -333,8 +358,8 @@
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="2">
-                    <StringItem index="0" value="Good"/>
-                    <StringItem index="1" value="Need Attention"/>
+                    <StringItem index="0" value="available"/>
+                    <StringItem index="1" value="broken"/>
                   </StringArray>
                 </Property>
               </Properties>

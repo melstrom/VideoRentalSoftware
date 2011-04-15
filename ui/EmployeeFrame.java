@@ -139,35 +139,35 @@ public class EmployeeFrame extends javax.swing.JFrame {
             .addGroup(customerInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(inPhoneLabel)
-                    .addComponent(inNameLabel)
-                    .addComponent(inLicenseLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(inLicenseField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                    .addComponent(inNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                    .addComponent(inPhoneField))
-                .addGap(18, 18, 18)
-                .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(customerInfoPanelLayout.createSequentialGroup()
-                        .addComponent(inAddressLabel)
-                        .addGap(4, 4, 4)
-                        .addComponent(inAddressScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
+                        .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inPhoneLabel)
+                            .addComponent(inNameLabel)
+                            .addComponent(inLicenseLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                        .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(inLicenseField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                            .addComponent(inNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                            .addComponent(inPhoneField)))
                     .addGroup(customerInfoPanelLayout.createSequentialGroup()
                         .addComponent(inPenaltyLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
                         .addComponent(inMoneySignLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inPenaltyField, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26))
+                        .addComponent(inPenaltyField, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(inAddressLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inAddressScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                .addGap(22, 22, 22))
         );
         customerInfoPanelLayout.setVerticalGroup(
             customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(customerInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(inAddressScrollPane, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, customerInfoPanelLayout.createSequentialGroup()
+                .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(inAddressScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(customerInfoPanelLayout.createSequentialGroup()
                         .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(inNameLabel)
                             .addComponent(inNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -175,15 +175,17 @@ public class EmployeeFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(inPhoneField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(inPhoneLabel))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inLicenseLabel)
-                    .addComponent(inLicenseField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inPenaltyLabel)
-                    .addComponent(inPenaltyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inMoneySignLabel))
-                .addContainerGap())
+                            .addComponent(inPhoneLabel))
+                        .addGap(11, 11, 11)
+                        .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(inLicenseLabel)
+                            .addComponent(inLicenseField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(inPenaltyLabel)
+                            .addComponent(inPenaltyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inMoneySignLabel))))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         inBarcodeField.addActionListener(new java.awt.event.ActionListener() {
@@ -209,24 +211,23 @@ public class EmployeeFrame extends javax.swing.JFrame {
 
         RepostLostButton.setText("Report Lost");
 
-        checkInComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Good", "Need Attention" }));
+        checkInComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "available", "broken" }));
 
         javax.swing.GroupLayout checkInjPanelLayout = new javax.swing.GroupLayout(checkInjPanel);
         checkInjPanel.setLayout(checkInjPanelLayout);
         checkInjPanelLayout.setHorizontalGroup(
             checkInjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(checkInjPanelLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(inCIdLabel)
+                .addGap(26, 26, 26)
+                .addComponent(inCustIdField, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(inCustOkButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, checkInjPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(checkInjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(RepostLostButton)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, checkInjPanelLayout.createSequentialGroup()
-                        .addComponent(inCIdLabel)
-                        .addGap(26, 26, 26)
-                        .addComponent(inCustIdField, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(inCustOkButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(customerInfoPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, checkInjPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(checkInjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(checkInjPanelLayout.createSequentialGroup()
                         .addComponent(inBarcodeLabel)
                         .addGap(26, 26, 26)
                         .addComponent(inBarcodeField, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -234,30 +235,46 @@ public class EmployeeFrame extends javax.swing.JFrame {
                         .addComponent(checkInComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(checkInButton))
-                    .addComponent(checkInScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE))
+                    .addComponent(checkInScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(checkInjPanelLayout.createSequentialGroup()
+                        .addGap(592, 592, 592)
+                        .addComponent(RepostLostButton)))
                 .addContainerGap())
+            .addGroup(checkInjPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(customerInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         checkInjPanelLayout.setVerticalGroup(
             checkInjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(checkInjPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(checkInjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inCIdLabel)
-                    .addComponent(inCustIdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addGroup(checkInjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(checkInjPanelLayout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(inCIdLabel))
+                    .addGroup(checkInjPanelLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(inCustIdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(inCustOkButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(customerInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(customerInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(checkInjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inBarcodeLabel)
-                    .addComponent(inBarcodeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(checkInButton)
-                    .addComponent(checkInComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(checkInjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(checkInjPanelLayout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(inBarcodeLabel))
+                    .addGroup(checkInjPanelLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(inBarcodeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(checkInjPanelLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(checkInComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(checkInButton))
                 .addGap(18, 18, 18)
                 .addComponent(checkInScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addComponent(RepostLostButton)
-                .addContainerGap(334, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Check In", checkInjPanel);
@@ -270,16 +287,16 @@ public class EmployeeFrame extends javax.swing.JFrame {
         jTabbedPane1.addTab("Inventory", inventoryPanel);
         employeePanel = new ui.EmployeePanel();
         jTabbedPane1.addTab("Employee", employeePanel);
-        othersPanel = new ui.OthersPanel();
-        jTabbedPane1.addTab("Others", othersPanel);
         pricePanel = new ui.PriceSchemePanel();
         jTabbedPane1.addTab("Price Scheme", pricePanel);
+        othersPanel = new ui.OthersPanel();
+        jTabbedPane1.addTab("Others", othersPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 706, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -330,8 +347,8 @@ public class EmployeeFrame extends javax.swing.JFrame {
         RentalMovieManagement RMM = null;
         try {
             RMM = new RentalMovieManagement();
-            RMM.setCurrentCopy(inBarcodeField.getText());
-            RMM.checkIn(currCustomer);
+            //System.out.println("al-checkInComboBox = "+ checkInComboBox.getSelectedItem().toString());
+            RMM.checkIn(currCustomer.getAccountID(),inBarcodeField.getText(),checkInComboBox.getSelectedItem().toString());
         } catch (SQLException ex) {
             Logger.getLogger(EmployeeFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -342,11 +359,6 @@ public class EmployeeFrame extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(EmployeeFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
-
-
 
 
 
@@ -417,8 +429,8 @@ public class EmployeeFrame extends javax.swing.JFrame {
     private ui.MembershipPanel membershipPanel;
     private ui.InventoryPanel inventoryPanel;
     private ui.EmployeePanel employeePanel;
-    private OthersPanel othersPanel;
     private ui.PriceSchemePanel pricePanel;
+    private OthersPanel othersPanel;
     // End of variables declaration//GEN-END:variables
 
 }
