@@ -1,66 +1,57 @@
 package pos;
+
+
+import java.io.IOException;
+import java.sql.*;
+//import jdbconnection.JDBCConnection;
 /**
-*	Penalty calculation class
-*	
-*	@author mattp
-*	@version 1.0 March 22, 2011
-*	@version 1.1 
-*		-changed setPenaltyPerDay() so it takes a double now
-*		-removed getName(), getTitle() and redundant stuff like that 		
-*		-fixed getPrice() so it returns a value in cents
-*/
-import inventory.RentalMovie;
-public class Penalty
+ *
+ * @author xliu01
+ */
+public class Penalty_1 implements TransactionItem
 {
-	/**
-                Constructor with 2 parameters
-		Initialize a penalty 
-		@param numberOfDays the number of days the input movie is overdue
-		@param movie the movie that is overdue
-	*/
-	public Penalty(int numberOfDays, RentalMovie movie)
-	{
-		this.numberOfDays = numberOfDays;
-		this.movie = movie;
-		setPenaltyPerDay(1);
-		calculate();
-	}
-	/**
-		Set penalty per day 
-		@param penaltyPerDay 
-	*/
-	private void setPenaltyPerDay(double penaltyPerDay)
-	{
-		this.penaltyPerDay = penaltyPerDay;
-	}
+    public Penalty_1(int price)
+            throws IOException
+    {
+        setPrice(price);
+    }
 
-	/**
-		Get overdue fee
-		@return overdueFee the total fee that is overdue
-	*/
-	public double getOverdueFee()
-	{
-		return overdueFee;
-	}
-	/**
-		Calculate total overdue fees
-	*/
-	private void calculate()
-	{
-		overdueFee = penaltyPerDay * numberOfDays;
-	}
-	
-	/**
-		Gets overdue fee in cents of this item
-		@return the price of this item in cents.
-	*/	
-	public int getPrice()
-	{
-		return (int)(getOverdueFee()*100);
-	}
+    public String getType()
+    {
+        return new String("Penalty");
+    }
 
-	private RentalMovie movie;
-	private double overdueFee;
-	private int numberOfDays;
-	private double penaltyPerDay;
+    public String getName()
+    {
+        return getType();
+    }
+
+    public int getPrice()
+    {
+        return this.priceInCents;
+    }
+
+    public String getBarcode()
+    {
+        return "";
+    }
+
+    private void setPrice(int price)
+            throws IOException
+    {
+        if(price < 0)
+            throw new IOException("Penalty price cannot be less than 0");
+        this.priceInCents = price;
+    }
+
+    public boolean updateItemInfoAtCheckOut(int invoiceID, JDBCConnection conn)
+            throws SQLException
+    {
+        PreparedStatement stat = conn.prepareStatement("INSERT INTO item " +
+                "VALUES (((MAX(itemID))+1), 'penalty', "+ priceInCents +", null," +
+                " null, null, null, " + invoiceID + ");");
+        return !(stat.execute());
+    }
+
+    private int priceInCents;
 }
