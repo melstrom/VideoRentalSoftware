@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.Date;
+import java.util.Vector;
 
 
 /**
@@ -25,7 +26,7 @@ import java.util.Date;
 public class TransactionManager
 {
 	private Transaction myTransaction;
-	private Payment myPayment;
+	//private Payment myPayment;
 	private PreparedStatement pstatement;
 	private Statement statement;
 	private Connection connection;
@@ -201,4 +202,25 @@ public class TransactionManager
 			throw new IllegalStateException();
 		return myTransaction.getTotal();
 	}
+
+        public void abortTransaction()
+        {
+            myTransaction = null;
+        }
+        
+        public Vector<Vector<String>> getReceiptInfo()
+        {
+            Vector<Vector<String>> receipt = new Vector<Vector<String>>();
+            
+            for(int i = 0 ; i < myTransaction.getNumberOfItems();i++)
+            {
+                Vector<String> temp = new Vector<String>();
+                temp.add(myTransaction.getItemBarcode(i));
+                temp.add(myTransaction.getItemName(i));
+                temp.add("$ "+Integer.toString(myTransaction.getItemPrice(i)/100));
+                receipt.add(temp);
+            }
+            return receipt;
+            
+        }
 }
