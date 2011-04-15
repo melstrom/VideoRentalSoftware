@@ -57,10 +57,8 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
         houseNumberCustomerTextField = new javax.swing.JTextField();
         statusCustomerTextField = new javax.swing.JTextField();
         penaltyCustomerTextField = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        phoneLabel = new javax.swing.JLabel();
+        phoneField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -75,8 +73,6 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
 
         postalCodeCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         postalCodeCustomerLabel.setText("Postal Code");
-
-        empIDCustomerTextField.setEditable(false);
 
         countryCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         countryCustomerLabel.setText("Country");
@@ -98,10 +94,10 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
         streetNameCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         streetNameCustomerLabel.setText("Street Name");
 
-        penaltyCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        penaltyCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         penaltyCustomerLabel.setText("Penalty");
 
-        fNameCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        fNameCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         fNameCustomerLabel.setText("First Name");
 
         lNameCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
@@ -113,11 +109,8 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
         statusCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         statusCustomerLabel.setText("Status");
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("Drivers License");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel3.setText("Phone Number");
+        phoneLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        phoneLabel.setText("Phone Number");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -126,62 +119,63 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(91, 91, 91)
                 .addComponent(titleCustomerInfoLabel)
-                .addContainerGap(125, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(addressCustomerLabel)
-                            .addComponent(statusCustomerLabel)
-                            .addComponent(jLabel1))
-                        .addGap(63, 63, 63)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(houseNumberCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(houseNumberCustomerLabel)
-                                    .addComponent(cityCustomerLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(streetNameCustomerLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGap(28, 28, 28)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(provinceCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(provinceCustomerLabel))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(countryCustomerLabel)
-                                            .addComponent(countryCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(streetNameCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)))
-                            .addComponent(postalCodeCustomerLabel)
-                            .addComponent(cityCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(postalCodeCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                            .addComponent(statusCustomerTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(okCustomerInfoButton)
-                        .addGap(90, 90, 90)))
-                .addGap(64, 64, 64))
-            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(111, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fNameCustomerLabel)
                     .addComponent(lNameCustomerLabel)
-                    .addComponent(empIDCustomerLabel)
-                    .addComponent(penaltyCustomerLabel)
-                    .addComponent(jLabel3))
-                .addGap(67, 67, 67)
+                    .addComponent(empIDCustomerLabel))
+                .addGap(81, 81, 81)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                    .addComponent(penaltyCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                    .addComponent(FirstNameCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                    .addComponent(lNameCustomerInfoTextfield, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                    .addComponent(empIDCustomerTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
+                    .addComponent(FirstNameCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                    .addComponent(lNameCustomerInfoTextfield, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                    .addComponent(empIDCustomerTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))
+                .addGap(64, 64, 64))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(penaltyCustomerLabel)
+                            .addComponent(addressCustomerLabel)
+                            .addComponent(statusCustomerLabel))
+                        .addGap(103, 103, 103)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(okCustomerInfoButton)
+                                .addGap(76, 76, 76))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(penaltyCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(houseNumberCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(houseNumberCustomerLabel)
+                                        .addComponent(cityCustomerLabel))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(streetNameCustomerLabel)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addGap(28, 28, 28)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(provinceCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(provinceCustomerLabel))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(countryCustomerLabel)
+                                                .addComponent(countryCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(streetNameCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)))
+                                .addComponent(postalCodeCustomerLabel)
+                                .addComponent(cityCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(postalCodeCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                                .addComponent(statusCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(phoneLabel)
+                        .addGap(67, 67, 67)
+                        .addComponent(phoneField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)))
                 .addGap(64, 64, 64))
         );
         layout.setVerticalGroup(
@@ -203,19 +197,19 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
                     .addComponent(empIDCustomerLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(penaltyCustomerLabel)
-                    .addComponent(penaltyCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(phoneLabel)
+                    .addComponent(phoneField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(penaltyCustomerLabel)
+                        .addGap(12, 12, 12)
                         .addComponent(statusCustomerLabel)
                         .addGap(29, 29, 29)
                         .addComponent(addressCustomerLabel))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(penaltyCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
                         .addComponent(statusCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -238,14 +232,10 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(postalCodeCustomerLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(postalCodeCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(37, 37, 37)
-                .addComponent(okCustomerInfoButton)
-                .addContainerGap())
+                        .addComponent(postalCodeCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(okCustomerInfoButton)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -284,15 +274,13 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
     private javax.swing.JLabel fNameCustomerLabel;
     private javax.swing.JLabel houseNumberCustomerLabel;
     private javax.swing.JTextField houseNumberCustomerTextField;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField lNameCustomerInfoTextfield;
     private javax.swing.JLabel lNameCustomerLabel;
     private javax.swing.JButton okCustomerInfoButton;
     private javax.swing.JLabel penaltyCustomerLabel;
     private javax.swing.JTextField penaltyCustomerTextField;
+    private javax.swing.JTextField phoneField;
+    private javax.swing.JLabel phoneLabel;
     private javax.swing.JLabel postalCodeCustomerLabel;
     private javax.swing.JTextField postalCodeCustomerTextField;
     private javax.swing.JLabel provinceCustomerLabel;

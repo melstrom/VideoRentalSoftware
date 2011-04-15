@@ -5,11 +5,13 @@
 
 package ui;
 
-import jdbconnection.JDBCConnection;
-
-import java.sql.*;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import authentication.Authentication;
+import ui.util.UiMode;
 
 /**
  *
@@ -20,38 +22,78 @@ import javax.swing.JOptionPane;
 
 public class UiController {
 
+
+
+
     /**
      * 
      */
-    private int mode;
+    private UiMode mode;
 
     /**
      *
      */
     private JFrame currFrame;
 
+    /*
+     *
+     */
+    private Authentication mainKey;
+
     /**
     * 
     */
     public void UiController(){
-
+        mainKey = new Authentication();
 
     }
     /**
      * Start UI
      */
-    public void startUI()throws Exception{
-      //currFrame = new CustomerFrame(this);
-            currFrame = new EmployeeFrame();
-            currFrame.setVisible(true);
+    public void startUI(){
+        switch (mode) {
+            case Employee:
+                if (login()){
+
+                }
+                try {
+                    currFrame = new EmployeeFrame();
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                break;
+
+            case Customer:
+            default:
+                try {
+                    currFrame = new CustomerFrame(this);
+                } catch (Exception ex) {
+                    Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+		break;
+	}
+        currFrame.setVisible(true);
     }
+
+    private boolean login(){
+
+
+
+
+
+        return true;
+    }
+
     /**
      * Change modeID.
-     * @param modeID 1=Customer, 2=Employee.
+     * @param modeID enum UiMode Customer and Employee.
      */
-    public void setMode(int modeID){
+    public void setMode(UiMode modeID){
         mode = modeID;
     }
+
 
     /**
      * Pop-up an warming message login fail
