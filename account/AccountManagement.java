@@ -66,14 +66,23 @@ public class AccountManagement
         try
         {
             st = JDBC.createStatement();
+            String addressInsert = "INSERT INTO address (addressID, houseNumber, streetName, city, province, country, postalCode) value ("
+                    + addressID + ","
+                    + address.getHouseNumber() + ",'"
+                    + address.getStreetName() + "','"
+                    + address.getCity() + "','"
+                    + address.getProvince() + "','"
+                    + address.getCity() + "','"
+                    + address.getPostalCode() + "')";
             String accountInsert = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
                     + accountID + ","
-                    + addressID + ","
-                    + Fname + ","
-                    + Lname + ")";
+                    + addressID + ",'"
+                    + Fname + "','"
+                    + Lname + "')";
             String employeeInsert = "INSERT INTO employee (employeeID, accountID) value("
                     + employeeID + ","
                     + accountID + ")";
+            st.executeUpdate(addressInsert);
             st.executeUpdate(accountInsert);
             st.executeUpdate(employeeInsert);
         }
@@ -97,7 +106,7 @@ public class AccountManagement
     {
         int accountID = this.generateNewAccountID();
         int addressID = this.generateAddressID();
-        account = new Customer(customerID, DL, accountID, Fname, Lname, address, phoneNum);
+        account = new Customer(DL, customerID, Fname, Lname, address, phoneNum);
         try
         {
             st = JDBC.createStatement();
@@ -155,22 +164,15 @@ public class AccountManagement
      */
     private int generateNewAccountID() throws SQLException
     {
-        try
-        {
         st = JDBC.createStatement();
         String table = "account";
         String column = "accountID";
-        String SQL = "SELECT " + column + " FROM" + table;
+        String SQL = "SELECT " + column + " FROM " + table;
         ResultSet rs = st.executeQuery(SQL);
         rs.last();
         int LastAccountID = rs.getInt(column);
         int newAccountID = LastAccountID + 1;
         return newAccountID;
-        }
-                finally
-        {
-            JDBC.closeConnection();
-        }
     }
 
     private int generateAddressID () throws SQLException
@@ -178,7 +180,7 @@ public class AccountManagement
         st = JDBC.createStatement();
         String table = "address";
         String column = "addressID";
-        String SQL = "SELECT " + column + " FROM" + table;
+        String SQL = "SELECT " + column + " FROM " + table;
         ResultSet rs = st.executeQuery(SQL);
         rs.last();
         int LastAccountID = rs.getInt(column);
