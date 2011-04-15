@@ -263,6 +263,6 @@ public class Address
     */
     public String toString()
     {
-    	return  houseNumber + " " + streetName + ", " + city + ", " + province + ", " + postalCode + ", " + country;
+    	return  houseNumber + " " + streetName + ",\n" + city + ", " + province + ",\n" + postalCode + ", " + country;
     }
 }
