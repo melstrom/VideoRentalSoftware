@@ -11,6 +11,7 @@ import inventory.GeneralMovie;
 import inventory.IndividualMovie;
 import inventory.MovieNotFoundException;
 import inventory.RentalMovie;
+import inventory.RentalMovieManagement;
 import jdbconnection.JDBCConnection;
 import java.util.Date;
 import java.util.Calendar;
