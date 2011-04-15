@@ -89,6 +89,10 @@ public class AccountManagement
     }
 
     /**
+
+     */
+
+    /**
      * Create a customer account
      * @param DL the driver license number of the user
      * @param accountID the accountID of the account
@@ -96,6 +100,8 @@ public class AccountManagement
      * @param Lname the last name of the user
      * @param address the address of the user
      * @param phoneNum the phone number of the user
+     * @throws SQLException
+     * @throws java.lang.Exception
      */
     public void createCustomer(int customerID, String DL, String Fname, String Lname, Address address, String phoneNum)
             throws SQLException, java.lang.Exception
@@ -130,6 +136,7 @@ public class AccountManagement
     }
 
     /**
+     * Generates a new employeeID or customerID from the database for a employee or customer
      * @param accountType The account type to generate a new ID for (employee or customer)
      * @return A new ID for a customer or employee
      * @throws SQLException
@@ -148,8 +155,8 @@ public class AccountManagement
     }
 
     /**
-     * Prepares for creating a new account by generating the next accountID
-     * @return The next accountID in the
+     * Generates a new accountID from the database for a new account
+     * @return The next accountID for the address table
      * @throws SQLException
      */
     private int generateNewAccountID() throws SQLException
@@ -165,6 +172,11 @@ public class AccountManagement
         return newAccountID;
     }
 
+    /**
+     * Generates a new addressID from the database for a new address
+     * @return The next addressID for the address table
+     * @throws SQLException
+     */
     private int generateAddressID () throws SQLException
     {
         st = JDBC.createStatement();
@@ -178,6 +190,14 @@ public class AccountManagement
         return newAccountID;
     }
 
+    /**
+     * Prepares a SQL statement to insert a new account
+     * @param accountID accountID generated from generateNewAccountID
+     * @param addressID addressID generated from generateAddressID
+     * @param Fname The first name
+     * @param Lname The last name
+     * @return
+     */
     private String createAccountInsertSQL (int accountID, int addressID, String Fname, String Lname)
     {
                     String SQL = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
@@ -265,7 +285,6 @@ public class AccountManagement
 //    private boolean isDuplicatedID(int ID, String accountType)
 //            throws SQLException, ClassNotFoundException, java.lang.Exception
 //    {
-//        //TODO.: generate correct query
 //        String table = accountType;
 //        String column = accountType;
 //        int constraint = ID;
