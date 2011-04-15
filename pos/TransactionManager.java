@@ -13,11 +13,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.util.Date;
 import java.util.Vector;
 import jdbconnection.JDBCConnection;
+import java.sql.ResultSet;
 
 /**
 	This object manages one transaction, the current one.
@@ -179,12 +177,20 @@ public class TransactionManager
 		{
 			throw new IllegalStateException("There are no items on the Invoice.");
 		}
-	
+	JDBCConnection JDBC = new JDBCConnection();
+                       Statement st = JDBC.createStatement();
+        String table = "invoice";
+        String column = "invoiceID";
+        String SQL = "SELECT " + column + " FROM " + table + " GROUP BY " + column;
+        ResultSet rs = st.executeQuery(SQL);
+        rs.last();
+        int LastID = rs.getInt(column);
+        int nextInvoiceID = LastID + 1;
+
 		// use these two lines if you want invoices to be numbered 1000 and up
 		// int starting = 999;
 		// int nextInvoiceID = mySQLhelper.getTotalNumberOfInvoices() + 1;
-		
-		int nextInvoiceID = mySQLhelper.getTotalNumberOfRows(SQLhelper.TRANSACTION_TABLE_NAME, SQLhelper.TRANSACTION_TABLE_PK) + 1;
+//		int nextInvoiceID = mySQLhelper.getTotalNumberOfRows(SQLhelper.TRANSACTION_TABLE_NAME, SQLhelper.TRANSACTION_TABLE_PK) + 1;
 		//Payment myPayment = new Payment(amount, paymentMethod);
                 double change = myTransaction.markPaid(paymentMethod, amount, nextInvoiceID);
                 process();
@@ -222,4 +228,5 @@ public class TransactionManager
             return receipt;
             
         }
+
 }
