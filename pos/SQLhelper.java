@@ -111,14 +111,15 @@ public class SQLhelper
 	 */
 	private int insertNewEmployee(Employee theEmployee, int accountID) throws ClassNotFoundException, IllegalStateException, SQLException
 	{
-	    int employeePrimaryKey = 1 + getTotalNumberOfRows(EMPLOYEE_TABLE_NAME, EMPLOYEE_TABLE_PK);
+	   // int employeePrimaryKey = 1 + getTotalNumberOfRows(EMPLOYEE_TABLE_NAME, EMPLOYEE_TABLE_PK);
+	   //              ^- the key will be found and set when the Customer or Employee object is created.
 	    String queryString = "INSERT INTO " + EMPLOYEE_TABLE_NAME + " ("
 		+ "employeeID,"
 		+ "accountID,"
 		+ "position"
 		+ ") VALUES (?, ?, ?)";
 	    setupPreparedStatement(queryString);
-	    pstatement.setInt(1, employeePrimaryKey);
+	    pstatement.setInt(1, theEmployee.getAccountID());
 	    pstatement.setInt(2, accountID);
 	    pstatement.setString(3, theEmployee.getPosition());
 	    pstatement.executeUpdate();
@@ -138,7 +139,7 @@ public class SQLhelper
 	    // todo add code to check if phone number exists
 	    //
 	    //
-	    int customerPrimaryKey = 1 + getTotalNumberOfRows(CUSTOMER_TABLE_NAME, CUSTOMER_TABLE_PK);
+	    //int customerPrimaryKey = 1 + getTotalNumberOfRows(CUSTOMER_TABLE_NAME, CUSTOMER_TABLE_PK);
 
 
 	    String queryString = "INSERT INTO " + CUSTOMER_TABLE_NAME + " ("
@@ -147,7 +148,7 @@ public class SQLhelper
 		+ "driversLicense"
 		+ ") VALUES (?, ?, ?)";
 	    setupPreparedStatement(queryString);
-	    pstatement.setInt(1, customerPrimaryKey);
+	    pstatement.setInt(1, theCustomer.getAccountID());
 	    pstatement.setInt(2, accountID);
 	    pstatement.setString(3, theCustomer.getDL());
 	    pstatement.executeUpdate();
