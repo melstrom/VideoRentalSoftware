@@ -89,12 +89,24 @@ public class Search
             ResultSet result = statement.executeQuery(query);
             //ResultSet result = statement.executeQuery("SELECT customer.customerID FROM customer, account WHERE account.lastName LIKE '%c%' AND account.accountID = customer.accountID");
             
-            while (result.next())
+            /* old, working code for returning the customers
+             while (result.next())
             {
                 String matchingAccountID = result.getString("customer.customerID");
                 int matchingAccountID_int = Integer.parseInt(matchingAccountID);
                 matchingMembers.add(getCustomer(matchingAccountID_int));
             }
+             * *
+             */
+
+            // New code, using getCustomer(ResultSet result)
+            Customer customer = getCustomer(result);
+            while (customer != null)
+            {
+                matchingMembers.add(customer);
+                customer = getCustomer(result);
+            }
+
             result.close();
         } // end try
         finally
@@ -129,7 +141,12 @@ public class Search
             return null;
         }
 
-        String query = "SELECT customer.customerID FROM customer, account WHERE ";
+        // old, working query
+        //String query = "SELECT customer.customerID FROM customer, account WHERE ";
+        
+        // new query for getCustomer(result:ResultSet)
+        String query = "SELECT * FROM customer, address, account WHERE ";
+
         String nameQuery = "account.lastName LIKE '" + pad(lastName.replaceAll("'", ""))+"'";
         String phoneNumQuery = "account.phoneNum LIKE ";
 
@@ -148,6 +165,7 @@ public class Search
             query += nameQuery + " AND " + phoneNumQuery;
         }
         query += " AND account.accountID = customer.accountID";
+        query += " AND account.addressID = address.addressID";
         return query;
     }
 
@@ -185,7 +203,7 @@ public class Search
                 {
                     return null;
                 }
-                String barcode = "" + memberID;
+                //String barcode = "" + memberID;
                 String driversLicense = result.getString("customer.driversLicense");
                 String firstName = result.getString("account.firstName");
                 String lastName = result.getString("account.lastName");
@@ -223,6 +241,60 @@ public class Search
             //connection.close();
             conn.closeConnection();
         }
+    }
+
+
+
+    /**
+     * This method creates a Customer object from a result set.
+     *
+     * @pre the result must select all columns
+     * @param the results of a query for customers
+     * @return the member's account, or null if the result set is empty
+     * @throws SQLException if a connection with the database cannot be made
+     * @throws ClassNotFoundException if the driver cannot be found
+     *
+     */
+    public static Customer getCustomer(ResultSet result)
+            throws SQLException, ClassNotFoundException
+    {
+            if (!result.next())
+            {
+                return null;
+            }
+            int memberID = result.getInt("customer.customerID");
+            String driversLicense = result.getString("customer.driversLicense");
+            String firstName = result.getString("account.firstName");
+            String lastName = result.getString("account.lastName");
+            String phoneNum = result.getString("account.phoneNum");
+
+
+            // copy and pasted address constructor
+//                public Address(
+//                    int houseNumber,
+//                    String streetName,
+//                    String city,
+//                    String province,
+//                    String country,
+//                    String postalCode)
+
+            int houseNumber = result.getInt("address.houseNumber");
+            String streetName = result.getString("address.streetName");
+            String city = result.getString("address.city");
+            String province = result.getString("address.province");
+            String country = result.getString("address.country");
+            String postalCode = result.getString("address.postalCode");
+            //int addressID = result.getInt("address.addressID");
+
+            Address address = new Address(houseNumber, streetName,
+                    city, province, country, postalCode);
+                        System.out.println(memberID);
+            return new Customer(driversLicense, memberID,
+                    firstName, lastName, address, phoneNum);
+            // copy and pasted signature from the Customer class
+            //public Customer (String DL, int accountID, String Fname, String Lname, Address address, String phoneNum)
+
+
     }
     
     
