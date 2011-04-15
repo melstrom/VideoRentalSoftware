@@ -75,9 +75,10 @@ public class AccountManagement
                     + address.getCity() + "','"
                     + address.getPostalCode() + "')";
             String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname);
-            String employeeInsert = "INSERT INTO employee (employeeID, accountID) value("
+            String employeeInsert = "INSERT INTO employee (employeeID, accountID, position) value("
                     + employeeID + ","
-                    + accountID + ")";
+                    + accountID + ",'"
+                    + position + "')";
             st.executeUpdate(addressInsert);
             st.executeUpdate(accountInsert);
             st.executeUpdate(employeeInsert);
