@@ -92,14 +92,18 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         priceSchemaTable = new javax.swing.JTable();
 
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         addFormatPriceSchemeButton.setText("Add Format");
         addFormatPriceSchemeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFormatPriceSchemeButtonActionPerformed(evt);
             }
         });
+        add(addFormatPriceSchemeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 390, -1, -1));
 
         addCategoryPriceSchemeButton.setText("Add Category");
+        add(addCategoryPriceSchemeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 390, -1, -1));
 
         savePriceSchemeButton.setText("Save Changes");
         savePriceSchemeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -107,6 +111,7 @@ public class PriceSchemePanel extends javax.swing.JPanel {
                 savePriceSchemeButtonActionPerformed(evt);
             }
         });
+        add(savePriceSchemeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 390, -1, -1));
 
         priceSchemaTable.setModel(new javax.swing.table.DefaultTableModel(
             data,header
@@ -122,34 +127,7 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(priceSchemaTable);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(83, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(addFormatPriceSchemeButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(addCategoryPriceSchemeButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(savePriceSchemeButton)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(savePriceSchemeButton)
-                    .addComponent(addCategoryPriceSchemeButton)
-                    .addComponent(addFormatPriceSchemeButton))
-                .addContainerGap(22, Short.MAX_VALUE))
-        );
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 608, 356));
     }// </editor-fold>//GEN-END:initComponents
 
     private void addFormatPriceSchemeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFormatPriceSchemeButtonActionPerformed

@@ -3,6 +3,7 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import search.Search;
 import inventory.MovieNotFoundException;
@@ -345,13 +346,14 @@ public class RentalMovieManagement {
         {
             ResultSet result = connection.getResults(query, numParam, param);
 
-            if (result.wasNull())
+            if (result.next())
+            {
+                return result.getString(1);
+            }
+            else
             {
                 return null;
             }
-            else
-              result.next();
-            return result.getString(1);
 
         }
         finally
@@ -739,6 +741,14 @@ public class RentalMovieManagement {
 
     private void checkInQuery(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
     {
+        JDBCConnection conn = new JDBCConnection();
+        String command = "UPDATE videoRental SET videoRental.condition='" + newCondition +
+                        "' WHERE rentalID='" + barcode.substring(barcode.length()-9) + "';";
+        //System.out.println(command);//testing
+        PreparedStatement stat = conn.prepareStatement(command);
+        stat.execute();
+
+        /*
         String tablename = "videoRental";
         String attribute = "videoRental.condition";
         String attributeTo = newCondition;

@@ -59,21 +59,63 @@ public class Search
     }*/
 
 
+    
+
+    /**
+     * This method finds a list of customers matching the search term, choosing
+     * a different attribute to search by for every different searchType.
+     * The possible searchTypes are ID, last name, or phone num
+     * @param searchTerm the term to look for
+     * @param searchType what attribute you want to look under
+     * @return an arrayList of customers if any are found
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public static ArrayList<Customer> searchCustomers(String searchTerm, String searchType)
+            throws SQLException, ClassNotFoundException
+    {
+        
+        if (searchTerm.equalsIgnoreCase("id"))
+        {
+            ArrayList<Customer> customerList = new ArrayList<Customer>();
+            Customer customer = getCustomer(Integer.parseInt(searchTerm));
+            customerList.add(customer);
+        }
+        else if (searchTerm.equalsIgnoreCase("phone num"))
+        {
+            return searchCustomers(null, null, searchTerm.replaceAll("-",""));
+        }
+        else if (searchTerm.equalsIgnoreCase("last name"))
+        {
+            return searchCustomers(null, searchTerm, null);
+        }
+        else
+        {
+            throw new IllegalArgumentException();
+        }
+        // never gets here
+        return null;
+    }
+    
+    
+    
+    
     /**
      * 
      * searchCustomers takes the name of a member or his phone number and
      * searches the database for matches.  A maximum of one parameter may be
      * null.  A list of Customers that match are returned.
+     * @pasram firstName not implemented yet
      * @param lastName the name of the customer.  Not case sensitive.
      * @param phoneNum the 9 digit phone number of the customer.
      * @return a list of Customers that match the search criteria, or
      * null if no matching accounts could be found
      * @throws SQLException if a connection with the database cannot be made
      * @throws ClassNotFoundException
-     * TODO: is memberID a string or an integer? how long is it?
+     * TODO: implementation for firstName
      */
-    public static ArrayList<Customer>
-            searchCustomers(String lastName, String phoneNum)
+    private static ArrayList<Customer>
+            searchCustomers(String firstName, String lastName, String phoneNum)
             throws SQLException, ClassNotFoundException
     {
         if (lastName == null && phoneNum == null)
