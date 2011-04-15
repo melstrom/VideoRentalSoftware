@@ -62,7 +62,7 @@ public class AccountManagement
     {
         int accountID = this.generateNewAccountID();
         int addressID = this.generateAddressID();
-        account = new Employee(position, accountID, Fname, Lname, address, phoneNum);
+        account = new Employee(position, employeeID, Fname, Lname, address, phoneNum);
         try
         {
             st = JDBC.createStatement();
@@ -74,11 +74,7 @@ public class AccountManagement
                     + address.getProvince() + "','"
                     + address.getCity() + "','"
                     + address.getPostalCode() + "')";
-            String accountInsert = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
-                    + accountID + ","
-                    + addressID + ",'"
-                    + Fname + "','"
-                    + Lname + "')";
+            String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname);
             String employeeInsert = "INSERT INTO employee (employeeID, accountID) value("
                     + employeeID + ","
                     + accountID + ")";
@@ -110,14 +106,20 @@ public class AccountManagement
         try
         {
             st = JDBC.createStatement();
-            String accountInsert = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
-                    + accountID + ","
+            String addressInsert = "INSERT INTO address (addressID, houseNumber, streetName, city, province, country, postalCode) value ("
                     + addressID + ","
-                    + Fname + ","
-                    + Lname + ")";
+                    + address.getHouseNumber() + ",'"
+                    + address.getStreetName() + "','"
+                    + address.getCity() + "','"
+                    + address.getProvince() + "','"
+                    + address.getCity() + "','"
+                    + address.getPostalCode() + "')";
+            String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname);
+
             String customerInsert = "INSERT INTO customer (customerID, accountID) value("
                     + customerID + ","
                     + accountID + ")";
+            st.executeUpdate(addressInsert);
             st.executeUpdate(accountInsert);
             st.executeUpdate(customerInsert);
         }
@@ -134,13 +136,6 @@ public class AccountManagement
      */
     public int generateNewID(String accountType) throws SQLException
     {
-        //SELECT account FROM customer/employee
-        //ResultSet rs = st.execute(SQL);
-        //rs.last();
-        //LastID = rs.getString(1) 1=columnIndex
-        //Convert into INT, +1, convert to string
-        try
-        {
         st = JDBC.createStatement();
         String table = accountType;
         String column = accountType + "ID";
@@ -150,11 +145,6 @@ public class AccountManagement
         int LastID = rs.getInt(column);
         int newID = LastID + 1;
         return newID;
-        }
-                finally
-        {
-            JDBC.closeConnection();
-        }
     }
 
     /**
@@ -186,6 +176,17 @@ public class AccountManagement
         int LastAccountID = rs.getInt(column);
         int newAccountID = LastAccountID + 1;
         return newAccountID;
+    }
+
+    private String createAccountInsertSQL (int accountID, int addressID, String Fname, String Lname)
+    {
+                    String SQL = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
+                    + accountID + ","
+                    + addressID + ",'"
+                    + Fname + "','"
+                    + Lname + "')";
+
+                    return SQL;
     }
 
     /**
