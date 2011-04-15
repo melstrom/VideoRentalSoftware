@@ -740,7 +740,7 @@ public class Search
 //                if (!result.wasNull())
 //                {
                     
-                    String category = result.getString("videoSale.category");
+                    String category = result.getString("videoSale.catagory");
                     String format = result.getString("physicalVideo.format");
                     String condition = result.getString("videoSale.condition");
 
