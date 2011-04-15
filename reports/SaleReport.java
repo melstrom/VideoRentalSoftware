@@ -1,4 +1,6 @@
-pacakge reports;
+package reports;
+
+import jdbconnection.JDBCConnection;
 import java.util.GregorianCalendar;
 import java.sql.*;
 import java.util.ArrayList;
