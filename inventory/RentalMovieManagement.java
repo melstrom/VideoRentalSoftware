@@ -229,10 +229,10 @@ public class RentalMovieManagement {
     {
         String original = movie.getCondition();
         
-        if(condition.equals(original))
+        /*if(condition.equals(original))
         {
             throw new IllegalArgumentException("input selection is the current selection");
-        }
+        }*/
 	for(int i = 0; i<conditions.length; i++)
         {
             if(condition.equals(conditions[i]))
@@ -452,10 +452,10 @@ public class RentalMovieManagement {
             throws SQLException, IllegalArgumentException, MovieNotFoundException, Exception
     {
         String original = movie.getCategory();
-        if(category.equals(original))
+        /*if(category.equals(original))
         {
             throw new IllegalArgumentException("input selection is the current selection");
-        }
+        }*/
         
         for (int i = 0; i < categories.length; i++)
         {
@@ -517,8 +517,6 @@ public class RentalMovieManagement {
      * It does not check that the movie is available, or that the customer has
      * no holds.
      *
-     * @pre the customerID and barcode must exist in the database
-     * @pre the connection must be open
      * @param customerID the unique customerID of the the customer who is
      * renting the video
      * @param barcode the full barcode of the RentalMovie being rented
@@ -526,13 +524,18 @@ public class RentalMovieManagement {
      * @return the due date of the movie
      * @throws SQLException
      * @throws ClassNotFoundException
+     * @pre the customerID and barcode must exist in the database
+     * @pre the connection must be open
      */
     public static GregorianCalendar checkOut(int customerID, String barcode, JDBCConnection connection)
-            throws SQLException, ClassNotFoundException
+            throws SQLException, ClassNotFoundException, MovieNotFoundException, IOException, java.lang.Exception
     {
-
-        // TODO: implement checks for holds on account, movies that are
-        // not available
+        Search search = new Search();
+        IndividualMovie aMovie = search.previewIndividualMovie(barcode);
+        if(!aMovie.getCondition().equals("available"))
+         {
+            throw new MovieNotAvailableException("movie is not available");
+         }
 
         String[] splitBarcode = { null, null };
         splitBarcode(barcode, splitBarcode);
