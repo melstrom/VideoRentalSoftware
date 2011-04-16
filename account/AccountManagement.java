@@ -207,7 +207,7 @@ public class AccountManagement
         + address.getStreetName() + "','"
         + address.getCity() + "','"
         + address.getProvince() + "','"
-        + address.getCity() + "','"
+        + address.getCountry() + "','"
         + address.getPostalCode() + "')";
         return SQL;
     }
