@@ -384,7 +384,7 @@ public class Transaction
 	private void setDate()
 	{
 		GregorianCalendar cal = new GregorianCalendar();
-		transactionDate = "" + cal.get(cal.YEAR) + "-" + cal.get(cal.MONTH) + "-" + cal.get(cal.DATE);
+		transactionDate = "" + cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + cal.get(cal.DATE);
 	}
 	/**
 		helper method to update the items info once it is checked out
