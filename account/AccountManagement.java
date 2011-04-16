@@ -183,7 +183,7 @@ public class AccountManagement
      */
     private String createAccountInsertSQL (int accountID, int addressID, String Fname, String Lname, String phoneNum)
     {
-            String SQL = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
+            String SQL = "INSERT INTO account (accountID, addressID, firstName, lastName, phoneNum) value("
             + accountID + ","
             + addressID + ",'"
             + Fname + "','"
