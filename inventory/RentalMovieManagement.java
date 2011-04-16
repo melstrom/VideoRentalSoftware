@@ -731,10 +731,36 @@ public class RentalMovieManagement {
      * It does not calculate the amount of penalty that the customer owes.
      *
      * This method is only intended to be called upon system start up.
+     *
+     * @return the number of overdue movies set
+     * @throws SQLException if a database connection cannot be made
+     * @throws ClassNotFoundException if the driver is not installed
      */
-    public static void setOverdueMovies()
+    public static int setOverdueMovies()
+            throws SQLException, ClassNotFoundException
     {
-        
+        String tableName = "videoRental, customer, catagories";
+        String set = "customer.penalty = 1, videoRental.condition = 'overdue'";
+        String constraint = "videoRental.condition = 'rented'";
+        constraint += " AND ";
+        constraint += "videoRental.customerID = customer.customerID";
+        constraint += " AND ";
+        constraint += "videoRental.condition = 'rented'";
+        constraint += " AND ";
+        constraint += "videoRental.catagory = catagories.catagory";
+        constraint += " AND ";
+        constraint += "((videoRental.checkout_time + INTERVAL (1 + catagories.rentalLength) DAY) <= NOW())";
+        String query = JDBCConnection.makeUpdate(tableName, set, constraint);
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            return connection.update(query);
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+
     }
 
 
