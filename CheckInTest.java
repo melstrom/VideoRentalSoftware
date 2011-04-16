@@ -18,6 +18,6 @@ public class CheckInTest
         String barcode = "678149496420" + "100000011";
         String newCondition = "broken";
 
-        rentalManager.checkIn(customerID, barcode, newCondition);
+        //rentalManager.checkIn(customerID, barcode, newCondition);
     }
 }
