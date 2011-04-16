@@ -68,10 +68,10 @@ public class TransactionManager
 		{
 			throw new IllegalStateException("The invoice has not been paid, not saving info.");
 		}
-		mySQLhelper.insertInvoiceTable(myTransaction);
+		//mySQLhelper.insertInvoiceTable(myTransaction);
                 RentalMovieManagement rentalManager = new RentalMovieManagement();
                 SaleMovieManagement saleManager = new SaleMovieManagement();
-                for(int i = 0 ; i < myTransaction.getNumberOfItems(); i++)
+                for(int i = 1 ; i <= myTransaction.getNumberOfItems(); i++)
                 {
                     TransactionItem item = myTransaction.getItem(i);
                     if(item.getType().equals("for sale"))
