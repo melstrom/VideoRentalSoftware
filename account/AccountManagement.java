@@ -92,6 +92,8 @@ public class AccountManagement
      * @throws SQLException
      * @throws java.lang.Exception
      */
+
+    //TODO: Fix exception handling and documentation
     public void createCustomer(int customerID, String DL, String Fname, String Lname, Address address, String phoneNum)
             throws SQLException, java.lang.Exception
     {
