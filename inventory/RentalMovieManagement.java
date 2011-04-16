@@ -714,6 +714,21 @@ public class RentalMovieManagement {
 
 
 
+    /**
+     * This method changes the status of all movies that have exceeded their
+     * rental period from "rented" to "overdue".  It also changes the penalty
+     * flag in the Customer account to 1 to indicated that they have penalties.
+     * It does not calculate the amount of penalty that the customer owes.
+     *
+     * This method is only intended to be called upon system start up.
+     */
+    public static void setOverdueMovies()
+    {
+        // TODO: Implementation
+    }
+
+
+
 //SQL
 //--------------------------------------------------------------------------------------------------------------------------------
    /**
