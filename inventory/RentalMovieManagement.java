@@ -44,6 +44,11 @@ import jdbconnection.JDBCConnection;
  * -the query method then automatically generates a corresponding query using the generic query generators and execute it
  *
  * Very simple but could run a bit slow if you want to call the setters many times at once.
+ *
+ * 16 April: setOverdueMovies is incomplete
+ * need to test all setters and getters
+ * change to sale and change to rental do not work and need to be rewritten to
+ * delete from videoRental and insert into videoSale and vice versa.
  */
 public class RentalMovieManagement {
 
@@ -335,7 +340,10 @@ public class RentalMovieManagement {
     public static String getGeneralMovieCategory(String SKU)
             throws SQLException, ClassNotFoundException
     {
-        //TODO: fix query bug
+        if (SKU == null)
+        {
+            return null;
+        }
         String query = JDBCConnection.makeQuery("videoRental",
                 "videoRental.catagory",
                 "videoRental.SKU = ? AND NOT videoRental.catagory = ?");
@@ -733,29 +741,7 @@ public class RentalMovieManagement {
 
 //SQL
 //--------------------------------------------------------------------------------------------------------------------------------
-   /**
-    * Create a query to check out a movie
-    * @param accountID the accountID of the customer
-    * @throws SQLException
-    * @throws Exception
-    * @pre accountID exists in the database
-    * @pre currentMovie is set/not null
-    * @post a line is added to Reservation table
-    */
-    private void checkOutQuery(String accountID)throws SQLException, Exception
-    {
-        String table = "videoRental";
-        String where =" where rentalID = "+quote+rentalID+quote;
-        String query = generateUpdateSQL (table, "videoRental.condition", "rented", where);
-        updateDatabase(query);
-
-        table = "madeReservations";
-        String []columns = {"dateTime","SKU", "customerID"};
-        String date = ""+today.get(today.YEAR)+"/"+today.get(today.MONTH)+"/"+today.get(today.DATE);
-        String []values = {date, SKU, "1"};
-        query = generateInsertSQL(table, columns, values);
-        updateDatabase(query);
-    }
+   
 
 
     /**
@@ -1399,75 +1385,3 @@ public class RentalMovieManagement {
     final char comma = ',';
 
 }
-
-/**
-//     * This method rents out a RentalMovie, updating both the RentalMovie
-//     * and the Customer's account in the database.
-//     * @param movie the movie that you want to rent out
-//     * @param customer the customer who is renting
-//     * @return the due date of the movie
-//     * @pre the barcode number must correspond to an existing movie
-//     * @pre the memberID must correspond to an existing member
-//     * @pre the movie's status must be available
-//     * @throws MovieNotFoundException if the movie does not exist
-//     * @throws CustomerNotFoundException if the customer does not exist
-//     * @throws MovieNotAvailableException if the movie is not available
-//     * @post the movie's status is changed to rented.
-//     */
-//    public GregorianCalendar checkOut(Customer customer)
-//            throws MovieNotFoundException, CustomerNotFoundException,
-//            MovieNotAvailableException, SQLException, Exception
-//    {
-//
-//
-//            if (movie == null || !movie.getCondition().equalsIgnoreCase("available"))
-//            {
-//                throw new MovieNotAvailableException("MovieNotAvailableException:"
-//                        + " movie is not available");
-//            }
-//
-//            if (customer == null)
-//            {
-//                throw new CustomerNotFoundException("CustomerDoesNotExistException:"
-//                        + " no Customer specified");
-//            }
-//
-//            checkOutQuery(""+customer.getAccountID());
-//
-//
-//
-//            movie.setCondition("rented");
-//
-//
-//
-//       dueDate.set(today.get(today.YEAR), today.get(today.MONTH), today.get(today.DATE+rentalPeriod));
-//       return dueDate;
-//    }
-//
-//
-//    public void checkIn(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
-//    {
-//        checkInQuery(customerID, barcode, newCondition);
-//    }
-//    /**
-//     * Change a movie from type rental to sale
-//     * @throws SQLException
-//     * @throws MovieNotFoundException
-//     * @throws java.lang.Exception
-//     */
-//    public void changeToSales()throws SQLException,MovieNotFoundException,java.lang.Exception
-//    {
-//        movie.setCategory("for sale");
-//        changeToSaleQuery();
-//    }
-//    /**
-//     * change a movie from type sale to rental
-//     * @throws SQLException
-//     * @throws MovieNotFoundException
-//     * @throws java.lang.Exception
-//     */
-//    public void changeToRental()throws SQLException,MovieNotFoundException,java.lang.Exception
-//    {
-//        movie.setCategory("7 day");
-//        changeToRentalQuery();
-//    }
