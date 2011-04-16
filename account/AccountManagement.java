@@ -66,7 +66,7 @@ public class AccountManagement
         {
             st = JDBC.createStatement();
             String addressInsert = this.createAddressInsertSQL(address, addressID);
-            String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname);
+            String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
             String employeeInsert = "INSERT INTO employee (employeeID, accountID, position) value("
                     + employeeID + ","
                     + accountID + ",'"
@@ -92,6 +92,8 @@ public class AccountManagement
      * @throws SQLException
      * @throws java.lang.Exception
      */
+
+    //TODO: Fix exception handling and documentation
     public void createCustomer(int customerID, String DL, String Fname, String Lname, Address address, String phoneNum)
             throws SQLException, java.lang.Exception
     {
@@ -102,12 +104,13 @@ public class AccountManagement
         {
             st = JDBC.createStatement();
             String addressInsert = this.createAddressInsertSQL(address, addressID);
-            String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname);
+            String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
 
-            String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense) value("
+            String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense, penalty) value("
                     + customerID + ","
                     + accountID + ",'"
-                    + DL + "')";
+                    + DL + "',"
+                    + "0";
             st.executeUpdate(addressInsert);
             st.executeUpdate(accountInsert);
             st.executeUpdate(customerInsert);
@@ -181,13 +184,14 @@ public class AccountManagement
      * @param Lname The last name
      * @return
      */
-    private String createAccountInsertSQL (int accountID, int addressID, String Fname, String Lname)
+    private String createAccountInsertSQL (int accountID, int addressID, String Fname, String Lname, String phoneNum)
     {
-            String SQL = "INSERT INTO account (accountID, addressID, firstName, lastName) value("
+            String SQL = "INSERT INTO account (accountID, addressID, firstName, lastName, phoneNum) value("
             + accountID + ","
             + addressID + ",'"
             + Fname + "','"
-            + Lname + "')";
+            + Lname + "','"
+            + phoneNum + "')";
             return SQL;
     }
 
@@ -206,7 +210,7 @@ public class AccountManagement
         + address.getStreetName() + "','"
         + address.getCity() + "','"
         + address.getProvince() + "','"
-        + address.getCity() + "','"
+        + address.getCountry() + "','"
         + address.getPostalCode() + "')";
         return SQL;
     }
