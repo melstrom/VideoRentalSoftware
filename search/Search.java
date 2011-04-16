@@ -75,26 +75,26 @@ public class Search
             throws SQLException, ClassNotFoundException
     {
         
-        if (searchTerm.equalsIgnoreCase("id"))
+        if (searchType.equalsIgnoreCase("id"))
         {
             ArrayList<Customer> customerList = new ArrayList<Customer>();
-            Customer customer = getCustomer(Integer.parseInt(searchTerm));
+            int customerID = Integer.parseInt(searchTerm);
+            Customer customer = getCustomer(customerID);
             customerList.add(customer);
+            return customerList;
         }
-        else if (searchTerm.equalsIgnoreCase("phone num"))
+        else if (searchType.equalsIgnoreCase("phone num"))
         {
             return searchCustomers(null, null, searchTerm.replaceAll("-",""));
         }
-        else if (searchTerm.equalsIgnoreCase("last name"))
+        else if (searchType.equalsIgnoreCase("last name"))
         {
             return searchCustomers(null, searchTerm, null);
         }
         else
         {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(searchType + " is not a valid search type");
         }
-        // never gets here
-        return null;
     }
     
     
@@ -190,21 +190,23 @@ public class Search
         // new query for getCustomer(result:ResultSet)
         String query = "SELECT * FROM customer, address, account WHERE ";
 
-        String nameQuery = "account.lastName LIKE '" + pad(lastName.replaceAll("'", ""))+"'";
+        String nameQuery;
         String phoneNumQuery = "account.phoneNum LIKE ";
 
         if (lastName != null && phoneNum == null)
         {
+            nameQuery = "account.lastName LIKE '" + pad(lastName.replaceAll("'", ""))+"'";
             query += nameQuery;
         }
         else if (phoneNum != null && lastName == null)
         {          
-            phoneNumQuery += pad(phoneNum);
+            phoneNumQuery = phoneNumQuery + "'"+ pad(phoneNum)+"'";
             query += phoneNumQuery;      
         }
         else
-        {     
-            phoneNumQuery += phoneNum;
+        {
+            nameQuery = "account.lastName LIKE '" + pad(lastName.replaceAll("'", ""))+"'";
+            phoneNumQuery = phoneNumQuery + "'"+ pad(phoneNum)+"'";
             query += nameQuery + " AND " + phoneNumQuery;
         }
         query += " AND account.accountID = customer.accountID";
@@ -304,7 +306,7 @@ public class Search
             
             if (result.isAfterLast())
             {
-                System.out.println("Is afer last"); // TESTING
+                //System.out.println("Is afer last"); // TESTING
                 return null;
             }
             
