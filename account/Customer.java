@@ -24,7 +24,7 @@ public class Customer extends Account
     {
         super(accountID, Fname, Lname, address,phoneNum);
         this.DL = DL;
-	this.barcode = barcode;
+	this.customerID = accountID;
     }
     /**
      * Set driver license number
@@ -46,11 +46,11 @@ public class Customer extends Account
     * Get barcode
     *@return barcode the barcode on the customer's membership card
     */
-    public String getBarcode()
+    public int getBarcode()
     {
-	    return barcode;
+	    return customerID;
     }
     
     private String DL;
-    private String barcode;
+    private int customerID;
 }
