@@ -35,7 +35,7 @@
     <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="private ui.CheckOutPanel checkOutPanel;&#xa;private ui.MembershipPanel membershipPanel;&#xa;private ui.InventoryPanel inventoryPanel;&#xa;private ui.EmployeePanel employeePanel;&#xa;private ui.PriceSchemePanel pricePanel;&#xa;private OthersPanel othersPanel;"/>
-        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="checkOutPanel = new ui.CheckOutPanel();&#xa;jTabbedPane1.addTab(&quot;Chek Out&quot;, checkOutPanel);&#xa;membershipPanel = new ui.MembershipPanel();&#xa;jTabbedPane1.addTab(&quot;Membership&quot;, membershipPanel);&#xa;inventoryPanel = new ui.InventoryPanel();&#xa;jTabbedPane1.addTab(&quot;Inventory&quot;, inventoryPanel);&#xa;employeePanel = new ui.EmployeePanel();&#xa;jTabbedPane1.addTab(&quot;Employee&quot;, employeePanel);&#xa;pricePanel = new ui.PriceSchemePanel();&#xa;jTabbedPane1.addTab(&quot;Price Scheme&quot;, pricePanel);&#xa;othersPanel = new ui.OthersPanel();&#xa;jTabbedPane1.addTab(&quot;Others&quot;, othersPanel);"/>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="checkOutPanel = new ui.CheckOutPanel();&#xa;jTabbedPane1.addTab(&quot;Check Out&quot;, checkOutPanel);&#xa;membershipPanel = new ui.MembershipPanel();&#xa;jTabbedPane1.addTab(&quot;Membership&quot;, membershipPanel);&#xa;inventoryPanel = new ui.InventoryPanel();&#xa;jTabbedPane1.addTab(&quot;Inventory&quot;, inventoryPanel);&#xa;employeePanel = new ui.EmployeePanel();&#xa;jTabbedPane1.addTab(&quot;Employee&quot;, employeePanel);&#xa;pricePanel = new ui.PriceSchemePanel();&#xa;jTabbedPane1.addTab(&quot;Price Scheme&quot;, pricePanel);&#xa;othersPanel = new ui.OthersPanel();&#xa;jTabbedPane1.addTab(&quot;Others&quot;, othersPanel);"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
@@ -83,9 +83,10 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="12" max="32767" attributes="0"/>
+                      <Component id="customerInfoPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="customerInfoPanel" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -182,7 +183,7 @@
                                       <Component id="inNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="inLicenseLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="69" max="32767" attributes="0"/>
+                                  <EmptySpace pref="72" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="inLicenseField" alignment="0" pref="187" max="32767" attributes="1"/>
                                       <Component id="inNameField" alignment="0" pref="187" max="32767" attributes="1"/>
@@ -201,7 +202,7 @@
                           <Component id="inAddressLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="inAddressScrollPane" pref="233" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -273,7 +274,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="11" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Driver&apos;s License::"/>
+                    <Property name="text" type="java.lang.String" value="Driver&apos;s License:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="inLicenseField">

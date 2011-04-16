@@ -110,8 +110,8 @@ public class EmployeeFrame extends javax.swing.JFrame {
 
         inPhoneField.setEditable(false);
 
-        inLicenseLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
-        inLicenseLabel.setText("Driver's License::");
+        inLicenseLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        inLicenseLabel.setText("Driver's License:");
 
         inLicenseField.setEditable(false);
         inLicenseField.setFocusable(false);
@@ -144,7 +144,7 @@ public class EmployeeFrame extends javax.swing.JFrame {
                             .addComponent(inPhoneLabel)
                             .addComponent(inNameLabel)
                             .addComponent(inLicenseLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
                         .addGroup(customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(inLicenseField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                             .addComponent(inNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
@@ -159,7 +159,7 @@ public class EmployeeFrame extends javax.swing.JFrame {
                 .addComponent(inAddressLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inAddressScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-                .addGap(22, 22, 22))
+                .addContainerGap())
         );
         customerInfoPanelLayout.setVerticalGroup(
             customerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,9 +240,10 @@ public class EmployeeFrame extends javax.swing.JFrame {
                         .addGap(592, 592, 592)
                         .addComponent(RepostLostButton)))
                 .addContainerGap())
-            .addGroup(checkInjPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(customerInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, checkInjPanelLayout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addComponent(customerInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         checkInjPanelLayout.setVerticalGroup(
             checkInjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,7 +281,7 @@ public class EmployeeFrame extends javax.swing.JFrame {
         jTabbedPane1.addTab("Check In", checkInjPanel);
 
         checkOutPanel = new ui.CheckOutPanel();
-        jTabbedPane1.addTab("Chek Out", checkOutPanel);
+        jTabbedPane1.addTab("Check Out", checkOutPanel);
         membershipPanel = new ui.MembershipPanel();
         jTabbedPane1.addTab("Membership", membershipPanel);
         inventoryPanel = new ui.InventoryPanel();
@@ -309,6 +310,7 @@ public class EmployeeFrame extends javax.swing.JFrame {
     private void inCustOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inCustOkButtonActionPerformed
         try {
 
+            cleanUpInputs();
             int custID = Integer.parseInt(inCustIdField.getText().toString().trim());
             //System.out.println("al-custid = "+custID);
             currCustomer = Search.getCustomer(custID);
@@ -324,11 +326,9 @@ public class EmployeeFrame extends javax.swing.JFrame {
             inNameField.setText(currCustomer.getFname()+" "+currCustomer.getLname());
             inPhoneField.setText(currCustomer.getPhoneNum());
             inLicenseField.setText(currCustomer.getDL());
-            //inPenaltyField.setText(currCustomer)
+            //inPenaltyField.setText(currCustomer);
             inAddressTextArea.setText(currCustomer.getAddress().toString());
         }
-
-
     }//GEN-LAST:event_inCustOkButtonActionPerformed
 
     private void inCustIdFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inCustIdFieldKeyTyped
@@ -361,15 +361,6 @@ public class EmployeeFrame extends javax.swing.JFrame {
         }
 
 
-
-
-
-
-
-
-
-
-
     }//GEN-LAST:event_checkInButtonActionPerformed
 
     /**
@@ -399,6 +390,17 @@ public class EmployeeFrame extends javax.swing.JFrame {
                evt.consume() ;
             }
     }
+
+    private void cleanUpInputs(){
+
+        inNameField.setText("");
+        inPhoneField.setText("");
+        inLicenseField.setText("");
+        //inPenaltyField.setText("");
+        inAddressTextArea.setText("");        
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton RepostLostButton;
     private javax.swing.JButton checkInButton;
