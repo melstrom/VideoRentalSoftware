@@ -577,6 +577,8 @@ public class RentalMovieManagement {
         }
         GregorianCalendar dueDate = new GregorianCalendar();
         dueDate.add(Calendar.DATE, rentalPeriod);
+        dueDate.set(Calendar.HOUR_OF_DAY, 23);
+        dueDate.set(Calendar.MINUTE, 59);
 
         return dueDate;
     }
@@ -724,7 +726,7 @@ public class RentalMovieManagement {
      */
     public static void setOverdueMovies()
     {
-        // TODO: Implementation
+        
     }
 
 
