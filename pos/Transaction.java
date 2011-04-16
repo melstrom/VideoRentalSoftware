@@ -138,6 +138,7 @@ public class Transaction
 
 	/**
 		Returns an item given the line number.
+         * "line number starts at 1" by Kevin
 		@param line the line number of the item on the invoice.
 		@throws IllegalStateException if the line is out of bounds.
 	*/
@@ -150,7 +151,10 @@ public class Transaction
 		return items.get(line - 1);
 	}
 	
-	
+	public String getDate()
+        {
+            return transactionDate;
+        }
 	
 	
 	
@@ -218,6 +222,7 @@ public class Transaction
 	}
 	/**
 		Returns the type that the item is (Video Rental, Video Sale, Discount, etc).
+         * line number starts at 1 by kevin
 		@param lineNumber the line number of the transaction item you wish to get info on (first item is index 1).
 		@return the type of transaction item.
 		@throws IndexOutOfBoundsException if the index is out of range (lineNumber less than 0 or greater than this.getNumberOfItems())
@@ -234,11 +239,12 @@ public class Transaction
 			throw new IndexOutOfBoundsException("lineNumber is out of range.");
 		}
 		
-		return items.get(lineNumber).getType();
+		return getItem(lineNumber).getType();
 	}
 		
 	/**
 		Gets the name of the item (Name of the movie or name of the discount, etc).
+         * line number starts at 1 by kevin
 		@param lineNumber the line number of the transaction item you wish to get info on (first item is index 1).
 		@return the name of the transaction item.
 		@throws IndexOutOfBoundsException if the index is out of range (lineNumber less than 0 or greater than this.getNumberOfItems())
@@ -255,11 +261,12 @@ public class Transaction
 			throw new IndexOutOfBoundsException("lineNumber is out of range.");
 		}
 		
-		return items.get(lineNumber).getName();
+		return getItem(lineNumber).getName();
 	}
 	
 	/**
 		Gets the barcode of the item .
+         * line number starts at 1 by kevin
 		@param lineNumber the line number of the transaction item you wish to get info on (first item is index 1).
 		@return the barcode of the transaction item.
 		@throws IndexOutOfBoundsException if the index is out of range (lineNumber less than 0 or greater than this.getNumberOfItems())
@@ -276,11 +283,12 @@ public class Transaction
 			throw new IndexOutOfBoundsException("lineNumber is out of range.");
 		}
 		
-		return items.get(lineNumber).getBarcode();
+		return getItem(lineNumber).getBarcode();
 	}
 	
 	/**
 		Gets the price of the item.
+         * line number starts at 1 by kevin
 		@param lineNumber the line number of the transaction item you wish to get info on (first item is index 1).
 		@return the price of the transaction item in cents.
 		@throws IndexOutOfBoundsException if the index is out of range (lineNumber less than 0 or greater than this.getNumberOfItems())
@@ -297,7 +305,7 @@ public class Transaction
 			throw new IndexOutOfBoundsException("lineNumber is out of range.");
 		}
 		
-		return items.get(lineNumber).getPrice();
+		return getItem(lineNumber).getPrice();
 	}
 	
 	
@@ -341,8 +349,8 @@ public class Transaction
 		paymentMethod = payment;
 		paymentAmount = amountDue;
 		transactionID = nextAvailableInvoiceID;
-		updateItemInfo();
-		setDate();
+		
+		setDate();//may cause a bug so that the checkout does not work.
                 JDBCConnection conn = new JDBCConnection();
                 conn.getConnection();
                 try
@@ -358,7 +366,17 @@ public class Transaction
                     conn.closeConnection();
                 }
 	}
-	
+
+        /**
+         * fixing the bug of not adding the invoice first. solution 1: let the
+         * transactionmanager call the markpaid() first, then call this updateItem(),
+         * see if this can works
+         */
+        public void UpdateItem()
+                throws Exception
+        {
+            updateItemInfo();
+        }
 	
 	/**
 		helper method to set date
