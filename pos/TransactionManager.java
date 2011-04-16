@@ -62,7 +62,7 @@ public class TransactionManager
 		</ul>
 		
 	*/
-	private void process() throws IllegalStateException, SQLException, ClassNotFoundException, MovieNotFoundException, Exception
+	public void process() throws IllegalStateException, SQLException, ClassNotFoundException, MovieNotFoundException, Exception
 	{
 		if (myTransaction.isPaid() == false)
 		{
@@ -173,28 +173,28 @@ public class TransactionManager
 	*/
 	public double pay(String paymentMethod, int amount ) throws IllegalStateException, SQLException, ClassNotFoundException, Exception
 	{
-		if (myTransaction.getNumberOfItems() == 0)
-		{
-			throw new IllegalStateException("There are no items on the Invoice.");
-		}
-	JDBCConnection JDBC = new JDBCConnection();
-                       Statement st = JDBC.createStatement();
-        String table = "invoice";
-        String column = "invoiceID";
-        String SQL = "SELECT " + column + " FROM " + table + " GROUP BY " + column;
-        ResultSet rs = st.executeQuery(SQL);
-        rs.last();
-        int LastID = rs.getInt(column);
-        int nextInvoiceID = LastID + 1;
+            if (myTransaction.getNumberOfItems() == 0)
+            {
+                throw new IllegalStateException("There are no items on the Invoice.");
+            }
+            JDBCConnection JDBC = new JDBCConnection();
+            Statement st = JDBC.createStatement();
+            String table = "invoice";
+            String column = "invoiceID";
+            String SQL = "SELECT " + column + " FROM " + table + " GROUP BY " + column;
+            ResultSet rs = st.executeQuery(SQL);
+            rs.last();
+            int LastID = rs.getInt(column);
+            int nextInvoiceID = LastID + 1;
 
 		// use these two lines if you want invoices to be numbered 1000 and up
 		// int starting = 999;
 		// int nextInvoiceID = mySQLhelper.getTotalNumberOfInvoices() + 1;
 //		int nextInvoiceID = mySQLhelper.getTotalNumberOfRows(SQLhelper.TRANSACTION_TABLE_NAME, SQLhelper.TRANSACTION_TABLE_PK) + 1;
 		//Payment myPayment = new Payment(amount, paymentMethod);
-                double change = myTransaction.markPaid(paymentMethod, amount, nextInvoiceID);
-                process();
-		return change;
+            double change = myTransaction.markPaid(paymentMethod, amount, nextInvoiceID);
+            process();
+            return change;
 	}
 	/**
 		Gets the total price that needs to be collected for this Transaction
