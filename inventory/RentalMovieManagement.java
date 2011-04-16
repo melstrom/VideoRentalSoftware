@@ -582,19 +582,30 @@ public class RentalMovieManagement {
     }
 
 
-    public void checkIn(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
+
+    /**
+     * This method is used to check in a RentalMovie.  The RentalMovie is
+     * identified by its barcode, and a newCondition is assigned to it.
+     * If the condition is good, the condition shall be "available".  If the
+     * movie has been damaged, the condition shall be "broken".
+     *
+     * @param barcode the unique barcode of the RentalMovie.
+     * @param newCondition the condition of the RentalMovie.  It shall be
+     * either available, or broken
+     * @throws SQLException if a connection to the database cannot be made
+     * @throws ClassNotFoundException if the driver cannot be found
+     *
+     * TODO: checks for the validity of input
+     */
+    public static void checkIn(String barcode, String newCondition)
+            throws SQLException, ClassNotFoundException
     {
-//        if(!movie.getCondition().equals("available"))
-//        {
-//            checkInQuery(customer.getAccountID());
-//            movie.setCondition("available");
-//        }
-//        else
-//        {
-//            throw new Exception("movie is already in stock");
-//        }
-        checkInQuery(customerID, barcode, newCondition);
+        checkInQuery(barcode, newCondition);
     }
+
+
+
+
     /**
      * Change a movie from type rental to sale
      * @throws SQLException
@@ -664,16 +675,6 @@ public class RentalMovieManagement {
         {
             throw new IllegalArgumentException("Not a valid barcode");
         }
-	/*
-        if(barcode.length() > MAX_SKU_LENGTH)
-        {
-            rentalID = barcode.substring(barcode.length());
-            SKU = barcode.substring(0, barcode.length());
-        }
-        else if(barcode.length() >= MIN_SKU_LENGTH && barcode.length()<= MAX_SKU_LENGTH)
-        SKU = barcode;
-         *
-         */
     }
 
 
@@ -739,31 +740,34 @@ public class RentalMovieManagement {
         updateDatabase(query);
     }
 
-    private void checkInQuery(int customerID, String barcode, String newCondition)throws SQLException, Exception,java.lang.Exception
+
+    /**
+     * This method executes an Update query, which changes the RentalMovie
+     * corresponding to the passed barcode so that its customerID is NULL,
+     * its checkout_time is NULL, and its condition is the passed condition,
+     * which will correspond to either available or broken.
+     * @param barcode the unique barcode corresponding to a RentalMovie
+     * @param newCondition the condition of the RentalMovie upon its check in.
+     * If the condition was good, the newCondition is available.  Otherwise,
+     * the condition is broken
+     * @throws SQLException if a connection to the database cannot be made
+     * @throws ClassNotException if the driver cannot be loaded
+     */
+    private static void checkInQuery(String barcode, String newCondition)throws SQLException, ClassNotFoundException
     {
         JDBCConnection conn = new JDBCConnection();
         String command = "UPDATE videoRental SET videoRental.condition='" + newCondition +
-                        "' WHERE rentalID='" + barcode.substring(barcode.length()-9) + "';";
+                        "', videoRental.customerID = NULL, " +
+                        "videoRental.checkout_time = NULL " +
+                        "WHERE videoRental.rentalID='" + barcode.substring(barcode.length()-9) + "';";
         //System.out.println(command);//testing
         PreparedStatement stat = conn.prepareStatement(command);
         stat.execute();
-
-        /*
-        String tablename = "videoRental";
-        String attribute = "videoRental.condition";
-        String attributeTo = newCondition;
-        String where = " where rentalID="+quote+barcode.substring(barcode.length() - 9 )+quote+" and SKU="+quote+barcode.substring(0,barcode.length()-9)+quote;
-        String query = generateUpdateSQL(tablename, attribute, attributeTo, where);
-        updateDatabase(query);
-        /*
-        if(newCondition.trim().toLowerCase().equals("available"))
-        {
-            tablename = "madeReservations";
-            where = " where customerID="+quote+customerID+quote+" and SKU="+quote+SKU+quote;
-            query = generateDeleteSQL(tablename,where);
-            updateDatabase(query);
-        }*/
     }
+
+
+
+
     /**
      * Create a query to make a reservation
      * @throws SQLException
