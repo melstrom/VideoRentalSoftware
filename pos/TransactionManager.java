@@ -193,6 +193,7 @@ public class TransactionManager
 //		int nextInvoiceID = mySQLhelper.getTotalNumberOfRows(SQLhelper.TRANSACTION_TABLE_NAME, SQLhelper.TRANSACTION_TABLE_PK) + 1;
 		//Payment myPayment = new Payment(amount, paymentMethod);
             double change = myTransaction.markPaid(paymentMethod, amount, nextInvoiceID);
+            myTransaction.UpdateItem();
             process();
             return change;
 	}
@@ -229,4 +230,16 @@ public class TransactionManager
             
         }
 
+        /* PROTOTYPE HELP METHOD
+         * REMOVE THIS METHOD TO PREVENT BACKDOOR
+         * REMOVE THIS METHOD TO PREVENT BACKDOOR
+         * REMOVE THIS METHOD TO PREVENT BACKDOOR
+         * REMOVE THIS METHOD TO PREVENT BACKDOOR
+         * REMOVE THIS METHOD TO PREVENT BACKDOOR
+         * REMOVE THIS METHOD TO PREVENT BACKDOOR
+         */
+        public Transaction getTransaction()
+        {
+            return myTransaction;
+        }
 }

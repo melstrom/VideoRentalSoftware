@@ -1,4 +1,3 @@
-
 package pos;
 //import pos.Transaction;
 import account.Address;
@@ -113,14 +112,14 @@ public class SQLhelper
 	private int insertNewEmployee(Employee theEmployee, int accountID) throws ClassNotFoundException, IllegalStateException, SQLException
 	{
 	    int employeePrimaryKey = 1 + getTotalNumberOfRows(EMPLOYEE_TABLE_NAME, EMPLOYEE_TABLE_PK);
-	   //              ^- the key will be found and set when the Customer or Employee object is created.
+	   //              ^- the key will be found and set now
 	    String queryString = "INSERT INTO " + EMPLOYEE_TABLE_NAME + " ("
 		+ "employeeID,"
 		+ "accountID,"
 		+ "position"
 		+ ") VALUES (?, ?, ?)";
 	    setupPreparedStatement(queryString);
-	    pstatement.setInt(1, theEmployee.getAccountID());
+	    pstatement.setInt(1, employeePrimaryKey);
 	    pstatement.setInt(2, accountID);
 	    pstatement.setString(3, theEmployee.getPosition());
 	    pstatement.executeUpdate();
@@ -149,7 +148,7 @@ public class SQLhelper
 		+ "driversLicense"
 		+ ") VALUES (?, ?, ?)";
 	    setupPreparedStatement(queryString);
-	    pstatement.setInt(1, theCustomer.getAccountID());
+	    pstatement.setInt(1, customerPrimaryKey);
 	    pstatement.setInt(2, accountID);
 	    pstatement.setString(3, theCustomer.getDL());
 	    pstatement.executeUpdate();
