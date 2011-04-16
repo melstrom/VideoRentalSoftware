@@ -45,7 +45,6 @@ public class AccountManagement
     public AccountManagement() throws SQLException, ClassNotFoundException
     {
         JDBC = new JDBCConnection();
-        //connection = JDBCConnection.getJDBCConnection();
     }
 
     /**
@@ -189,10 +188,16 @@ public class AccountManagement
             + addressID + ",'"
             + Fname + "','"
             + Lname + "')";
-
             return SQL;
     }
 
+    /**
+     *
+     * @param address
+     * @param addressID
+     * @return
+     * @throws SQLException
+     */
     private String createAddressInsertSQL (Address address, int addressID) throws SQLException
     {
         String SQL = "INSERT INTO address (addressID, houseNumber, streetName, city, province, country, postalCode) value ("
@@ -203,7 +208,6 @@ public class AccountManagement
         + address.getProvince() + "','"
         + address.getCity() + "','"
         + address.getPostalCode() + "')";
-
         return SQL;
     }
 
@@ -218,7 +222,9 @@ public class AccountManagement
         {
             Employee employee = (Employee) aAccount;
             account = employee;
-        } else if (accountType.equals("customer"))
+        }
+
+        else if (accountType.equals("customer"))
         {
             Customer customer = (Customer) aAccount;
             account = customer;
@@ -273,6 +279,7 @@ public class AccountManagement
         account = employee;
     }
 }
+
 //    /**
 //     * Check if an account id already exists in the database
 //     * @param ID an account ID
