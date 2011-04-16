@@ -104,10 +104,11 @@ public class AccountManagement
             String addressInsert = this.createAddressInsertSQL(address, addressID);
             String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
 
-            String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense) value("
+            String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense, penalty) value("
                     + customerID + ","
                     + accountID + ",'"
-                    + DL + "')";
+                    + DL + "',"
+                    + "0";
             st.executeUpdate(addressInsert);
             st.executeUpdate(accountInsert);
             st.executeUpdate(customerInsert);
