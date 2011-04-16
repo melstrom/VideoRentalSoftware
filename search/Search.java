@@ -80,6 +80,10 @@ public class Search
             ArrayList<Customer> customerList = new ArrayList<Customer>();
             int customerID = Integer.parseInt(searchTerm);
             Customer customer = getCustomer(customerID);
+            if (customer == null)
+            {
+                return null;
+            }
             customerList.add(customer);
             return customerList;
         }

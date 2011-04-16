@@ -179,15 +179,23 @@ public class EmployeeFrame extends javax.swing.JFrame {
         try {
             RMM = new RentalMovieManagement();
             //System.out.println("al-checkInComboBox = "+ checkInComboBox.getSelectedItem().toString());
-            RMM.checkIn(currCustomer.getAccountID(),inBarcodeField.getText(),checkInComboBox.getSelectedItem().toString());
+            //RMM.checkIn(currCustomer.getAccountID(),inBarcodeField.getText(),checkInComboBox.getSelectedItem().toString());
+            // changed the constructor call: Mitch 16 April
+            RMM.checkIn(inBarcodeField.getText(), checkInComboBox.getSelectedItem().toString());
         } catch (SQLException ex) {
             Logger.getLogger(EmployeeFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(EmployeeFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MovieNotFoundException ex) {
+        }
+        /* commented out: reason: MovieNotFoundException is never thrown : Mitch 16 April
+         catch (MovieNotFoundException ex)
+        {
             Logger.getLogger(EmployeeFrame.class.getName()).log(Level.SEVERE, null, ex);
             inBarcodeField.setText("Movie Not Found!");
-        } catch (Exception ex) {
+        }
+         * 
+         */
+        catch (Exception ex) {
             Logger.getLogger(EmployeeFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
 
