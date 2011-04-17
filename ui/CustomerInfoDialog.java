@@ -10,16 +10,29 @@
  */
 
 package ui;
-
+import account.Customer;
+import account.Address;
+import account.AccountManagement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pos.SQLhelper;
 /**
  *
  * @author kpoirier00
  */
 public class CustomerInfoDialog extends javax.swing.JDialog {
+    private int panelType;
 
     /** Creates new form CustomerInfoDialog */
     public CustomerInfoDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        initComponents();
+    }
+
+        /** Creates new form CustomerInfoDialog */
+    public CustomerInfoDialog(int panelType,boolean modal) {
+        this.panelType = panelType;
         initComponents();
     }
 
@@ -53,201 +66,192 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
         lNameCustomerLabel = new javax.swing.JLabel();
         lNameCustomerInfoTextfield = new javax.swing.JTextField();
         addressCustomerLabel = new javax.swing.JLabel();
-        statusCustomerLabel = new javax.swing.JLabel();
         houseNumberCustomerTextField = new javax.swing.JTextField();
-        statusCustomerTextField = new javax.swing.JTextField();
         penaltyCustomerTextField = new javax.swing.JTextField();
         phoneLabel = new javax.swing.JLabel();
         phoneField = new javax.swing.JTextField();
+        DLCustInfoTextField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        enteredIntoDatabaseLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        titleCustomerInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 24));
+        titleCustomerInfoLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         titleCustomerInfoLabel.setText("Customer Information");
+        getContentPane().add(titleCustomerInfoLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 11, -1, -1));
 
         postalCodeCustomerTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 postalCodeCustomerTextFieldActionPerformed(evt);
             }
         });
+        getContentPane().add(postalCodeCustomerTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 420, 260, -1));
 
-        postalCodeCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        postalCodeCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         postalCodeCustomerLabel.setText("Postal Code");
+        getContentPane().add(postalCodeCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 400, -1, -1));
+        getContentPane().add(countryCustomerTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, 260, -1));
+        getContentPane().add(provinceCustomerTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, 52, -1));
+        getContentPane().add(cityCustomerTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, 200, -1));
 
-        countryCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        empIDCustomerTextField.setEditable(false);
+        getContentPane().add(empIDCustomerTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 172, 260, -1));
+
+        countryCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         countryCustomerLabel.setText("Country");
+        getContentPane().add(countryCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 360, -1, -1));
 
         okCustomerInfoButton.setText("OK");
+        okCustomerInfoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okCustomerInfoButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(okCustomerInfoButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 460, -1, -1));
 
-        provinceCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        provinceCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         provinceCustomerLabel.setText("Province");
+        getContentPane().add(provinceCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 310, -1, -1));
+        getContentPane().add(FirstNameCustomerTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 78, 260, -1));
 
-        cityCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        cityCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         cityCustomerLabel.setText("City");
+        getContentPane().add(cityCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, -1, -1));
 
-        houseNumberCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        houseNumberCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         houseNumberCustomerLabel.setText("House #");
+        getContentPane().add(houseNumberCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 260, -1, -1));
 
         empIDCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        empIDCustomerLabel.setText("CustomerID");
+        empIDCustomerLabel.setText("CustomerID:");
+        getContentPane().add(empIDCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 175, -1, -1));
 
-        streetNameCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
+        streetNameCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         streetNameCustomerLabel.setText("Street Name");
+        getContentPane().add(streetNameCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 260, -1, -1));
 
-        penaltyCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
-        penaltyCustomerLabel.setText("Penalty");
+        penaltyCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        penaltyCustomerLabel.setText("Penalty:");
+        getContentPane().add(penaltyCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 229, -1, -1));
+        getContentPane().add(streetNameCustomerTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 290, 163, -1));
 
         fNameCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        fNameCustomerLabel.setText("First Name");
+        fNameCustomerLabel.setText("First Name:");
+        getContentPane().add(fNameCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 81, -1, -1));
 
-        lNameCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lNameCustomerLabel.setText("Last Name");
+        lNameCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lNameCustomerLabel.setText("Last Name:");
+        getContentPane().add(lNameCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 112, -1, -1));
 
-        addressCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
-        addressCustomerLabel.setText("Address");
+        lNameCustomerInfoTextfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lNameCustomerInfoTextfieldActionPerformed(evt);
+            }
+        });
+        getContentPane().add(lNameCustomerInfoTextfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 109, 260, -1));
 
-        statusCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
-        statusCustomerLabel.setText("Status");
+        addressCustomerLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        addressCustomerLabel.setText("Address:");
+        getContentPane().add(addressCustomerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, -1, -1));
+        getContentPane().add(houseNumberCustomerTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 91, -1));
+
+        penaltyCustomerTextField.setEditable(false);
+        getContentPane().add(penaltyCustomerTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 229, 260, -1));
 
         phoneLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        phoneLabel.setText("Phone Number");
+        phoneLabel.setText("Phone Number:");
+        getContentPane().add(phoneLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 144, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(91, 91, 91)
-                .addComponent(titleCustomerInfoLabel)
-                .addContainerGap(111, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fNameCustomerLabel)
-                    .addComponent(lNameCustomerLabel)
-                    .addComponent(empIDCustomerLabel))
-                .addGap(81, 81, 81)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(FirstNameCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                    .addComponent(lNameCustomerInfoTextfield, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                    .addComponent(empIDCustomerTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))
-                .addGap(64, 64, 64))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(penaltyCustomerLabel)
-                            .addComponent(addressCustomerLabel)
-                            .addComponent(statusCustomerLabel))
-                        .addGap(103, 103, 103)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(okCustomerInfoButton)
-                                .addGap(76, 76, 76))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(penaltyCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(houseNumberCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(houseNumberCustomerLabel)
-                                        .addComponent(cityCustomerLabel))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(streetNameCustomerLabel)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                            .addGap(28, 28, 28)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(provinceCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(provinceCustomerLabel))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(countryCustomerLabel)
-                                                .addComponent(countryCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addComponent(streetNameCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)))
-                                .addComponent(postalCodeCustomerLabel)
-                                .addComponent(cityCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(postalCodeCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                                .addComponent(statusCustomerTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(phoneLabel)
-                        .addGap(67, 67, 67)
-                        .addComponent(phoneField, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)))
-                .addGap(64, 64, 64))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(titleCustomerInfoLabel)
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(FirstNameCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fNameCustomerLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lNameCustomerInfoTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lNameCustomerLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(empIDCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(empIDCustomerLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(phoneLabel)
-                    .addComponent(phoneField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(penaltyCustomerLabel)
-                        .addGap(12, 12, 12)
-                        .addComponent(statusCustomerLabel)
-                        .addGap(29, 29, 29)
-                        .addComponent(addressCustomerLabel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(penaltyCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(statusCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(houseNumberCustomerLabel)
-                            .addComponent(streetNameCustomerLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(houseNumberCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(streetNameCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cityCustomerLabel)
-                            .addComponent(provinceCustomerLabel)
-                            .addComponent(countryCustomerLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cityCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(countryCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(provinceCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(postalCodeCustomerLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(postalCodeCustomerTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(okCustomerInfoButton)))
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
+        phoneField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                phoneFieldActionPerformed(evt);
+            }
+        });
+        getContentPane().add(phoneField, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 141, 260, -1));
+        getContentPane().add(DLCustInfoTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 203, 260, -1));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("Drivers License:");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 206, 94, -1));
+
+        enteredIntoDatabaseLabel1.setVisible(false);
+        enteredIntoDatabaseLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        enteredIntoDatabaseLabel1.setForeground(new java.awt.Color(255, 51, 51));
+        enteredIntoDatabaseLabel1.setText("CUSTOMER ENTERED INTO DATABASE");
+        getContentPane().add(enteredIntoDatabaseLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 46, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void phoneFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneFieldActionPerformed
+        // TODO add your handling code here:
+}//GEN-LAST:event_phoneFieldActionPerformed
+
+    private void lNameCustomerInfoTextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lNameCustomerInfoTextfieldActionPerformed
+        // TODO add your handling code here:
+}//GEN-LAST:event_lNameCustomerInfoTextfieldActionPerformed
+
+    private void okCustomerInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okCustomerInfoButtonActionPerformed
+        try {
+            // TODO add your handling code here:
+            addToDatabase();
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerInfoDialog.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CustomerInfoDialog.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(CustomerInfoDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        CustomerInfoDialog dialog = new CustomerInfoDialog(new javax.swing.JFrame(), true);
+        dialog.setVisible(false);
+}//GEN-LAST:event_okCustomerInfoButtonActionPerformed
 
     private void postalCodeCustomerTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postalCodeCustomerTextFieldActionPerformed
         // TODO add your handling code here:
 }//GEN-LAST:event_postalCodeCustomerTextFieldActionPerformed
 
+    private void addToDatabase() throws SQLException, ClassNotFoundException, Exception{
+        AccountManagement populateData = new AccountManagement();
+        String fname = FirstNameCustomerTextField.getText();
+        String lname = lNameCustomerInfoTextfield.getText();
+        String phoneNum = phoneField.getText();
+        Integer houseNum = 0;
+        try{
+            houseNum = Integer.parseInt(houseNumberCustomerTextField.getText());
+        } catch(NumberFormatException ex){
+            enteredIntoDatabaseLabel1.setText("Please Fill All Fields");
+            enteredIntoDatabaseLabel1.setVisible(true);
+        }
+        String streetName = streetNameCustomerTextField.getText();
+        String city = cityCustomerTextField.getText();
+        String province = provinceCustomerTextField.getText();
+        String country = countryCustomerTextField.getText();
+        String postalCode = postalCodeCustomerTextField.getText();
+        String DLCustInfo = DLCustInfoTextField.getText();
+
+
+        if (fname.equals("") || lname.equals("") || phoneNum.equals("") ||
+            streetName.equals("") ||city.equals("") || province.equals("") || country.equals("") ||
+            postalCode.equals("") || DLCustInfo.equals("")){
+            enteredIntoDatabaseLabel1.setText("Please Fill All Fields");
+            enteredIntoDatabaseLabel1.setVisible(true);
+        }else{
+            int customerID = populateData.generateNewID("customer");
+            empIDCustomerTextField.setText("" + customerID);
+            Address customerAddress = new Address(houseNum, streetName, city, province, country, postalCode);
+            populateData.createCustomer(customerID, DLCustInfo, fname, lname, customerAddress, phoneNum);
+            if (panelType == 1)
+                    enteredIntoDatabaseLabel1.setText("CUSTOMER ENTERED INTO DATABASE");
+            else enteredIntoDatabaseLabel1.setText("CUSTOMER HAS BEEN UPDATED");
+            enteredIntoDatabaseLabel1.setVisible(true);
+
+        }
+    }
     /**
     * @param args the command line arguments
     */
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -263,6 +267,7 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField DLCustInfoTextField;
     private javax.swing.JTextField FirstNameCustomerTextField;
     private javax.swing.JLabel addressCustomerLabel;
     private javax.swing.JLabel cityCustomerLabel;
@@ -271,9 +276,11 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
     private javax.swing.JTextField countryCustomerTextField;
     private javax.swing.JLabel empIDCustomerLabel;
     private javax.swing.JTextField empIDCustomerTextField;
+    private javax.swing.JLabel enteredIntoDatabaseLabel1;
     private javax.swing.JLabel fNameCustomerLabel;
     private javax.swing.JLabel houseNumberCustomerLabel;
     private javax.swing.JTextField houseNumberCustomerTextField;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField lNameCustomerInfoTextfield;
     private javax.swing.JLabel lNameCustomerLabel;
     private javax.swing.JButton okCustomerInfoButton;
@@ -285,8 +292,6 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
     private javax.swing.JTextField postalCodeCustomerTextField;
     private javax.swing.JLabel provinceCustomerLabel;
     private javax.swing.JTextField provinceCustomerTextField;
-    private javax.swing.JLabel statusCustomerLabel;
-    private javax.swing.JTextField statusCustomerTextField;
     private javax.swing.JLabel streetNameCustomerLabel;
     private javax.swing.JTextField streetNameCustomerTextField;
     private javax.swing.JLabel titleCustomerInfoLabel;
