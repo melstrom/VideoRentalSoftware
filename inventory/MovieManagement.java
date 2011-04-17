@@ -71,7 +71,6 @@ import java.io.IOException;
  */
 public class MovieManagement
 {
-
     private GeneralMovie movie = null;
     private IndividualMovie copy = null;
     private MovieRequest request = null;
@@ -115,32 +114,30 @@ public class MovieManagement
             String format,
             int runtime)throws MissingFieldException,SQLException, MovieExistsException, java.lang.Exception
     {
+        try
+        {
+            this.checkDuplicateSKU(SKU);
+            this.movie = new GeneralMovie(SKU,title,actors,director,producer,releaseDate, synopsis,
+                    genre,rating,studio,retailPrice,format, runtime);
+            String actorsList="";
+            for(int i=0; i<actors.length; i++)
+            {
+                actorsList +=actors[i]+",";
+            }
 
-    try
-    {
-    this.checkDuplicateSKU(SKU);
- 
-    this.movie = new GeneralMovie(SKU,title,actors,director,producer,releaseDate, synopsis,
-                     genre,rating,studio,retailPrice,format, runtime);
-    String actorsList="";
-    for(int i=0; i<actors.length; i++)
-    {
-    actorsList +=actors[i]+",";
+            String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
+            String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
+            String query = generateInsertSQL("videoInfo",columns, values );
+            statement.executeUpdate(query);
+            String columns1[]= {"SKU","Format","InfoID","RetailPrice"};
+            String values1[] = {SKU,format, SKU, ""+retailPrice};
+            query = generateInsertSQL("physicalVideo",columns1, values1);
+            statement.executeUpdate(query);
         }
-
-    String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
-    String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
-    String query = generateInsertSQL("videoInfo",columns, values );
-    statement.executeUpdate(query);
-    String columns1[]= {"SKU","Format","InfoID","RetailPrice"};
-    String values1[] = {SKU,format, SKU, ""+retailPrice};
-    query = generateInsertSQL("physicalVideo",columns1, values1);
-    statement.executeUpdate(query);
-    }
-    finally
-    {
-        connection.close();
-    }
+        finally
+        {
+            connection.close();
+        }
     }
     
     /**
@@ -157,9 +154,7 @@ public class MovieManagement
         {
             throw new IllegalArgumentException("Null movie passed");
         }
-
         inventory.MovieManagement.checkDuplicateBarcode(movie.getSKU());
-
         Integer infoID = findMatchingVideoInfo(movie);
         if (infoID == null)
         {
@@ -167,11 +162,7 @@ public class MovieManagement
             addVideoInfo(infoID, movie);
         }
         addPhysicalVideo(infoID, movie);
-
     }
-    
-    
-
 
     /**
      * This method creates new GeneralMovies in the Database
@@ -280,9 +271,6 @@ public class MovieManagement
         JDBCConnection conn = new JDBCConnection();
         try
         {
-            //ResultSet result = conn.getResults(query);
-
-
             String title = movie.getTitle();
             String director = movie.getDirector();
             String producer = movie.getProducer();
@@ -302,11 +290,13 @@ public class MovieManagement
             {
                 int infoID = result.getInt(column);
                 return infoID;
-            } else
+            }
+            else
             {
                 return null;
             }
-        } finally
+        }
+        finally
         {
             conn.closeConnection();
         }
@@ -402,7 +392,6 @@ public class MovieManagement
      */
     private static String makeActorConstraint(String[] actors)
     {
-
         int numActors = actors.length;
         int actorIndex = 0; // start from the first actor
         String actorConstraint = "(";
@@ -447,7 +436,6 @@ public class MovieManagement
         int newHighestID = currentHighestID + 1;
         if (newHighestID > Math.pow(10, GeneralMovie.INFO_ID_LENGTH + 1))
         {
-
             throw new MovieLimitReachedException("Cannot add movie information."
                     + "Maximum number of movie information is reached");
         }
@@ -474,13 +462,14 @@ public class MovieManagement
                 if (result.wasNull())
                 {
                     return (int) Math.pow(10, GeneralMovie.INFO_ID_LENGTH);
-                } else
+                }
+                else
                 {
                     return result.getInt(1);
                 }
             }
-
-        } finally
+        }
+        finally
         {
             conn.closeConnection();
         }
@@ -497,7 +486,6 @@ public class MovieManagement
     private static void addVideoInfo(int infoID, GeneralMovie movie)
             throws Exception
     {
-
         if (movie == null)
         {
             throw new IllegalArgumentException("No movie provided");
@@ -513,7 +501,6 @@ public class MovieManagement
         String genre = movie.getGenre();
         String length = "" + movie.getLength();
 
-
         if (actors == null || actors.length < 1)
         {
             throw new IllegalArgumentException("No actors provided");
@@ -527,9 +514,6 @@ public class MovieManagement
         actorsString = actorsString.replaceAll("'", "");
 
         String tableName = "videoInfo";
-
-
-
         String[][] videoInfo =
         {
             {
@@ -569,11 +553,11 @@ public class MovieManagement
             {
                 throw new java.sql.SQLException("Updates were not completed");
             }
-        } finally
+        }
+        finally
         {
             conn.closeConnection();
         }
-
     }
 
     /**
@@ -609,11 +593,13 @@ public class MovieManagement
             {
                 // throw new SQLException("" + linesChanged + "rows were changed");
                 // undo the update
-            } else if (linesChanged == 0)
+            }
+            else if (linesChanged == 0)
             {
                 throw new java.sql.SQLException("Updates were not completed");
             }
-        } finally
+        }
+        finally
         {
             conn.closeConnection();
         }
@@ -641,7 +627,8 @@ public class MovieManagement
                 barcode = this.addRentalMovie(generalMovie, type);
             }
             return barcode;
-        } finally
+        }
+        finally
         {
             connection.close();
         }
@@ -676,7 +663,8 @@ public class MovieManagement
             movie.setGenre(genre);
 
             //UPDATE VideoInfo SET Title = movie.getTitle, Actors = movie.getActors...etc   WHERE SKU = SKU
-        } finally
+        }
+        finally
         {
             connection.close();
         }
@@ -761,38 +749,6 @@ public class MovieManagement
     }
 
     /**
-     * Generate generic insert queries
-     * @param tableName
-     * @param columnNames
-     * @param values
-     * @return a query
-     */
-    private String generateInsertSQL(String tableName, String[] columnNames, String[] values)
-    {
-
-        String query = "INSERT INTO "+tableName+" (";
-        for (int i = 0; i < columnNames.length; i++)
-        {
-            query += columnNames[i];
-            if (i != columnNames.length - 1)
-            {
-                query += ", ";
-            }
-        }
-        query += ") VALUES (";
-        for (int i = 0; i < values.length; i++)
-        {
-            query = query + "'"+values[i]+"'";
-            if (i != values.length - 1)
-            {
-                query += ", ";
-            }
-        }
-        query += ")";
-        return query;
-    }
-
-    /**
      * Manually removes a request from the list of requests
      * @param request
      */
@@ -836,7 +792,7 @@ public class MovieManagement
      * Checks if the movie copy already exist in the database
      * @param barcode
      */
-    public static void checkDuplicateBarcode(String barcode) throws Exception
+    private static void checkDuplicateBarcode(String barcode) throws Exception
     {
 
         //Query:SELECT barcode FROM physicalVideo WHERE barcode = 'barcode'
@@ -865,6 +821,37 @@ public class MovieManagement
         {
             conn.closeConnection();
         }
+    }
+    
+    /**
+     * Generate generic insert queries
+     * @param tableName
+     * @param columnNames
+     * @param values
+     * @return a query
+     */
+    private String generateInsertSQL(String tableName, String[] columnNames, String[] values)
+    {
+        String query = "INSERT INTO "+tableName+" (";
+        for (int i = 0; i < columnNames.length; i++)
+        {
+            query += columnNames[i];
+            if (i != columnNames.length - 1)
+            {
+                query += ", ";
+            }
+        }
+        query += ") VALUES (";
+        for (int i = 0; i < values.length; i++)
+        {
+            query = query + "'"+values[i]+"'";
+            if (i != values.length - 1)
+            {
+                query += ", ";
+            }
+        }
+        query += ")";
+        return query;
     }
 
     /**
@@ -895,6 +882,7 @@ public class MovieManagement
             }
         }
     }
+
     /**
      * Generate a rental/sale ID
      * @param type the ID type
@@ -915,6 +903,7 @@ public class MovieManagement
 
         return newID;
     }
+
     /**
      * Add a line to videoSale table
      * @param generalMovie
@@ -937,6 +926,7 @@ public class MovieManagement
         String newBarCode = SKU + newSaleID;
         return newBarCode;
     }
+
     /**
      * Add a line to videoSale table
      * @param generalMovie
