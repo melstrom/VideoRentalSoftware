@@ -28,7 +28,7 @@ public abstract class Account
     //private String loginID; this is the accountID
     private String Fname;
     private String Lname;
-    private String phoneNum;
+    protected String phoneNum;
     private Address address;
    // private String password;
 //    private boolean status;
