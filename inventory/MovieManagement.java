@@ -723,7 +723,7 @@ public class MovieManagement
         String columns[] = {"datetime", "SKU", "customerID"};
 
         String query = "SELECT SKU, customerID FROM " + tablename + " WHERE customerID = " + customerID + " AND SKU = '" + movie.getSKU() + "'";
-        if (statement.execute(query)==false)
+        if (statement.execute(query)==true)
         {
             throw new RequestAlreadyExistsException ("The same request has already been made");
         }
