@@ -1,7 +1,17 @@
 /*
-Things that are unclear:
-1. What happens if you add barcode twice. Should you be able to do that? What if a promo is rent 2 movies and get a discount and the guy rents 4 movies.
+TODO
+add helper method that gets customerID when given a customer's accountID (customer.getAccountID()) so that the invoice can be inserted into the db
+- something like this
 
+private int getCustomerID(Customer customer)
+{
+	// SELECT customerID FROM customer WHERE accountID=customer.getAccountID();
+}
+
+private int getEmployeeID(Employee employee)
+{
+	// SELECT employeeID FROM employee WHERE accountID=employee.getAccountID();
+}
 
 */
 package pos;
