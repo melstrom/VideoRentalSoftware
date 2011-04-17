@@ -65,8 +65,12 @@ public class MovieInterface implements TransactionItem
                 String column = "itemID";
                 String SQL = "SELECT " + column + " FROM " + table +" GROUP BY "+column;
                 ResultSet rs = stat.executeQuery(SQL);
-                rs.last();
-                int largestItemID = rs.getInt(column)+1;
+                int largestItemID = 0;
+
+                if(rs.last())
+                {
+                    largestItemID = rs.getInt(column)+1;
+                }
 
                 String query = "INSERT INTO item VALUES (" + largestItemID + ","
                         + "'sale', "+ priceInCents +", '"+ barcode.substring(barcode.length() - 9)
@@ -81,8 +85,12 @@ public class MovieInterface implements TransactionItem
                 String column = "itemID";
                 String SQL = "SELECT " + column + " FROM " + table +" GROUP BY "+column;
                 ResultSet rs = stat.executeQuery(SQL);
-                rs.last();
-                int largestItemID = rs.getInt(column)+1;
+                int largestItemID = 0;
+
+                if(rs.last())
+                {
+                    largestItemID = rs.getInt(column)+1;
+                }
 
                 String query = "INSERT INTO item VALUES (" + largestItemID + ", "
                         +"'rental',"+ priceInCents + ", null, null, '" + category + "', " +

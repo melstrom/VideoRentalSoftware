@@ -193,9 +193,13 @@ public class TransactionManager
             String column = "invoiceID";
             String SQL = "SELECT " + column + " FROM " + table + " GROUP BY " + column;
             ResultSet rs = st.executeQuery(SQL);
-            rs.last();
-            int LastID = rs.getInt(column);
-            int nextInvoiceID = LastID + 1;
+            //rs.last();
+            int nextInvoiceID = 0;
+            if (rs.last())
+            {
+                int LastID = rs.getInt(column);
+                nextInvoiceID = LastID + 1;
+            }
 
 		// use these two lines if you want invoices to be numbered 1000 and up
 		// int starting = 999;

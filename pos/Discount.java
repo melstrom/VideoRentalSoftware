@@ -56,8 +56,11 @@ public class Discount implements TransactionItem
         String column = "itemID";
         String SQL = "SELECT " + column + " FROM " + table;
         ResultSet rs = stat.executeQuery(SQL);
-        rs.last();
-        int LastAccountID = rs.getInt(column);
+        int LastAccountID = 0;
+        if (rs.last())
+        {
+            LastAccountID = rs.getInt(column);
+        }
         int newAccountID = LastAccountID + 1;
 
         stat.executeQuery("INSERT INTO item VALUES ("+ newAccountID + ", promo, "
