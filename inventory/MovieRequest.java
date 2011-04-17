@@ -19,18 +19,13 @@ public class MovieRequest {
 
     private String SKU;
     /**
-     * Movie's media type
-     */
-    private String format;
-    /**
      *  The date the movie is available in store and to checkout.
      */
-    private GregorianCalendar releaseDate;
-
+    private GregorianCalendar requestDate;
     /**
      * The id of the Customer who make the reservation.
      */
-    private int accountID;
+    private int customerID;
     /**
      * MovieRequest is the constructor for this class.
      * It takes a customer Account object and some movie informations to make a request.
@@ -42,13 +37,11 @@ public class MovieRequest {
      * @pre releaseDate is not null
      * @post Object Request created.
      */
-    public MovieRequest(String SKU, String format, GregorianCalendar releaseDate, int accountID){
-
+    public MovieRequest(String SKU, int customerID, GregorianCalendar requestDate)
+    {
         this.SKU = SKU;
-        this.format = format;
-        this.releaseDate = releaseDate;
-        this.accountID = accountID;
-
+        this.customerID = customerID;
+        this.requestDate = requestDate;
     }
 
     /**
@@ -57,18 +50,9 @@ public class MovieRequest {
      * @pre SKU not empty.
      * @post return SKU.
      */
-    public String getSKU(){
+    public String getSKU()
+    {
         return SKU;
-    }
-
-    /**
-     * Accessors - Get media format (dvd / video/ blueray)
-     * @return movie's media format.
-     * @pre format not empty.
-     * @post return format
-     */
-    public String getFormat(){
-        return format;
     }
 
     /**
@@ -77,8 +61,9 @@ public class MovieRequest {
      * @pre releaseDate not null.
      * @post return releaseDate.
      */
-    public GregorianCalendar getReleaseDate(){
-        return releaseDate;
+    public GregorianCalendar getRequestDate()
+    {
+        return requestDate;
     }
 
     /**
@@ -86,35 +71,8 @@ public class MovieRequest {
      * @return account id of the customer who makes the request.
      * @post return customer id.
      */
-    public int getAccountID(){
-        return accountID;
-    }
-
-    /**
-     * Mutator - Set media format.
-     * @param format new media format to be set.
-     * @pre format a valid media format.
-     * @post new media format set.
-     */
-    public void setFormat(String format){
-        this.format = format;
-    }
-
-    /**
-     * Mutator - Set the release date.
-     * @param date the date the movie is available in store and to pickup.
-     * @pre date is not null
-     * @post new date replaced.
-     */
-    public void setDate(GregorianCalendar date){
-        releaseDate = date;
-    }
-
-     /**
-     * Mutator - Set the customer account id.
-     * @param accountID the account id of the customer
-     */
-    public void setAccountID(int accountID){
-        this.accountID = accountID;
+    public int getCustomerID()
+    {
+        return customerID;
     }
 }

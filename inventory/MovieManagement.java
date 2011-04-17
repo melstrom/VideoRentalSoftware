@@ -712,60 +712,54 @@ public class MovieManagement
         while (resultSet.isLast() == false)
         {
             String SKU = resultSet.getString("SKU");
-
-//            We need a format to construct a movieRequest.
-//            First of all, why do we need the format if SKU can tell us everything?
-//            Second, format does not exist in the table; if it doesn't exists, do we need it?
-//            Same for release date
             //SELECT format FROM videoInfo WHERE SKU = SKU
 //            String format = resultSet.getString("Format");
             int customerID = resultSet.getInt("CustomerID");
             Date datetime = resultSet.getDate("datetime");
-            GregorianCalendar releaseDate = new GregorianCalendar();
-            releaseDate.setTime(datetime);
-            String format = "TEST FORMAT";
+            GregorianCalendar requestDate = new GregorianCalendar();
 
-            this.request = new MovieRequest(SKU, format, releaseDate, customerID);
+            this.request = new MovieRequest(SKU, customerID, requestDate);
             movieRequest.add(this.request);
         }
         return movieRequest;
     }
-    /**
-     * Add a request to request list
-     * @param copy
-     * @param account
-     */
-    public void addRequest(IndividualMovie copy, Customer account)throws SQLException
-    {
-        //String title, String format, Date releaseDate, CustomerAccount requestAcc
-        this.copy = copy;
 
-        String title = copy.getTitle();
-        String format = copy.getFormat();
-        GregorianCalendar releaseDate = copy.getReleaseDate();
-        int accountID = account.getAccountID();
+//    /**
+//     * Add a request to request list
+//     * @param copy
+//     * @param account
+//     */
+//    public void addRequest(GeneralMovie movie, Customer account)throws SQLException
+//    {
+//        this.movie = movie;
+//        String SKU = movie.getSKU();
+//        //TODO: Get current time
+//        GregorianCalendar requestDate = new GregorianCalendar();
+//        int customerID = account.getAccountID();
+//
+//        this.request = new MovieRequest(SKU, customerID, requestDate);
+//        createRequest(movie, account);
+//    }
 
-        this.request = new MovieRequest(title, format, releaseDate, accountID);
-        createRequest(copy, account);
-
-    }
     /**
      * Create query for special order
      * @param copy
      * @param account
      * @throws SQLException
      */
-    private void createRequest(IndividualMovie copy, Customer account)throws SQLException
+    public void createRequest(GeneralMovie movie, int customerID)throws SQLException
     {
+        int requestingCustomer = customerID;
         String tablename = "madeSpecialOrders";
         String columns[] = {"datetime", "SKU", "customerID"};
         Calendar today = Calendar.getInstance();
         today.setTime(today.getTime());
         String time = makeReleaseDateString((GregorianCalendar)today);
-        String values[] = {time,copy.getSKU(),""+account.getAccountID()};
+        String values[] = {time,movie.getSKU(),""+requestingCustomer};
         String query = generateInsertSQL(tablename, columns, values);
         statement.executeUpdate(query);
     }
+
     /**
      * Generate generic insert queries
      * @param tableName
@@ -807,7 +801,7 @@ public class MovieManagement
         this.request = request;
         String table = "madeSpecialOrders";
         String SKU = request.getSKU();
-        int CustomerID = request.getAccountID();
+        int CustomerID = request.getCustomerID();
 
         String query = "DELETE FROM+ "+ table+ " WHERE SKU= '"+SKU +"' and " + "CustomerID= '"+CustomerID+"'";
 
