@@ -44,9 +44,11 @@ public class SaleReporter
         String startDateString = "" + startDate.get(startDate.YEAR) + "-" +
                                 (startDate.get(startDate.MONTH) + 1 ) + "-" +
                                 startDate.get(startDate.DATE);
+        System.out.println(startDateString);//testing
         String endDateString = "" + endDate.get(endDate.YEAR) + "-" +
                                (endDate.get(endDate.MONTH) + 1) + "-" +
                                endDate.get(endDate.DATE);
+        System.out.println(endDateString);//testing
         reportWriter.print("Sale Report from " + startDateString + " to "
                 + endDateString);
         reportWriter.println("\n" +
