@@ -165,6 +165,14 @@ public class MovieManagement
     /**
      * This method creates new GeneralMovies in the Database
      * given a .csv file name
+     * The file passed must be a comma delimited file with every entry on a
+     * new line.  It must have the following information, in the specific order:
+     * SKU, title, releaseDate, studio, genre, director, producer, rating, priceInDollars, length, format, actor1, actor2, ..., actor_n
+     * Any deviation from the order will corrupt the database.
+     * Any deviation from the number of parameters will result in either
+     * database corruption or an ArrayOutOfBoundsException.
+     * There must be at least one actor, but many may be added so long as they
+     * are separated by commas.
      * @param filename the filename. it must be a .csv file
      * @throws IOException
      * @throws Exception
