@@ -17,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import pos.PriceScheme;
-import search.Search;
 
 /**
  *
@@ -196,7 +195,7 @@ public class PriceSchemePanel extends javax.swing.JPanel {
 
     private void addFormatPriceSchemeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFormatPriceSchemeButtonActionPerformed
         // TODO add your handling code here:
-        new AddFormatFrame().setVisible(true);
+        new AddFormatDialog().setVisible(true);
         makePanel();
 }//GEN-LAST:event_addFormatPriceSchemeButtonActionPerformed
 
