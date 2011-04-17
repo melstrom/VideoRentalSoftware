@@ -14,7 +14,6 @@ package account;
 public class Employee extends Account
 {
     private String position;
-	
     /**
      * Default constructor of Employee
      * @param position the position of the employee (Manager/Staff)
@@ -64,6 +63,7 @@ public class Employee extends Account
     {
         return position;
     }
+
     /**
      * Set position
      * @param position the position of the employee
@@ -72,6 +72,7 @@ public class Employee extends Account
     {
         this.position = position;
     }
+    
     /**
      * Check if the employee is a manager
      * @return boolean the value shows this employee is a manager or not
@@ -80,13 +81,4 @@ public class Employee extends Account
     {
        return position.equals("Manager");
     }
-    /**
-     * Get password
-     * @return the password for the account (employees' password is their phone number)
-     */
-    public String getPassword()
-    {
-    	return phoneNum;
-    }
-
 }
