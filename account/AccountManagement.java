@@ -192,11 +192,22 @@ public class AccountManagement
     /**
      * Demote a manager to employee
      */
-    public void demoteManager()
+    public void demoteManager(int employeeID) throws SQLException
     {
-        Employee employee = (Employee) account;
-        employee.setPosition("Employee");
-        account = employee;
+        st = JDBC.createStatement();
+        String table = "employee";
+        String column = "position";
+        String query = "SELECT " + column + " FROM " + table + " WHERE employeeID = " + employeeID;
+        ResultSet rs = st.executeQuery(query);
+        if (rs.next()==!false)
+        {
+            String result = rs.getString(1);
+            if (!result.equals("Employee"))
+            {
+                String SQL = "UPDATE " + table + " SET " + column + " = Employee WHERE employeeID = " + employeeID;
+                st.executeUpdate(SQL);
+            }
+        }
     }
 
     /**
