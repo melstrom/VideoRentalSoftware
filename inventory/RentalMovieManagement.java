@@ -157,7 +157,6 @@ public class RentalMovieManagement {
     }
 
     /**
-     * Alternate call of editCopy(String,String[])
      * Changes the attributes of the RentalMovie to the specified ones.
      * If you don't want to change any attributes, then send them as null
      * @param category the category of the movie
@@ -533,8 +532,45 @@ public class RentalMovieManagement {
         checkInQuery(barcode, newCondition);
     }
 
+
+    /**
+     * This method removes a RentalMovie from rental circulation and makes it
+     * a sale movie.  It does this by changing the category of
+     * the videoRental table to "for sale" in
+     * the database, and creating a new entry in the videoSale table.
+     * Except for the change of category and possibly condition in the
+     * videoRental table, the RentalMovie's old information is preserved so
+     * that transactions that involved renting it in the past can still be
+     * looked up.
+     *
+     * This method does not check the condition of the movie beforehand.
+     * It assumes that if the movie is lost, or broken by a customer during
+     * a rental period, that the movie can be sold to the customer in lieu of
+     * paying exorbitant overdue fees.
+     *
+     * This method takes an IndividualMovie as a parameter because it will
+     * put the new IndividualMovie created from the old RentalMovie into the
+     * passed reference.  However, the movie passed in should actually be a
+     * RentalMovie and the method throws an exception if this is not the case.
+     * Please be careful.
+     *
+     * @param movie the RentalMovie to change to a sale movie.  Note that the
+     * type of this object MUST be a RentalMovie.
+     * @throws SQLException if a connection to the database cannot be made
+     * @throws ClassNotFoundException if the driver is not installed
+     * @throws IllegalArgumentException if the parameter passed is not a
+     * RentalMovie
+     * @throws IOException if the price cannot be found
+     */
     public static void changeToSale(IndividualMovie movie)
-            throws SQLException, ClassNotFoundException {
+            throws SQLException, ClassNotFoundException, IOException
+    {
+        if (!(movie instanceof RentalMovie))
+        {
+            throw new IllegalArgumentException("Not a Rental Movie.  Cannot "
+                    + "change it from rental to sales.");
+        }
+
         // Attributes of videoSale that need to be filled in:
         // saleID: int
         // condition: String
@@ -587,7 +623,9 @@ public class RentalMovieManagement {
                 movie.getFormat(),
                 movie.getLength());
         //public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition)
-        movie = new IndividualMovie("for sale", movie.getPrice(), SKU, generalMovie, condition);
+        pos.PriceSchemeManagement priceScheme = new pos.PriceSchemeManagement();
+        int price = priceScheme.getPrice(movie.getCategory(), movie.getFormat());
+        movie = new IndividualMovie("for sale", price, SKU, generalMovie, condition);
 
     }
 
@@ -1310,6 +1348,10 @@ public class RentalMovieManagement {
             throws MovieNotFoundException, SQLException, ClassNotFoundException {
         return getAvailableCopies(movie.getSKU());
     }
+
+
+
+    
     private String barcode;
     private String SKU;
     private String rentalID;
