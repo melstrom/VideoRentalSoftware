@@ -84,6 +84,8 @@ public class CustomerFrame extends javax.swing.JFrame {
     }
 
 
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -381,12 +383,13 @@ public class CustomerFrame extends javax.swing.JFrame {
 
         //SearchTableModel
         
-
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ReserveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReserveButtonActionPerformed
         // TODO add your handling code here:
+        if(this.localUIC.getKey().isLogin()){
+
+        }
         new ReseveMovieDialog(this, false, localUIC).setVisible(true);
 }//GEN-LAST:event_ReserveButtonActionPerformed
 
