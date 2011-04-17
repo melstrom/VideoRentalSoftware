@@ -237,6 +237,20 @@ public static Connection getConnection()
 
 
     /**
+     * Creates a query that will delete a row from the specified table if it
+     * matches the specified constraint, if it's executed
+     * @param tableName the table to delete from
+     * @param constraint the constraint that specifies which rows to delete
+     * @return a string containing a formed query
+     */
+    public static String makeDelete(String tableName, String constraint)
+    {
+        return "DELETE FROM "+tableName+" WHERE "+constraint;
+    }
+
+
+
+    /**
      * This method gets the results of an SQL query that you provide
      * @param query a SELECT FROM WHERE query
      * @return the results of the query

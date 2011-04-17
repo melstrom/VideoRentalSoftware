@@ -120,6 +120,34 @@ public class AccountManagement
             JDBC.closeConnection();
         }
     }
+    
+    /**
+     * Edits personal information with 4 attributes
+     * @param Fname the first name of the user
+     * @param Lname the last name of the user
+     * @param address the address of the user
+     * @param phoneNum the phone number of the user
+     */
+        public void editPersonalInfo(String Fname, String Lname, Address address, String phoneNum)
+    {
+        account.setPersonalInfo(Fname, Lname, address, phoneNum);
+    }
+
+    /**
+     * Edits personal information with 5 attributes
+     * @param DL the driver license id of the customer
+     * @param Fname the first name of the user
+     * @param Lname the last name of the user
+     * @param address the address of the user
+     * @param phoneNum the phone number of the user
+     */
+    public void editPersonalInfo(String DL, String Fname, String Lname, Address address, String phoneNum)
+    {
+        Customer customer = (Customer) account;
+        customer.setPersonalInfo(Fname, Lname, address, phoneNum);
+        customer.setDL(DL);
+        account = customer;
+    }
 
     /**
      * Generates a new employeeID or customerID from the database for a employee or customer
@@ -138,6 +166,50 @@ public class AccountManagement
         int LastID = rs.getInt(column);
         int newID = LastID + 1;
         return newID;
+    }
+    
+    /**
+     * Promote an employee to manager
+     */
+    public void promoteEmployee(int employeeID) throws SQLException
+    {
+        //TODO: Throw exception if employee is already an manager
+        st = JDBC.createStatement();
+        String table = "employee";
+        String column = "position";
+        String query = "SELECT " + column + " FROM " + table + " WHERE employeeID = " + employeeID;
+        ResultSet rs = st.executeQuery(query);
+        if (rs.next()==!false)
+        {
+            String result = rs.getString(1);
+            if (!result.equals("manager"))
+            {
+                String SQL = "UPDATE " + table + " SET " + column + " = 'Manager' WHERE employeeID = " + employeeID;
+                st.executeUpdate(SQL);
+            }
+        }
+    }
+
+    /**
+     * Demote a manager to employee
+     */
+    public void demoteManager(int employeeID) throws SQLException
+    {
+        //TODO: Throw exception if employee is already an employee
+        st = JDBC.createStatement();
+        String table = "employee";
+        String column = "position";
+        String query = "SELECT " + column + " FROM " + table + " WHERE employeeID = " + employeeID;
+        ResultSet rs = st.executeQuery(query);
+        if (rs.next()==!false)
+        {
+            String result = rs.getString(1);
+            if (!result.equals("Employee"))
+            {
+                String SQL = "UPDATE " + table + " SET " + column + " = 'Employee' WHERE employeeID = " + employeeID;
+                st.executeUpdate(SQL);
+            }
+        }
     }
 
     /**
@@ -214,74 +286,6 @@ public class AccountManagement
         + address.getPostalCode() + "')";
         return SQL;
     }
-
-    /**
-     * Edit an existing account
-     * @param aAccount the account
-     * @param accountType the type of the account
-     */
-    public void editAccount(Object aAccount, String accountType)
-    {
-        if (accountType.equals("employee"))
-        {
-            Employee employee = (Employee) aAccount;
-            account = employee;
-        }
-
-        else if (accountType.equals("customer"))
-        {
-            Customer customer = (Customer) aAccount;
-            account = customer;
-        }
-    }
-
-    /**
-     * Edits personal information with 4 attributes
-     * @param Fname the first name of the user
-     * @param Lname the last name of the user
-     * @param address the address of the user
-     * @param phoneNum the phone number of the user
-     */
-    public void editPersonalInfo(String Fname, String Lname, Address address, String phoneNum)
-    {
-        account.setPersonalInfo(Fname, Lname, address, phoneNum);
-    }
-
-    /**
-     * Edits personal information with 5 attributes
-     * @param DL the driver license id of the customer
-     * @param Fname the first name of the user
-     * @param Lname the last name of the user
-     * @param address the address of the user
-     * @param phoneNum the phone number of the user
-     */
-    public void editPersonalInfo(String DL, String Fname, String Lname, Address address, String phoneNum)
-    {
-        Customer customer = (Customer) account;
-        customer.setPersonalInfo(Fname, Lname, address, phoneNum);
-        customer.setDL(DL);
-        account = customer;
-    }
-
-    /**
-     * Promote an employee to manager
-     */
-    public void promoteEmployee()
-    {
-        Employee employee = (Employee) account;
-        employee.setPosition("Manager");
-        account = employee;
-    }
-
-    /**
-     * Demote a manager to employee
-     */
-    public void demoteManager()
-    {
-        Employee employee = (Employee) account;
-        employee.setPosition("Employee");
-        account = employee;
-    }
 }
 
 //    /**
@@ -317,4 +321,26 @@ public class AccountManagement
 //    public void changeStatus()
 //    {
 //        account.changeStatus();
+//    }
+
+
+
+//    /**
+//     * Edit an existing account
+//     * @param aAccount the account
+//     * @param accountType the type of the account
+//     */
+//    public void editAccount(Object aAccount, String accountType)
+//    {
+//        if (accountType.equals("employee"))
+//        {
+//            Employee employee = (Employee) aAccount;
+//            account = employee;
+//        }
+//
+//        else if (accountType.equals("customer"))
+//        {
+//            Customer customer = (Customer) aAccount;
+//            account = customer;
+//        }
 //    }
