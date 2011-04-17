@@ -1114,6 +1114,7 @@ public class Search
      *      (movieInfo.infoID = physicalVideo.infoID
      *          AND physicalVideo.SKU = videoRental.SKU) AND
      *      customer.rentalID = videoRental.rentalID
+     *      AND videoRental.catagory <> 'for sale'
      *
      * It does this by collecting each attribute query in an arrayList
      * then forming a string
@@ -1124,7 +1125,7 @@ public class Search
      * @param memberID
      * @return an SQL query for all rental movies matching the passed search
      * criteria, or null if no movies could be found.
-     *
+     * TODO: make sure that category is not for sale
      * TODO: need to fix the SQL, especially for customer.
      * It might make more sense to give every RentalVideo a memberID instead.
      */
@@ -1149,9 +1150,7 @@ public class Search
         String customerFromClause = ", customer";
         String movieWhereClause = "(videoInfo.infoID = physicalVideo.infoID"
                     + " AND physicalVideo.SKU = videoRental.SKU)";
-        String actorsWhereClause = "(customer.customerID = videoRental.customerID";
         boolean needsMovieWhereClause = false;
-        boolean needsActorsWhereClause = false;
 
         if (title != null)
         {
@@ -1217,6 +1216,7 @@ public class Search
             {
                 query += " AND " + clause;
             }
+            query += " AND videoRental.catagory <> 'for sale'";
             return query;
 
         }
