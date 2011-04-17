@@ -165,6 +165,14 @@ public class MovieManagement
     /**
      * This method creates new GeneralMovies in the Database
      * given a .csv file name
+     * The file passed must be a comma delimited file with every entry on a
+     * new line.  It must have the following information, in the specific order:
+     * SKU, title, releaseDate, studio, genre, director, producer, rating, priceInDollars, length, format, actor1, actor2, ..., actor_n
+     * Any deviation from the order will corrupt the database.
+     * Any deviation from the number of parameters will result in either
+     * database corruption or an ArrayOutOfBoundsException.
+     * There must be at least one actor, but many may be added so long as they
+     * are separated by commas.
      * @param filename the filename. it must be a .csv file
      * @throws IOException
      * @throws Exception
@@ -710,41 +718,30 @@ public class MovieManagement
         return movieRequest;
     }
 
-//    /**
-//     * Add a request to request list
-//     * @param copy
-//     * @param account
-//     */
-//    public void addRequest(GeneralMovie movie, Customer account)throws SQLException
-//    {
-//        this.movie = movie;
-//        String SKU = movie.getSKU();
-//        //TODO: Get current time
-//        GregorianCalendar requestDate = new GregorianCalendar();
-//        int customerID = account.getAccountID();
-//
-//        this.request = new MovieRequest(SKU, customerID, requestDate);
-//        createRequest(movie, account);
-//    }
-
     /**
      * Create query for special order
      * @param copy
      * @param account
      * @throws SQLException
      */
-    public void addRequest(GeneralMovie movie, int customerID)throws SQLException
+    public void addRequest(GeneralMovie movie, int customerID)throws SQLException, RequestAlreadyExistsException
     {
         int requestingCustomer = customerID;
         String tablename = "madeSpecialOrders";
         String columns[] = {"datetime", "SKU", "customerID"};
+
+        String query = "SELECT SKU, customerID FROM " + tablename + " WHERE customerID = " + customerID + " AND SKU = '" + movie.getSKU() + "'";
+        if (statement.execute(query)==true)
+        {
+            throw new RequestAlreadyExistsException ("The same request has already been made");
+        }
         Calendar today = Calendar.getInstance();
         today.setTime(today.getTime());
         String time = makeReleaseDateString((GregorianCalendar)today);
         String values[] = {time,movie.getSKU(),""+requestingCustomer};
         //TODO: Duplicate requests can be added; need to ask about db keys
-        String query = generateInsertSQL(tablename, columns, values);
-        statement.executeUpdate(query);
+        String SQL = generateInsertSQL(tablename, columns, values);
+        statement.executeUpdate(SQL);
     }
 
     /**

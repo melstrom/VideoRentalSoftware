@@ -171,7 +171,7 @@ public class AccountManagement
     /**
      * Promote an employee to manager
      */
-    public void promoteEmployee(int employeeID) throws SQLException
+    public void promoteEmployee(int employeeID) throws SQLException, AlreadyManagerException
     {
         //TODO: Throw exception if employee is already an manager
         st = JDBC.createStatement();
@@ -184,16 +184,17 @@ public class AccountManagement
             String result = rs.getString(1);
             if (!result.equals("manager"))
             {
-                String SQL = "UPDATE " + table + " SET " + column + " = 'Manager' WHERE employeeID = " + employeeID;
-                st.executeUpdate(SQL);
+                throw new AlreadyManagerException("The employee is already a manager");
             }
+        String SQL = "UPDATE " + table + " SET " + column + " = 'Manager' WHERE employeeID = " + employeeID;
+        st.executeUpdate(SQL);
         }
     }
 
     /**
      * Demote a manager to employee
      */
-    public void demoteManager(int employeeID) throws SQLException
+    public void demoteManager(int employeeID) throws SQLException, NotManagerException
     {
         //TODO: Throw exception if employee is already an employee
         st = JDBC.createStatement();
@@ -204,10 +205,9 @@ public class AccountManagement
         if (rs.next()==!false)
         {
             String result = rs.getString(1);
-            if (!result.equals("Employee"))
+            if (result.equals("Employee"))
             {
-                String SQL = "UPDATE " + table + " SET " + column + " = 'Employee' WHERE employeeID = " + employeeID;
-                st.executeUpdate(SQL);
+                throw new NotManagerException("The employee is not a manager");
             }
         }
     }
