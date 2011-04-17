@@ -19,20 +19,25 @@ public class Test_Customer
     {
 	SQLhelper mySQLhelper = new SQLhelper();
 
-	Address empAddress = new Address(223, "Cambie st.", "Vancouver", "B.C.", "Canada", "V6V 1V1");
+	Address empAddress = new Address(552, "Cambie st.", "Vancouver", "B.C.", "Canada", "V6V 1V1");
 
 
-	String position = "slave";
+	
 	int accountID = 5;
 	int employeeID = 6;
 	String firstName = "CustomerFName";
 	String lastName = "Smith";
 	//String address = "4321 Electric Ave.";
 	String phoneNum = "604-888-9876";
-	Employee myEmployee = new Employee(position, accountID, firstName, lastName, empAddress, phoneNum);
-	// any accountID given is not used, the constructor should not have that parameter. The db sets it.
-	Customer myCustomer = new Customer("DL GOES HERE", 666, "FFFF", "LLLL", empAddress, phoneNum); 
+	String dl = "666123456";
+	
+	// any accountID given to  "createAccount()" is not used,  The method sets it.
+	Customer myCustomer = new Customer(dl, 666, firstName, lastName, empAddress, phoneNum); 
 	mySQLhelper.createAccount(myCustomer);
+	
+	/*
+	SELECT customerID, firstName, city, phoneNum FROM address.addressID=account.addressID AND account.accountID=customer.accountID;
+	*/
 
     }
 
