@@ -65,10 +65,10 @@ public class AccountManagement
         {
             String addressInsert = this.createAddressInsertSQL(address, addressID);
             String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
-            String employeeInsert = "INSERT INTO employee (employeeID, accountID, position) value("
-                    + employeeID + ","
-                    + accountID + ",'"
-                    + position + "')";
+            String employeeInsert = "INSERT INTO employee (employeeID, accountID, position) values ("
+                    + "'"+employeeID+"'" + ","
+                    + "'"+accountID+"'" + ","
+                    + "'"+position+"'" + ")";
             statement.executeUpdate(addressInsert);
             statement.executeUpdate(accountInsert);
             statement.executeUpdate(employeeInsert);
@@ -103,11 +103,11 @@ public class AccountManagement
             String addressInsert = this.createAddressInsertSQL(address, addressID);
             String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
 
-            String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense, penalty) value("
-                    + customerID + ","
-                    + accountID + ",'"
-                    + DL + "',"
-                    + "0";
+            String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense, penalty) values ("
+                    + "'"+customerID+"'" + ","
+                    + "'"+accountID+"'" + ","
+                    + "'"+DL+"'" + ","
+                    + "'0')";
             statement.executeUpdate(addressInsert);
             statement.executeUpdate(accountInsert);
             statement.executeUpdate(customerInsert);
@@ -152,6 +152,11 @@ public class AccountManagement
      * @return A new ID for a customer or employee
      * @throws SQLException
      */
+    /*
+     * This method works, however it has been commented out because we are
+     * attempting to find a solution that does not require a dummy employee
+     * or customer stuck in the database
+     * Commented out by Mitch: 17 April
     public int generateNewID(String accountType) throws SQLException
     {
         String table = accountType;
@@ -163,6 +168,98 @@ public class AccountManagement
         int newID = LastID + 1;
         return newID;
     }
+     *
+     */
+    
+    
+    
+    
+    /**
+     * This method generates a new employee or customer ID.  It finds the 
+     * highest previous value of the ID and adds one to it to obtain a new
+     * unique ID.  If there are no values in the database, then it automatically
+     * starts at the minimum possible value.
+     * 
+     * @param accountType the type of account.  Must be either employee or customer
+     * @return the new ID
+     * @throws SQLException if a connection the database cannot be made
+     * @throws AccountLimitReachedException if the maximum number of accounts, either
+     * customer or employee depending on the accountType, has been reached
+     * @throws IllegalArgumentException if the accountType is not customer
+     * or employee
+     */
+    public int generateNewID(String accountType) throws SQLException,
+            AccountLimitReachedException, ClassNotFoundException
+    {
+        String table = accountType;
+        String column = accountType + "ID";
+        int highestID = getHighestID(table, column);
+        int newHighestID = highestID + 1;
+        int maxCustomerID = Integer.MAX_VALUE;
+        int maxEmployeeID = (int) Math.pow(10, Customer.ID_LENGTH -1) * Customer.ID_START_DIGIT - 1;
+        if (accountType.equalsIgnoreCase("customer") && newHighestID > maxCustomerID)
+        {
+            throw new AccountLimitReachedException("The maximum number of " +
+                    "customer accounts has been reached");
+        }
+        else if (accountType.equalsIgnoreCase("employee") && newHighestID > maxEmployeeID)
+        {
+            throw new AccountLimitReachedException("The maximum number" +
+                    " of employee accounts has been reached");
+        }
+        return newHighestID;
+    }
+
+
+
+    /**
+     * This method finds the highest ID number that currently exists
+     * for either an employee or customer or account or address
+     * @return the highest ID
+     * @throws SQLException
+     * @throws IllegalArgumentException if the table is not
+     * account, customer, employee, or address
+     */
+    private int getHighestID(String table, String column)
+            throws SQLException, ClassNotFoundException
+    {
+        String query = JDBCConnection.makeQuery(table, "MAX(" + column + ")", null);
+
+        
+        if (connection.isClosed())
+        {
+            setupConnection();
+        }
+        ResultSet result = statement.executeQuery(query);//conn.getResults(query);
+        if (result.next() && result.getInt(1) != 0)
+        {
+                return result.getInt(1);
+        }
+        else if (table.equalsIgnoreCase("customer"))
+        {
+            return (int) (Math.pow(10, Customer.ID_LENGTH - 1) * Customer.ID_START_DIGIT);
+        }
+        else if (table.equalsIgnoreCase("employee"))
+        {
+            return (int) (Math.pow(10, Employee.ID_LENGTH - 1) * Employee.ID_START_DIGIT);
+        }
+        else if (table.equalsIgnoreCase("account"))
+        {
+            return 0;
+        }
+        else if (table.equalsIgnoreCase("address"))
+        {
+            return 0;
+        }
+        else
+        {
+            throw new IllegalArgumentException("Cannot find the highest ID of" +
+                    " "+table);
+        }
+        
+    }
+    
+    
     
     /**
      * Promote an employee to manager
@@ -209,6 +306,11 @@ public class AccountManagement
      * @return The next accountID for the address table
      * @throws SQLException
      */
+    /*
+     * This code workds, however it has been commented out in an attempt
+     * to remove the need for a dummy account in the database
+     * commented out by Mitch: 17 April
+     *
     private int generateNewAccountID() throws SQLException
     {
         String table = "account";
@@ -220,12 +322,38 @@ public class AccountManagement
         int newAccountID = LastAccountID + 1;
         return newAccountID;
     }
+     * 
+     */
+
+
+
+    /**
+     * This method generates a new account ID.  The account ID is only ever
+     * used in the database.
+     * @return a new, unique AccountID
+     * @throws SQLException
+     */
+    private int generateNewAccountID() throws SQLException, ClassNotFoundException
+    {
+        String table = "account";
+        String column = "accountID";
+        int highestID = getHighestID(table, column);
+        return highestID + 1;
+    }
+
+
 
     /**
      * Generates a new addressID from the database for a new address
      * @return The next addressID for the address table
      * @throws SQLException
      */
+    /*
+     * This code works but it has been commented out in an attempt to
+     * find a solution that does not require dummy values to be inserted into
+     * the database
+     * Commented out by Mitch: 17 April
+     * 
     private int generateAddressID () throws SQLException
     {
         String table = "address";
@@ -237,6 +365,26 @@ public class AccountManagement
         int newAccountID = LastAccountID + 1;
         return newAccountID;
     }
+     *
+     */
+
+
+
+    /**
+     * This method generates a new account ID.  The account ID is only ever
+     * used in the database.
+     * @return a new, unique AccountID
+     * @throws SQLException
+     */
+    private int generateAddressID() throws SQLException, ClassNotFoundException
+    {
+        String table = "address";
+        String column = "addressID";
+        int highestID = getHighestID(table, column);
+        return highestID + 1;
+    }
+
+
 
     /**
      * Prepares a SQL statement to insert a new account

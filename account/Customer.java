@@ -50,4 +50,5 @@ public class Customer extends Account
         return super.getAccountID();
     }
     private String DL;
+    public static final int ID_START_DIGIT = 5;
 }

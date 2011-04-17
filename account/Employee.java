@@ -14,6 +14,12 @@ package account;
 public class Employee extends Account
 {
     private String position;
+    public static final int ID_START_DIGIT = 1;
+
+
+
+
+
     /**
      * Default constructor of Employee
      * @param position the position of the employee (Manager/Staff)

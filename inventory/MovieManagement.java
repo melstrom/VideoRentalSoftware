@@ -474,12 +474,15 @@ public class MovieManagement
                     return result.getInt(1);
                 }
             }
+            else
+            {
+                return (int) Math.pow(10, GeneralMovie.INFO_ID_LENGTH);
+            }
         }
         finally
         {
             conn.closeConnection();
         }
-        return -1; // should never get here
     }
 
     /**
