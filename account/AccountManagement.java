@@ -35,16 +35,15 @@ public class AccountManagement
 {
 
     private Account account;
-    private JDBCConnection JDBC;
     private Connection connection;
-    private Statement st;
+    private Statement statement;
 
     /**
      * Default constructor with no parameters
      */
     public AccountManagement() throws SQLException, ClassNotFoundException
     {
-        JDBC = new JDBCConnection();
+        setupConnection();
     }
 
     /**
@@ -64,20 +63,19 @@ public class AccountManagement
         account = new Employee(position, employeeID, Fname, Lname, address, phoneNum);
         try
         {
-            st = JDBC.createStatement();
             String addressInsert = this.createAddressInsertSQL(address, addressID);
             String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
             String employeeInsert = "INSERT INTO employee (employeeID, accountID, position) value("
                     + employeeID + ","
                     + accountID + ",'"
                     + position + "')";
-            st.executeUpdate(addressInsert);
-            st.executeUpdate(accountInsert);
-            st.executeUpdate(employeeInsert);
+            statement.executeUpdate(addressInsert);
+            statement.executeUpdate(accountInsert);
+            statement.executeUpdate(employeeInsert);
         }
         finally
         {
-            JDBC.closeConnection();
+            connection.close();
         }
     }
 
@@ -102,7 +100,6 @@ public class AccountManagement
         account = new Customer(DL, customerID, Fname, Lname, address, phoneNum);
         try
         {
-            st = JDBC.createStatement();
             String addressInsert = this.createAddressInsertSQL(address, addressID);
             String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
 
@@ -111,13 +108,13 @@ public class AccountManagement
                     + accountID + ",'"
                     + DL + "',"
                     + "0";
-            st.executeUpdate(addressInsert);
-            st.executeUpdate(accountInsert);
-            st.executeUpdate(customerInsert);
+            statement.executeUpdate(addressInsert);
+            statement.executeUpdate(accountInsert);
+            statement.executeUpdate(customerInsert);
         }
         finally
         {
-            JDBC.closeConnection();
+            connection.close();
         }
     }
     
@@ -157,11 +154,10 @@ public class AccountManagement
      */
     public int generateNewID(String accountType) throws SQLException
     {
-        st = JDBC.createStatement();
         String table = accountType;
         String column = accountType + "ID";
         String SQL = "SELECT " + column + " FROM " + table;
-        ResultSet rs = st.executeQuery(SQL);
+        ResultSet rs = statement.executeQuery(SQL);
         rs.last();
         int LastID = rs.getInt(column);
         int newID = LastID + 1;
@@ -173,12 +169,10 @@ public class AccountManagement
      */
     public void promoteEmployee(int employeeID) throws SQLException, AlreadyManagerException
     {
-        //TODO: Throw exception if employee is already an manager
-        st = JDBC.createStatement();
         String table = "employee";
         String column = "position";
         String query = "SELECT " + column + " FROM " + table + " WHERE employeeID = " + employeeID;
-        ResultSet rs = st.executeQuery(query);
+        ResultSet rs = statement.executeQuery(query);
         if (rs.next()==!false)
         {
             String result = rs.getString(1);
@@ -187,7 +181,7 @@ public class AccountManagement
                 throw new AlreadyManagerException("The employee is already a manager");
             }
         String SQL = "UPDATE " + table + " SET " + column + " = 'Manager' WHERE employeeID = " + employeeID;
-        st.executeUpdate(SQL);
+        statement.executeUpdate(SQL);
         }
     }
 
@@ -196,12 +190,10 @@ public class AccountManagement
      */
     public void demoteManager(int employeeID) throws SQLException, NotManagerException
     {
-        //TODO: Throw exception if employee is already an employee
-        st = JDBC.createStatement();
         String table = "employee";
         String column = "position";
         String query = "SELECT " + column + " FROM " + table + " WHERE employeeID = " + employeeID;
-        ResultSet rs = st.executeQuery(query);
+        ResultSet rs = statement.executeQuery(query);
         if (rs.next()==!false)
         {
             String result = rs.getString(1);
@@ -219,11 +211,10 @@ public class AccountManagement
      */
     private int generateNewAccountID() throws SQLException
     {
-        st = JDBC.createStatement();
         String table = "account";
         String column = "accountID";
         String SQL = "SELECT " + column + " FROM " + table;
-        ResultSet rs = st.executeQuery(SQL);
+        ResultSet rs = statement.executeQuery(SQL);
         rs.last();
         int LastAccountID = rs.getInt(column);
         int newAccountID = LastAccountID + 1;
@@ -237,11 +228,10 @@ public class AccountManagement
      */
     private int generateAddressID () throws SQLException
     {
-        st = JDBC.createStatement();
         String table = "address";
         String column = "addressID";
         String SQL = "SELECT " + column + " FROM " + table;
-        ResultSet rs = st.executeQuery(SQL);
+        ResultSet rs = statement.executeQuery(SQL);
         rs.last();
         int LastAccountID = rs.getInt(column);
         int newAccountID = LastAccountID + 1;
@@ -285,6 +275,17 @@ public class AccountManagement
         + address.getCountry() + "','"
         + address.getPostalCode() + "')";
         return SQL;
+    }
+
+        /**
+     * Sets up the database connection for the class
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    private void setupConnection() throws SQLException, ClassNotFoundException
+    {
+        connection = JDBCConnection.getJDBCConnection();
+        statement = connection.createStatement();
     }
 }
 
