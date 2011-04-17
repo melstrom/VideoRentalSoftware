@@ -106,6 +106,30 @@ public class Authentication
                 return TypeOfPerson.NOT_LOGIN;
         }
 
+        public boolean isLogin()
+        {
+            TypeOfPerson type = whoAmI();
+            if(type == TypeOfPerson.NOT_LOGIN)
+                return false;
+            return true;
+        }
+
+        public boolean isCustomer()
+        {
+            TypeOfPerson type = whoAmI();
+            if(type == TypeOfPerson.CUSTOMER)
+                return true;
+            return false;
+        }
+
+        public boolean isManager()
+        {
+            TypeOfPerson type = whoAmI();
+            if(type == TypeOfPerson.MANAGER)
+                return true;
+            return false;
+        }
+
         /**
          * User please cancatinate the account object to Customer or Employee
          * @return
@@ -117,7 +141,7 @@ public class Authentication
 
         public boolean logout()
         {
-            if(account !=null)
+            if(account == null)
                 return false;
             account = null;
             return true;
