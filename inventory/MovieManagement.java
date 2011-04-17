@@ -710,41 +710,30 @@ public class MovieManagement
         return movieRequest;
     }
 
-//    /**
-//     * Add a request to request list
-//     * @param copy
-//     * @param account
-//     */
-//    public void addRequest(GeneralMovie movie, Customer account)throws SQLException
-//    {
-//        this.movie = movie;
-//        String SKU = movie.getSKU();
-//        //TODO: Get current time
-//        GregorianCalendar requestDate = new GregorianCalendar();
-//        int customerID = account.getAccountID();
-//
-//        this.request = new MovieRequest(SKU, customerID, requestDate);
-//        createRequest(movie, account);
-//    }
-
     /**
      * Create query for special order
      * @param copy
      * @param account
      * @throws SQLException
      */
-    public void addRequest(GeneralMovie movie, int customerID)throws SQLException
+    public void addRequest(GeneralMovie movie, int customerID)throws SQLException, RequestAlreadyExistsException
     {
         int requestingCustomer = customerID;
         String tablename = "madeSpecialOrders";
         String columns[] = {"datetime", "SKU", "customerID"};
+
+        String query = "SELECT SKU, customerID FROM " + tablename + " WHERE customerID = " + customerID + " AND SKU = '" + movie.getSKU() + "'";
+        if (statement.execute(query)==false)
+        {
+            throw new RequestAlreadyExistsException ("The same request has already been made");
+        }
         Calendar today = Calendar.getInstance();
         today.setTime(today.getTime());
         String time = makeReleaseDateString((GregorianCalendar)today);
         String values[] = {time,movie.getSKU(),""+requestingCustomer};
         //TODO: Duplicate requests can be added; need to ask about db keys
-        String query = generateInsertSQL(tablename, columns, values);
-        statement.executeUpdate(query);
+        String SQL = generateInsertSQL(tablename, columns, values);
+        statement.executeUpdate(SQL);
     }
 
     /**
