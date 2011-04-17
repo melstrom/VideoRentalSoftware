@@ -28,7 +28,7 @@ public abstract class Account
     //private String loginID; this is the accountID
     private String Fname;
     private String Lname;
-    private String phoneNum;
+    protected String phoneNum;
     private Address address;
    // private String password;
 //    private boolean status;
@@ -173,13 +173,7 @@ public abstract class Account
     {
         return address;
     }
-    /**
-     * Get password
-     * @return password the password of the account
-    public String getPassword()
-    {
-        return password;
-    }
+    /*
      * Get status
      * @return status the status of the account (True = Active/False = Inactive)
     public boolean getStatus()

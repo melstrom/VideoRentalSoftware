@@ -62,11 +62,19 @@ public class SaleReport
         {
             String sDateString = "" + startDate.get(startDate.YEAR) + "-" +
                     (startDate.get(startDate.MONTH) + 1) + "-" +
-                    startDate.get(startDate.DATE);
+                    startDate.get(startDate.DATE) + "-" +
+                    startDate.get(startDate.HOUR) + "-" +
+                    startDate.get(startDate.MINUTE) + "-" +
+                    startDate.get(startDate.SECOND);
             String eDateString = "" + endDate.get(endDate.YEAR) + "-" +
                     (endDate.get(endDate.MONTH) + 1) + "-" +
-                    endDate.get(endDate.DATE);
-            
+                    endDate.get(endDate.DATE)+ "-" + 
+                    startDate.get(endDate.HOUR) + "-" + 
+                    startDate.get(endDate.MINUTE) + "-" + 
+                    startDate.get(endDate.SECOND);
+            System.out.println("in salereport constructor"+sDateString);//testing
+            System.out.println("in salereport constructor"+eDateString);//testing
+
             PreparedStatement stat = conn.prepareStatement("SELECT * FROM invoice"
                     + " WHERE dateTime BETWEEN '" + sDateString + "' AND '"
                     + eDateString + "';");
@@ -144,6 +152,8 @@ public class SaleReport
             ArrayList<String> cashInvoiceTaxRate)
             throws SQLException, ClassNotFoundException
     {
+        if(cashInvoiceIDs.size() != 0)
+        {
         JDBCConnection conn = new JDBCConnection();
         conn.getConnection();
         try
@@ -212,6 +222,7 @@ public class SaleReport
         {
             conn.closeConnection();
         }
+        }
     }
 
     /**
@@ -230,6 +241,8 @@ public class SaleReport
             ArrayList<String> debitInvoiceTaxRate)
             throws SQLException, ClassNotFoundException
     {
+        if(debitInvoiceIDs.size() != 0)
+        {
         JDBCConnection conn = new JDBCConnection();
         conn.getConnection();
         try
@@ -284,6 +297,7 @@ public class SaleReport
         {
             conn.closeConnection();
         }
+        }
     }
 
     /**
@@ -302,6 +316,8 @@ public class SaleReport
             ArrayList<String> creditInvoiceTaxRate)
             throws SQLException, ClassNotFoundException
     {
+        if(creditInvoiceIDs.size() != 0)
+        {
         JDBCConnection conn = new JDBCConnection();
         conn.getConnection();
         try
@@ -355,6 +371,7 @@ public class SaleReport
         finally
         {
             conn.closeConnection();
+        }
         }
     }
 

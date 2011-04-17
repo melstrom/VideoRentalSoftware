@@ -14,9 +14,6 @@ package account;
 public class Employee extends Account
 {
     private String position;
-    private int employeeID;
-
-	
     /**
      * Default constructor of Employee
      * @param position the position of the employee (Manager/Staff)
@@ -46,7 +43,6 @@ public class Employee extends Account
     public Employee (String position, int accountID, String Fname, String Lname, Address address, String phoneNum, int employeeID)
     {
         super(accountID, Fname, Lname, address,phoneNum);
-		this.employeeID = employeeID;
         this.position = position;
     }
 
@@ -54,15 +50,10 @@ public class Employee extends Account
     	Gets the Employee's ID (employeeID).
     	@return the employee's id
     */
-    public int getEmployeeID() { return employeeID; }
-
-    /**
-    	Sets the Employee's ID (employeeID).
-    	@param employeeID the employee's id
-    */
-    public void setEmployeeID(int employeeID) { this.employeeID = employeeID; }
-
-
+    public int getEmployeeID()
+    {
+        return super.getAccountID();
+    }
     
     /**
      * Get position
@@ -72,6 +63,7 @@ public class Employee extends Account
     {
         return position;
     }
+
     /**
      * Set position
      * @param position the position of the employee
@@ -80,6 +72,7 @@ public class Employee extends Account
     {
         this.position = position;
     }
+    
     /**
      * Check if the employee is a manager
      * @return boolean the value shows this employee is a manager or not
@@ -88,5 +81,4 @@ public class Employee extends Account
     {
        return position.equals("Manager");
     }
-
 }

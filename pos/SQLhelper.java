@@ -83,8 +83,8 @@ public class SQLhelper
 	
 	/**
 	 * Method to add a customer or employee to the database.
-	 * @param theAccount an Account object that has not been saved
-	 * @return barcode the account id
+	 * @param theAccount an Account object that has not been saved; any accountID in this object is not used to save in db because this method will calculate it.
+	 * @return the accountID
 	 * @throws IllegalStateException if the customer or employee is already in the db (based on dl for customer and based on ph for employee)
 	 */
 	public int createAccount(Account theAccount) throws ClassNotFoundException, IllegalStateException, SQLException
@@ -100,7 +100,7 @@ public class SQLhelper
 	    {
 		barcode = insertNewCustomer((Customer)theAccount, accountPrimaryKey);
 	    }
-	    return barcode;
+	    return accountPrimaryKey;
 
 	}
 	/**
@@ -295,7 +295,7 @@ public class SQLhelper
 	}
 	*/
 	
-	/**
+	/*
 		Method to get an ArrayList of all employees in the database.
 		@throws ClassNotFoundException if JDBC driver is not in CLASSPATH
 		@throws SQLException if a database access error occurs or this method is called on a closed connection or no results

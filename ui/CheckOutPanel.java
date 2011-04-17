@@ -12,11 +12,16 @@
 package ui;
 
 import account.Customer;
+import account.Employee;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pos.TransactionManager;
+import pos.Transaction;
 import search.Search;
+
 
 /**
  *
@@ -24,12 +29,21 @@ import search.Search;
  */
 public class CheckOutPanel extends javax.swing.JPanel {
 
-    //CheckINPanel
+    //CheckINPanel local Variables
     private Customer currCustomer;
+    private Employee currEmp;
+    private TransactionManager transactionM;
+    private Transaction currT;
+    private Vector <Vector <String>> tableContent;
+    private Vector <String> header;
+
 
     /** Creates new form CheckOutPanel */
     public CheckOutPanel() {
+        transactionM = new TransactionManager();  //init Transection,
+        initTableData();
         initComponents();
+
     }
 
     /** This method is called from within the constructor to
@@ -75,10 +89,10 @@ public class CheckOutPanel extends javax.swing.JPanel {
         jTextField3.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         jTextField3.setText("0.00");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel6.setText("Total");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel5.setText("HST");
 
         outOkButton.setText("OK");
@@ -89,30 +103,8 @@ public class CheckOutPanel extends javax.swing.JPanel {
         });
 
         transactionTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {new Integer(25), "ET - DVD - Rental", new Integer(700)},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "ID", "Description", "Price"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, true, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+            tableContent, header
+        ));
         transactionScrollPane.setViewportView(transactionTable);
 
         outCustomerInfoPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -228,7 +220,7 @@ public class CheckOutPanel extends javax.swing.JPanel {
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No Discount", "Discount 1" }));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("$");
 
         jButton2.setText("<---");
@@ -348,21 +340,27 @@ public class CheckOutPanel extends javax.swing.JPanel {
             int custID = Integer.parseInt(outCIdField.getText().toString().trim());
             //System.out.println("al-custid = "+custID);
             currCustomer = Search.getCustomer(custID);
+            if(currCustomer == null){
+                outNameField.setText("Customer Not Found!");
+            }else{
+                outNameField.setText(currCustomer.getFname()+" "+currCustomer.getLname());
+                outPhoneField.setText(currCustomer.getPhoneNum());
+                outLicenseField.setText(currCustomer.getDL());
+            //outPenaltyField.setText(currCustomer);
+            }
+            setTransection( currCustomer, currEmp);
+
+        } catch (java.lang.NumberFormatException ex){
+            //User enter noting.
+            cleanUpInputs();
+            outNameField.setText("No Customer ID!");
         } catch (SQLException ex) {
             Logger.getLogger(EmployeeFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(EmployeeFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if(currCustomer == null){
-            outNameField.setText("Customer Not Found!");
-        }else{
-            outNameField.setText(currCustomer.getFname()+" "+currCustomer.getLname());
-            outPhoneField.setText(currCustomer.getPhoneNum());
-            outLicenseField.setText(currCustomer.getDL());
-            //outPenaltyField.setText(currCustomer);
-
-        }
+        
     }//GEN-LAST:event_outOkButtonActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -372,6 +370,46 @@ public class CheckOutPanel extends javax.swing.JPanel {
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
+
+
+    private void initTableData(){
+      tableContent = new Vector<Vector <String>>();
+      for(int i = 0; i < 1; i++){
+          System.out.println("i = " + i);
+          Vector temp = new Vector <String>();
+          temp.add("1231546548795156121354546462455 ");
+          temp.add("7-day Rental");
+          temp.add("3.20");
+
+          tableContent.add(temp);
+      }
+
+      header = new Vector<String>();
+      header.add("Item Barcode"); //Barcode
+      header.add("Description"); // Item Description
+      header.add("Price"); // Item Price
+
+    }
+
+
+    private void UpdateTable() {
+
+
+
+    }
+
+ /**
+ * Creat an Transection
+ * @param cust current customer class
+ * @param emp  current employee class
+ * @return transction object
+ * @pre Customer and Employee object exist
+ * @post a new transeaction object
+ */
+    private void setTransection (Customer cust, Employee emp){
+        transactionM.createTransaction(cust.getFname(), cust.getLname(), cust.getAccountID(), emp.getFname(), emp.getAccountID());
+    }
+
 
     private void numberInputOnly(KeyEvent evt){
             char ch = evt.getKeyChar() ;

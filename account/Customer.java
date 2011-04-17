@@ -22,9 +22,8 @@ public class Customer extends Account
      */
     public Customer (String DL, int accountID, String Fname, String Lname, Address address, String phoneNum)
     {
-        super(accountID, Fname, Lname, address,phoneNum);
+        super(accountID, Fname, Lname, address, phoneNum);
         this.DL = DL;
-	this.barcode = barcode;
     }
     /**
      * Set driver license number
@@ -32,7 +31,7 @@ public class Customer extends Account
      */
     public void setDL(String DL)
     {
-        this.DL=DL;
+        this.DL = DL;
     }
     /**
      * Get driver license number
@@ -46,11 +45,9 @@ public class Customer extends Account
     * Get barcode
     *@return barcode the barcode on the customer's membership card
     */
-    public String getBarcode()
+    public int getCustomerID()
     {
-	    return barcode;
+        return super.getAccountID();
     }
-    
     private String DL;
-    private String barcode;
 }
