@@ -270,14 +270,14 @@ public class AccountManagement
         String column = "position";
         String query = "SELECT " + column + " FROM " + table + " WHERE employeeID = " + employeeID;
         ResultSet rs = statement.executeQuery(query);
-        if (rs.next()==!false)
+        if (rs.next())
         {
             String result = rs.getString(1);
-            if (!result.equals("manager"))
+            if (result.equalsIgnoreCase("manager"))
             {
                 throw new AlreadyManagerException("The employee is already a manager");
             }
-        String SQL = "UPDATE " + table + " SET " + column + " = 'Manager' WHERE employeeID = " + employeeID;
+        String SQL = "UPDATE " + table + " SET " + column + " = 'Manager' WHERE employeeID = " + "'"+employeeID+"'";
         statement.executeUpdate(SQL);
         }
     }
@@ -291,13 +291,18 @@ public class AccountManagement
         String column = "position";
         String query = "SELECT " + column + " FROM " + table + " WHERE employeeID = " + employeeID;
         ResultSet rs = statement.executeQuery(query);
-        if (rs.next()==!false)
+        if (rs.next())
         {
             String result = rs.getString(1);
-            if (result.equals("Employee"))
+            if (result.equalsIgnoreCase("Employee"))
             {
                 throw new NotManagerException("The employee is not a manager");
             }
+
+            String set = column + " = 'Employee'";
+            String constraint = "employeeID = '"+employeeID+"'";
+            String updateQuery = JDBCConnection.makeUpdate(table, set, constraint);
+            statement.executeUpdate(updateQuery);
         }
     }
 
