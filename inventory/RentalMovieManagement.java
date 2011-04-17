@@ -3,23 +3,14 @@ package inventory;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import search.Search;
-import inventory.MovieNotFoundException;
-import inventory.MovieNotAvailableException;
-import inventory.GeneralMovie;
-import inventory.IndividualMovie;
-import inventory.RentalMovie;
-import inventory.Reservation;
-import account.CustomerNotFoundException;
 import account.Customer;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Date;
-import java.util.Locale;
 import jdbconnection.JDBCConnection;
 
 /**
@@ -46,10 +37,8 @@ import jdbconnection.JDBCConnection;
  *
  * Very simple but could run a bit slow if you want to call the setters many times at once.
  *
- * 16 April: setOverdueMovies is incomplete
+ * 16 April: 
  * need to test all setters and getters
- * change to sale and change to rental do not work and need to be rewritten to
- * delete from videoRental and insert into videoSale and vice versa.
  */
 public class RentalMovieManagement {
 
@@ -624,10 +613,14 @@ public class RentalMovieManagement {
      * @throws MovieNotFoundException
      * @throws java.lang.Exception
      */
+    /*
+     * commented out because we are not changing a sale movie back to rental
     public void changeToRental() throws SQLException, MovieNotFoundException, java.lang.Exception {
         movie.setCategory("7 day");
         changeToRentalQuery();
     }
+     *
+     */
     //Utilities
     //--------------------------------------------------------------------------------------------------------------------------------
 
@@ -670,6 +663,8 @@ public class RentalMovieManagement {
         }
     }
 
+
+
     /**
      * This method finds the SKU of a movie from the barcode of a movie
      * @param barcode the barcode of the movie
@@ -680,6 +675,8 @@ public class RentalMovieManagement {
         splitBarcode(barcode, splitBarcode);
         return splitBarcode[0];
     }
+
+
 
     /**
      * This method finds the copy number (either rentalID or saleID) of a
@@ -692,6 +689,8 @@ public class RentalMovieManagement {
         splitBarcode(barcode, splitBarcode);
         return splitBarcode[1];
     }
+
+
 
     /**
      *
@@ -850,6 +849,8 @@ public class RentalMovieManagement {
      * @post a line is added to videoRental
      * @post a line is removed from videoSale
      */
+    /*
+     * commented out because it is unused: Mitch: 16 April
     private void changeToSaleQuery() throws SQLException, MovieNotFoundException, Exception {
         if (movie.getCondition().equals("available")) {
             //add new line in sales table
@@ -860,14 +861,15 @@ public class RentalMovieManagement {
             String query = generateUpdateSQL(table, attribute, attributeTo, where);
             updateDatabase(query);
 
-            /*String[]columnNames = {"SaleID","condition","catagory", "SKU"};
+            String[]columnNames = {"SaleID","condition","catagory", "SKU"};
             String[] values = { rentalID, movie.getCondition(), movie.getCategory(),SKU };
             table = "videoSale";
             query = generateInsertSQL(table, columnNames,values);
-            updateDatabase(query);*/
+            updateDatabase(query);
         }
 
     }
+    */
 
     /**
      * Changes a rental movie to a sale movie and updates the database
