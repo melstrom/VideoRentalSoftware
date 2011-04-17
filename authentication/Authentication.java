@@ -27,9 +27,10 @@ public class Authentication
                 try
                 {
                     String command = "SELECT account.phoneNum " +
-                            "FROM employee, account" +
+                            "FROM employee, account " +
                             "WHERE employee.accountID = account.accountID " +
                             "AND employee.employeeID = " + ID + ";";
+                    System.out.println(command);//testing
                     PreparedStatement stat = conn.prepareStatement(command);
                     ResultSet result = stat.executeQuery();
                     if(result.next())
