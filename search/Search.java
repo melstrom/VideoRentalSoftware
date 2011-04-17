@@ -442,7 +442,7 @@ public class Search
             while (resultSet.next())
             {
                     String position = resultSet.getString("position");
-                    int accountID = resultSet.getInt("accountID");
+                    int accountID = resultSet.getInt("employeeID");
                     String firstName = resultSet.getString("firstName");
                     String lastName = resultSet.getString("lastName");
                     int houseNumber = resultSet.getInt("houseNumber");

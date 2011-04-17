@@ -368,28 +368,29 @@ public class RentalMovieManagement {
      * @pre the input condition is one of the conditions in conditions[]
      * @post one and only one row is changed
      */
-    public void setCondition(String condition)
-            throws IllegalArgumentException, SQLException,
-            MovieNotFoundException, Exception {
-        String original = movie.getCondition();
-
-        /*if(condition.equals(original))
-        {
-        throw new IllegalArgumentException("input selection is the current selection");
-        }*/
-        for (int i = 0; i < conditions.length; i++) {
-            if (condition.equals(conditions[i])) {
-                movie.setCondition(condition.toLowerCase());
-                setConditionQuery(condition);
-            }
-        }
-
-        if (movie.getCondition().equals(original)) {
-            throw new IllegalArgumentException("condition must be lost, broken,reserved, available, rented or overdue");
-        }
-
-
-    }
+//
+//    public void setCondition(String condition)
+//            throws IllegalArgumentException, SQLException,
+//            MovieNotFoundException, Exception {
+//        String original = movie.getCondition();
+//
+//        /*if(condition.equals(original))
+//        {
+//        throw new IllegalArgumentException("input selection is the current selection");
+//        }*/
+//        for (int i = 0; i < conditions.length; i++) {
+//            if (condition.equals(conditions[i])) {
+//                movie.setCondition(condition.toLowerCase());
+//                setConditionQuery(condition);
+//            }
+//        }
+//
+//        if (movie.getCondition().equals(original)) {
+//            throw new IllegalArgumentException("condition must be lost, broken,reserved, available, rented or overdue");
+//        }
+//
+//
+//    }
 
     /**
      * This method finds the rental period in days of a particular movie,
@@ -565,25 +566,25 @@ public class RentalMovieManagement {
      * @pre input category is one of the categories in categories[]
      * @post only one row is changed
      */
-    public void setCategory(String category)
-            throws SQLException, IllegalArgumentException, MovieNotFoundException, Exception {
-        String original = movie.getCategory();
-        /*if(category.equals(original))
-        {
-        throw new IllegalArgumentException("input selection is the current selection");
-        }*/
-
-        for (int i = 0; i < categories.length; i++) {
-            if (category.equals(categories[i])) {
-                movie.setCategory(category);
-                setCategoryQuery(category);
-            }
-        }
-
-        if (movie.getCategory().equals(original)) {
-            throw new IllegalArgumentException("category must be 7 day, new release or for sale");
-        }
-    }
+//    public void setCategory(String category)
+//            throws SQLException, IllegalArgumentException, MovieNotFoundException, Exception {
+//        String original = movie.getCategory();
+//        /*if(category.equals(original))
+//        {
+//        throw new IllegalArgumentException("input selection is the current selection");
+//        }*/
+//
+//        for (int i = 0; i < categories.length; i++) {
+//            if (category.equals(categories[i])) {
+//                movie.setCategory(category);
+//                setCategoryQuery(category);
+//            }
+//        }
+//
+//        if (movie.getCategory().equals(original)) {
+//            throw new IllegalArgumentException("category must be 7 day, new release or for sale");
+//        }
+//    }
 
     //General rental
     //--------------------------------------------------------------------------------------------------------------------------------
