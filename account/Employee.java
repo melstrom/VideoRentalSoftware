@@ -80,5 +80,13 @@ public class Employee extends Account
     {
        return position.equals("Manager");
     }
+    /**
+     * Get password
+     * @return the password for the account (employees' password is their phone number)
+     */
+    public String getPassword()
+    {
+    	return phoneNum;
+    }
 
 }

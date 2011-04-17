@@ -49,6 +49,13 @@ public class Customer extends Account
     {
 	    return super.getAccountID();
     }
-   
+   /**
+     * Get password
+     * @return the password for the account (customers' password is their phone number)
+     */
+    public String getPassword()
+    {
+    	return phoneNum;
+    }
     private String DL;
 }

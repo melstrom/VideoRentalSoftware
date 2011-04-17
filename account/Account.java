@@ -176,10 +176,10 @@ public abstract class Account
     /**
      * Get password
      * @return password the password of the account
-    public String getPassword()
-    {
-        return password;
-    }
+     */
+    abstract String getPassword();
+    
+    /*
      * Get status
      * @return status the status of the account (True = Active/False = Inactive)
     public boolean getStatus()
