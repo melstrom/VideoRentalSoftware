@@ -15,8 +15,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 import pos.PriceScheme;
-import search.Search;
 
 /**
  *
@@ -40,6 +40,7 @@ public class PriceSchemePanel extends javax.swing.JPanel {
 
     /** Creates new form PriceSchemePanel */
     public PriceSchemePanel() {
+
         ArrayList headerString;
         ArrayList formatString;
         //populates the data Arraylist with the prices
@@ -53,18 +54,13 @@ public class PriceSchemePanel extends javax.swing.JPanel {
             formatString = new ArrayList<String>();
             formatString = init.getAllFormats();
             header = ReturnVector(headerString);
-            header.add("");
-
             Vector <String> row;
             for (int i = 0; i < prices.length-1; i++)
             {
                 row = new Vector <String>();
                 row.add(formatString.get(i).toString());
                 for (int j = 0; j < prices[i].length; j++)
-                {
-                    
                     row.add("" + prices[j][i]);
-                }
                 data.add(row);
             }
         }
@@ -74,7 +70,47 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         catch (ClassNotFoundException ex) {
             Logger.getLogger(PriceSchemePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         initComponents();
+
+    }
+    private void makePanel(){
+        ArrayList headerString;
+        ArrayList formatString;
+        //populates the data Arraylist with the prices
+        DefaultTableModel table = (DefaultTableModel)priceSchemaTable.getModel();
+        while (table.getRowCount()>0)
+            table.removeRow(0);
+        data = new Vector <Vector<String>>();
+        try {
+            int[][] prices;
+            PriceScheme init = new PriceScheme();
+            prices = init.getAllPrices();
+            headerString = new ArrayList<String>();
+            headerString = init.getAllCategories();
+            formatString = new ArrayList<String>();
+            formatString = init.getAllFormats();
+            header = ReturnVector(headerString);
+           // header.add("");
+
+            Vector <String> row;
+            for (int i = 0; i < prices.length-1; i++)
+            {
+                row = new Vector <String>();
+                row.add(formatString.get(i).toString());
+                for (int j = 0; j < prices[i].length; j++)
+                    row.add("" + prices[j][i]);
+                table.addRow(row);
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(PriceSchemePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (ClassNotFoundException ex) {
+            Logger.getLogger(PriceSchemePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        table.fireTableStructureChanged();
+        
     }
 
     /** This method is called from within the constructor to
@@ -92,18 +128,19 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         priceSchemaTable = new javax.swing.JTable();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         addFormatPriceSchemeButton.setText("Add Format");
         addFormatPriceSchemeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFormatPriceSchemeButtonActionPerformed(evt);
             }
         });
-        add(addFormatPriceSchemeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 390, -1, -1));
 
         addCategoryPriceSchemeButton.setText("Add Category");
-        add(addCategoryPriceSchemeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 390, -1, -1));
+        addCategoryPriceSchemeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addCategoryPriceSchemeButtonActionPerformed(evt);
+            }
+        });
 
         savePriceSchemeButton.setText("Save Changes");
         savePriceSchemeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -111,7 +148,6 @@ public class PriceSchemePanel extends javax.swing.JPanel {
                 savePriceSchemeButtonActionPerformed(evt);
             }
         });
-        add(savePriceSchemeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 390, -1, -1));
 
         priceSchemaTable.setModel(new javax.swing.table.DefaultTableModel(
             data,header
@@ -127,20 +163,56 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(priceSchemaTable);
 
-        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 608, 356));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(83, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(addFormatPriceSchemeButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(addCategoryPriceSchemeButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(savePriceSchemeButton)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(savePriceSchemeButton)
+                    .addComponent(addCategoryPriceSchemeButton)
+                    .addComponent(addFormatPriceSchemeButton))
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void addFormatPriceSchemeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFormatPriceSchemeButtonActionPerformed
         // TODO add your handling code here:
+        new AddFormatDialog().setVisible(true);
+        makePanel();
 }//GEN-LAST:event_addFormatPriceSchemeButtonActionPerformed
 
     private void savePriceSchemeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePriceSchemeButtonActionPerformed
         // TODO add your handling code here:
+        makePanel();
 }//GEN-LAST:event_savePriceSchemeButtonActionPerformed
 
     private void priceSchemaTableAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_priceSchemaTableAncestorAdded
         // TODO add your handling code here:
 }//GEN-LAST:event_priceSchemaTableAncestorAdded
+
+    private void addCategoryPriceSchemeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCategoryPriceSchemeButtonActionPerformed
+        // TODO add your handling code here:
+        //new PriceCategoryDialog().
+        //makePanel();
+    }//GEN-LAST:event_addCategoryPriceSchemeButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
