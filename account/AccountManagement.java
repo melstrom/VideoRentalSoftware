@@ -117,6 +117,153 @@ public class AccountManagement
             connection.close();
         }
     }
+
+
+
+    /**
+     * This method takes an employee object, with attributes that differ from
+     * the attributes in the database.  It updates the database with this
+     * employee information.  The attribute that should not change is the
+     * employee's accountID (Java class) which is equivalent to the
+     * employeeID in the database.
+     * @param employee an Employee object with attributes that we want to save
+     */
+    public static void editPersonalInfo(Employee employee)
+            throws SQLException, ClassNotFoundException
+    {
+        String table = "employee, account, address";
+        String set = "employee.position = ?";
+        set += ", ";
+        set += "account.firstName = ?";
+        set += ", ";
+        set += "account.lastName = ?";
+        set += ", ";
+        set += "account.phoneNum = ?";
+        set += ", ";
+        set += "address.houseNumber = ?";
+        set += ", ";
+        set += "address.streetName = ?";
+        set += ", ";
+        set += "address.city = ?";
+        set += ", ";
+        set += "address.province = ?";
+        set += ", ";
+        set += "address.country = ?";
+        set += ", ";
+        set += "address.postalCode = ?";
+
+        String constraint = "employee.accountID = account.accountID";
+        constraint += " AND ";
+        constraint += "account.addressID = address.addressID";
+        constraint += " AND ";
+        constraint += "employee.employeeID = ?";
+
+        int numParams = 11;
+        Address address = employee.getAddress();
+        String[] params = {
+            employee.getPosition(),
+            employee.getFname(),
+            employee.getLname(),
+            employee.getPhoneNum(),
+            "" + address.getHouseNumber(),
+            address.getStreetName(),
+            address.getCity(),
+            address.getProvince(),
+            address.getCountry(),
+            address.getPostalCode(),
+            "" + employee.getAccountID()
+        };
+        String updateQuery = JDBCConnection.makeUpdate(table, set, constraint);
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            int linesChanged = connection.update(updateQuery, numParams, params);
+            if (linesChanged == 0)
+            {
+                throw new IllegalArgumentException("Could not find that EmployeeID");
+            }
+            // assert (linesChanged == 1)
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+
+    }
+
+
+
+    /**
+     * This method takes an customer object, with attributes that differ from
+     * the attributes in the database.  It updates the database with this
+     * customer information.  The attribute that should not change is the
+     * customer's accountID (Java class) which is equivalent to the
+     * customerID in the database.
+     * @param customer an customer object with attributes that we want to save
+     */
+    public static void editPersonalInfo(Customer customer)
+            throws SQLException, ClassNotFoundException
+    {
+        String table = "customer, account, address";
+        String set = "customer.driversLicense  = ?";
+        set += ", ";
+        set += "account.firstName = ?";
+        set += ", ";
+        set += "account.lastName = ?";
+        set += ", ";
+        set += "account.phoneNum = ?";
+        set += ", ";
+        set += "address.houseNumber = ?";
+        set += ", ";
+        set += "address.streetName = ?";
+        set += ", ";
+        set += "address.city = ?";
+        set += ", ";
+        set += "address.province = ?";
+        set += ", ";
+        set += "address.country = ?";
+        set += ", ";
+        set += "address.postalCode = ?";
+
+        String constraint = "customer.accountID = account.accountID";
+        constraint += " AND ";
+        constraint += "account.addressID = address.addressID";
+        constraint += " AND ";
+        constraint += "customer.customerID = ?";
+
+        int numParams = 11;
+        Address address = customer.getAddress();
+        String[] params = {
+            customer.getDL(),
+            customer.getFname(),
+            customer.getLname(),
+            customer.getPhoneNum(),
+            "" + address.getHouseNumber(),
+            address.getStreetName(),
+            address.getCity(),
+            address.getProvince(),
+            address.getCountry(),
+            address.getPostalCode(),
+            "" + customer.getAccountID()
+        };
+        String updateQuery = JDBCConnection.makeUpdate(table, set, constraint);
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            int linesChanged = connection.update(updateQuery, numParams, params);
+            if (linesChanged == 0)
+            {
+                throw new IllegalArgumentException("Could not find that CustomerID");
+            }
+            // assert (linesChanged == 1)
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+
+    }
+
     
     /**
      * Edits personal information with 4 attributes
@@ -125,10 +272,16 @@ public class AccountManagement
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
+    /*
+     * Commented out because it doesn't do anything in the database
+     * Mitch 17 April
+     *
         public void editPersonalInfo(String Fname, String Lname, Address address, String phoneNum)
     {
         account.setPersonalInfo(Fname, Lname, address, phoneNum);
     }
+     *
+     */
 
     /**
      * Edits personal information with 5 attributes
@@ -138,6 +291,9 @@ public class AccountManagement
      * @param address the address of the user
      * @param phoneNum the phone number of the user
      */
+    /*
+     * commented out because it doesn't do anything in the database
+     * Mitch 17 April
     public void editPersonalInfo(String DL, String Fname, String Lname, Address address, String phoneNum)
     {
         Customer customer = (Customer) account;
@@ -145,6 +301,8 @@ public class AccountManagement
         customer.setDL(DL);
         account = customer;
     }
+     *
+     */
 
     /**
      * Generates a new employeeID or customerID from the database for a employee or customer
