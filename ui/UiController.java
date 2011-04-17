@@ -113,6 +113,10 @@ public class UiController {
     }
 
 
+    public UiMode getMode(){
+        return mode;
+    }
+
     /**
      * Pop-up an warming message login fail
      */

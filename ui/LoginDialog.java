@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import ui.util.UiMode;
 
 /**
  *
@@ -41,6 +42,8 @@ public class LoginDialog extends javax.swing.JDialog {
         this.UIC = UiC;
         this.key = key;
         initComponents();
+
+
     }
 
 
@@ -176,6 +179,8 @@ public class LoginDialog extends javax.swing.JDialog {
                 msgArea.setText("login ok");
                 this.setVisible(false);
                 UIC.getCurrentFrame().setVisible(true);
+                if(UIC.getMode() == UiMode.Customer)
+                    new ReseveMovieDialog(UIC.getCurrentFrame(), false, UIC).setVisible(true);
 
             }else{
                 msgArea.setForeground(Color.red);
@@ -203,11 +208,17 @@ public class LoginDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
-        System.exit(0);
+        if(UIC.getMode() == UiMode.Customer)
+            this.setVisible(false);
+        else
+            System.exit(0);
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        System.exit(0);
+        if(UIC.getMode() == UiMode.Customer)
+            this.setVisible(false);
+        else
+            System.exit(0);
     }//GEN-LAST:event_formWindowClosed
 
     /**
