@@ -894,8 +894,11 @@ public class MovieManagement
         String constraint = "ORDER BY "+type+"ID";
         String query = generateQuery(table, column, constraint);
         ResultSet resultSet = statement.executeQuery(query);
-        resultSet.last();
-        int LastID = resultSet.getInt(type+"ID");
+        int LastID = 100000000;
+        if (resultSet.last())
+        {
+            LastID = resultSet.getInt(type+"ID");
+        }
         int newID = LastID + 1;
 
         return newID;

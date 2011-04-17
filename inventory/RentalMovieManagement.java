@@ -209,10 +209,11 @@ public class RentalMovieManagement {
         // TODO: checkc condition against database once the condition table is live
         String tableName = "videoSale";
         String set = tableName+".condition = ?";
-        String constraint = tableName+".saleID = ?";
+        String constraint = tableName+".saleID = ? AND "+tableName+".SKU = ?";
         String saleID = movie.getCopyNum();
-        int numParam = 2;
-        String[] params = {newCondition, saleID};
+        String SKU = movie.getSKU();
+        int numParam = 3;
+        String[] params = {newCondition, saleID, SKU};
 
         String updateQuery = JDBCConnection.makeUpdate(tableName, set, constraint);
 
@@ -256,10 +257,11 @@ public class RentalMovieManagement {
         // TODO: checkc condition against database once the condition table is live
         String tableName = "videoRental";
         String set = tableName+".condition = ?";
-        String constraint = tableName+".rentalID = ?";
+        String constraint = tableName+".rentalID = ? AND "+tableName+".SKU = ?";
         String rentalID = movie.getCopyNum();
-        int numParam = 2;
-        String[] params = {newCondition, rentalID};
+        String SKU = movie.getSKU();
+        int numParam = 3;
+        String[] params = {newCondition, rentalID, SKU};
 
         String updateQuery = JDBCConnection.makeUpdate(tableName, set, constraint);
 
@@ -309,10 +311,11 @@ public class RentalMovieManagement {
 
         String tableName = "videoRental";
         String set = tableName+".catagory = ?";
-        String constraint = tableName+".rentalID = ?";
+        String constraint = tableName+".rentalID = ? AND "+tableName+".SKU = ?";
         String rentalID = movie.getCopyNum();
-        int numParam = 2;
-        String[] params = {newCategory, rentalID};
+        String SKU = movie.getSKU();
+        int numParam = 3;
+        String[] params = {newCategory, rentalID, SKU};
 
         String updateQuery = JDBCConnection.makeUpdate(tableName, set, constraint);
 
