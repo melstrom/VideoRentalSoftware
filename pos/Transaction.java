@@ -355,11 +355,10 @@ public class Transaction
                 conn.getConnection();
                 try
                 {
-                    System.out.print("customer id = "+customerID);
                     String command = "INSERT INTO invoice VALUES(" + nextAvailableInvoiceID + ", '" + paymentMethod + "', '"+ transactionDate + "', "+ customerID + ", " + employeeID + ", 1, " + taxPercent + ");";
                     PreparedStatement stat = conn.prepareStatement(command);
                     stat.execute();
-                    return ((double)amountDue)/100 - ((double)(getSubTotal() * getTax())/100);
+                    return (((double)(amountDue))/100) - (((double)(getSubTotal()+getTax()))/100);
                 }
                 finally
                 {
