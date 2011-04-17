@@ -1058,12 +1058,11 @@ public class Search
 
     /**
      * This method searches the database for a rental movie matching the search
-     * criteria.  At least one of the fields must not be null.  This differs
+     * criteria.  At least one of the fields must not be null and non blank.  This differs
      * from the searchVideo method by finding every single rental copy
      * available.  Therefore it will not search movies that are not carried by
      * the store.
      *
-     * TODO: possibly make this IndividualMovie to cover saleSearch too
      *
      * @param title the title of the movie
      * @param actor an actor in the movie
@@ -1072,7 +1071,7 @@ public class Search
      * @return a list of videos that match the search criteria, or null if
      * no matching videos could be found.
      * @throws SQLException if a database connection cannot be made
-     * @throws SanitizerException if any search terms contain SQL commands
+     * @throws IllegalArgumentException if the parameters are all blank
      */
     public static ArrayList<RentalMovie> searchRentals(
             String title,
@@ -1124,10 +1123,8 @@ public class Search
      * @param director
      * @param memberID
      * @return an SQL query for all rental movies matching the passed search
+     * @throws IllegalArgumentException if the parameters are all blank
      * criteria, or null if no movies could be found.
-     * TODO: make sure that category is not for sale
-     * TODO: need to fix the SQL, especially for customer.
-     * It might make more sense to give every RentalVideo a memberID instead.
      */
     private static String searchRentalsGenerateQuery(
             String title,
@@ -1152,7 +1149,7 @@ public class Search
                     + " AND physicalVideo.SKU = videoRental.SKU)";
         boolean needsMovieWhereClause = false;
 
-        if (title != null)
+        if (title != null && title.trim().length() > 0)
         {
             searchCriteria.add("videoInfo.title LIKE ? ");
             needsMovieWhereClause = true;
@@ -1180,7 +1177,7 @@ public class Search
             needsMovieWhereClause = true;
         }
         
-        if (director != null)
+        if (director != null && director.trim().length() > 0)
         {
             searchCriteria.add("videoInfo.director LIKE ? ");
             needsMovieWhereClause = true;
@@ -1189,7 +1186,7 @@ public class Search
 
         if (memberID != null)
         {
-            searchCriteria.add("customer.customerID LIKE ? ");
+            searchCriteria.add("customer.customerID = ? ");
             whereClause.add("videoRental.customerID = customer.customerID ");
             fromQuery += customerFromClause;
         }
@@ -1222,7 +1219,7 @@ public class Search
         }
         else
         {
-            return null;
+            throw new IllegalArgumentException("No search terms provided");
         }
     }
 
@@ -1262,7 +1259,7 @@ public class Search
             {
                 if (searchTerms.get(i) != null)
                 {
-                    statement.setString(parameterIndex, pad(searchTerms.get(i)));
+                    statement.setString(parameterIndex, searchTerms.get(i));
                     parameterIndex++;
                 }
             } // end for
@@ -1294,18 +1291,18 @@ public class Search
         ArrayList<String> searchTerms = new ArrayList<String>();
         if (title != null)
         {
-            searchTerms.add(title);
+            searchTerms.add(pad(title));
         }
         if (actors != null)
         {
             for (String actor : actors)
             {
-                searchTerms.add("%" + actor + "%");
+                searchTerms.add(pad(actor));
             }
         }
         if (director != null)
         {
-            searchTerms.add(director);
+            searchTerms.add(pad(director));
         }
         if (memberID != null)
         {

@@ -191,8 +191,10 @@ public class RentalMovieManagement {
 
 
     /**
-     * This method sets a new condition for the specified movie.  The condition
-     * will be checked against the conditions listed in the database.
+     * This method sets a new condition for the specified movie.
+     * The condition attribute of the passed IndividualMovie will be changed
+     * accordingly.
+     *
      * @param newCondition the new condition for the movie
      * @param movie the movie that you want to change
      * @throws SQLException if a connection to the database cannot be made
@@ -204,15 +206,149 @@ public class RentalMovieManagement {
     public static void setCondition(String newCondition, IndividualMovie movie)
             throws SQLException, ClassNotFoundException, MovieNotFoundException
     {
-        // BOOKMARK
+        // TODO: checkc condition against database once the condition table is live
+        String tableName = "videoSale";
+        String set = tableName+".condition = ?";
+        String constraint = tableName+".saleID = ?";
+        String saleID = movie.getCopyNum();
+        int numParam = 2;
+        String[] params = {newCondition, saleID};
+
+        String updateQuery = JDBCConnection.makeUpdate(tableName, set, constraint);
+
+        // TODO: get rid of JDBCConnection object and try/finally block once
+        // we start passing in JDBCConnection objects
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            int numLinesChanged = connection.update(updateQuery, numParam, params);
+            if (numLinesChanged < 1)
+            {
+                throw new MovieNotFoundException("Movie does not exist in database");
+            }
+            // assert (numLinesChanged == 1);
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+        movie.setCondition(newCondition);
     }
 
 
 
-    public static void setCategory(String newCategory, IndividualMovie movie)
-            throws SQLException, ClassNotFoundException
+    /**
+     * This method sets a new condition for the specified movie.
+     * The condition attribute of the passed RentalMovie will be changed
+     * accordingly.
+     *
+     * @param newCondition the new condition for the movie
+     * @param movie the movie that you want to change
+     * @throws SQLException if a connection to the database cannot be made
+     * @throws ClassNotFoundException if the JDBC driver is not installed
+     * @throws IllegalArgumentException if the condition is not found in the
+     * database
+     * @throws MovieNotFoundException if the movie cannot be found in the database
+     */
+    public static void setCondition(String newCondition, RentalMovie movie)
+            throws SQLException, ClassNotFoundException, MovieNotFoundException
     {
+        // TODO: checkc condition against database once the condition table is live
+        String tableName = "videoRental";
+        String set = tableName+".condition = ?";
+        String constraint = tableName+".rentalID = ?";
+        String rentalID = movie.getCopyNum();
+        int numParam = 2;
+        String[] params = {newCondition, rentalID};
 
+        String updateQuery = JDBCConnection.makeUpdate(tableName, set, constraint);
+
+        // TODO: get rid of JDBCConnection object and try/finally block once
+        // we start passing in JDBCConnection objects
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            int numLinesChanged = connection.update(updateQuery, numParam, params);
+            if (numLinesChanged < 1)
+            {
+                throw new MovieNotFoundException("Movie does not exist in database");
+            }
+            // assert (numLinesChanged == 1);
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+        movie.setCondition(newCondition);
+    }
+
+
+
+    /**
+     * This method sets a new category for a given RentalMovie.
+     * The category is checked to ensure that it exists in the database,
+     * and then if it does the category in the videoRental table is updated,
+     * and the movie passed's category is changed to the specified newCategory
+     *
+     * Unlike setCondition, setCategory has no counterpart for IndividualMovies
+     * since the only possible category for an IndividualMovie object is "for sale"
+     *
+     * @param newCategory the new category of the movie
+     * @param movie the rental movie
+     * @throws SQLException if a database connection cannot be made
+     * @throws ClassNotFoundException if the jdbc driver is not installed
+     * @throws MovieNotFoundException if the movie does not exist in the database
+     * @throws IllegalArgumentException if the newCategory does not exist
+     */
+    public static void setCategory(String newCategory, RentalMovie movie)
+            throws SQLException, ClassNotFoundException, MovieNotFoundException,
+            IllegalArgumentException
+    {
+        String categoryCheckQuery  = JDBCConnection.makeQuery("catagories", "catagory", null);
+
+
+        String tableName = "videoRental";
+        String set = tableName+".catagory = ?";
+        String constraint = tableName+".rentalID = ?";
+        String rentalID = movie.getCopyNum();
+        int numParam = 2;
+        String[] params = {newCategory, rentalID};
+
+        String updateQuery = JDBCConnection.makeUpdate(tableName, set, constraint);
+
+        // TODO: get rid of JDBCConnection object and try/finally block once
+        // we start passing in JDBCConnection objects
+        JDBCConnection connection = new JDBCConnection();
+        try
+        {
+            ResultSet categoryCheckResults = connection.getResults(categoryCheckQuery);
+            boolean categoryExists = false;
+            while(categoryCheckResults.next())
+            {
+                if (categoryCheckResults.getString(1).equalsIgnoreCase(newCategory))
+                {
+                    categoryExists = true;
+                }
+            }
+            if (!categoryExists)
+            {
+                throw new IllegalArgumentException("The category "+newCategory+" " +
+                        "does not exist");
+            }
+
+
+            int numLinesChanged = connection.update(updateQuery, numParam, params);
+            if (numLinesChanged < 1)
+            {
+                throw new MovieNotFoundException("Movie does not exist in database");
+            }
+            // assert (numLinesChanged == 1);
+        }
+        finally
+        {
+            connection.closeConnection();
+        }
+        movie.setCategory(newCategory);
     }
 
 
