@@ -75,6 +75,7 @@ public class PriceSchemeManagement
                     + " SET price=" + price
                     + " WHERE catagory='" + cat.trim().toLowerCase() + "' AND "
                     + "format='" + form.trim().toLowerCase() + "';";
+            System.out.println("inside PSM::setprice : "+ command);//testing
             PreparedStatement stat = conn.prepareStatement(command);
             boolean successful = stat.execute();
             if(!successful)
@@ -108,9 +109,9 @@ public class PriceSchemeManagement
         if(price < 0)
             throw new IOException("Price cannot be less than 0.");
 
-        if(PRICE_SCHEME.getIndexOfCategory(cat.trim().toLowerCase()) >=0 ||
-                PRICE_SCHEME.getIndexOfFormat(form.trim().toLowerCase()) >= 0)
-            throw new IOException("Price already exist.");
+//        if(PRICE_SCHEME.getIndexOfCategory(cat.trim().toLowerCase()) >=0 ||
+//                PRICE_SCHEME.getIndexOfFormat(form.trim().toLowerCase()) >= 0)
+//            throw new IOException("Price already exist.");
 
         if(isValid(cat.trim().toLowerCase(), form.trim().toLowerCase()))
             //if every parameter is valid, then adding the new record to the
@@ -120,14 +121,14 @@ public class PriceSchemeManagement
             conn.getConnection();
             try
             {
+                System.out.println("INSERT INTO pricing "
+                    + "VALUES ("+ price + ", '" + cat.trim().toLowerCase()
+                    + "', '" + form.trim().toLowerCase() + "');");//testing
                 PreparedStatement stat = conn.prepareStatement("INSERT INTO pricing "
                     + "VALUES ("+ price + ", '" + cat.trim().toLowerCase()
-                    + "', '" + form.trim().toLowerCase() + ");");
+                    + "', '" + form.trim().toLowerCase() + "');");
                 boolean successful = stat.execute();
-                if(successful)
-                    PRICE_SCHEME = new PriceScheme();
-                else
-                    throw new SQLException("Fail to update the database.");
+                PRICE_SCHEME = new PriceScheme();
             }
             finally
             {
@@ -209,6 +210,7 @@ public class PriceSchemeManagement
             {
                 String command = "INSERT INTO catagories VALUES ('" + newCat +
                         "', " + period + ");";
+                System.out.println("inside priceschememanangement::addcategory "+command);//testing
                 PreparedStatement stat = conn.prepareStatement(command);
                 stat.executeUpdate();
                 PRICE_SCHEME = new PriceScheme();
