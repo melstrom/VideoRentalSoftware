@@ -41,7 +41,6 @@ import jdbconnection.JDBCConnection;
  * need to test all setters and getters
  */
 public class RentalMovieManagement {
-
     /**
      * Default constructor
      * initialize JDBC connection, default formats, conditions, categories, and currentTime,
@@ -188,6 +187,36 @@ public class RentalMovieManagement {
             throws MovieNotFoundException, SQLException {
         return movie.getCondition();
     }
+
+
+
+    /**
+     * This method sets a new condition for the specified movie.  The condition
+     * will be checked against the conditions listed in the database.
+     * @param newCondition the new condition for the movie
+     * @param movie the movie that you want to change
+     * @throws SQLException if a connection to the database cannot be made
+     * @throws ClassNotFoundException if the JDBC driver is not installed
+     * @throws IllegalArgumentException if the condition is not found in the
+     * database
+     * @throws MovieNotFoundException if the movie cannot be found in the database
+     */
+    public static void setCondition(String newCondition, IndividualMovie movie)
+            throws SQLException, ClassNotFoundException, MovieNotFoundException
+    {
+        // BOOKMARK
+    }
+
+
+
+    public static void setCategory(String newCategory, IndividualMovie movie)
+            throws SQLException, ClassNotFoundException
+    {
+
+    }
+
+
+
 
     /** This method sets the condition of the instanced RentalMovie to a specified
      * value and updates the database.
@@ -548,29 +577,18 @@ public class RentalMovieManagement {
      * a rental period, that the movie can be sold to the customer in lieu of
      * paying exorbitant overdue fees.
      *
-     * This method takes an IndividualMovie as a parameter because it will
-     * put the new IndividualMovie created from the old RentalMovie into the
-     * passed reference.  However, the movie passed in should actually be a
-     * RentalMovie and the method throws an exception if this is not the case.
-     * Please be careful.
+     * Because the old RentalMovie object no longer makes any sense once the
+     * IndividualMovie is created, please set the reference to null.
      *
      * @param movie the RentalMovie to change to a sale movie.  Note that the
      * type of this object MUST be a RentalMovie.
      * @throws SQLException if a connection to the database cannot be made
      * @throws ClassNotFoundException if the driver is not installed
-     * @throws IllegalArgumentException if the parameter passed is not a
-     * RentalMovie
      * @throws IOException if the price cannot be found
      */
-    public static void changeToSale(IndividualMovie movie)
+    public static IndividualMovie changeToSale(RentalMovie movie)
             throws SQLException, ClassNotFoundException, IOException
     {
-        if (!(movie instanceof RentalMovie))
-        {
-            throw new IllegalArgumentException("Not a Rental Movie.  Cannot "
-                    + "change it from rental to sales.");
-        }
-
         // Attributes of videoSale that need to be filled in:
         // saleID: int
         // condition: String
@@ -625,7 +643,7 @@ public class RentalMovieManagement {
         //public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition)
         pos.PriceSchemeManagement priceScheme = new pos.PriceSchemeManagement();
         int price = priceScheme.getPrice(movie.getCategory(), movie.getFormat());
-        movie = new IndividualMovie("for sale", price, SKU, generalMovie, condition);
+        return new IndividualMovie("for sale", price, SKU, generalMovie, condition);
 
     }
 
