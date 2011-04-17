@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
-import account.Customer;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -72,7 +71,6 @@ import java.io.IOException;
 public class MovieManagement
 {
     private GeneralMovie movie = null;
-    private IndividualMovie copy = null;
     private MovieRequest request = null;
     private static Connection connection;
     private static Statement statement;
@@ -735,7 +733,7 @@ public class MovieManagement
      * @param account
      * @throws SQLException
      */
-    public void createRequest(GeneralMovie movie, int customerID)throws SQLException
+    public void addRequest(GeneralMovie movie, int customerID)throws SQLException
     {
         int requestingCustomer = customerID;
         String tablename = "madeSpecialOrders";
@@ -744,6 +742,7 @@ public class MovieManagement
         today.setTime(today.getTime());
         String time = makeReleaseDateString((GregorianCalendar)today);
         String values[] = {time,movie.getSKU(),""+requestingCustomer};
+        //TODO: Duplicate requests can be added; need to ask about db keys
         String query = generateInsertSQL(tablename, columns, values);
         statement.executeUpdate(query);
     }
@@ -755,14 +754,12 @@ public class MovieManagement
     public void removeRequest(MovieRequest request) throws SQLException
     {
         this.request = request;
-        String table = "madeSpecialOrders";
+        int customerID = request.getCustomerID();
         String SKU = request.getSKU();
-        int CustomerID = request.getCustomerID();
 
-        String query = "DELETE FROM+ "+ table+ " WHERE SKU= '"+SKU +"' and " + "CustomerID= '"+CustomerID+"'";
-
-        ResultSet resultSet = statement.executeQuery(query);
-        resultSet.deleteRow();
+        String table = "madeSpecialOrders";
+        String SQL = "DELETE FROM " + table + " WHERE SKU= " + SKU + " and customerID= " + customerID;
+        statement.executeUpdate(SQL);
     }
 
     /**
