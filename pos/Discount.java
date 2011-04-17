@@ -61,7 +61,7 @@ public class Discount implements TransactionItem
         int newAccountID = LastAccountID + 1;
 
         stat.executeQuery("INSERT INTO item VALUES ("+ newAccountID + ", promo, "
-                + priceInCents + "null," + barcode +", null, null," + invoiceID
+                + (-1 * priceInCents) + "null," + barcode +", null, null," + invoiceID
                 +");");
     }
 
