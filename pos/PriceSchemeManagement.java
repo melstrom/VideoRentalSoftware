@@ -75,7 +75,6 @@ public class PriceSchemeManagement
                     + " SET price=" + price
                     + " WHERE catagory='" + cat.trim().toLowerCase() + "' AND "
                     + "format='" + form.trim().toLowerCase() + "';";
-            System.out.println(command);//testing
             PreparedStatement stat = conn.prepareStatement(command);
             boolean successful = stat.execute();
             if(!successful)
