@@ -173,12 +173,6 @@ public abstract class Account
     {
         return address;
     }
-    /**
-     * Get password
-     * @return password the password of the account
-     */
-    abstract String getPassword();
-    
     /*
      * Get status
      * @return status the status of the account (True = Active/False = Inactive)

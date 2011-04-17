@@ -22,7 +22,7 @@ public class Customer extends Account
      */
     public Customer (String DL, int accountID, String Fname, String Lname, Address address, String phoneNum)
     {
-        super(accountID, Fname, Lname, address,phoneNum);
+        super(accountID, Fname, Lname, address, phoneNum);
         this.DL = DL;
     }
     /**
@@ -47,15 +47,7 @@ public class Customer extends Account
     */
     public int getCustomerID()
     {
-	    return super.getAccountID();
-    }
-   /**
-     * Get password
-     * @return the password for the account (customers' password is their phone number)
-     */
-    public String getPassword()
-    {
-    	return phoneNum;
+        return super.getAccountID();
     }
     private String DL;
 }
