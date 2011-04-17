@@ -174,7 +174,55 @@ public class PriceSchemeManagement
             }
         }
     }
-    
+
+    public void addFormat(String newForm)
+            throws IOException,SQLException, ClassNotFoundException
+    {
+        if(PRICE_SCHEME.getIndexOfFormat(newForm.trim().toLowerCase()) < 0)
+        {
+            JDBCConnection conn = new JDBCConnection();
+            conn.getConnection();
+            try
+            {
+                String command = "INSERT INTO formats VALUES ('" + newForm + "');";
+                System.out.println(command);//testing
+                PreparedStatement stat = conn.prepareStatement(command);
+                stat.executeUpdate();
+                PRICE_SCHEME = new PriceScheme();
+            }
+            finally
+            {
+                conn.closeConnection();
+            }
+        }
+        else
+            throw new IOException("The new format has already existed.");
+    }
+
+    public void addCategory(String newCat, String period)
+            throws SQLException, IOException, ClassNotFoundException
+    {
+        if(PRICE_SCHEME.getIndexOfCategory(newCat.trim().toLowerCase()) < 0)
+        {
+            JDBCConnection conn = new JDBCConnection();
+            conn.getConnection();
+            try
+            {
+                String command = "INSERT INTO catagories VALUES ('" + newCat +
+                        "', " + period + ");";
+                PreparedStatement stat = conn.prepareStatement(command);
+                stat.executeUpdate();
+                PRICE_SCHEME = new PriceScheme();
+            }
+            finally
+            {
+                conn.closeConnection();
+            }
+        }
+        else
+            throw new IOException("The new format has already exist.");
+    }
+
     public int[][] getAllPrices()
     {
         return PRICE_SCHEME.getAllPrices();
@@ -225,7 +273,6 @@ public class PriceSchemeManagement
             conn.closeConnection();
         }
     }
-
 
     private pos.PriceScheme PRICE_SCHEME;
 }
