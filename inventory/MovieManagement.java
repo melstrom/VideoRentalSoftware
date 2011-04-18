@@ -43,7 +43,7 @@ import java.io.IOException;
  * -start implementation of most methods
  * -to-do
  *      DONE: private bool checkDuplicateSKU (String SKU)
- *      DONE: private bool checkDuplicateBarcode (String barcode)
+ *      DONE: private bool checkDuplicateBarcode (String SKU)
  *      DONE: private bool checkNULLinfo (String[] info)
  * -bugs
  *      FIXED: line 90, wrong return type
@@ -55,7 +55,7 @@ import java.io.IOException;
  * -creation of MovieManagement class
  * -initial methods:
  *      createGeneralMovie
- *      addCopy #need to add types for category, format, and barcode#
+ *      addCopy #need to add types for category, format, and SKU#
  *      editInfo
  *      setPrice
  *      getQuantity
@@ -618,7 +618,7 @@ public class MovieManagement
      * Creates a new copy of a movie in the database
      * @param generalMovie
      * @param type The type of movie to default to (sale or rental)
-     * @return The generated barcode that uniquely identifies the copy (printed out and labelled on the copy)
+     * @return The generated SKU that uniquely identifies the copy (printed out and labelled on the copy)
      * @throws SQLException
      */
     public String addCopy(GeneralMovie generalMovie, String type) throws SQLException
@@ -787,23 +787,31 @@ public class MovieManagement
 
     /**
      * Checks if the movie copy already exist in the database
-     * @param barcode
+     * Despite its name, this method checks the SKU, not the barcode
+     * @param SKU
      */
-    private static void checkDuplicateBarcode(String barcode) throws Exception
+    private static void checkDuplicateBarcode(String SKU) throws Exception
     {
+        if (SKU == null || SKU.trim().length() < GeneralMovie.MIN_SKU_LENGTH || SKU.trim().length() > GeneralMovie.MAX_SKU_LENGTH)
+        {
+            throw new IllegalArgumentException("Not a valid SKU");
+        }
 
-        //Query:SELECT barcode FROM physicalVideo WHERE barcode = 'barcode'
-        //String table = "barcode";
-        //String column = "physicalVideo";
-        //String constraint = barcode;
+        for (int i = 0; i < SKU.trim().length(); i++)
+        {
+            if (!Character.isDigit(SKU.trim().charAt(i)))
+            {
+                throw new IllegalArgumentException("Not a valid SKU");
+            }
+        }
 
         String table = "physicalVideo";
         String column = "SKU";
-        String constraint = "SKU = '" + barcode.replaceAll("'", "") + "'";
+        String constraint = "SKU = '" + SKU.trim().replaceAll("'", "") + "'";
 
-        //String query = generateQuery(table, column, barcode);
+        //String query = generateQuery(table, column, SKU);
         String query = JDBCConnection.makeQuery(table, column, constraint);
-        //String query = "SELECT " + column + " FROM " + table + " WHERE " + column + "='" + barcode + "'";
+        //String query = "SELECT " + column + " FROM " + table + " WHERE " + column + "='" + SKU + "'";
         //boolean found = statement.execute(query);
         JDBCConnection conn = new JDBCConnection();
         try
@@ -907,7 +915,7 @@ public class MovieManagement
     /**
      * Add a line to videoSale table
      * @param generalMovie
-     * @return a barcode for this saleMovie
+     * @return a SKU for this saleMovie
      * @throws SQLException
      */
     private String addSaleMovie(GeneralMovie generalMovie, String type) throws SQLException
@@ -930,7 +938,7 @@ public class MovieManagement
     /**
      * Add a line to videoSale table
      * @param generalMovie
-     * @return a barcode for this rentalMovie
+     * @return a SKU for this rentalMovie
      * @throws SQLException
      */
     private String addRentalMovie(GeneralMovie generalMovie, String type) throws SQLException
