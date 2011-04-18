@@ -10,6 +10,11 @@
  */
 
 package ui;
+import inventory.*;
+import java.sql.SQLException;
+import search.*;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -32,160 +37,237 @@ public class VideoInfoDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        descriptionVideoInfoLabel = new javax.swing.JLabel();
-        genreVideoInfoLabel = new javax.swing.JLabel();
-        producerVideoInfoLabel = new javax.swing.JLabel();
-        titleVideoInfoLabel = new javax.swing.JLabel();
-        actorsVideoInfoLabel = new javax.swing.JLabel();
-        studioVideoInfoLabel = new javax.swing.JLabel();
-        releaseDateVideoInfoLabel = new javax.swing.JLabel();
-        lengthVideoInfoLabel = new javax.swing.JLabel();
-        directorVideoInfoLabel = new javax.swing.JLabel();
-        videoInfoTitle = new javax.swing.JLabel();
-        titleVideoInfoTextField = new javax.swing.JTextField();
-        producerVideoInfoTextField = new javax.swing.JTextField();
-        actorsVideoInfoTextField = new javax.swing.JTextField();
-        genreVideoInfoTextField = new javax.swing.JTextField();
-        studioVideoInfoTextField = new javax.swing.JTextField();
-        releaseDateVideoInfoTextField = new javax.swing.JTextField();
-        lengthVideoInfoTextField = new javax.swing.JTextField();
-        directorVideoInfoTextField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        descriptionVideoInfoTextBox = new javax.swing.JTextArea();
+        jTable1 = new javax.swing.JTable();
+        videoInfoTitle = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        categoryComboBox = new javax.swing.JComboBox();
+        conditionComboBox = new javax.swing.JComboBox();
+        rentPriceTextField = new javax.swing.JTextField();
+        barcodeTextField = new javax.swing.JTextField();
+        okButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
+        searchLabel = new javax.swing.JLabel();
+        searchTextField = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        resultTable = new javax.swing.JTable();
+        searchButton = new javax.swing.JButton();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        descriptionVideoInfoLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        descriptionVideoInfoLabel.setText("Description");
-
-        genreVideoInfoLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        genreVideoInfoLabel.setText("Genre");
-
-        producerVideoInfoLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        producerVideoInfoLabel.setText("Producer");
-
-        titleVideoInfoLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        titleVideoInfoLabel.setText("Title");
-
-        actorsVideoInfoLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        actorsVideoInfoLabel.setText("Actors");
-
-        studioVideoInfoLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        studioVideoInfoLabel.setText("Studio");
-
-        releaseDateVideoInfoLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        releaseDateVideoInfoLabel.setText("ReleaseDate");
-
-        lengthVideoInfoLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lengthVideoInfoLabel.setText("Length");
-
-        directorVideoInfoLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        directorVideoInfoLabel.setText("Director");
-
-        videoInfoTitle.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        videoInfoTitle.setFont(new java.awt.Font("Tahoma", 0, 24));
         videoInfoTitle.setText("Video Information");
 
-        titleVideoInfoTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel1.setText("Rent Price");
 
-        producerVideoInfoTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel2.setText("Barcode");
 
-        actorsVideoInfoTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel3.setText("Category");
 
-        genreVideoInfoTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel4.setText("Condition");
 
-        studioVideoInfoTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        categoryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DVD", "Blu-ray", "VHS" }));
 
-        releaseDateVideoInfoTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        conditionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Available", "Rented", "Reserved", "Broken", "Lost" }));
 
-        lengthVideoInfoTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        okButton.setText("Ok");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
 
-        directorVideoInfoTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
-        descriptionVideoInfoTextBox.setColumns(20);
-        descriptionVideoInfoTextBox.setRows(5);
-        jScrollPane1.setViewportView(descriptionVideoInfoTextBox);
+        searchLabel.setText("Movie Search");
+
+        searchTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchTextFieldActionPerformed(evt);
+            }
+        });
+
+        resultTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title", "Director"
+            }
+        ));
+        jScrollPane2.setViewportView(resultTable);
+
+        searchButton.setText("Search");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
+                .addGap(45, 45, 45)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(cancelButton))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel1))
+                            .addGap(48, 48, 48)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(barcodeTextField)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(rentPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(14, 14, 14)
+                                    .addComponent(jLabel4)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(conditionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(26, 26, 26)))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(searchLabel)
+                        .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(titleVideoInfoLabel)
-                            .addComponent(producerVideoInfoLabel)
-                            .addComponent(genreVideoInfoLabel)
-                            .addComponent(actorsVideoInfoLabel)
-                            .addComponent(studioVideoInfoLabel)
-                            .addComponent(releaseDateVideoInfoLabel)
-                            .addComponent(lengthVideoInfoLabel)
-                            .addComponent(directorVideoInfoLabel)
-                            .addComponent(descriptionVideoInfoLabel))
-                        .addGap(41, 41, 41)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(titleVideoInfoTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                            .addComponent(directorVideoInfoTextField)
-                            .addComponent(lengthVideoInfoTextField)
-                            .addComponent(releaseDateVideoInfoTextField)
-                            .addComponent(studioVideoInfoTextField)
-                            .addComponent(genreVideoInfoTextField)
-                            .addComponent(actorsVideoInfoTextField)
-                            .addComponent(producerVideoInfoTextField)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(197, 197, 197)
-                        .addComponent(videoInfoTitle)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                            .addComponent(videoInfoTitle)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                                .addComponent(searchButton)))))
+                .addGap(60, 60, 60))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
                 .addComponent(videoInfoTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(titleVideoInfoLabel)
-                    .addComponent(titleVideoInfoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(searchLabel)
+                    .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchButton))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(producerVideoInfoLabel)
-                    .addComponent(producerVideoInfoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel1)
+                    .addComponent(rentPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(conditionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(actorsVideoInfoLabel)
-                    .addComponent(actorsVideoInfoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel2)
+                    .addComponent(barcodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(genreVideoInfoLabel)
-                    .addComponent(genreVideoInfoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(studioVideoInfoLabel)
-                    .addComponent(studioVideoInfoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(releaseDateVideoInfoLabel)
-                    .addComponent(releaseDateVideoInfoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lengthVideoInfoLabel)
-                    .addComponent(lengthVideoInfoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(directorVideoInfoLabel)
-                    .addComponent(directorVideoInfoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(descriptionVideoInfoLabel)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(okButton)
+                    .addComponent(cancelButton))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        String rentalPrice = rentPriceTextField.getText();
+        String barcode = barcodeTextField.getText();
+        String category = (String)categoryComboBox.getSelectedItem();
+        String condition = (String)conditionComboBox.getSelectedItem();
+
+        try
+        {
+           //String query =
+        }
+
+        finally
+        {
+
+        }
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void searchTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchTextFieldActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        String searchText = searchTextField.getText();
+        Search search = new Search();
+        try
+        {
+         ArrayList<GeneralMovie> list = search.searchMovies(searchText, "title");
+
+         /*Object [][]data =new String[10][10];
+            data[0][0]="test";
+            data[1][1]="test";*/
+
+            DefaultTableModel model = new DefaultTableModel();
+            model.addRow(new Object[]{"v1", "v2"});
+            resultTable.setModel(model);
+    
+        }
+        catch(SQLException e)
+        {
+
+        }
+        catch(ClassNotFoundException e)
+        {
+
+        }
+        catch(MovieNotFoundException e)
+        {
+
+        }
+        catch(java.io.IOException e)
+        {
+
+        }
+        catch(java.lang.Exception e)
+        {
+
+        }
+
+    }//GEN-LAST:event_searchButtonActionPerformed
 
     /**
     * @param args the command line arguments
@@ -205,25 +287,23 @@ public class VideoInfoDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel actorsVideoInfoLabel;
-    private javax.swing.JTextField actorsVideoInfoTextField;
-    private javax.swing.JLabel descriptionVideoInfoLabel;
-    private javax.swing.JTextArea descriptionVideoInfoTextBox;
-    private javax.swing.JLabel directorVideoInfoLabel;
-    private javax.swing.JTextField directorVideoInfoTextField;
-    private javax.swing.JLabel genreVideoInfoLabel;
-    private javax.swing.JTextField genreVideoInfoTextField;
+    private javax.swing.JTextField barcodeTextField;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JComboBox categoryComboBox;
+    private javax.swing.JComboBox conditionComboBox;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lengthVideoInfoLabel;
-    private javax.swing.JTextField lengthVideoInfoTextField;
-    private javax.swing.JLabel producerVideoInfoLabel;
-    private javax.swing.JTextField producerVideoInfoTextField;
-    private javax.swing.JLabel releaseDateVideoInfoLabel;
-    private javax.swing.JTextField releaseDateVideoInfoTextField;
-    private javax.swing.JLabel studioVideoInfoLabel;
-    private javax.swing.JTextField studioVideoInfoTextField;
-    private javax.swing.JLabel titleVideoInfoLabel;
-    private javax.swing.JTextField titleVideoInfoTextField;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JButton okButton;
+    private javax.swing.JTextField rentPriceTextField;
+    private javax.swing.JTable resultTable;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JLabel searchLabel;
+    private javax.swing.JTextField searchTextField;
     private javax.swing.JLabel videoInfoTitle;
     // End of variables declaration//GEN-END:variables
 
