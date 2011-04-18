@@ -440,7 +440,7 @@ public class MovieManagement
     {
         int currentHighestID = getHighestID("videoInfo", "InfoID");
         int newHighestID = currentHighestID + 1;
-        if (newHighestID > Math.pow(10, GeneralMovie.INFO_ID_LENGTH + 1))
+        if (newHighestID > Math.pow(10, GeneralMovie.INFO_ID_LENGTH) - 1)
         {
             throw new MovieLimitReachedException("Cannot add movie information."
                     + "Maximum number of movie information is reached");
@@ -467,7 +467,7 @@ public class MovieManagement
                 result.getString(1);
                 if (result.wasNull())
                 {
-                    return (int) Math.pow(10, GeneralMovie.INFO_ID_LENGTH);
+                    return (int) Math.pow(10, GeneralMovie.INFO_ID_LENGTH - 1);
                 }
                 else
                 {
@@ -476,7 +476,7 @@ public class MovieManagement
             }
             else
             {
-                return (int) Math.pow(10, GeneralMovie.INFO_ID_LENGTH);
+                return (int) Math.pow(10, GeneralMovie.INFO_ID_LENGTH - 1);
             }
         }
         finally
