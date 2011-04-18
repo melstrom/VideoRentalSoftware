@@ -165,12 +165,15 @@ public class RentalMovieManagement {
      * @throws java.lang.Exception
      * @pre current copy is selected/not null
      */
+    /*
     public void editCopy(String category, String condition)
             throws MovieNotFoundException, SQLException, java.lang.Exception {
         setCategory(category);
         //setFormat(format);
         setCondition(condition);
     }
+     * 
+     */
 
     /**
      * This method gets the condition of a Rental Movie specified by its
