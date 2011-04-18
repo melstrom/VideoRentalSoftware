@@ -173,6 +173,7 @@ public class MovieManagement
      * database corruption or an ArrayOutOfBoundsException.
      * There must be at least one actor, but many may be added so long as they
      * are separated by commas.
+     * Do not put any commas in the synopsis field.
      * @param filename the filename. it must be a .csv file
      * @throws IOException
      * @throws Exception
@@ -226,7 +227,7 @@ public class MovieManagement
             int actorIndex = 0;
             while ( fieldIndex < numFields)
             {
-                actors[actorIndex] = fields[fieldIndex];
+                actors[actorIndex] = fields[fieldIndex].trim();
                 actorIndex++;
                 fieldIndex++;
             }
