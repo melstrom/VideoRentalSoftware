@@ -647,31 +647,33 @@ public class MovieManagement
      * Changes the information of a movie
      * @param info contains the 7 required information to identify a movie
      */
-    public void editInfo(String[] info, GregorianCalendar releaseDate) throws SQLException, MissingFieldException
+    public void editInfo(String SKU,
+            String title,
+            String[] actors,
+            String director,
+            String producer,
+            GregorianCalendar releaseDate,
+            String synopsis,
+            String genre,
+	    String rating,
+            String studio,
+            int retailPrice,
+            String format,
+            int runtime) throws SQLException, MissingFieldException
     {
         try
         {
-            this.checkNULLinfo(info);
-            String SKU = info[0];
-            String title = info[1];
-            String actors = info[2];
-            String director = info[3];
-            //String releaseDate = info[4];
-            String synopsis = info[4];
-            String genre = info[5];
-
-            //splits the actors into an array of actors
-            String[] actorArray = actors.split(",");
-
-         
-            movie.setTitle(title);
-            movie.setActors(actorArray);
-            movie.setDirector(director);
-            movie.setReleaseDate(releaseDate);  //GregorianCalendar
-            movie.setSynopsis(synopsis);
-            movie.setGenre(genre);
-
-            //UPDATE VideoInfo SET Title = movie.getTitle, Actors = movie.getActors...etc   WHERE SKU = SKU
+            this.movie = new GeneralMovie(SKU,title,actors,director,producer,releaseDate, synopsis,
+                    genre,rating,studio,retailPrice,format, runtime);
+            String actorsList="";
+            for(int i=0; i<actors.length; i++)
+            {
+                actorsList +=actors[i]+",";
+            }
+            String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
+            String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
+            String query = generateUpdateSQL("videoInfo",columns, values );
+            statement.executeUpdate(query);
         }
         finally
         {
@@ -957,6 +959,22 @@ public class MovieManagement
 
         String newBarCode = SKU + newRentalID;
         return newBarCode;
+    }
+
+        private String generateUpdateSQL(String tableName, String[] columnNames, String[] values)
+    {
+        String query = "UPDATE "+tableName+" SET ";
+        for (int i = 1; i < columnNames.length; i++)
+        {
+            query += columnNames[i] + " = ";
+            query += values[i];
+            if (i != columnNames.length - 1)
+            {
+                query += ", ";
+            }
+        }
+        query += "WHERE " +columnNames[0]+ " = " + values[0];
+        return query;
     }
 
     /**
