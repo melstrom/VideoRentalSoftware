@@ -73,15 +73,18 @@ public class CustomerFrame extends javax.swing.JFrame {
      */
     public CustomerFrame() throws Exception {
         MakeTable();
-        initComponents();
-        
+        initComponents();       
     }
     
     public CustomerFrame(ui.UiController UIC)throws Exception {
         localUIC = UIC;
         initComponents();
         MakeTable();
+
+
     }
+
+
 
 
     /** This method is called from within the constructor to
@@ -381,13 +384,17 @@ public class CustomerFrame extends javax.swing.JFrame {
 
         //SearchTableModel
         
-
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ReserveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReserveButtonActionPerformed
         // TODO add your handling code here:
-        new ReseveMovieDialog(this, false, localUIC).setVisible(true);
+        if(localUIC.getKey().isLogin())
+           new ReseveMovieDialog(this, false, localUIC).setVisible(true);
+        else
+           new LoginDialog(localUIC.getKey(),localUIC,false).setVisible(true);
+
+        
+        
 }//GEN-LAST:event_ReserveButtonActionPerformed
 
     private void RequestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RequestButtonActionPerformed
