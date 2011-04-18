@@ -29,9 +29,8 @@ import java.awt.event.KeyEvent;
 public class EmployeeFrame extends javax.swing.JFrame {
 
     //CheckINPanel
+    private UiController localUIC;
     private Customer currCustomer;
-
-
 
 
 
@@ -40,6 +39,13 @@ public class EmployeeFrame extends javax.swing.JFrame {
        initComponents();
        cleanUpInputs();
     }
+
+    public EmployeeFrame(ui.UiController UIC)throws ClassNotFoundException, SQLException{
+       localUIC = UIC;
+       initComponents();
+       cleanUpInputs();
+    }
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -138,7 +144,7 @@ public class EmployeeFrame extends javax.swing.JFrame {
         jTabbedPane1.addTab("Check Out", checkOutPanel);
         membershipPanel = new ui.MembershipPanel();
         jTabbedPane1.addTab("Membership", membershipPanel);
-        inventoryPanel = new ui.InventoryPanel();
+        inventoryPanel = new ui.InventoryPanel(localUIC);
         jTabbedPane1.addTab("Inventory", inventoryPanel);
         employeePanel = new ui.EmployeePanel();
         jTabbedPane1.addTab("Employee", employeePanel);
@@ -230,7 +236,9 @@ public class EmployeeFrame extends javax.swing.JFrame {
 
         inBarcodeField.setText("");
     }
-
+    public boolean Test(){
+      return true;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton RepostLostButton;

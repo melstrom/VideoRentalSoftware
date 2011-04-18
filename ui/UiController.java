@@ -10,8 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import authentication.Authentication;
+import authentication.*;
 import ui.util.UiMode;
+
 
 /**
  *
@@ -21,8 +22,6 @@ import ui.util.UiMode;
 
 
 public class UiController {
-
-
 
 
     /**
@@ -43,7 +42,7 @@ public class UiController {
     /**
     * 
     */
-    public void UiController(){
+    public UiController(){
         mainKey = new Authentication();
 
     }
@@ -51,13 +50,16 @@ public class UiController {
      * Start UI
      */
     public void startUI(){
+
+        boolean logIn = false;
+
         switch (mode) {
             case Employee:
-                if (login()){
 
-                }
                 try {
-                    currFrame = new EmployeeFrame();
+                    currFrame = new EmployeeFrame(this);
+                    new LoginDialog(mainKey,this,false).setVisible(true);
+                    // Employee Frame will be bring up the login process.
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
@@ -69,22 +71,38 @@ public class UiController {
             default:
                 try {
                     currFrame = new CustomerFrame(this);
+                    currFrame.setVisible(true);
                 } catch (Exception ex) {
                     Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 		break;
 	}
-        currFrame.setVisible(true);
+
     }
 
     private boolean login(){
 
-
-
-
-
         return true;
     }
+
+
+    /**
+     * Returns current Frame
+     * @return current Frame
+     */
+    public java.awt.Frame getCurrentFrame(){
+        return currFrame;
+    }
+
+    /**
+     * Returns current Authentication object
+     * @return Authentication object.
+     */
+    public Authentication getKey(){
+        return this.mainKey;
+    }
+
+
 
     /**
      * Change modeID.
@@ -94,6 +112,10 @@ public class UiController {
         mode = modeID;
     }
 
+
+    public UiMode getMode(){
+        return mode;
+    }
 
     /**
      * Pop-up an warming message login fail

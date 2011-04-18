@@ -17,8 +17,11 @@ package ui;
  */
 public class InventoryPanel extends javax.swing.JPanel {
 
+    private UiController localUIC;
+
     /** Creates new form EmployeePanel */
-    public InventoryPanel() {
+    public InventoryPanel(ui.UiController UIC) {
+        localUIC = UIC;
         initComponents();
     }
 

@@ -11,17 +11,42 @@
 
 package ui;
 
+import authentication.*;
+import java.awt.Color;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import ui.util.UiMode;
+
 /**
  *
  * @author alby
  */
 public class LoginDialog extends javax.swing.JDialog {
 
-    /** Creates new form LoginDialog */
-    public LoginDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    private Authentication key;
+    private UiController UIC;
+
+
+    public LoginDialog(JFrame jFrame, boolean b) {
+        super(jFrame, b);
         initComponents();
     }
+
+    /** Creates new form LoginDialog */
+    public LoginDialog(Authentication key, UiController UiC, boolean modal) {
+
+        super(UiC.getCurrentFrame(), modal);
+        this.UIC = UiC;
+        this.key = key;
+        initComponents();
+
+
+    }
+
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -43,6 +68,11 @@ public class LoginDialog extends javax.swing.JDialog {
         titleLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         idLabel.setText("ID:");
 
@@ -73,7 +103,7 @@ public class LoginDialog extends javax.swing.JDialog {
             }
         });
 
-        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 24));
         titleLabel.setText("Video Store Login");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -135,13 +165,61 @@ public class LoginDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_idFieldActionPerformed
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-        // TODO add your handling code here:
+        try {
+
+            //System.out.println("id: " + idField.getText());
+            //System.out.println("pass: " + charArrayToString(PasswordField.getPassword()));
+
+            String id = idField.getText();
+            String pass = charArrayToString(PasswordField.getPassword());
+            boolean isLogIn = key.login(id, pass);
+
+            if(isLogIn){
+                msgArea.setForeground(Color.black);
+                msgArea.setText("login ok");
+                this.setVisible(false);
+                UIC.getCurrentFrame().setVisible(true);
+                if(UIC.getMode() == UiMode.Customer)
+                    new ReseveMovieDialog(UIC.getCurrentFrame(), false, UIC).setVisible(true);
+
+            }else{
+                msgArea.setForeground(Color.red);
+                msgArea.setText("Password Incorrect");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);
+            msgArea.setForeground(Color.red);
+            msgArea.setText("SQL - " + ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);
+            msgArea.setForeground(Color.red);
+            msgArea.setText("Class - " + ex.getMessage());
+        } catch (AuthenticationException ex) {
+            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);
+            msgArea.setForeground(Color.red);
+            msgArea.setText(ex.getMessage());
+        } catch (IOException ex) {
+            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);
+            msgArea.setForeground(Color.red);
+            msgArea.setText("IO - " + ex.getMessage());
+        }
+
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
-        // TODO add your handling code here:
-        System.exit(0);
+        if(UIC.getMode() == UiMode.Customer)
+            this.setVisible(false);
+        else
+            System.exit(0);
     }//GEN-LAST:event_CancelButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        if(UIC.getMode() == UiMode.Customer)
+            this.setVisible(false);
+        else
+            System.exit(0);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
     * @param args the command line arguments
@@ -158,6 +236,16 @@ public class LoginDialog extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+
+    private String charArrayToString(char[] chr)
+    {
+        String str = "";
+        for(int b=0; b<chr.length; b++)
+        {
+            str = str + chr[b] ;
+        }
+        return str;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
