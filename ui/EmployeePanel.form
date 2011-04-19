@@ -23,10 +23,10 @@
               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                   <Component id="jButton1" max="32767" attributes="1"/>
                   <Component id="empDemoteButton" max="32767" attributes="1"/>
-                  <Component id="empRemoveButton" alignment="0" max="32767" attributes="1"/>
+                  <Component id="empEditButton" alignment="0" max="32767" attributes="1"/>
                   <Component id="empAddButton" alignment="0" pref="127" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -42,7 +42,7 @@
                       <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                       <Component id="empAddButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="empRemoveButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="empEditButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="empDemoteButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -61,9 +61,6 @@
       <SubComponents>
         <Component class="javax.swing.JTable" name="empTable">
           <Properties>
-            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="0" rowCount="0"/>
-            </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0"/>
             </Property>
@@ -94,12 +91,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="empAddButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="empRemoveButton">
+    <Component class="javax.swing.JButton" name="empEditButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Remove"/>
+        <Property name="text" type="java.lang.String" value="Edit"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="empRemoveButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="empEditButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">

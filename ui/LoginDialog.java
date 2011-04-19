@@ -173,6 +173,8 @@ public class LoginDialog extends javax.swing.JDialog {
             String id = idField.getText();
             String pass = charArrayToString(PasswordField.getPassword());
             boolean isLogIn = key.login(id, pass);
+            // not allow customer to login Employee Fram
+            if(UIC.getMode() == UiMode.Employee && key.isCustomer())isLogIn = false;
 
             if(isLogIn){
                 msgArea.setForeground(Color.black);

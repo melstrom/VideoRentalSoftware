@@ -232,30 +232,10 @@ public class MovieManagement
                 fieldIndex++;
             }
             
-            
-            //public void createGeneralMovie(String SKU,
-//            String title,
-//            String[] actors,
-//            String director,
-//            String producer,
-//            GregorianCalendar releaseDate,
-//            String synopsis,
-//            String genre,
-//	    String rating,
-//            String studio,
-//            int retailPrice,
-//            String format,
-//            int runtime)
-            
             createGeneralMovie(new GeneralMovie(sku, title, actors, director, producer, releaseDate,
                     synopsis, genre, rating, studio, priceInCents, format, length));
         }
-        
-    }
-    
-    
-    
-    
+    }    
 
     /**
      * This method looks at the attributes of a GeneralMovie and tries to
@@ -308,6 +288,7 @@ public class MovieManagement
             conn.closeConnection();
         }
     }
+
     /**
      * Generic method to create a constraint for a movie
      * @param movie
@@ -341,51 +322,6 @@ public class MovieManagement
         constraint += "length = '" + runtime + "'";
         return constraint;
     }
-
-    /**
-     * Makes the constraint string for searching for videoInfo
-     * @param movie
-     * @return
-     * TODO: use PreparedStatement to prevent escaping queries with '
-     */
-   /*private static String makeConstraint(GeneralMovie movie)
-    {
-
-        //String SKU = movie.getSKU();
-        String title = movie.getTitle();
-        String[] actors = movie.getActors();
-        String director = movie.getDirector();
-        String producer = movie.getProducer();
-        String studio = movie.getStudio();
-        String synopsis = movie.getSynopsis();
-        String rating = movie.getRating();
-        java.util.Calendar releaseDate = movie.getReleaseDate();
-        String genre = movie.getGenre();
-        int runtime = movie.getLength();
-        String constraint = "";
-        //constraint = "SKU = '"+SKU+"'";
-        //constraint += " AND ";
-        constraint += "Title = '" + title + "'";
-        constraint += " AND ";
-        constraint += makeActorConstraint(actors);
-        constraint += " AND ";
-        constraint += "director = '" + director + "'";
-        constraint += " AND ";
-        constraint += "Producer = '" + producer + "'";
-        constraint += " AND ";
-        constraint += "studio = '" + studio + "'";
-        constraint += " AND ";
-        constraint += "Description = '" + synopsis + "'";
-        constraint += " AND ";
-        constraint += "Rating = '" + rating + "'";
-        constraint += " AND ";
-        constraint += "releaseDate = '" + makeReleaseDateString(releaseDate) + "'";
-        constraint += " AND ";
-        constraint += "Genre = '" + genre + "'";
-        constraint += " AND ";
-        constraint += "length = '" + runtime + "'";
-        return constraint;
-    }*/
 
     /**
      * Creates a string of the form
@@ -646,7 +582,7 @@ public class MovieManagement
 
     /**
      * Changes the information of a movie
-     * @param info contains the 7 required information to identify a movie
+     * @param info contains the 13 required information to identify a movie
      */
     public void editInfo(String SKU,
             String title,
@@ -664,13 +600,73 @@ public class MovieManagement
     {
         try
         {
+            if (connection.isClosed())
+            {
+                connection = JDBCConnection.getConnection();
+            }
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new SQLException(e.getMessage());
+        }
+        try
+        {
             this.movie = new GeneralMovie(SKU,title,actors,director,producer,releaseDate, synopsis,
                     genre,rating,studio,retailPrice,format, runtime);
             String actorsList="";
-            for(int i=0; i<actors.length; i++)
+            actorsList+= actors[0];
+            for(int i=1; i<actors.length; i++)
             {
-                actorsList +=actors[i]+",";
+                actorsList = actorsList + "," + actors[i];
             }
+            String dateString = ""+releaseDate.get(Calendar.YEAR);
+            dateString += "-";
+            dateString += releaseDate.get(Calendar.MONTH);
+            dateString += "-";
+            dateString += releaseDate.get(Calendar.DATE);
+            String tables = "videoInfo, physicalVideo";
+            String set = "videoInfo.title = ?," +
+                    "videoInfo.actors = ?," +
+                    "videoInfo.director = ?," +
+                    "videoInfo.producer = ?," +
+                    "videoInfo.releaseDate = ?," +
+                    "videoInfo.description = ?," +
+                    "videoInfo.genre = ?," +
+                    "videoInfo.rating = ?," +
+                    "videoInfo.studio = ?," +
+                    "physicalVideo.RetailPrice = ?," +
+                    "physicalVideo.Format = ?," +
+                    "videoInfo.length = ?";
+            String constraint =  "physicalVideo.infoID = videoInfo.infoID AND physicalVideo.SKU = ?";
+            String query = JDBCConnection.makeUpdate(tables, set, constraint);
+            int numParams = 13;
+            String[] params = {
+                title,
+                actorsList,
+                director,
+                producer,
+                dateString,
+                synopsis,
+                genre,
+                rating,
+                studio,
+                ""+retailPrice,
+                format,
+                ""+runtime,
+                SKU
+            };
+
+            java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query);
+            for (int i = 1; i <= numParams; i++)
+            {
+                preparedStatement.setString(i, params[i-1]);
+            }
+
+            preparedStatement.executeUpdate();
+                    
+            /*
+             * Need to update all the fields that get passed in
+
             String table = "physicalVideo";
             String column = "infoID";
             String constraint = "WHERE SKU = " + SKU;
@@ -678,10 +674,28 @@ public class MovieManagement
             ResultSet rs = statement.executeQuery(query2);
             rs.next();
             int infoID = rs.getInt("infoID");
+>>>>>>> 0b6117953b75bf56208856ed98716d3774eb2686
             String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
+            String paramaterizedValues[] = new String[columns.length];
+            for (int i = 0; i < columns.length; i++)
+            {
+                paramaterizedValues[i] = "?";
+            }
             String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
-            String query = generateUpdateSQL("videoInfo",columns, values, infoID);
-            statement.executeUpdate(query);
+<<<<<<< HEAD
+            String query = generateUpdateSQL("videoInfo",columns, paramaterizedValues );
+            System.out.println(query); // TESTING
+            java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query);
+            for (int i = 1; i <= values.length; i++)
+            {
+                preparedStatement.setString(i, values[i-1]);
+            }
+            preparedStatement.executeUpdate();
+
+             * 
+             */
+
+            //statement.executeUpdate(query);
         }
         finally
         {
@@ -980,7 +994,11 @@ public class MovieManagement
                 query += ", ";
             }
         }
+//<<<<<<< HEAD
+//        query += " WHERE " +columnNames[0]+ " = " + values[0];
+//=======
         query += "WHERE " +columnNames[0]+ " = " + constraint;
+//>>>>>>> 0b6117953b75bf56208856ed98716d3774eb2686
         return query;
     }
 
@@ -995,3 +1013,48 @@ public class MovieManagement
         statement = connection.createStatement();
     }
 }
+
+    /**
+     * Makes the constraint string for searching for videoInfo
+     * @param movie
+     * @return
+     * TODO: use PreparedStatement to prevent escaping queries with '
+     */
+   /*private static String makeConstraint(GeneralMovie movie)
+    {
+
+        //String SKU = movie.getSKU();
+        String title = movie.getTitle();
+        String[] actors = movie.getActors();
+        String director = movie.getDirector();
+        String producer = movie.getProducer();
+        String studio = movie.getStudio();
+        String synopsis = movie.getSynopsis();
+        String rating = movie.getRating();
+        java.util.Calendar releaseDate = movie.getReleaseDate();
+        String genre = movie.getGenre();
+        int runtime = movie.getLength();
+        String constraint = "";
+        //constraint = "SKU = '"+SKU+"'";
+        //constraint += " AND ";
+        constraint += "Title = '" + title + "'";
+        constraint += " AND ";
+        constraint += makeActorConstraint(actors);
+        constraint += " AND ";
+        constraint += "director = '" + director + "'";
+        constraint += " AND ";
+        constraint += "Producer = '" + producer + "'";
+        constraint += " AND ";
+        constraint += "studio = '" + studio + "'";
+        constraint += " AND ";
+        constraint += "Description = '" + synopsis + "'";
+        constraint += " AND ";
+        constraint += "Rating = '" + rating + "'";
+        constraint += " AND ";
+        constraint += "releaseDate = '" + makeReleaseDateString(releaseDate) + "'";
+        constraint += " AND ";
+        constraint += "Genre = '" + genre + "'";
+        constraint += " AND ";
+        constraint += "length = '" + runtime + "'";
+        return constraint;
+    }*/

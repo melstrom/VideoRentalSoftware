@@ -11,6 +11,9 @@
 
 package ui;
 
+import java.util.ArrayList;
+import pos.PriceSchemeManagement;
+
 /**
  *
  * @author Kristan
@@ -18,8 +21,8 @@ package ui;
 public class PriceCategoryDialog extends javax.swing.JDialog {
 
     /** Creates new form PriceCategoryDialog */
-    public PriceCategoryDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public PriceCategoryDialog(boolean modal) {
+
         initComponents();
     }
 
@@ -101,6 +104,16 @@ public class PriceCategoryDialog extends javax.swing.JDialog {
 
     private void savePriceCatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePriceCatButtonActionPerformed
         // TODO add your handling code here:
+        String newCategory = catTitlePriceCatTextField.getText();
+        String duration = dayPriceCatSpinner.getValue().toString();
+        try{
+            PriceSchemeManagement layout = new PriceSchemeManagement();
+            layout.addCategory(newCategory,duration);
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        this.hide();
     }//GEN-LAST:event_savePriceCatButtonActionPerformed
 
     /**
@@ -109,8 +122,9 @@ public class PriceCategoryDialog extends javax.swing.JDialog {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                PriceCategoryDialog dialog = new PriceCategoryDialog(new javax.swing.JFrame(), true);
+                PriceCategoryDialog dialog = new PriceCategoryDialog(true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
                         System.exit(0);
                     }
