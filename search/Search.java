@@ -923,6 +923,52 @@ public class Search
                 rating, studio, retailPriceInCents, format, length);
     }
 
+    
+    
+
+    /**
+     * Wrapper for the searchRentals method. Either searches by title or
+     * tries to get the matching rental movie that matches the barcode
+     * @param searchTerm what you're searching for
+     * @param searchType either title or barcode
+     * @return an arraylist of rental movies, or null if nothing's found
+     * @throws Exception
+     */
+    public static ArrayList<RentalMovie> searchRentals(
+            String searchTerm, String searchType)
+            throws Exception
+    {
+        if (searchType.equalsIgnoreCase("title"))
+        {
+            return searchRentals(searchTerm, null, null, null);
+        }
+        else if (searchType.equalsIgnoreCase("barcode"))
+        {
+            IndividualMovie movie = previewIndividualMovie(searchTerm);
+            if (movie == null)
+            {
+                return null;
+            }
+            if (movie instanceof RentalMovie)
+            {
+                ArrayList<RentalMovie> rentalMovies = new ArrayList<RentalMovie>();
+                rentalMovies.add((RentalMovie) movie);
+                return rentalMovies;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            throw new IllegalArgumentException("Not a valid search type");
+        }
+    }
+    
+    
+    
+    
     /**
      * This method searches the database for a rental movie matching the search
      * criteria.  At least one of the fields must not be null and non blank.  This differs
@@ -1121,7 +1167,7 @@ public class Search
             int parameterIndex = 1; // SQL starts numbering indecies from 1
             for (int i = 0; i < numTerms; i++)
             {
-                if (searchTerms.get(i) != null)
+                if (searchTerms.get(i) != null && searchTerms.get(i).trim().length() > 0)
                 {
                     statement.setString(parameterIndex, searchTerms.get(i));
                     parameterIndex++;
@@ -1148,7 +1194,7 @@ public class Search
             String[] actors, String director, Integer memberID)
     {
         ArrayList<String> searchTerms = new ArrayList<String>();
-        if (title != null)
+        if (title != null && title.trim().length() > 0)
         {
             searchTerms.add(pad(title));
         }
@@ -1159,7 +1205,7 @@ public class Search
                 searchTerms.add(pad(actor));
             }
         }
-        if (director != null)
+        if (director != null && director.trim().length() > 0)
         {
             searchTerms.add(pad(director));
         }

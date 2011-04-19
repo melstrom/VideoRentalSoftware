@@ -25,9 +25,10 @@ public class RequestMovieDialog extends javax.swing.JDialog {
         initComponents();
     }
 
-    public RequestMovieDialog(java.awt.Frame parent, boolean modal, ui.UiController UIC) {
+    public RequestMovieDialog(java.awt.Frame parent, boolean modal, ui.UiController UIC, inventory.GeneralMovie movie) {
         this(parent, modal);
         localUIC = UIC;
+        this.movie = movie;
     }
 
     /** This method is called from within the constructor to
@@ -162,5 +163,5 @@ public class RequestMovieDialog extends javax.swing.JDialog {
     private javax.swing.JLabel movieLabel;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
-
+    private inventory.GeneralMovie movie;
 }
