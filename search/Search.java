@@ -267,6 +267,7 @@ public class Search
             
             if (result.isAfterLast())
             {
+                //System.out.println("Is afer last"); // TESTING
                 return null;
             }
             
@@ -689,6 +690,7 @@ public class Search
         {
             throw new IllegalArgumentException("Not an individual movie");
         }
+        //System.out.println(SKU+" "+copyNum);
         GeneralMovie generalMovie = previewGeneralMovie(SKU);
         
         
@@ -748,6 +750,7 @@ public class Search
 
                     IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
                     RentalMovie rentalMovie = new RentalMovie(rentalPeriod, individualMovie);
+                    //System.out.println(SKU+" "+copyNum);
                     return rentalMovie;
                 // copy and pasted signature for RentalMovie
                 //public RentalMovie(int rentalPeriod, IndividualMovie movie)
@@ -777,6 +780,7 @@ public class Search
     private static GeneralMovie previewGeneralMovie(String barcodeID)
             throws SQLException, MovieNotFoundException, ClassNotFoundException, java.lang.Exception
     {
+        //System.out.println(barcodeID);
         String query = "SELECT * FROM videoInfo, physicalVideo "
                 + "WHERE videoInfo.InfoID = physicalVideo.InfoID "
                 + "AND physicalVideo.SKU = '" +barcodeID + "'";
@@ -879,6 +883,7 @@ public class Search
     private static GeneralMovie previewGeneralMovie(ResultSet results)
             throws SQLException, ClassNotFoundException
     {
+        //System.out.println(barcodeID);
 
         if (results.isAfterLast())
         {
@@ -1011,7 +1016,46 @@ public class Search
         }
     }
 
-
+    /**
+     * This method searches the database for a rental movie matching the search
+     * criteria.  At least one of the fields must not be null and non blank.  This differs
+     * from the searchVideo method by finding every single rental copy
+     * available.  Therefore it will not search movies that are not carried by
+     * the store.
+     *
+     *
+     * @param title the title of the movie
+     * @param actor an actor in the movie
+     * @param director the director of the movie
+     * @param memberID the member who is currently renting this
+     * @return a list of videos that match the search criteria, or null if
+     * no matching videos could be found.
+     * @throws SQLException if a database connection cannot be made
+     * @throws IllegalArgumentException if the parameters are all blank
+     */
+    public static ArrayList<IndividualMovie> searchSales(
+            String title,
+            String[] actors,
+            String director)
+            throws SQLException, ClassNotFoundException, IOException,
+            MovieNotFoundException,java.lang.Exception
+    {
+        String query =
+                searchSalesGenerateQuery(title, actors, director);
+        Connection connection = JDBCConnection.getConnection();
+        try
+        {
+            ResultSet result = searchSalesGetSQLResult(query, title, actors,
+                    director, connection);
+            ArrayList<IndividualMovie> resultList = searchSalesResultsList(result);
+            result.close();
+            return resultList;
+        }
+        finally
+        {
+            connection.close();
+        }
+    }
 
     /** 
      * This is a helper method for searchRentals.  It generates an SQL query of
@@ -1135,6 +1179,93 @@ public class Search
         }
     }
 
+        private static String searchSalesGenerateQuery(
+            String title,
+            String[] actors,
+            String director)
+    {
+//        String query = "SELECT videoRental.SKU, videoRental.rentalID " +
+//                "FROM videoRental, videoInfo, physicalVideo " +
+//                "WHERE ";
+
+        String selectQuery = "SELECT videoSale.SKU, videoSale.SaleID ";
+        String fromQuery = "FROM videoSale";
+        String whereQuery = "WHERE ";
+
+        ArrayList<String> searchCriteria = new ArrayList<String>();
+        ArrayList<String> whereClause = new ArrayList<String>();
+
+        String movieFromClause = ", videoInfo, physicalVideo";
+        String movieWhereClause = "(videoInfo.infoID = physicalVideo.infoID"
+                    + " AND physicalVideo.SKU = videoSale.SKU)";
+        boolean needsMovieWhereClause = false;
+
+        if (title != null && title.trim().length() > 0)
+        {
+            searchCriteria.add("videoInfo.title LIKE ? ");
+            needsMovieWhereClause = true;
+        }
+
+        if (actors != null)
+        {
+            String actorsQuery = "";
+            /* actorsQuery should have the form
+             * (movieInfo.actors LIKE ?
+             *   {optional lines movieInfo.actors LIKE ? OR }
+             *  )
+             */
+            int numActors = actors.length;
+            if (numActors > 0)
+            {
+                actorsQuery += "(videoInfo.actors LIKE ? ";
+                for (int i = 1; i < numActors; i++)
+                {
+                    actorsQuery += "OR videoInfo.actors LIKE ? ";
+                }
+                actorsQuery += ")";
+            }
+            searchCriteria.add(actorsQuery);
+            needsMovieWhereClause = true;
+        }
+
+        if (director != null && director.trim().length() > 0)
+        {
+            searchCriteria.add("videoInfo.director LIKE ? ");
+            needsMovieWhereClause = true;
+        }
+
+        if (needsMovieWhereClause)
+        {
+            whereClause.add(movieWhereClause);
+            fromQuery += movieFromClause;
+        }
+
+        String query = selectQuery;
+        query += fromQuery;
+        query = query + " " + whereQuery;
+
+        if (!searchCriteria.isEmpty())
+        {
+            query += searchCriteria.get(0);
+            for (int i = 1; i < searchCriteria.size(); i++)
+            {
+                query += " AND ";
+                query += searchCriteria.get(i);
+            }
+            for (String clause : whereClause)
+            {
+                query += " AND " + clause;
+            }
+            query += " AND videoSale.catagory <> 'for sale'";
+            return query;
+
+        }
+        else
+        {
+            throw new IllegalArgumentException("No search terms provided");
+        }
+    }
+
     /**
      * This is a helper function for searchRentals that takes a string containing
      * and SQL query, opens a connection to the database, queries the database,
@@ -1168,6 +1299,47 @@ public class Search
             for (int i = 0; i < numTerms; i++)
             {
                 if (searchTerms.get(i) != null && searchTerms.get(i).trim().length() > 0)
+                {
+                    statement.setString(parameterIndex, searchTerms.get(i));
+                    parameterIndex++;
+                }
+            }
+            ResultSet result = statement.executeQuery();
+            return result;
+    }
+
+        /**
+     * This is a helper function for searchRentals that takes a string containing
+     * and SQL query, opens a connection to the database, queries the database,
+     * then returns the results of the query.
+     *
+     * @param query
+     * @param title
+     * @param actors
+     * @param director
+     * @param memberID
+     * @throws SQLException if the database cannot be connected to
+     * @return
+     */
+    private static ResultSet searchSalesGetSQLResult(String query,
+            String title, String[] actors, String director, Connection connection)
+            throws SQLException, ClassNotFoundException
+    {
+        ArrayList<String> searchTerms = consolidateSearchTerms(title, actors,
+                director);
+        if (searchTerms == null)
+        {
+            return null;
+        }
+
+        //Connection connection = JDBCConnection.getConnection();
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            int numTerms = searchTerms.size();
+            int parameterIndex = 1; // SQL starts numbering indecies from 1
+            for (int i = 0; i < numTerms; i++)
+            {
+                if (searchTerms.get(i) != null)
                 {
                     statement.setString(parameterIndex, searchTerms.get(i));
                     parameterIndex++;
@@ -1232,6 +1404,49 @@ public class Search
         }
     }
 
+        /**
+     * This method takes the parameters, filters out the null ones, then
+     * consolidates them into an array list.
+     *
+     * @param title
+     * @param actors
+     * @param director
+     * @param memberID
+     * @return an array list of the non-null parameters, or null if they are all
+     * null
+     * @throws IllegalArgumnetException if the length of the memberID is not
+     * correct
+     */
+    private static ArrayList<String> consolidateSearchTerms(String title,
+            String[] actors, String director)
+    {
+        ArrayList<String> searchTerms = new ArrayList<String>();
+        if (title != null)
+        {
+            searchTerms.add(pad(title));
+        }
+        if (actors != null)
+        {
+            for (String actor : actors)
+            {
+                searchTerms.add(pad(actor));
+            }
+        }
+        if (director != null)
+        {
+            searchTerms.add(pad(director));
+        }
+
+        if (searchTerms.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+            return searchTerms;
+        }
+    }
+
     /**
      * This moves the Results into an ArrayList
      * @param result
@@ -1251,6 +1466,29 @@ public class Search
             barcode += result.getString("VideoRental.SKU");
             barcode += result.getString("VideoRental.rentalID");
             rentalList.add((RentalMovie) previewMovie(barcode));
+        }
+        if (rentalList.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+            return rentalList;
+        }
+    }
+
+        private static ArrayList<IndividualMovie>
+            searchSalesResultsList(ResultSet result)
+            throws SQLException, MovieNotFoundException, ClassNotFoundException,
+            IOException,java.lang.Exception
+    {
+        ArrayList<IndividualMovie> rentalList = new ArrayList<IndividualMovie>();
+        while (result.next())
+        {
+            String barcode = "";
+            barcode += result.getString("VideoSale.SKU");
+            barcode += result.getString("VideoSale.SaleID");
+            rentalList.add((IndividualMovie) previewMovie(barcode));
         }
         if (rentalList.isEmpty())
         {

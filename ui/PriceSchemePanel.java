@@ -81,7 +81,7 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         }
 
         initComponents();
-
+        System.out.println("quiting price scheme panel constructor.");//
     }
 
     private Vector ReturnVector(ArrayList list){
@@ -91,8 +91,9 @@ public class PriceSchemePanel extends javax.swing.JPanel {
 
     private void redrawPanel(){
         table = (DefaultTableModel)priceSchemaTable.getModel();
-        while (table.getRowCount()>0)
-            table.removeRow(0);
+        while (table.getRowCount()>0){
+            System.out.println("delete Rows");
+            table.removeRow(0);}
         ArrayList headerString;
         ArrayList formatString;
         //populates the data Arraylist with the prices
@@ -116,7 +117,7 @@ public class PriceSchemePanel extends javax.swing.JPanel {
                 row.add(formatString.get(j).toString().toUpperCase());
                 for (int i = 0; i < prices.length; i++)
                     row.add(""+prices[i][j]);
-                data.add(row);
+                table.addRow(row);
             }
 
         }
@@ -137,14 +138,13 @@ public class PriceSchemePanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         addFormatPriceSchemeButton = new javax.swing.JButton();
         addCategoryPriceSchemeButton = new javax.swing.JButton();
-        savePriceSchemeButton = new javax.swing.JButton();
+        refreshPriceSchemeButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        priceSchemaTable = new javax.swing.JTable(data, header);
-        jButton2 = new javax.swing.JButton();
+        priceSchemaTable = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         addFormatPriceSchemeButton.setText("Add Format");
         addFormatPriceSchemeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -160,19 +160,17 @@ public class PriceSchemePanel extends javax.swing.JPanel {
             }
         });
 
-        savePriceSchemeButton.setText("Save changes");
-        savePriceSchemeButton.addActionListener(new java.awt.event.ActionListener() {
+        refreshPriceSchemeButton.setText("Refresh");
+        refreshPriceSchemeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                savePriceSchemeButtonActionPerformed(evt);
+                refreshPriceSchemeButtonActionPerformed(evt);
             }
         });
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, savePriceSchemeButton, org.jdesktop.beansbinding.ObjectProperty.create(), priceSchemaTable, org.jdesktop.beansbinding.BeanProperty.create("columnSelectionAllowed"));
-        bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, savePriceSchemeButton, org.jdesktop.beansbinding.ObjectProperty.create(), priceSchemaTable, org.jdesktop.beansbinding.BeanProperty.create("rowSelectionAllowed"));
-        bindingGroup.addBinding(binding);
-
-        /*
+        priceSchemaTable.setModel(new javax.swing.table.DefaultTableModel(
+            data,header
+        ));
+        //System.out.println("I'm here" );
         priceSchemaTable.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -182,13 +180,12 @@ public class PriceSchemePanel extends javax.swing.JPanel {
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-        */
         jScrollPane2.setViewportView(priceSchemaTable);
 
-        jButton2.setText("Undo Changes");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("Change Prices");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                ChangePrice(evt);
             }
         });
 
@@ -198,16 +195,16 @@ public class PriceSchemePanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(83, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(26, 26, 26)
                         .addComponent(addFormatPriceSchemeButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(addCategoryPriceSchemeButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(savePriceSchemeButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(refreshPriceSchemeButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -215,16 +212,14 @@ public class PriceSchemePanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addFormatPriceSchemeButton)
+                    .addComponent(refreshPriceSchemeButton)
                     .addComponent(addCategoryPriceSchemeButton)
-                    .addComponent(jButton2)
-                    .addComponent(savePriceSchemeButton))
-                .addContainerGap(41, Short.MAX_VALUE))
+                    .addComponent(addFormatPriceSchemeButton)
+                    .addComponent(jButton1))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
-
-        bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
     private void addFormatPriceSchemeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFormatPriceSchemeButtonActionPerformed
@@ -242,37 +237,38 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         changedCols.add(col);
     }
 
-    private void savePriceSchemeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePriceSchemeButtonActionPerformed
-        try {
-            // TODO add your handling code here:
-            int col;
-            int row;
-            int value = 0;
-            String format = "" ;
-            String category = "";
-
-            PriceSchemeManagement setNewPrice = new PriceSchemeManagement();
-            for(int i = 0; i < changedCols.size(); i++){
-                col = Integer.parseInt("" + changedCols.get(i));
-                row = Integer.parseInt("" + changedRows.get(i));
-                value = Integer.parseInt("" + priceSchemaTable.getValueAt(col,row));
-                format = "" + priceSchemaTable.getValueAt(row, 0);
-                category = "" + priceSchemaTable.getValueAt(0, col);
-                setNewPrice.setPrice(category,format,value);
-
-            }
+    private void refreshPriceSchemeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshPriceSchemeButtonActionPerformed
+//        try {
+//            // TODO add your handling code here:
+//            int col;
+//            int row;
+//            int value = 0;
+//            String format = "" ;
+//            String category = "";
+//            System.out.println("changedrows = " + changedRows.size());//testing
+//            System.out.println("changedcols = " + changedCols.size());//testing
+//            PriceSchemeManagement setNewPrice = new PriceSchemeManagement();
+//            for(int i = 0; i < changedCols.size(); i++){
+//                col = Integer.parseInt("" + changedCols.get(i));
+//                row = Integer.parseInt("" + changedRows.get(i));
+//                value = Integer.parseInt("" + priceSchemaTable.getValueAt(col,row));
+//                format = "" + priceSchemaTable.getValueAt(row, 0);
+//                category = "" + priceSchemaTable.getValueAt(0, col);
+//                setNewPrice.setPrice(category,format,value);
+//
+//            }
 
 
             redrawPanel();
-        } catch (IOException ex) {
-            Logger.getLogger(PriceSchemePanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(PriceSchemePanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PriceSchemePanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        } catch (IOException ex) {
+//            Logger.getLogger(PriceSchemePanel.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(PriceSchemePanel.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (ClassNotFoundException ex) {
+//            Logger.getLogger(PriceSchemePanel.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
-}//GEN-LAST:event_savePriceSchemeButtonActionPerformed
+}//GEN-LAST:event_refreshPriceSchemeButtonActionPerformed
 
     private void priceSchemaTableAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_priceSchemaTableAncestorAdded
         // TODO add your handling code here:
@@ -289,15 +285,20 @@ public class PriceSchemePanel extends javax.swing.JPanel {
 redrawPanel();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void ChangePrice(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangePrice
+        System.out.println("inside changeprice.");//testing
+        new ChangePriceDialog(false).setVisible(true);
+        redrawPanel();
+    }//GEN-LAST:event_ChangePrice
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCategoryPriceSchemeButton;
     private javax.swing.JButton addFormatPriceSchemeButton;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable priceSchemaTable;
-    private javax.swing.JButton savePriceSchemeButton;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    private javax.swing.JButton refreshPriceSchemeButton;
     // End of variables declaration//GEN-END:variables
 
 }
