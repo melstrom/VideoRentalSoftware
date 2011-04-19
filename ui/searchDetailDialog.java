@@ -18,8 +18,9 @@ package ui;
 public class searchDetailDialog extends javax.swing.JDialog {
 
     /** Creates new form searchDetailDialog */
-    public searchDetailDialog(java.awt.Frame parent, boolean modal) {
+    public searchDetailDialog(java.awt.Frame parent, boolean modal, inventory.GeneralMovie movie) {
         super(parent, modal);
+        this.movie = movie;
         initComponents();
     }
 
@@ -38,18 +39,18 @@ public class searchDetailDialog extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        titleField = new javax.swing.JTextField();
+        directorField = new javax.swing.JTextField();
+        releaseDateField = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        actorsArea = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        descriptionArea = new javax.swing.JTextArea();
         jToggleButton1 = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24));
         jLabel1.setText("Search Detail");
 
         jLabel2.setText("Movie Title:");
@@ -62,19 +63,35 @@ public class searchDetailDialog extends javax.swing.JDialog {
 
         jLabel6.setText("Description:");
 
-        jTextField1.setText("jTextField1");
+        titleField.setText(movie.getTitle());
+        titleField.setEditable(false);
 
-        jTextField2.setText("jTextField2");
+        directorField.setText(movie.getDirector());
+        directorField.setEditable(false);
 
-        jFormattedTextField1.setText("jFormattedTextField1");
+        java.util.GregorianCalendar releaseDate = movie.getReleaseDate();
+        int year = releaseDate.get(java.util.Calendar.YEAR);
+        releaseDateField.setText(""+year);
+        releaseDateField.setEditable(false);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        actorsArea.setColumns(20);
+        actorsArea.setRows(5);
+        String[] actors = movie.getActors();
+        String actorsString = actors[0].trim();
+        for (int i = 1; i < actors.length; i++)
+        {
+            actorsString+= ", ";
+            actorsString+= actors[i].trim();
+        }
+        actorsArea.setText(actorsString);
+        actorsArea.setEditable(false);
+        jScrollPane1.setViewportView(actorsArea);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        descriptionArea.setColumns(20);
+        descriptionArea.setRows(5);
+        descriptionArea.setText(movie.getSynopsis());
+        descriptionArea.setEditable(false);
+        jScrollPane2.setViewportView(descriptionArea);
 
         jToggleButton1.setText("OK");
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -102,9 +119,9 @@ public class searchDetailDialog extends javax.swing.JDialog {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))))
+                                .addComponent(directorField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(releaseDateField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(titleField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(230, Short.MAX_VALUE)
                         .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -122,15 +139,15 @@ public class searchDetailDialog extends javax.swing.JDialog {
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(titleField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(releaseDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(directorField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
@@ -158,7 +175,8 @@ public class searchDetailDialog extends javax.swing.JDialog {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                searchDetailDialog dialog = new searchDetailDialog(new javax.swing.JFrame(), true);
+                searchDetailDialog dialog = new searchDetailDialog(new javax.swing.JFrame(), true, null);
+                // added the null as the third parameter.
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosing(java.awt.event.WindowEvent e) {
                         System.exit(0);
@@ -170,7 +188,9 @@ public class searchDetailDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JTextArea actorsArea;
+    private javax.swing.JTextArea descriptionArea;
+    private javax.swing.JTextField directorField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -179,11 +199,9 @@ public class searchDetailDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JFormattedTextField releaseDateField;
+    private javax.swing.JTextField titleField;
     // End of variables declaration//GEN-END:variables
-
+    private inventory.GeneralMovie movie;
 }

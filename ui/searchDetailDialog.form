@@ -38,9 +38,9 @@
                           <Component id="jScrollPane2" alignment="0" pref="214" max="32767" attributes="0"/>
                           <Component id="jScrollPane1" alignment="0" pref="214" max="32767" attributes="0"/>
                           <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jTextField2" alignment="0" max="32767" attributes="1"/>
-                              <Component id="jFormattedTextField1" alignment="0" max="32767" attributes="1"/>
-                              <Component id="jTextField1" alignment="0" pref="205" max="32767" attributes="1"/>
+                              <Component id="directorField" alignment="0" max="32767" attributes="1"/>
+                              <Component id="releaseDateField" alignment="0" max="32767" attributes="1"/>
+                              <Component id="titleField" alignment="0" pref="205" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                   </Group>
@@ -66,17 +66,17 @@
               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="titleField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jFormattedTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="releaseDateField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="directorField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -129,20 +129,20 @@
         <Property name="text" type="java.lang.String" value="Description:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextField1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
+    <Component class="javax.swing.JTextField" name="titleField">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="titleField.setText(movie.getTitle());&#xa;titleField.setEditable(false);"/>
+      </AuxValues>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextField2">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField2"/>
-      </Properties>
+    <Component class="javax.swing.JTextField" name="directorField">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="directorField.setText(movie.getDirector());&#xa;directorField.setEditable(false);"/>
+      </AuxValues>
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jFormattedTextField1"/>
-      </Properties>
+    <Component class="javax.swing.JFormattedTextField" name="releaseDateField">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="java.util.GregorianCalendar releaseDate = movie.getReleaseDate();&#xa;int year = releaseDate.get(java.util.Calendar.YEAR);&#xa;releaseDateField.setText(&quot;&quot;+year);&#xa;releaseDateField.setEditable(false);"/>
+      </AuxValues>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
@@ -151,11 +151,14 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTextArea" name="jTextArea1">
+        <Component class="javax.swing.JTextArea" name="actorsArea">
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="String[] actors = movie.getActors();&#xa;String actorsString = actors[0].trim();&#xa;for (int i = 1; i &lt; actors.length; i++)&#xa;{&#xa;    actorsString+= &quot;, &quot;;&#xa;    actorsString+= actors[i].trim();&#xa;}&#xa;actorsArea.setText(actorsString);&#xa;actorsArea.setEditable(false);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -166,11 +169,14 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTextArea" name="jTextArea2">
+        <Component class="javax.swing.JTextArea" name="descriptionArea">
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="descriptionArea.setText(movie.getSynopsis());&#xa;descriptionArea.setEditable(false);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
