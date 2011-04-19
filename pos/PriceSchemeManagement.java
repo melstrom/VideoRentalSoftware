@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import jdbconnection.*;
 import inventory.*;
+import java.util.Vector;
 import search.*;
 
 /**
@@ -75,7 +76,6 @@ public class PriceSchemeManagement
                     + " SET price=" + price
                     + " WHERE catagory='" + cat.trim().toLowerCase() + "' AND "
                     + "format='" + form.trim().toLowerCase() + "';";
-            System.out.println("inside PSM::setprice : "+ command);//testing
             PreparedStatement stat = conn.prepareStatement(command);
             boolean successful = stat.execute();
             if(!successful)
@@ -121,7 +121,6 @@ public class PriceSchemeManagement
             conn.getConnection();
             try
             {
-                System.out.println("INSERT INTO pricing "
                     + "VALUES ("+ price + ", '" + cat.trim().toLowerCase()
                     + "', '" + form.trim().toLowerCase() + "');");//testing
                 PreparedStatement stat = conn.prepareStatement("INSERT INTO pricing "
@@ -185,10 +184,18 @@ public class PriceSchemeManagement
             try
             {
                 String command = "INSERT INTO formats VALUES ('" + newForm + "');";
-                System.out.println(command);//testing
                 PreparedStatement stat = conn.prepareStatement(command);
                 stat.executeUpdate();
+                ArrayList<String> categories = new ArrayList();
+                categories = this.getAllCategories();
+                for (String aCategory : categories){
+                    String pricingCommand = "INSERT INTO pricing (format, catagory, price) value ('" +
+                    newForm + "','" + aCategory + "',0);";
+                    stat = conn.prepareStatement(pricingCommand);
+                    stat.executeUpdate();
+                }
                 PRICE_SCHEME = new PriceScheme();
+
             }
             finally
             {
@@ -214,9 +221,20 @@ public class PriceSchemeManagement
             {
                 String command = "INSERT INTO catagories VALUES ('" + newCat +
                         "', " + period + ");";
-                System.out.println("inside priceschememanangement::addcategory "+command);//testing
                 PreparedStatement stat = conn.prepareStatement(command);
                 stat.executeUpdate();
+                
+                ArrayList<String> formats = new ArrayList();
+                formats = this.getAllFormats();
+                //for(String aFormat : formats){
+              //  }
+                for(String aFormat : formats){
+
+                    String pricingCommand = "INSERT INTO pricing (catagory,format,price)values ('"
+                        + newCat + "','" + aFormat + "',0);";
+                    stat = conn.prepareStatement(pricingCommand);
+                    stat.executeUpdate();
+                }
                 PRICE_SCHEME = new PriceScheme();
             }
             finally

@@ -636,7 +636,6 @@ public class MovieManagement
             String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
 <<<<<<< HEAD
             String query = generateUpdateSQL("videoInfo",columns, paramaterizedValues );
-            System.out.println(query); // TESTING
             java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query);
             for (int i = 1; i <= values.length; i++)
             {
@@ -667,7 +666,6 @@ public class MovieManagement
         String constraint = "";
 
         String query = generateQuery(table, column, constraint);
-        System.out.println(query);//testing
         ResultSet resultSet = statement.executeQuery(query);
 
         while (resultSet.isLast() == false)
