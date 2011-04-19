@@ -113,7 +113,7 @@ public class GeneralMovie
         this.producer = outputInfo("producer", infoID);
         ResultSet rs = statement.executeQuery("SELECT RetailPrice FROM physicalVideo WHERE InfoID = " + infoID);
         rs.next();
-        this.retailPriceInCents = rs.getInt(1);;
+        this.retailPriceInCents = rs.getInt(1);
 	setRating(outputInfo("rating", infoID));
         setGenre(outputInfo("genre", infoID));
         ResultSet rsnn = statement.executeQuery("SELECT format FROM physicalVideo WHERE InfoID = " + infoID);
