@@ -33,6 +33,7 @@ public class EmployeePanel extends javax.swing.JPanel {
     private ArrayList<Employee> employeeInfoObj;
     private Vector<Vector<String>> et_data; //used for data from database
     private Vector<String> et_header; //used to store data header
+    private DefaultTableModel table;
 
     /** Creates new form InventoryPanel */
     public EmployeePanel() {
@@ -45,7 +46,7 @@ public class EmployeePanel extends javax.swing.JPanel {
 
       et_data = new Vector<Vector <String>>();
       for(int i = 0; i < 1; i++){
-          System.out.println("i = " + i);
+          System.out.println("Kristan i = " + i);
           Vector temp = new Vector <String>();
           temp.add(" ");
           temp.add(" ");
@@ -63,15 +64,12 @@ public class EmployeePanel extends javax.swing.JPanel {
     }
 
     private void refreshTable(){
-         DefaultTableModel table = (DefaultTableModel)empTable.getModel();
+         table = (DefaultTableModel)empTable.getModel();
          while (table.getRowCount()>0)
+             //System.out.println("Delete Row" + table.getRowCount());
             table.removeRow(0);
         try {
-            //get data from database
             employeeInfoObj = Search.getAllEmployees();
-         //   for (Employee emp : employeeInfoObj){
-           //     System.out.println("From ArrayList: " + emp.getFname()); // TESTING
-          //  }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(EmployeePanel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -86,6 +84,7 @@ public class EmployeePanel extends javax.swing.JPanel {
            row = new Vector<String>();
 
            String ID = "" + emp.getEmployeeID();
+           System.out.println("id: " +ID);
            row.add(ID);
            String name = "" + emp.getFname() + " " + emp.getLname();
            row.add(name);
@@ -95,6 +94,7 @@ public class EmployeePanel extends javax.swing.JPanel {
         }
         //create header for the table
         et_header = new Vector<String>();
+        et_header.add("EmployeeId");
         et_header.add("Name");
         et_header.add("Position");
 
@@ -116,19 +116,11 @@ public class EmployeePanel extends javax.swing.JPanel {
         ;
         empDemoteButton = new javax.swing.JButton();
         empAddButton = new javax.swing.JButton();
-        empRemoveButton = new javax.swing.JButton();
+        empEditButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
         empTable.setModel(new javax.swing.table.DefaultTableModel(
             et_data, et_header
-        ));
-        empTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
         ));
         empScrollPane.setViewportView(empTable);
 
@@ -146,10 +138,10 @@ public class EmployeePanel extends javax.swing.JPanel {
             }
         });
 
-        empRemoveButton.setText("Remove");
-        empRemoveButton.addActionListener(new java.awt.event.ActionListener() {
+        empEditButton.setText("Edit");
+        empEditButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                empRemoveButtonActionPerformed(evt);
+                empEditButtonActionPerformed(evt);
             }
         });
 
@@ -171,9 +163,9 @@ public class EmployeePanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(empDemoteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(empRemoveButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(empEditButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(empAddButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,7 +178,7 @@ public class EmployeePanel extends javax.swing.JPanel {
                         .addGap(19, 19, 19)
                         .addComponent(empAddButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(empRemoveButton)
+                        .addComponent(empEditButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(empDemoteButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -195,14 +187,18 @@ public class EmployeePanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void empRemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_empRemoveButtonActionPerformed
+    private void empEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_empEditButtonActionPerformed
         // TODO add your handling code here:
-}//GEN-LAST:event_empRemoveButtonActionPerformed
+        int rowNumber = empTable.getSelectedRow();
+        String valueID = "" + table.getValueAt(rowNumber, 0);
+        new EmployeeInfoDialog(valueID,0,false).setVisible(true);
+}//GEN-LAST:event_empEditButtonActionPerformed
 
     private void empAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_empAddButtonActionPerformed
-        // TODO add your handling code here:
-                /** Creates new form CustomerInfoDialog */
-        new EmployeeInfoDialog(1,false).setVisible(true);
+
+
+            new EmployeeInfoDialog(1, false).setVisible(true);
+
     }//GEN-LAST:event_empAddButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -215,15 +211,22 @@ public class EmployeePanel extends javax.swing.JPanel {
             // TODO add your handling code here:
             int rownumber = empTable.getSelectedRow();
             AccountManagement manage = new AccountManagement();
-            System.err.println("after getSelectedRow(): "+ rownumber);
-            String valueID = "" + empTable.getModel().getValueAt(1, rownumber);
-            String valuePos = "" + empTable.getModel().getValueAt(3, rownumber);
-             System.err.println("after getValueAt: "+valueID);
+            System.out.println("after getSelectedRow(): "+ rownumber);
+
+            String valueID = "" + table.getValueAt(rownumber, 0);
+            System.out.println("after getValueAt: "+ Integer.parseInt(valueID));
+
+            String valuePos = "" + table.getValueAt(rownumber,2);
+            System.out.println("after getPosition At: "+valuePos);
+
             if (valuePos.equals("Manager")) {
                 manage.demoteManager(Integer.parseInt(valueID));
+                System.out.println("In = M: " + Integer.parseInt(valueID));
             }else{
                 manage.promoteEmployee(Integer.parseInt(valueID));
+                System.out.println("In = E: " + Integer.parseInt(valueID));
             }
+            
         } catch (SQLException ex) {
             Logger.getLogger(EmployeePanel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -233,13 +236,14 @@ public class EmployeePanel extends javax.swing.JPanel {
         }catch (AlreadyManagerException ex) {
                     Logger.getLogger(EmployeePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        refreshTable();
     }//GEN-LAST:event_empDemoteButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton empAddButton;
     private javax.swing.JButton empDemoteButton;
-    private javax.swing.JButton empRemoveButton;
+    private javax.swing.JButton empEditButton;
     private javax.swing.JScrollPane empScrollPane;
     private javax.swing.JTable empTable;
     private javax.swing.JButton jButton1;
