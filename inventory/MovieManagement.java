@@ -648,6 +648,7 @@ public class MovieManagement
      * Changes the information of a movie
      * @param info contains the 7 required information to identify a movie
      */
+    //TODO: SQL ' problem, needs lookover
     public void editInfo(String SKU,
             String title,
             String[] actors,
@@ -671,9 +672,16 @@ public class MovieManagement
             {
                 actorsList +=actors[i]+",";
             }
+            String table = "physicalVideo";
+            String column = "infoID";
+            String constraint = "WHERE SKU = " + SKU;
+            String query2 = generateQuery(table, column, constraint);
+            ResultSet rs = statement.executeQuery(query2);
+            rs.next();
+            int infoID = rs.getInt("infoID");
             String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
             String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
-            String query = generateUpdateSQL("videoInfo",columns, values );
+            String query = generateUpdateSQL("videoInfo",columns, values, infoID);
             statement.executeUpdate(query);
         }
         finally
@@ -962,19 +970,19 @@ public class MovieManagement
         return newBarCode;
     }
 
-        private String generateUpdateSQL(String tableName, String[] columnNames, String[] values)
+        private String generateUpdateSQL(String tableName, String[] columnNames, String[] values, int constraint)
     {
         String query = "UPDATE "+tableName+" SET ";
         for (int i = 1; i < columnNames.length; i++)
         {
-            query += columnNames[i] + " = ";
-            query += values[i];
+            query += columnNames[i] + " = '";
+            query += values[i] + "' ";
             if (i != columnNames.length - 1)
             {
                 query += ", ";
             }
         }
-        query += "WHERE " +columnNames[0]+ " = " + values[0];
+        query += "WHERE " +columnNames[0]+ " = " + constraint;
         return query;
     }
 
