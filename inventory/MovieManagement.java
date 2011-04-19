@@ -994,11 +994,11 @@ public class MovieManagement
                 query += ", ";
             }
         }
-<<<<<<< HEAD
-        query += " WHERE " +columnNames[0]+ " = " + values[0];
-=======
+//<<<<<<< HEAD
+//        query += " WHERE " +columnNames[0]+ " = " + values[0];
+//=======
         query += "WHERE " +columnNames[0]+ " = " + constraint;
->>>>>>> 0b6117953b75bf56208856ed98716d3774eb2686
+//>>>>>>> 0b6117953b75bf56208856ed98716d3774eb2686
         return query;
     }
 
