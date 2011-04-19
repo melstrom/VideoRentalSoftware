@@ -45,22 +45,6 @@ import pos.*;
 public class Search
 {
 
-    
-    /**
-     * This enumeration represents all the possible genres of movies that are
-     * carried by the video store.
-     * TODO: decide maybe this is standalone enum, or mabye it goes in Movie class
-     */
-    /*public enum Genre
-    {
-        ACTION, COMEDY, DRAMA, FAMILY, HORROR, ROMANCE, SUSPENSE, WESTERN,
-        SCIENCE_FICTION, MUSICAL, SILENT, FOREIGN, INDEPENDENT,
-        DOCUMENTARY, TV_SERIES, MISC
-    }*/
-
-
-    
-
     /**
      * This method finds a list of customers matching the search term, choosing
      * a different attribute to search by for every different searchType.
@@ -100,9 +84,6 @@ public class Search
             throw new IllegalArgumentException(searchType + " is not a valid search type");
         }
     }
-    
-    
-    
     
     /**
      * 
@@ -170,8 +151,6 @@ public class Search
         }
     }
     
-    
-    
     /**
      * Helper function for searchCustomers.  Generates an SQL query.
      * @pre the case where lastName and phoneNum should be filtered out before
@@ -218,8 +197,6 @@ public class Search
         return query;
     }
 
-
-
     /**
      * This method retrieves the Customer account with the provided member ID from
      * the database.  Depends on both the Customer class and the customer
@@ -258,16 +235,6 @@ public class Search
                 String lastName = result.getString("account.lastName");
                 String phoneNum = result.getString("account.phoneNum");
 
-
-                // copy and pasted address constructor
-//                public Address(
-//                    int houseNumber,
-//                    String streetName,
-//                    String city,
-//                    String province,
-//                    String country,
-//                    String postalCode)
-
                 int houseNumber = result.getInt("address.houseNumber");
                 String streetName = result.getString("address.streetName");
                 String city = result.getString("address.city");
@@ -281,18 +248,13 @@ public class Search
                 
                 return new Customer(driversLicense, memberID,
                         firstName, lastName, address, phoneNum);
-                // copy and pasted signature from the Customer class
-                //public Customer (String DL, int accountID, String Fname, String Lname, Address address, String phoneNum)
                 
-        }// end try
+        }
         finally
         {
-            //connection.close();
             conn.closeConnection();
         }
     }
-
-
 
     /**
      * This method creates a Customer object from a result set.
@@ -320,16 +282,6 @@ public class Search
             String lastName = result.getString("account.lastName");
             String phoneNum = result.getString("account.phoneNum");
 
-
-            // copy and pasted address constructor
-//                public Address(
-//                    int houseNumber,
-//                    String streetName,
-//                    String city,
-//                    String province,
-//                    String country,
-//                    String postalCode)
-
             int houseNumber = result.getInt("address.houseNumber");
             String streetName = result.getString("address.streetName");
             String city = result.getString("address.city");
@@ -342,13 +294,7 @@ public class Search
                     city, province, country, postalCode);
             return new Customer(driversLicense, memberID,
                     firstName, lastName, address, phoneNum);
-            // copy and pasted signature from the Customer class
-            //public Customer (String DL, int accountID, String Fname, String Lname, Address address, String phoneNum)
-
-
     }
-    
-    
     
     /**
      * This method retrieves the Employee account with the provided member ID from
@@ -367,7 +313,6 @@ public class Search
             throws SQLException, ClassNotFoundException
     {
         JDBCConnection conn = new JDBCConnection();
-        //Connection connection = JDBCConnection.getConnection();
         try
         {
                 String query = conn.makeQuery("address, account, employee", 
@@ -388,15 +333,6 @@ public class Search
                 String lastName = result.getString("account.lastName");
                 String phoneNum = result.getString("account.phoneNum");
 
-                // copy and pasted address constructor
-//                public Address(
-//                    int houseNumber,
-//                    String streetName,
-//                    String city,
-//                    String province,
-//                    String country,
-//                    String postalCode)
-
                 int houseNumber = result.getInt("address.houseNumber");
                 String streetName = result.getString("address.streetName");
                 String city = result.getString("address.city");
@@ -410,18 +346,12 @@ public class Search
 
                 return new Employee(position, employeeID, firstName, lastName,
                         address, phoneNum);
-                // copy and pasted signature from the Employee class
-                //public Employee (String position, int accountID, String Fname, String Lname, Address address, String phoneNum)
-                
-        }// end try
+        }
         finally
         {
-            //connection.close();
             conn.closeConnection();
         }
     }
-    
-    
     
     /**
 		Method to get an ArrayList of all employees in the database.
@@ -467,8 +397,6 @@ public class Search
         }
         
     }
-
-
 
     /**
      * This method will search for a movie by a specified attribute.
@@ -604,9 +532,7 @@ public class Search
                 GeneralMovie aMovie = previewGeneralMovie(result);
                 searchResults.add(aMovie);
             }
-            
             return searchResults;
-            
         }
         finally
         {
@@ -631,8 +557,6 @@ public class Search
         }*/
     }
 
-
-
     /**
      * Pads a string with wildcard % symbols so that we can search for
      * matches that only contain the term instead of equalling exactly
@@ -643,8 +567,6 @@ public class Search
     {
         return "%" + str + "%";
     }
-
-
 
     /**
      * This is a helper method for searchMovies.  It generates an SQL query
@@ -681,9 +603,6 @@ public class Search
         {
             searchCriteria.add("videoInfo.title LIKE ?");
         }
-        
-        
-        
         if (actor != null)
         {
             String[] actors = actor.split(",");
@@ -719,8 +638,6 @@ public class Search
         return query;
     }
 
-
-
     /**
      * This method decides if the passed barcode is a single SKU, in which case
      * it returns a GeneralMovie object, or an IndividualMovie barcode.
@@ -754,13 +671,8 @@ public class Search
             throw new IllegalArgumentException("IllegalArgumentException: "
                     + "not a valid barcode number");
         }
-     
-        
         return movie;
-        
     }
-
-
 
     /**
      * Returns an individual movie that matches the barcodeID
@@ -812,7 +724,6 @@ public class Search
                     String format = result.getString("physicalVideo.format");
                     String condition = result.getString("videoSale.condition");
 
-
                     // copy and pasted IndividualMovie constructor:
                     //   public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition
 
@@ -854,8 +765,6 @@ public class Search
                     throw new MovieNotFoundException("MovieNotFoundException:"
                             + " could not find that barcode");
                 }
-
-
             }
         }
         finally
@@ -863,13 +772,7 @@ public class Search
             
             conn.close();
         }
-
     }
-    
-    
-   
-    
-    
 
     /**
      * Creates a GenrealMovie object based on the SKU
@@ -954,16 +857,12 @@ public class Search
             return new GeneralMovie(barcodeID, title, actorList, director, 
                     producer, releaseCalendar, synopsis, genre,
                     rating, studio, retailPriceInCents, format, length);
-        } // end try
-
+        }
         finally
         {
             connection.close();
         }
-        
     }
-
-
 
     /**
      * Creates a GeneralMovie based on the result set.
@@ -1014,9 +913,7 @@ public class Search
         GregorianCalendar releaseCalendar = new GregorianCalendar();
         releaseCalendar.setTime(releaseDate);
 
-
         String[] actorList = actors.split(", ");
-
 /*
         // the format of releaseDate is YYYYMMDD, or an 8 digit integer
         // To get its four most significant digits, we want to get rid of
@@ -1031,30 +928,10 @@ public class Search
                 new java.util.GregorianCalendar(year, month, day);
 *
 */
-        // copy and pasted GeneralMovie signature
-//            public GeneralMovie
-//            (String SKU,
-//            String title,
-//            String[] actors,
-//            String director,
-//            String producer,
-//            GregorianCalendar releaseDate,
-//            String synopsis,
-//            String genre,
-//	    String rating,
-//            String studio,
-//            int retailPriceInCents,
-//            String format,
-//            int runtime)
         return new GeneralMovie(barcodeID, title, actorList, director,
                 producer, releaseCalendar, synopsis, genre,
                 rating, studio, retailPriceInCents, format, length);
-
-
     }
-    
-
-
 
     /**
      * This method searches the database for a rental movie matching the search
@@ -1183,7 +1060,6 @@ public class Search
             needsMovieWhereClause = true;
         }
 
-
         if (memberID != null)
         {
             searchCriteria.add("customer.customerID = ? ");
@@ -1223,8 +1099,6 @@ public class Search
         }
     }
 
-
-
     /**
      * This is a helper function for searchRentals that takes a string containing
      * and SQL query, opens a connection to the database, queries the database,
@@ -1262,15 +1136,10 @@ public class Search
                     statement.setString(parameterIndex, searchTerms.get(i));
                     parameterIndex++;
                 }
-            } // end for
-
+            }
             ResultSet result = statement.executeQuery();
             return result;
-        
-
     }
-
-
 
     /**
      * This method takes the parameters, filters out the null ones, then
@@ -1327,8 +1196,6 @@ public class Search
         }
     }
 
-
-
     /**
      * This moves the Results into an ArrayList
      * @param result
@@ -1358,8 +1225,6 @@ public class Search
             return rentalList;
         }
     }
-
-
 
     /**
      * This method lets the caller see all GeneralMovies corresponding to the
@@ -1396,7 +1261,8 @@ public class Search
     
     public GeneralMovie forAlbert (String SKU) throws SQLException, MovieNotFoundException, ClassNotFoundException, Exception
     {
- return previewGeneralMovie(SKU);
+         return previewGeneralMovie(SKU);
+    }
 }
     
     /**
@@ -1527,7 +1393,14 @@ public class Search
      *
      */
 
-
-
-}
-
+    /**
+     * This enumeration represents all the possible genres of movies that are
+     * carried by the video store.
+     * TODO: decide maybe this is standalone enum, or mabye it goes in Movie class
+     */
+    /*public enum Genre
+    {
+        ACTION, COMEDY, DRAMA, FAMILY, HORROR, ROMANCE, SUSPENSE, WESTERN,
+        SCIENCE_FICTION, MUSICAL, SILENT, FOREIGN, INDEPENDENT,
+        DOCUMENTARY, TV_SERIES, MISC
+    }*/
