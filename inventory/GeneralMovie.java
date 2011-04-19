@@ -25,6 +25,8 @@
  *     
  */
 package inventory;
+import jdbconnection.JDBCConnection;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -37,8 +39,6 @@ public class GeneralMovie
     public GeneralMovie()
     {
     }
-
-
 
     /**
      * Constructor of GeneralMovie
@@ -88,7 +88,39 @@ public class GeneralMovie
         this.runtime = runtime;
     }
 
-
+    public GeneralMovie (String SKU) throws SQLException, ClassNotFoundException
+    {
+        connection = JDBCConnection.getJDBCConnection();
+        statement = connection.createStatement();
+        ResultSet rsn = statement.executeQuery("SELECT InfoID FROM physicalVideo WHERE SKU = '" + SKU + "'");
+        rsn.next();
+        int infoID = rsn.getInt(1);
+        this.SKU = SKU;
+        this.title = outputInfo("title", infoID);
+	this.director = outputInfo("director", infoID);
+        String actorsString = outputInfo("actors", infoID);
+        this.actors = actorsString.split(",");
+        this.synopsis = outputInfo("description", infoID);
+	this.studio = outputInfo("studio", infoID);
+        ResultSet rs3 = statement.executeQuery("SELECT releaseDate FROM videoInfo WHERE InfoID = " + infoID);
+        rs3.next();
+        Date date = rs3.getDate(1);
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+	this.releaseDate = calendar;
+        this.producer = outputInfo("producer", infoID);
+        ResultSet rs = statement.executeQuery("SELECT RetailPrice FROM physicalVideo WHERE InfoID = " + infoID);
+        rs.next();
+        this.retailPriceInCents = rs.getInt(1);
+	setRating(outputInfo("rating", infoID));
+        setGenre(outputInfo("genre", infoID));
+        ResultSet rsnn = statement.executeQuery("SELECT format FROM physicalVideo WHERE InfoID = " + infoID);
+        rsnn.next();
+        setFormat(rsnn.getString(1));
+        ResultSet rs2 = statement.executeQuery("SELECT length FROM videoInfo WHERE InfoID = " + infoID);
+        rs2.next();
+        this.runtime = rs2.getInt(1);
+    }
 
     /**
      * Constructor of GeneralMovie
@@ -139,8 +171,6 @@ public class GeneralMovie
         this.runtime = runtime;
     }
 
-
-
     public int getLength()
     {
         return runtime;
@@ -160,15 +190,10 @@ public class GeneralMovie
 
     }
 
-	
-
-
    public String getFormat()
     {
         return format;
     }
-
-
 
     public final void setFormat(String format)
     {
@@ -195,10 +220,7 @@ public class GeneralMovie
         }
         */
         this.format = format;
-
     }
-
-
 
     /**
      * Sets the rating of this GeneralMovie object to the specified rating.
@@ -286,9 +308,6 @@ public class GeneralMovie
 	    return rating;
     }
 
-
-
-
    /**
     * Add a reservation to the end of reservation list
     * @param aReservation a reservation record
@@ -297,6 +316,7 @@ public class GeneralMovie
     {
 	    reservations.add(aReservation);
     }
+
     /**
      * Remove the first reservation from the reservation list
      */
@@ -305,6 +325,7 @@ public class GeneralMovie
         if(!reservations.isEmpty())
         reservations.remove(0);
     }
+
     /**
      * Create reservation query
      * @param aReservation a reservation record
@@ -333,6 +354,7 @@ public class GeneralMovie
 
         executeQuery(query);
     }*/
+
     /**
     *	Set retail price in cents
     * @param price the retailPriceInCents
@@ -359,8 +381,6 @@ public class GeneralMovie
 	this.SKU = SKU;
     }
 
-
-
     /**
     *   Get SKU
     *  @return SKU - the SKU uniquely identifies a movie catalog
@@ -370,8 +390,6 @@ public class GeneralMovie
         return SKU;
     }
 
-
-
     /**
      * Set title
      * @param title the title of a movie
@@ -380,6 +398,7 @@ public class GeneralMovie
     {
         this.title=title;
     }
+
     /**
      * Get movie title
      * @return title the title of a movie
@@ -388,6 +407,7 @@ public class GeneralMovie
     {
         return title;
     }
+
     /**
      * Set director
      * @param director the director of a movie
@@ -396,6 +416,7 @@ public class GeneralMovie
     {
         this.director = director;
     }
+
     /**
      * Get director
      * @return director the director of a movie
@@ -404,6 +425,7 @@ public class GeneralMovie
     {
         return director;
     }
+
     /**
     *	Set producer
     * @param producer the producer of the movie
@@ -412,6 +434,7 @@ public class GeneralMovie
     {
 	    this.producer = producer;
     }
+
     /**
     *	
     */
@@ -419,6 +442,7 @@ public class GeneralMovie
     {
 	    return producer;
     }
+
     /**
      * Set release date
      * @param releaseDate the release date of a movie
@@ -427,6 +451,7 @@ public class GeneralMovie
     {
 	this.releaseDate = releaseDate;
     }
+
     /**
      * Get Release date
      * @return the release date of a movie
@@ -435,6 +460,7 @@ public class GeneralMovie
     {
         return releaseDate;
     }
+
     /**
      * Set actors
      * @param actors the actor list of a movie
@@ -443,6 +469,7 @@ public class GeneralMovie
     {
 	this.actors = actors;
     }
+
     /**
      * Get actors
      * @return the actor list of a movie
@@ -451,14 +478,16 @@ public class GeneralMovie
     {
 	return actors;
     }
+
     /**
     * Set studio
     *@param studio the studio name
     */
     protected void setStudio(String studio)
     {
-	    this.studio = studio;
+        this.studio = studio;
     }
+
     /**
     *Get studio
     *@return studio the studio name
@@ -467,6 +496,7 @@ public class GeneralMovie
     {
 	    return studio;
     }
+
     /**
      * Set synopsis/description
      * @param synopsis the synopsis of a movie
@@ -475,6 +505,7 @@ public class GeneralMovie
     {
         this.synopsis = synopsis;
     }
+
     /**
      * Get synopsis/description
      * @return synopsis the synopsis of a movie
@@ -483,6 +514,7 @@ public class GeneralMovie
     {
         return synopsis;
     }
+
     /**
     *  Get reservation list
     *  @return reservations - reservation arraylist
@@ -492,13 +524,10 @@ public class GeneralMovie
 	    return reservations;
     }
 
-
     public String getGenre()
     {
         return genre;
     }
-
-
 
     /**
      * Sets the genre of this general movie to the specified genre, assuming that
@@ -522,6 +551,14 @@ public class GeneralMovie
 //        throw new IllegalArgumentException("Not a valid genre");
     }
 
+    private String outputInfo (String info, int infoID) throws SQLException
+    {
+        String query = "SELECT " + info + " FROM videoInfo WHERE InfoID = " + infoID;
+        ResultSet rs = statement.executeQuery(query);
+        rs.next();
+        return rs.getString(info);
+    }
+
     private String title;
     private String SKU;
     private String studio;
@@ -540,7 +577,10 @@ public class GeneralMovie
     private int retailPriceInCents;
     private String genre;
     private String format;
+    Connection connection;
+    Statement statement;
+}
+
 //    public final String[] possibleGenres = { "science fiction", "musical", "action",
 //            "drama", "comedy", "romance", "family", "horror", "suspense"
 //        };
-}

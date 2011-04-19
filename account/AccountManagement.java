@@ -45,9 +45,8 @@ public class AccountManagement
     }
 
     /**
-     * Create an employee account
+     * Creates an employee account
      * @param position the position of the employee (Manager/Staff)
-     * @param accountID the account ID of the account
      * @param Fname the first name of the user
      * @param Lname the last name of the user
      * @param address the address of the user
@@ -59,14 +58,14 @@ public class AccountManagement
         int accountID = this.generateNewAccountID();
         int addressID = this.generateAddressID();
         Employee account = new Employee(position, employeeID, Fname, Lname, address, phoneNum);
+        String addressInsert = this.createAddressInsertSQL(address, addressID);
+        String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
+        String employeeInsert = "INSERT INTO employee (employeeID, accountID, position) values ("
+        + "'"+account.getEmployeeID()+"'" + ","
+        + "'"+accountID+"'" + ","
+        + "'"+account.getPosition()+"'" + ")";
         try
         {
-            String addressInsert = this.createAddressInsertSQL(address, addressID);
-            String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
-            String employeeInsert = "INSERT INTO employee (employeeID, accountID, position) values ("
-                    + "'"+account.getEmployeeID()+"'" + ","
-                    + "'"+accountID+"'" + ","
-                    + "'"+account.getPosition()+"'" + ")";
             statement.executeUpdate(addressInsert);
             statement.executeUpdate(accountInsert);
             statement.executeUpdate(employeeInsert);
@@ -78,9 +77,8 @@ public class AccountManagement
     }
 
     /**
-     * Create a customer account
+     * Creates a customer account
      * @param DL the driver license number of the user
-     * @param accountID the accountID of the account
      * @param Fname the first name of the user
      * @param Lname the last name of the user
      * @param address the address of the user
@@ -96,16 +94,15 @@ public class AccountManagement
         int accountID = this.generateNewAccountID();
         int addressID = this.generateAddressID();
         Customer account = new Customer(DL, customerID, Fname, Lname, address, phoneNum);
+        String addressInsert = this.createAddressInsertSQL(address, addressID);
+        String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
+        String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense, penalty) values ("
+                + "'"+account.getCustomerID()+"'" + ","
+                + "'"+accountID+"'" + ","
+                + "'"+account.getDL()+"'" + ","
+                + "'0')";
         try
         {
-            String addressInsert = this.createAddressInsertSQL(address, addressID);
-            String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
-
-            String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense, penalty) values ("
-                    + "'"+account.getCustomerID()+"'" + ","
-                    + "'"+accountID+"'" + ","
-                    + "'"+account.getDL()+"'" + ","
-                    + "'0')";
             statement.executeUpdate(addressInsert);
             statement.executeUpdate(accountInsert);
             statement.executeUpdate(customerInsert);
@@ -337,9 +334,12 @@ public class AccountManagement
         }
     }
 
-    /**
-     * Promote an employee to manager
-     */
+/**
+ * Promotes an employee to manager
+ * @param employeeID The employeeID of the employee being promoted
+ * @throws SQLException
+ * @throws AlreadyManagerException
+ */
     public void promoteEmployee(int employeeID) throws SQLException, AlreadyManagerException
     {
         String table = "employee";
@@ -358,9 +358,12 @@ public class AccountManagement
         }
     }
 
-    /**
-     * Demote a manager to employee
-     */
+/**
+ * Demote a manager to employee
+ * @param employeeID The employeeID of the employee being demoted
+ * @throws SQLException
+ * @throws NotManagerException
+ */
     public void demoteManager(int employeeID) throws SQLException, NotManagerException
     {
         String table = "employee";
@@ -397,9 +400,9 @@ public class AccountManagement
     }
 
     /**
-     * This method generates a new account ID.  The account ID is only ever
+     * This method generates a new address ID.  The address ID is only ever
      * used in the database.
-     * @return a new, unique AccountID
+     * @return a new, unique AddressID
      * @throws SQLException
      */
     private int generateAddressID() throws SQLException, ClassNotFoundException
@@ -416,7 +419,7 @@ public class AccountManagement
      * @param addressID addressID generated from generateAddressID
      * @param Fname The first name
      * @param Lname The last name
-     * @return
+     * @return A SQL statement that inserts a new account when run
      */
     private String createAccountInsertSQL (int accountID, int addressID, String Fname, String Lname, String phoneNum)
     {
@@ -430,10 +433,10 @@ public class AccountManagement
     }
 
     /**
-     *
-     * @param address
-     * @param addressID
-     * @return
+     * Prepares a SQL statement to insert a new address
+     * @param address An address object containing all address information
+     * @param addressID addressID generated from generateAddressID
+     * @return A SQL statement that inserts a new address when run
      * @throws SQLException
      */
     private String createAddressInsertSQL (Address address, int addressID) throws SQLException
