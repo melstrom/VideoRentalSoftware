@@ -31,6 +31,11 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import jdbconnection.JDBCConnection;
 
+/**
+ * AccountManagement is charge of all account related tasks, such as creating new
+ * customers and employees, editing personal info, and changing the position of employees
+ * @author melstrom
+ */
 public class AccountManagement
 {
     private Connection connection;
@@ -38,6 +43,8 @@ public class AccountManagement
 
     /**
      * Default constructor with no parameters
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     public AccountManagement() throws SQLException, ClassNotFoundException
     {
@@ -46,11 +53,14 @@ public class AccountManagement
 
     /**
      * Creates an employee account
+     * @param employeeID The employeeID that is auto-generated for each new employee
      * @param position the position of the employee (Manager/Staff)
      * @param Fname the first name of the user
      * @param Lname the last name of the user
      * @param address the address of the user
      * @param phoneNum the phone number of the user
+     * @throws SQLException
+     * @throws java.lang.Exception
      */
     public void createEmployee(int employeeID, String position, String Fname, String Lname, Address address, String phoneNum)
             throws SQLException, java.lang.Exception
@@ -78,6 +88,7 @@ public class AccountManagement
 
     /**
      * Creates a customer account
+     * @param customerID The customerID that is auto-generated for each new customer
      * @param DL the driver license number of the user
      * @param Fname the first name of the user
      * @param Lname the last name of the user
@@ -120,6 +131,8 @@ public class AccountManagement
      * employee's accountID (Java class) which is equivalent to the
      * employeeID in the database.
      * @param employee an Employee object with attributes that we want to save
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     public static void editPersonalInfo(Employee employee)
             throws SQLException, ClassNotFoundException
@@ -190,6 +203,8 @@ public class AccountManagement
      * customer's accountID (Java class) which is equivalent to the
      * customerID in the database.
      * @param customer an customer object with attributes that we want to save
+     * @throws SQLException
+     * @throws ClassNotFoundException
      */
     public static void editPersonalInfo(Customer customer)
             throws SQLException, ClassNotFoundException
@@ -264,6 +279,7 @@ public class AccountManagement
      * @throws SQLException if a connection the database cannot be made
      * @throws AccountLimitReachedException if the maximum number of accounts, either
      * customer or employee depending on the accountType, has been reached
+     * @throws ClassNotFoundException
      * @throws IllegalArgumentException if the accountType is not customer
      * or employee
      */
@@ -358,12 +374,12 @@ public class AccountManagement
         }
     }
 
-/**
- * Demote a manager to employee
- * @param employeeID The employeeID of the employee being demoted
- * @throws SQLException
- * @throws NotManagerException
- */
+    /**
+     * Demote a manager to employee
+     * @param employeeID The employeeID of the employee being demoted
+     * @throws SQLException
+     * @throws NotManagerException
+     */
     public void demoteManager(int employeeID) throws SQLException, NotManagerException
     {
         String table = "employee";
