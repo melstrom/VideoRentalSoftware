@@ -12,9 +12,12 @@ package ui;
 import account.Customer;
 import account.Address;
 import account.AccountManagement;
+import account.Employee;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import search.Search;
+
 
 
 /**
@@ -22,18 +25,53 @@ import java.util.logging.Logger;
  * @author kpoirier00
  */
 public class EmployeeInfoDialog extends javax.swing.JDialog {
-    private int panelType;
-    /** Creates new form EmployeeInfoDialog */
-    public EmployeeInfoDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-    }
 
-            /** Creates new form CustomerInfoDialog */
+    private String EmployeeID;
+    private int panelType;
+    private Employee currentEmployee;
+    /** Creates new form EmployeeInfoDialog */
+         /** Creates new form CustomerInfoDialog */
+
     public EmployeeInfoDialog(int panelType, boolean modal) {
         this.panelType = panelType;
         initComponents();
     }
+
+    public EmployeeInfoDialog(String EmployeeID, int panelType, boolean modal) {
+        this.panelType = panelType;
+        this.EmployeeID = EmployeeID;
+        initComponents();
+        PopulateFields(this.EmployeeID);
+    }
+
+
+    private void PopulateFields(String EmployeeID){
+        try {
+            Search employeeObject = new Search();
+            currentEmployee = Search.getEmployee(Integer.parseInt(EmployeeID));
+            System.out.println("employee Retrieved");
+            System.out.println("return: " + currentEmployee.getFname());
+            firstNameEmployeeInfoTextField.setText(currentEmployee.getFname());
+            //System.out.println(currentEmployee.getFname());
+            lastNameEmployeeInfoTextField.setText(currentEmployee.getLname());
+            positionEmployeeInfoComboBox.setSelectedItem(currentEmployee.getPosition());
+            phoneField.setText(currentEmployee.getPhoneNum());
+            employeeIDEmployeeInfoTextField.setText("" + currentEmployee.getEmployeeID());
+            Address address = currentEmployee.getAddress();
+            houseNumberEmployeeInfoTextField.setText("" + address.getHouseNumber());
+            streetNameEmployeeInfoTextField.setText(address.getStreetName());
+            cityEmployeeInfoTextField.setText(address.getCity());
+            provinceEmployeeInfoTextField.setText(address.getProvince());
+            countryEmployeeInfoTextField.setText(address.getCountry());
+            postalCodeEmployeeInfoTextField.setText(address.getPostalCode());
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeInfoDialog.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(EmployeeInfoDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -44,6 +82,7 @@ public class EmployeeInfoDialog extends javax.swing.JDialog {
      private void addToDatabase(){
         try {
             AccountManagement populateData = new AccountManagement();
+
             String fname = firstNameEmployeeInfoTextField.getText();
             String lname = lastNameEmployeeInfoTextField.getText();
             String position = "" + positionEmployeeInfoComboBox.getSelectedItem();
@@ -60,18 +99,27 @@ public class EmployeeInfoDialog extends javax.swing.JDialog {
             String province = provinceEmployeeInfoTextField.getText();
             String country = countryEmployeeInfoTextField.getText();
             String postalCode = postalCodeEmployeeInfoTextField.getText();
+
             if (fname.equals("") || lname.equals("") || phoneNum.equals("") || streetName.equals("") || city.equals("") || province.equals("") || country.equals("") || postalCode.equals("")) {
                 enteredIntoDatabaseLabel1.setText("Please Fill All Fields");
                 enteredIntoDatabaseLabel1.setVisible(true);
             } else {
-                int employeeID = populateData.generateNewID("employee");
+                int employeeID;
+                if(employeeIDEmployeeInfoTextField.getText().equals(""))
+                    employeeID = populateData.generateNewID("employee");
+                else employeeID = Integer.parseInt(employeeIDEmployeeInfoTextField.getText());
                 employeeIDEmployeeInfoTextField.setText("" + employeeID);
-                Address customerAddress = new Address(houseNum, streetName, city, province, country, postalCode);
-                populateData.createEmployee(employeeID,position, fname, lname, customerAddress, phoneNum);
-                if (panelType == 1)
+                Address employeeAddress = new Address(houseNum, streetName, city, province, country, postalCode);
+                
+                if (panelType == 1){
                     enteredIntoDatabaseLabel1.setText("EMPLOYEE ENTERED INTO DATABASE");
-                else
+                    populateData.createEmployee(employeeID,position, fname, lname, employeeAddress, phoneNum);
+                }
+                else if (panelType == 0){
                     enteredIntoDatabaseLabel1.setText("EMPLOYEE HAS BEEN UPDATED");
+                    currentEmployee = new Employee(position, employeeID, fname, lname, employeeAddress, phoneNum);
+                    AccountManagement.editPersonalInfo(currentEmployee);
+                }
                 enteredIntoDatabaseLabel1.setVisible(true);
             }
 
@@ -346,7 +394,8 @@ public class EmployeeInfoDialog extends javax.swing.JDialog {
 
     private void employeeInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeInfoButtonActionPerformed
         // TODO add your handling code here:
-        addToDatabase();
+            addToDatabase();
+
     }//GEN-LAST:event_employeeInfoButtonActionPerformed
 
     /**

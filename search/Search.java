@@ -772,8 +772,8 @@ public class Search
      */
     public static IndividualMovie previewIndividualMovie(String barcodeID)
             throws MovieNotFoundException, SQLException, 
-            IllegalArgumentException, ClassNotFoundException,
-            java.io.IOException, java.lang.Exception
+            IllegalArgumentException, ClassNotFoundException
+            ,java.io.IOException, java.lang.Exception
     {
         String[] splitBarcode = { null, null };
         inventory.RentalMovieManagement.splitBarcode(barcodeID, splitBarcode);

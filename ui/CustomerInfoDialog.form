@@ -17,104 +17,108 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,29,0,0,2,10"/>
   </AuxValues>
 
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="110" pref="110" max="110" attributes="0"/>
-              <Component id="titleCustomerInfoLabel" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="120" pref="120" max="120" attributes="0"/>
-              <Component id="enteredIntoDatabaseLabel1" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Component id="fNameCustomerLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="73" pref="73" max="73" attributes="0"/>
-              <Component id="FirstNameCustomerTextField" min="-2" pref="260" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Component id="lNameCustomerLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="74" pref="74" max="74" attributes="0"/>
-              <Component id="lNameCustomerInfoTextfield" min="-2" pref="260" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Component id="phoneLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="51" pref="51" max="51" attributes="0"/>
-              <Component id="phoneField" min="-2" pref="260" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Component id="empIDCustomerLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="65" pref="65" max="65" attributes="0"/>
-              <Component id="empIDCustomerTextField" min="-2" pref="260" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Component id="jLabel1" min="-2" pref="94" max="-2" attributes="0"/>
-              <EmptySpace min="42" pref="42" max="42" attributes="0"/>
-              <Component id="DLCustInfoTextField" min="-2" pref="260" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Component id="penaltyCustomerLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="90" pref="90" max="90" attributes="0"/>
-              <Component id="penaltyCustomerTextField" min="-2" pref="260" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Component id="addressCustomerLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="101" pref="101" max="101" attributes="0"/>
-              <Component id="houseNumberCustomerLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="63" pref="63" max="63" attributes="0"/>
-              <Component id="streetNameCustomerLabel" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="150" pref="150" max="150" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="90" pref="90" max="90" attributes="0"/>
-                      <Component id="streetNameCustomerTextField" min="-2" pref="163" max="-2" attributes="0"/>
+                      <EmptySpace min="110" pref="110" max="110" attributes="0"/>
+                      <Component id="titleCustomerInfoLabel" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="houseNumberCustomerTextField" min="-2" pref="91" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="120" pref="120" max="120" attributes="0"/>
+                      <Component id="enteredIntoDatabaseLabel1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                      <Component id="fNameCustomerLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="73" pref="73" max="73" attributes="0"/>
+                      <Component id="FirstNameCustomerTextField" min="-2" pref="260" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                      <Component id="lNameCustomerLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="74" pref="74" max="74" attributes="0"/>
+                      <Component id="lNameCustomerInfoTextfield" min="-2" pref="260" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                      <Component id="phoneLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="51" pref="51" max="51" attributes="0"/>
+                      <Component id="phoneField" min="-2" pref="260" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                      <Component id="empIDCustomerLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="65" pref="65" max="65" attributes="0"/>
+                      <Component id="empIDCustomerTextField" min="-2" pref="260" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                      <Component id="jLabel1" min="-2" pref="94" max="-2" attributes="0"/>
+                      <EmptySpace min="42" pref="42" max="42" attributes="0"/>
+                      <Component id="DLCustInfoTextField" min="-2" pref="260" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                      <Component id="penaltyCustomerLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="90" pref="90" max="90" attributes="0"/>
+                      <Component id="penaltyCustomerTextField" min="-2" pref="260" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                      <Component id="addressCustomerLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="101" pref="101" max="101" attributes="0"/>
+                      <Component id="houseNumberCustomerLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="63" pref="63" max="63" attributes="0"/>
+                      <Component id="streetNameCustomerLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="150" pref="150" max="150" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="90" pref="90" max="90" attributes="0"/>
+                              <Component id="streetNameCustomerTextField" min="-2" pref="163" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="houseNumberCustomerTextField" min="-2" pref="91" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="200" pref="200" max="200" attributes="0"/>
+                      <Component id="cityCustomerLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="128" pref="128" max="128" attributes="0"/>
+                      <Component id="provinceCustomerLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="150" pref="150" max="150" attributes="0"/>
+                      <Component id="cityCustomerTextField" min="-2" pref="200" max="-2" attributes="0"/>
+                      <Component id="provinceCustomerTextField" min="-2" pref="52" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="230" pref="230" max="230" attributes="0"/>
+                      <Component id="countryCustomerLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="150" pref="150" max="150" attributes="0"/>
+                      <Component id="countryCustomerTextField" min="-2" pref="260" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="260" pref="260" max="260" attributes="0"/>
+                      <Component id="postalCodeCustomerLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="150" pref="150" max="150" attributes="0"/>
+                      <Component id="postalCodeCustomerTextField" min="-2" pref="260" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="250" pref="250" max="250" attributes="0"/>
+                      <Component id="okCustomerInfoButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="200" pref="200" max="200" attributes="0"/>
-              <Component id="cityCustomerLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="128" pref="128" max="128" attributes="0"/>
-              <Component id="provinceCustomerLabel" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="150" pref="150" max="150" attributes="0"/>
-              <Component id="cityCustomerTextField" min="-2" pref="200" max="-2" attributes="0"/>
-              <Component id="provinceCustomerTextField" min="-2" pref="52" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="230" pref="230" max="230" attributes="0"/>
-              <Component id="countryCustomerLabel" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="150" pref="150" max="150" attributes="0"/>
-              <Component id="countryCustomerTextField" min="-2" pref="260" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="260" pref="260" max="260" attributes="0"/>
-              <Component id="postalCodeCustomerLabel" min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="150" pref="150" max="150" attributes="0"/>
-              <Component id="postalCodeCustomerTextField" min="-2" pref="260" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="250" pref="250" max="250" attributes="0"/>
-              <Component id="okCustomerInfoButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="66" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -199,6 +203,7 @@
               <Component id="postalCodeCustomerTextField" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="20" pref="20" max="20" attributes="0"/>
               <Component id="okCustomerInfoButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="47" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

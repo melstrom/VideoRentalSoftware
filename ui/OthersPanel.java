@@ -12,7 +12,13 @@
 package ui;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
-
+import java.util.GregorianCalendar;
+import java.sql.SQLException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Vector;
+import inventory.*;
+import reports.*;
 
 /**
  *
@@ -52,6 +58,7 @@ public class OthersPanel extends javax.swing.JPanel {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -69,17 +76,22 @@ public class OthersPanel extends javax.swing.JPanel {
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Requested Move list", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
         jButton7.setText("View Requests");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getAllRequests(evt);
+            }
+        });
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Customer ID", "SKU", "Titile", "Format", "Studio", "Price"
+                "Customer ID", "SKU", "Request Date"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -92,27 +104,24 @@ public class OthersPanel extends javax.swing.JPanel {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addComponent(jButton7)
-                        .addGap(141, 141, 141))))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap(156, Short.MAX_VALUE)
+                .addComponent(jButton7)
+                .addGap(151, 151, 151))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton7)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(29, 29, 29)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))
         );
 
         reportPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Import Movie From a File", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+
+        jTextField1.setEnabled(false);
 
         jLabel1.setText("Source Location");
 
@@ -126,7 +135,7 @@ public class OthersPanel extends javax.swing.JPanel {
         jButton2.setText("Import");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                CSVImport(evt);
             }
         });
 
@@ -134,19 +143,17 @@ public class OthersPanel extends javax.swing.JPanel {
         reportPanel1.setLayout(reportPanel1Layout);
         reportPanel1Layout.setHorizontalGroup(
             reportPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, reportPanel1Layout.createSequentialGroup()
+            .addGroup(reportPanel1Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
                 .addGroup(reportPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(reportPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, reportPanel1Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         reportPanel1Layout.setVerticalGroup(
             reportPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,13 +163,14 @@ public class OthersPanel extends javax.swing.JPanel {
                     .addComponent(jLabel1)
                     .addComponent(jButton1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                .addGap(18, 18, 18))
+                .addGap(11, 11, 11)
+                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         reportPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sale Reports", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
+        jTextField2.setEnabled(false);
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField2ActionPerformed(evt);
@@ -172,12 +180,24 @@ public class OthersPanel extends javax.swing.JPanel {
         jLabel2.setText("Destination Location");
 
         jButton3.setText("Browse");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChooseReportDestination(evt);
+            }
+        });
 
         jButton4.setText("Daily Sale Report");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateDailyReport(evt);
+            }
+        });
 
         jButton5.setText("Monthly Sale Report");
 
         jButton6.setText("Annualy Sale Report");
+
+        jLabel3.setText("Note: Genreating sale report may take some time.");
 
         javax.swing.GroupLayout reportPanelLayout = new javax.swing.GroupLayout(reportPanel);
         reportPanel.setLayout(reportPanelLayout);
@@ -187,17 +207,22 @@ public class OthersPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, reportPanelLayout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
-                .addGap(50, 50, 50))
+            .addGroup(reportPanelLayout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))
+                        .addGap(54, 54, 54))))
         );
         reportPanelLayout.setVerticalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,12 +233,14 @@ public class OthersPanel extends javax.swing.JPanel {
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3))
                 .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addGap(18, 18, 18)
                 .addComponent(jButton5)
                 .addGap(17, 17, 17)
                 .addComponent(jButton6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -222,10 +249,10 @@ public class OthersPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(reportPanel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(reportPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(reportPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(reportPanel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -237,7 +264,7 @@ public class OthersPanel extends javax.swing.JPanel {
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(reportPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(reportPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -250,18 +277,92 @@ public class OthersPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void ChooseCSVFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChooseCSVFile
-        // TODO add your handling code here:
         javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();
-        javax.swing.filechooser.FileNameExtensionFilter filter = new FileNameExtensionFilter("cvs File", "cvs");
+        javax.swing.filechooser.FileNameExtensionFilter filter = new FileNameExtensionFilter("csv File", "csv");
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(jButton1);
         if(returnVal == javax.swing.JFileChooser.APPROVE_OPTION)
-            jTextField1.setText(chooser.getSelectedFile().getName());
+            jTextField1.setText(chooser.getSelectedFile().getAbsolutePath());
     }//GEN-LAST:event_ChooseCSVFile
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void CSVImport(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CSVImport
+        String path = jTextField1.getText();
+        try
+        {
+            MovieManagement.createGeneralMovie(path);
+            //ProgressBarForm here
+            javax.swing.JOptionPane.showMessageDialog(this, "Import Movie Sucessful.",
+                    "Import Movie From csv File", 1);
+        }
+        catch(Exception e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                                                "Import Movie From scv File", 0);
+        }
+    }//GEN-LAST:event_CSVImport
+
+    private void ChooseReportDestination(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChooseReportDestination
+        javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();
+        javax.swing.filechooser.FileNameExtensionFilter filter = new FileNameExtensionFilter("txt file", "txt");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(jButton3);
+        if(returnVal == javax.swing.JFileChooser.APPROVE_OPTION)
+            jTextField2.setText(chooser.getSelectedFile().getAbsolutePath());
+    }//GEN-LAST:event_ChooseReportDestination
+
+    private void generateDailyReport(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateDailyReport
+        GregorianCalendar today = new GregorianCalendar();
+        String path = jTextField2.getText();
+        try
+        {
+            SaleReporter reporter = new SaleReporter();
+            reporter.generateReport(today, today, path);
+            javax.swing.JOptionPane.showMessageDialog(this, "Sale report successfully" +
+                    " genreated", "Successful", 1);
+        }
+        catch(SQLException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Database Error.", 0);
+        }
+        catch(IOException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Destination path is bad.", 0);
+        }
+        catch(ClassNotFoundException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Database Driver Problem", 0);
+        }
+    }//GEN-LAST:event_generateDailyReport
+
+    private void getAllRequests(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getAllRequests
+        try
+        {
+            MovieManagement movieMan = new MovieManagement();
+            ArrayList<MovieRequest> allRequests = movieMan.getRequest();
+            Vector<Vector<String>> data = new Vector<Vector<String>>();
+            for(int i = 0; i < allRequests.size(); i++)
+            {
+                Vector<String> oneRequest = new Vector<String>();
+                oneRequest.add("" + allRequests.get(i).getCustomerID());
+                oneRequest.add(allRequests.get(i).getSKU());
+                oneRequest.add();
+            }
+            jTable2 = javax.swing.JTable();
+        }
+        catch(SQLException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Database Data Error", 0);
+        }
+        catch(ClassNotFoundException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Database Driver Error", 0);
+        }
+    }//GEN-LAST:event_getAllRequests
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -274,6 +375,7 @@ public class OthersPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
