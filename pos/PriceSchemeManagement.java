@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import jdbconnection.*;
 import inventory.*;
+import java.util.Vector;
 import search.*;
 
 /**
@@ -188,7 +189,16 @@ public class PriceSchemeManagement
                 System.out.println(command);//testing
                 PreparedStatement stat = conn.prepareStatement(command);
                 stat.executeUpdate();
+                ArrayList<String> categories = new ArrayList();
+                categories = this.getAllCategories();
+                for (String aCategory : categories){
+                    String pricingCommand = "INSERT INTO pricing (format, catagory, price) value ('" +
+                    newForm + "','" + aCategory + "',0);";
+                    stat = conn.prepareStatement(pricingCommand);
+                    stat.executeUpdate();
+                }
                 PRICE_SCHEME = new PriceScheme();
+
             }
             finally
             {
@@ -213,6 +223,23 @@ public class PriceSchemeManagement
                 System.out.println("inside priceschememanangement::addcategory "+command);//testing
                 PreparedStatement stat = conn.prepareStatement(command);
                 stat.executeUpdate();
+                
+                ArrayList<String> formats = new ArrayList();
+                formats = this.getAllFormats();
+                //for(String aFormat : formats){
+                  //  System.out.println("for loop format First: " + aFormat);
+              //  }
+                for(String aFormat : formats){
+
+                  //  System.out.println("for loop format: " + aFormat);
+                    String pricingCommand = "INSERT INTO pricing (catagory,format,price)values ('"
+                        + newCat + "','" + aFormat + "',0);";
+                   // System.out.println("after created query");
+                    stat = conn.prepareStatement(pricingCommand);
+                   // System.out.println("after prepareStatement");
+                    stat.executeUpdate();
+                   // System.out.println("after execute Update");
+                }
                 PRICE_SCHEME = new PriceScheme();
             }
             finally

@@ -21,7 +21,7 @@ import pos.PriceSchemeManagement;
 public class AddFormatDialog extends javax.swing.JDialog {
 
     /** Creates new form AddFormatFrame */
-    public AddFormatDialog() {
+    public AddFormatDialog(boolean modal) {
         initComponents();
     }
 
@@ -41,7 +41,7 @@ public class AddFormatDialog extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel1.setText("Format:");
@@ -115,14 +115,15 @@ public class AddFormatDialog extends javax.swing.JDialog {
         try{
             PriceSchemeManagement layout = new PriceSchemeManagement();
             layout.addFormat(newFormat);
-            ArrayList<String> aCategory = new ArrayList();
+          /*  ArrayList<String> aCategory = new ArrayList();
             aCategory = layout.getAllCategories();
             for (String cat : aCategory)
                 System.out.println("preloop formats: " + cat);
             for (String cat : aCategory){
                 System.out.println("formats: " + cat);
                 layout.addPrice(cat, newFormat, 1);
-            }
+            }*/
+        
         }
         catch(Exception ex){}
         this.hide();
