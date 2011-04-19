@@ -68,6 +68,9 @@ public class EmployeeFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        checkOutPanel = new ui.CheckOutPanel(localUIC);
+        jTabbedPane1.addTab("Check Out", checkOutPanel);
+
         checkInComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "available", "broken" }));
 
         RepostLostButton.setText("Report Lost");
@@ -140,8 +143,6 @@ public class EmployeeFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Check In", jPanel1);
 
-        checkOutPanel = new ui.CheckOutPanel(localUIC);
-        jTabbedPane1.addTab("Check Out", checkOutPanel);
         membershipPanel = new ui.MembershipPanel();
         jTabbedPane1.addTab("Membership", membershipPanel);
         inventoryPanel = new ui.InventoryPanel(localUIC);

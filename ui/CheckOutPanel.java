@@ -53,6 +53,7 @@ public class CheckOutPanel extends javax.swing.JPanel {
 //        initTableData();
         initComponents();
         lockInput(true);
+        changeField.setEditable(false);
 
     }
 
@@ -75,8 +76,6 @@ public class CheckOutPanel extends javax.swing.JPanel {
         outLicenseLabel = new javax.swing.JLabel();
         outLicenseField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        checkOutButton = new javax.swing.JButton();
-        ResetButton = new javax.swing.JButton();
         buttonPanel = new javax.swing.JPanel();
         removeItemButton = new javax.swing.JButton();
         barcodeField = new javax.swing.JTextField();
@@ -97,6 +96,18 @@ public class CheckOutPanel extends javax.swing.JPanel {
         totalLabel = new javax.swing.JLabel();
         totalField = new javax.swing.JTextField();
         taxLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        displayArea = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        paymentField = new javax.swing.JTextField();
+        changeField = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        payComboBox = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        checkOutButton = new javax.swing.JButton();
+        ResetButton = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -154,7 +165,7 @@ public class CheckOutPanel extends javax.swing.JPanel {
                         .addComponent(jLabel2)
                         .addGap(10, 10, 10)
                         .addComponent(outPenalthField, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         outCustomerInfoPanelLayout.setVerticalGroup(
             outCustomerInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,10 +199,6 @@ public class CheckOutPanel extends javax.swing.JPanel {
                             .addComponent(outLicenseField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(13, 13, 13))
         );
-
-        checkOutButton.setText("Check Out");
-
-        ResetButton.setText("Reset");
 
         buttonPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -362,14 +369,20 @@ public class CheckOutPanel extends javax.swing.JPanel {
         taxLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         taxLabel.setText("HST");
 
+        displayArea.setColumns(20);
+        displayArea.setRows(5);
+        jScrollPane1.setViewportView(displayArea);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(totalLabel)
                             .addComponent(taxLabel))
@@ -378,7 +391,7 @@ public class CheckOutPanel extends javax.swing.JPanel {
                             .addComponent(totalField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TaxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(transactionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -386,17 +399,96 @@ public class CheckOutPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(transactionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(TaxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(taxLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(totalField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
-                        .addComponent(totalLabel)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                        .addComponent(totalLabel))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setText("Payment:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setText("Change:");
+
+        payComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cash", "Credit Card", "Debit Card" }));
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel6.setText("Method:");
+
+        jLabel7.setText("cents");
+
+        checkOutButton.setText("Check Out");
+        checkOutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkOutButtonActionPerformed(evt);
+            }
+        });
+
+        ResetButton.setText("Reset");
+        ResetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ResetButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addGap(28, 28, 28)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(paymentField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7))
+                    .addComponent(payComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(changeField))
+                .addContainerGap(48, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(121, Short.MAX_VALUE)
+                .addComponent(checkOutButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ResetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(payComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(paymentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(changeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ResetButton)
+                    .addComponent(checkOutButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -411,13 +503,10 @@ public class CheckOutPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(checkOutButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ResetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -425,15 +514,14 @@ public class CheckOutPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ResetButton)
-                            .addComponent(checkOutButton))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(outCustomerInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(outCustomerInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 275, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -450,7 +538,7 @@ public class CheckOutPanel extends javax.swing.JPanel {
             //System.out.println("al-custid = "+custID);
             currCustomer = Search.getCustomer(custID);
             if(currCustomer == null){
-                outNameField.setText("Customer Not Found!");
+                this.displayArea.setText("Customer Not Found!");
             }else{
                 outNameField.setText(currCustomer.getFname()+" "+currCustomer.getLname());
                 outPhoneField.setText(currCustomer.getPhoneNum());
@@ -484,6 +572,14 @@ public class CheckOutPanel extends javax.swing.JPanel {
        addTransactionItem();
     }//GEN-LAST:event_addItemButtonActionPerformed
 
+    private void checkOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkOutButtonActionPerformed
+       processPayment();
+    }//GEN-LAST:event_checkOutButtonActionPerformed
+
+    private void ResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetButtonActionPerformed
+       reset();
+    }//GEN-LAST:event_ResetButtonActionPerformed
+
 
 Action delete = new AbstractAction()
 {
@@ -505,11 +601,19 @@ Action delete = new AbstractAction()
     private javax.swing.JButton addItemButton;
     private javax.swing.JTextField barcodeField;
     private javax.swing.JPanel buttonPanel;
+    private javax.swing.JTextField changeField;
     private javax.swing.JButton checkOutButton;
+    private javax.swing.JTextArea displayArea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField outCIdField;
     private javax.swing.JLabel outCIdLabel;
     private javax.swing.JPanel outCustomerInfoPanel;
@@ -522,6 +626,8 @@ Action delete = new AbstractAction()
     private javax.swing.JLabel outPenaltyLabel;
     private javax.swing.JTextField outPhoneField;
     private javax.swing.JLabel outPhoneLabel;
+    private javax.swing.JComboBox payComboBox;
+    private javax.swing.JTextField paymentField;
     private javax.swing.JButton penaltyButton;
     private javax.swing.JButton removeItemButton;
     private javax.swing.JLabel taxLabel;
@@ -590,6 +696,44 @@ Action delete = new AbstractAction()
 
     }
 
+    private void processPayment() throws IllegalStateException{
+        try {
+            int pay = Integer.parseInt(paymentField.getText().trim());
+            switch (payComboBox.getSelectedIndex()) {
+                case 0:
+                    double change = transactionM.pay("cash", pay);
+                    this.changeField.setText(Double.toString(change));
+                    displayArea.setText("Check Out Success!");
+                    break;
+                case 1:
+                    paymentField.setEditable(false);
+                    transactionM.pay("credit", pay);
+                    changeField.setText("0.00");
+                    displayArea.setText("Check Out Success!");
+
+                    break;
+                case 2:
+                    paymentField.setEditable(false);
+                    transactionM.pay("debit", pay);
+                    changeField.setText("0.00");
+                    displayArea.setText("Check Out Success!");
+
+                default:
+                    break;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CheckOutPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CheckOutPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(CheckOutPanel.class.getName()).log(Level.SEVERE, null, ex);
+            displayArea.setText("Item not avaliable, please reset and try again. ");
+        }
+        
+
+    }
+
+
  /**
  * Create an Transection
  * @param cust current customer class
@@ -632,6 +776,25 @@ Action delete = new AbstractAction()
         this.penaltyButton.setEnabled(!lock);
         this.DiscountBox.setEnabled(!lock);
         this.DiscountButton.setEnabled(!lock);
+    }
+
+    private void reset() {
+
+        DefaultTableModel table = (DefaultTableModel)transactionTable.getModel();
+
+        this.transactionM.abortTransaction();
+        cleanUpInputs();
+        lockInput(true);
+        for(int i = 0; i < table.getRowCount(); i++){
+
+            table.removeRow(i);
+        }
+        changeField.setText("0.00");
+        paymentField.setText("");
+        outCIdField.setText("");
+        barcodeField.setText("");
+        displayArea.setText("Reset Done");
+
     }
 
 }

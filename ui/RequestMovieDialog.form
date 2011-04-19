@@ -32,19 +32,27 @@
                       <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="movieLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="movieDisplayLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="idLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                              <Component id="idDisplayLabel" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="idLabel" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="customerNameLabel" min="-2" max="-2" attributes="0"/>
+                                  <Component id="movieLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="skuLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="idDisplayLabel" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="skuDisplayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="movieDisplayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="nameDisplayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="75" max="32767" attributes="0"/>
+              <EmptySpace pref="69" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace pref="220" max="32767" attributes="0"/>
@@ -65,17 +73,36 @@
                   <Component id="idLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="idDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="movieLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="movieDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="customerNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="nameDisplayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="CancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="confirmButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="CancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="confirmButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="skuLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                              <Component id="movieLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="skuDisplayLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                              <Component id="movieDisplayLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
               </Group>
-              <EmptySpace pref="33" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -99,12 +126,16 @@
     </Component>
     <Component class="javax.swing.JLabel" name="movieDisplayLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="ET"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="movie.getTitle()" type="code"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="idDisplayLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="123456"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="&quot;&quot;+customer.getAccountID()" type="code"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="titleLabel">
@@ -112,7 +143,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="24" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Rquest Comfirmation"/>
+        <Property name="text" type="java.lang.String" value="Request Confirmation"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="idLabel">
@@ -123,6 +154,30 @@
     <Component class="javax.swing.JLabel" name="movieLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Movie Title:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="customerNameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Customer name:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="nameDisplayLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="customer.getFname() + &quot; &quot; + customer.getLname()" type="code"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="skuLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="SKU:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="skuDisplayLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="movie.getSKU()" type="code"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>

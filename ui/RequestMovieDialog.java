@@ -10,6 +10,11 @@
  */
 
 package ui;
+import inventory.MovieRequest;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import inventory.MovieManagement;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,10 +30,12 @@ public class RequestMovieDialog extends javax.swing.JDialog {
         initComponents();
     }
 
-    public RequestMovieDialog(java.awt.Frame parent, boolean modal, ui.UiController UIC, inventory.GeneralMovie movie) {
-        this(parent, modal);
+    public RequestMovieDialog(java.awt.Frame parent, boolean modal, ui.UiController UIC, inventory.GeneralMovie movie, account.Customer customer) {
+        super(parent, modal);
         localUIC = UIC;
         this.movie = movie;
+        this.customer = customer;
+        initComponents();
     }
 
     /** This method is called from within the constructor to
@@ -47,6 +54,10 @@ public class RequestMovieDialog extends javax.swing.JDialog {
         titleLabel = new javax.swing.JLabel();
         idLabel = new javax.swing.JLabel();
         movieLabel = new javax.swing.JLabel();
+        customerNameLabel = new javax.swing.JLabel();
+        nameDisplayLabel = new javax.swing.JLabel();
+        skuLabel = new javax.swing.JLabel();
+        skuDisplayLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -64,16 +75,24 @@ public class RequestMovieDialog extends javax.swing.JDialog {
             }
         });
 
-        movieDisplayLabel.setText("ET");
+        movieDisplayLabel.setText(movie.getTitle());
 
-        idDisplayLabel.setText("123456");
+        idDisplayLabel.setText(""+customer.getAccountID());
 
-        titleLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        titleLabel.setText("Rquest Comfirmation");
+        titleLabel.setFont(new java.awt.Font("Tahoma", 0, 24));
+        titleLabel.setText("Request Confirmation");
 
         idLabel.setText("Account ID:");
 
         movieLabel.setText("Movie Title:");
+
+        customerNameLabel.setText("Customer name:");
+
+        nameDisplayLabel.setText(customer.getFname() + " " + customer.getLname());
+
+        skuLabel.setText("SKU:");
+
+        skuDisplayLabel.setText(movie.getSKU());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,14 +107,20 @@ public class RequestMovieDialog extends javax.swing.JDialog {
                         .addGap(55, 55, 55)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(movieLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(movieDisplayLabel))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(idLabel)
+                                .addGap(28, 28, 28)
+                                .addComponent(idDisplayLabel))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(customerNameLabel)
+                                    .addComponent(movieLabel)
+                                    .addComponent(skuLabel))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(idDisplayLabel)))))
-                .addContainerGap(75, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(skuDisplayLabel)
+                                    .addComponent(movieDisplayLabel)
+                                    .addComponent(nameDisplayLabel))))))
+                .addContainerGap(69, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(220, Short.MAX_VALUE)
                 .addComponent(confirmButton)
@@ -112,29 +137,57 @@ public class RequestMovieDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(idLabel)
                     .addComponent(idDisplayLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(movieLabel)
-                    .addComponent(movieDisplayLabel))
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CancelButton)
-                    .addComponent(confirmButton))
-                .addContainerGap(33, Short.MAX_VALUE))
+                    .addComponent(customerNameLabel)
+                    .addComponent(nameDisplayLabel))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(CancelButton)
+                            .addComponent(confirmButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(skuLabel)
+                                .addGap(2, 2, 2)
+                                .addComponent(movieLabel))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(skuDisplayLabel)
+                                .addGap(2, 2, 2)
+                                .addComponent(movieDisplayLabel)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Upon clicking the confirm button, the request object will be saved
+     * @param evt
+     */
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
-        // TODO add your handling code here:
-        localUIC.PopRequestDone();
-        this.setVisible(false);
+        // public MovieRequest(String SKU, int customerID, GregorianCalendar requestDate)
+        try
+        {
+            //MovieRequest request = new MovieRequest(movie.getSKU(), customer.getAccountID(), new GregorianCalendar());
+            MovieManagement movieManagement = new MovieManagement();
+            movieManagement.addRequest(customer.getAccountID(), movie.getSKU());
+            localUIC.PopRequestDone();
+            this.setVisible(false);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "An error occurred", JOptionPane.ERROR_MESSAGE);
+        }
 }//GEN-LAST:event_confirmButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        //this.setVisible(false);
+        dispose();
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     /**
@@ -157,11 +210,16 @@ public class RequestMovieDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
     private javax.swing.JButton confirmButton;
+    private javax.swing.JLabel customerNameLabel;
     private javax.swing.JLabel idDisplayLabel;
     private javax.swing.JLabel idLabel;
     private javax.swing.JLabel movieDisplayLabel;
     private javax.swing.JLabel movieLabel;
+    private javax.swing.JLabel nameDisplayLabel;
+    private javax.swing.JLabel skuDisplayLabel;
+    private javax.swing.JLabel skuLabel;
     private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
     private inventory.GeneralMovie movie;
+    private account.Customer customer;
 }

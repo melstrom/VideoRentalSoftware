@@ -134,8 +134,8 @@ public class UiController {
      */
     public void PopRequestDone(){
         JOptionPane.showMessageDialog(currFrame,
-        "Your Request Done.",
-        "Request Done",
+        "Your request has been recorded.",
+        "Request Successful",
         JOptionPane.PLAIN_MESSAGE);
     }
 

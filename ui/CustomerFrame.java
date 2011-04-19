@@ -404,21 +404,57 @@ public class CustomerFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_ReserveButtonActionPerformed
 
     private void RequestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RequestButtonActionPerformed
-        JOptionPane.showMessageDialog(null, "This feature is not implemented yet", "Sorry", JOptionPane.INFORMATION_MESSAGE);
-        
-        /*if(localUIC.getKey().isLogin())
-           new RequestMovieDialog(this, false, localUIC).setVisible(true);
-        else
+        //JOptionPane.showMessageDialog(null, "This feature is not implemented yet", "Sorry", JOptionPane.INFORMATION_MESSAGE);
+        try
         {
-            new LoginDialog(localUIC).setVisible(true);
-        }*/
-           //new LoginDialog(localUIC.getKey(),localUIC,false).setVisible(true);
+
+
+            String accountID = JOptionPane.showInputDialog(null, "Please enter your acocunt number", "Request", JOptionPane.QUESTION_MESSAGE);
+            int customerID = 0;
+            try
+            {
+                customerID = Integer.parseInt(accountID);
+            }
+            catch (NumberFormatException e)
+            {
+                throw new NumberFormatException("Account ID must be a number.  Cancelling Request");
+            }
+            account.Customer customer = Search.getCustomer(customerID);
+            if (customer == null)
+            {
+                throw new account.CustomerNotFoundException("That ID does not exist");
+            }
+            int rowNum = jTable1.getSelectedRow();
+            inventory.GeneralMovie movie = result.get(rowNum);
+            if (movie == null)
+            {
+                throw new inventory.MovieNotFoundException("That movie does not exist");
+            }
+            new RequestMovieDialog(this, false, localUIC, movie, customer).setVisible(true);
+//            if(localUIC.getKey().isLogin())
+//            {
+//                //public RequestMovieDialog(java.awt.Frame parent, boolean modal, ui.UiController UIC, inventory.GeneralMovie movie, account.Customer customer) {
+//
+//            }
+//            else
+//            {
+//                new LoginDialog(localUIC).setVisible(true);
+//            }
+               //new LoginDialog(localUIC.getKey(),localUIC,false).setVisible(true);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "An error occurred", JOptionPane.ERROR_MESSAGE);
+        }
+
+
 }//GEN-LAST:event_RequestButtonActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         int rowNum = jTable1.getSelectedRow();
         inventory.GeneralMovie movie = result.get(rowNum);
+        
         new ui.searchDetailDialog(this, false, movie).setVisible(true);
 }//GEN-LAST:event_jTable1MouseClicked
 
