@@ -784,7 +784,6 @@ public class RentalMovieManagement
         {
             throw new IllegalArgumentException("Not a valid barcode");
         }
-        System.out.println(this.SKU + "-" + rentalID);
     }
 
     /**
@@ -862,7 +861,6 @@ public class RentalMovieManagement
                 + "', videoRental.customerID = NULL, "
                 + "videoRental.checkout_time = NULL "
                 + "WHERE videoRental.rentalID='" + barcode.substring(barcode.length() - 9) + "';";
-        //System.out.println(command);//testing
         PreparedStatement stat = conn.prepareStatement(command);
         stat.execute();
     }
@@ -1020,7 +1018,6 @@ public class RentalMovieManagement
             throws SQLException
     {
         String query = "DELETE FROM " + tableName + " " + where;
-        System.out.println(query);
         return query;
     }
 
@@ -1061,7 +1058,6 @@ public class RentalMovieManagement
         }
         query += ")";
 
-        System.out.println(query);
         return query;
     }
 
@@ -1082,7 +1078,6 @@ public class RentalMovieManagement
         String command = "UPDATE " + tableName
                 + " SET " + attributeName + " = " + "'" + setAttributeTo + "'"
                 + whereCondition;
-        System.out.println(command);
         return command;
     }
 
@@ -1099,7 +1094,6 @@ public class RentalMovieManagement
     private String generateSelectSQL(String tablename, String field, String where)
     {
         String query = "select " + field + " from " + tablename + " " + where;
-        System.out.println(query);
         return query;
     }
 
@@ -1114,7 +1108,6 @@ public class RentalMovieManagement
      */
     private int updateDatabase(String query) throws Exception, SQLException
     {
-        System.out.println(query);
         try
         {
             int rowsChanged = JDBC.update(query);
@@ -1509,7 +1502,6 @@ public class RentalMovieManagement
     //Penalty penalty = new Penalty();
 
     // String id = customer.getFname();
-    //System.out.println(id);
 
     return 0;
     }

@@ -39,7 +39,6 @@ public class Genres
 
     private Genres() throws SQLException, ClassNotFoundException
     {
-        //System.out.println("Initializing for the first time"); // TODO: comment out after testing
         update();
     }
 
