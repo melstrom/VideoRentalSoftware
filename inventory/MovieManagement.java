@@ -664,7 +664,7 @@ public class MovieManagement
         ArrayList<MovieRequest> movieRequest = new ArrayList<MovieRequest>();
         String table = "madeSpecialOrders";
         String column = "*";
-        String constraint = null;
+        String constraint = "";
 
         String query = generateQuery(table, column, constraint);
 
@@ -679,6 +679,10 @@ public class MovieManagement
             requestDate.setTime(datetime);
             this.request = new MovieRequest(SKU, customerID, requestDate);
             movieRequest.add(this.request);
+        }
+        if (movieRequest.size()==0)
+        {
+            throw new SQLException("There are no requests.");
         }
         return movieRequest;
     }
