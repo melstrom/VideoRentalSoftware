@@ -509,17 +509,17 @@ public class GeneralMovie
      */
     public final void setGenre(String genre)
     {
-        if (genre == null)
-            throw new IllegalArgumentException("Not a valid genre");
-        for (String possibleGenre : possibleGenres)
-        {
-            if (possibleGenre.equalsIgnoreCase(genre))
-            {
+//        if (genre == null)
+//            throw new IllegalArgumentException("Not a valid genre");
+//        for (String possibleGenre : possibleGenres)
+//        {
+//            if (possibleGenre.equalsIgnoreCase(genre))
+//            {
                 this.genre = genre;
-                return;
-            }
-        }
-        throw new IllegalArgumentException("Not a valid genre");
+//                return;
+//            }
+//        }
+//        throw new IllegalArgumentException("Not a valid genre");
     }
 
     private String title;
@@ -540,7 +540,7 @@ public class GeneralMovie
     private int retailPriceInCents;
     private String genre;
     private String format;
-    public final String[] possibleGenres = { "science fiction", "musical", "action",
-            "drama", "comedy", "romance", "family", "horror", "suspense"
-        };
+//    public final String[] possibleGenres = { "science fiction", "musical", "action",
+//            "drama", "comedy", "romance", "family", "horror", "suspense"
+//        };
 }

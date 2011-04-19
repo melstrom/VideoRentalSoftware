@@ -26,40 +26,22 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="24" pref="24" max="24" attributes="0"/>
+                      <EmptySpace min="130" pref="130" max="130" attributes="0"/>
+                      <Component id="addNewTitleHeaderLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="20" pref="20" max="20" attributes="0"/>
+                      <Component id="addNewTitleInstructionLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="20" pref="20" max="20" attributes="0"/>
                       <Component id="titleTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="92" pref="92" max="92" attributes="0"/>
+                      <EmptySpace min="95" pref="95" max="95" attributes="0"/>
                       <Component id="titleAddNewTitleTextField" min="-2" pref="210" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <EmptySpace min="24" pref="24" max="24" attributes="0"/>
-                      <Component id="skuAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="95" pref="95" max="95" attributes="0"/>
-                      <Component id="skuAddNewTitleTextField" min="-2" pref="210" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="24" pref="24" max="24" attributes="0"/>
-                      <Component id="mediaTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="52" pref="52" max="52" attributes="0"/>
-                      <Component id="mediaTypeAddNewTitleTextField" min="-2" pref="210" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="24" pref="24" max="24" attributes="0"/>
+                      <EmptySpace min="20" pref="20" max="20" attributes="0"/>
                       <Component id="yearTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="91" pref="91" max="91" attributes="0"/>
-                      <Component id="yearAddNewTitleSpinner" min="-2" pref="83" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="20" pref="20" max="20" attributes="0"/>
-                      <Component id="genreTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="86" pref="86" max="86" attributes="0"/>
-                      <Component id="genreAddNewTitleTextField" min="-2" pref="210" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="20" pref="20" max="20" attributes="0"/>
-                      <Component id="producerTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="69" pref="69" max="69" attributes="0"/>
-                      <Component id="producerAddNewTitleTextField" min="-2" pref="210" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="20" pref="20" max="20" attributes="0"/>
@@ -75,22 +57,10 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="20" pref="20" max="20" attributes="0"/>
-                      <Component id="studioTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="84" pref="84" max="84" attributes="0"/>
-                      <Component id="studioAddNewTitleTextField" min="-2" pref="210" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="20" pref="20" max="20" attributes="0"/>
-                      <Component id="ratingTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="83" pref="83" max="83" attributes="0"/>
-                      <Component id="ratingAddNewTitleTextField" min="-2" pref="210" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="20" pref="20" max="20" attributes="0"/>
                       <Component id="lengthTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="81" pref="81" max="81" attributes="0"/>
                       <Component id="lengthAddNewTitleTextField" min="-2" pref="60" max="-2" attributes="0"/>
-                      <EmptySpace min="9" pref="9" max="9" attributes="0"/>
+                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
                       <Component id="lengthLabelMinutesAddNewTitle" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
@@ -113,52 +83,94 @@
                       <EmptySpace min="33" pref="33" max="33" attributes="0"/>
                       <Component id="CancelAddNewTitleButton" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="producerTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="genreTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="producerAddNewTitleTextField" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="yearAddNewTitleTextField" alignment="0" max="32767" attributes="1"/>
+                              <Component id="addNewTitleGenreComboBox" alignment="0" pref="91" max="32767" attributes="1"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="studioTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ratingTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="addNewTitleRatingComboBox" min="-2" pref="51" max="-2" attributes="0"/>
+                          <Component id="studioAddNewTitleTextField" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="skuAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="mediaTypeAddNewTitleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="addNewTitleFormatComboBox" min="-2" pref="101" max="-2" attributes="0"/>
+                          <Component id="skuAddNewTitleTextField" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="20" pref="20" max="20" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="addNewTitleAddAnotherMovieLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="addNewTitleSuccessMessageLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
-              <EmptySpace pref="14" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="39" pref="39" max="39" attributes="0"/>
+              <EmptySpace min="11" pref="11" max="11" attributes="0"/>
+              <Component id="addNewTitleHeaderLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="14" pref="14" max="14" attributes="0"/>
+              <Component id="addNewTitleInstructionLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="6" pref="6" max="6" attributes="0"/>
+              <Component id="addNewTitleSuccessMessageLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+              <Component id="addNewTitleAddAnotherMovieLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="3" pref="3" max="3" attributes="0"/>
-                      <Component id="titleTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="titleTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
                   <Component id="titleAddNewTitleTextField" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="11" pref="11" max="11" attributes="0"/>
+              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="3" pref="3" max="3" attributes="0"/>
-                      <Component id="skuAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="skuAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
                   <Component id="skuAddNewTitleTextField" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="11" pref="11" max="11" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="3" pref="3" max="3" attributes="0"/>
-                      <Component id="mediaTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="mediaTypeAddNewTitleTextField" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="11" pref="11" max="11" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="3" pref="3" max="3" attributes="0"/>
-                      <Component id="yearTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="yearAddNewTitleSpinner" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="8" pref="8" max="8" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="genreTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="genreAddNewTitleTextField" min="-2" max="-2" attributes="0"/>
-              </Group>
               <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="mediaTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="addNewTitleFormatComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="yearTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="yearAddNewTitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="genreTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="addNewTitleGenreComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="producerTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
                   <Component id="producerAddNewTitleTextField" min="-2" max="-2" attributes="0"/>
@@ -179,18 +191,15 @@
                   <Component id="studioAddNewTitleTextField" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="ratingTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="ratingAddNewTitleTextField" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="ratingTypeAddNewTitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="addNewTitleRatingComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lengthTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
                   <Component id="lengthAddNewTitleTextField" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="6" pref="6" max="6" attributes="0"/>
-                      <Component id="lengthLabelMinutesAddNewTitle" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="lengthLabelMinutesAddNewTitle" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="10" pref="10" max="10" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -203,12 +212,12 @@
                   <Component id="infoTypeAddNewTitleLabel" min="-2" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="14" pref="14" max="14" attributes="0"/>
+              <EmptySpace min="34" pref="34" max="34" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="saveAddNewTitleButton" min="-2" max="-2" attributes="0"/>
                   <Component id="CancelAddNewTitleButton" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="11" max="32767" attributes="0"/>
+              <EmptySpace pref="29" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -239,12 +248,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="titleAddNewTitleTextField">
-    </Component>
-    <Component class="javax.swing.JSpinner" name="yearAddNewTitleSpinner">
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-        <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="yearAddNewTitleSpinner.setModel(new SpinnerNumberModel(2011, 1888, 3000, 1));"/>
-      </AuxValues>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
@@ -333,8 +336,6 @@
         <Property name="text" type="java.lang.String" value="Director"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="genreAddNewTitleTextField">
-    </Component>
     <Component class="javax.swing.JTextField" name="producerAddNewTitleTextField">
     </Component>
     <Component class="javax.swing.JTextField" name="directorAddNewTitleTextField">
@@ -343,12 +344,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="studioAddNewTitleTextField">
     </Component>
-    <Component class="javax.swing.JTextField" name="ratingAddNewTitleTextField">
-    </Component>
     <Component class="javax.swing.JTextField" name="lengthAddNewTitleTextField">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="lengthAddNewTitleTextFieldActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="skuAddNewTitleLabel">
       <Properties>
@@ -367,8 +363,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="skuAddNewTitleTextField">
-    </Component>
-    <Component class="javax.swing.JTextField" name="mediaTypeAddNewTitleTextField">
     </Component>
     <Component class="javax.swing.JLabel" name="retailPriceAddNewTitleTextLabel">
       <Properties>
@@ -389,6 +383,70 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="minutes"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="addNewTitleHeaderLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="24" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Add a new movie"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="addNewTitleInstructionLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Fill out all fields and click the Save button to add a new movie."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="addNewTitleSuccessMessageLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Movie name () successfully added."/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="addNewTitleSuccessMessageLabel.setVisible(false);"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="addNewTitleGenreComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new javax.swing.DefaultComboBoxModel(genreComboBoxItems)" type="code"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="Genres dbGenre = Genres.getInstance();&#xa;String[] genreComboBoxItems = dbGenre.getGenres();"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="addNewTitleRatingComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new javax.swing.DefaultComboBoxModel(ratings)" type="code"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="Ratings dbRatings = Ratings.getInstance();&#xa;String[] ratings = dbRatings.getRatings();"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="addNewTitleFormatComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new javax.swing.DefaultComboBoxModel(comboBoxItems)" type="code"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="Formats dbFormats = Formats.getInstance();&#xa;String[] comboBoxItems = dbFormats.getFormats();"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JTextField" name="yearAddNewTitleTextField">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="yearAddNewTitleTextFieldActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="addNewTitleAddAnotherMovieLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="You may add another movie."/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="addNewTitleAddAnotherMovieLabel.setVisible(false);"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

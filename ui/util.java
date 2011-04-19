@@ -12,8 +12,8 @@ package ui;
 public class util {
 
     public enum UiMode {
-    Customer, Employee
-}
+        Customer, Employee
+    }
 
 
 }
