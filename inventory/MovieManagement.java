@@ -648,7 +648,6 @@ public class MovieManagement
      * Changes the information of a movie
      * @param info contains the 7 required information to identify a movie
      */
-    //TODO: SQL ' problem, needs lookover
     public void editInfo(String SKU,
             String title,
             String[] actors,
@@ -753,7 +752,6 @@ public class MovieManagement
         today.setTime(today.getTime());
         String time = makeReleaseDateString((GregorianCalendar)today);
         String values[] = {time,movie.getSKU(),""+requestingCustomer};
-        //TODO: Duplicate requests can be added; need to ask about db keys
         String SQL = generateInsertSQL(tablename, columns, values);
         statement.executeUpdate(SQL);
     }
