@@ -244,7 +244,7 @@ public class MovieManagement
     /**
      * Generic method to create a constraint for a movie
      * @param movie
-     * @return a constraint
+     * @return A prepared statement
      */
     private static String makePreparedConstraint(GeneralMovie movie)
     {
@@ -305,10 +305,10 @@ public class MovieManagement
     }
 
     /**
-     * retrieves a string of form YYYY-MM-DD from the Calendar object
-     * assumes that this form is the form of sql datetime
+     * Retrieves a string of form YYYY-MM-DD from the Calendar object
+     * assumes that this form is the form of SQL datetime
      * @param releaseDate
-     * @return
+     * @return A string containing the formatted date
      */
     private static String makeReleaseDateString(GregorianCalendar releaseDate)
     {
@@ -321,8 +321,8 @@ public class MovieManagement
 
     /**
      * This method finds the next unused infoID number and returns it.
-     * @pre the infoIDs are below maximum
-     * @return the next unused infoID
+     * @pre The infoIDs are below maximum
+     * @return The next unused infoID
      * @throws MovieLimitReachedException if there are no infoIDs left
      */
     private static int nextInfoID() throws Exception
@@ -461,7 +461,7 @@ public class MovieManagement
     /**
      * This method adds a physical video to the database tables
      * @param infoID the id for a physical video
-     * @param movie a movie
+     * @param movie A GeneralMovie object
      * @throws Exception
      */
     private static void addPhysicalVideo(int infoID, GeneralMovie movie)
@@ -655,18 +655,6 @@ public class MovieManagement
         }
     }
 
-//    /**
-//     *
-//     * @return quantity of...something
-//     */
-//    public int getQuantity()
-//    {
-//        String table = "videoInfo";
-//        int quantity = movie.getSKU();
-//        //SELECT COUNT(SKU) FROM videoInfo WHERE SKU='SKU'
-//
-//        return quantity;
-//    }
     /**
      *  Get an arrayList of MovieRequests
      *  @return an arrayList of MovieRequests
@@ -1010,3 +998,16 @@ public class MovieManagement
         constraint += "length = '" + runtime + "'";
         return constraint;
     }*/
+
+//    /**
+//     *
+//     * @return quantity of...something
+//     */
+//    public int getQuantity()
+//    {
+//        String table = "videoInfo";
+//        int quantity = movie.getSKU();
+//        //SELECT COUNT(SKU) FROM videoInfo WHERE SKU='SKU'
+//
+//        return quantity;
+//    }
