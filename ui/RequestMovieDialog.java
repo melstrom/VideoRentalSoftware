@@ -174,7 +174,7 @@ public class RequestMovieDialog extends javax.swing.JDialog {
         {
             //MovieRequest request = new MovieRequest(movie.getSKU(), customer.getAccountID(), new GregorianCalendar());
             MovieManagement movieManagement = new MovieManagement();
-            movieManagement.addRequest(movie, customer.getAccountID());
+            movieManagement.addRequest(customer.getAccountID(), movie.getSKU());
             localUIC.PopRequestDone();
             this.setVisible(false);
         }
