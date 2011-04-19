@@ -31,6 +31,11 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import jdbconnection.JDBCConnection;
 
+/**
+ * AccountManagement is charge of all account related tasks, such as creating new
+ * customers and employees, editing personal info, and changing the position of employees
+ * @author melstrom
+ */
 public class AccountManagement
 {
     private Connection connection;
@@ -48,6 +53,7 @@ public class AccountManagement
 
     /**
      * Creates an employee account
+     * @param employeeID The employeeID that is auto-generated for each new employee
      * @param position the position of the employee (Manager/Staff)
      * @param Fname the first name of the user
      * @param Lname the last name of the user
@@ -82,6 +88,7 @@ public class AccountManagement
 
     /**
      * Creates a customer account
+     * @param customerID The customerID that is auto-generated for each new customer
      * @param DL the driver license number of the user
      * @param Fname the first name of the user
      * @param Lname the last name of the user
