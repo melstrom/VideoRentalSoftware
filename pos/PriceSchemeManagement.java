@@ -76,7 +76,6 @@ public class PriceSchemeManagement
                     + " SET price=" + price
                     + " WHERE catagory='" + cat.trim().toLowerCase() + "' AND "
                     + "format='" + form.trim().toLowerCase() + "';";
-            System.out.println("inside PSM::setprice : "+ command);//testing
             PreparedStatement stat = conn.prepareStatement(command);
             boolean successful = stat.execute();
             if(!successful)
@@ -122,7 +121,6 @@ public class PriceSchemeManagement
             conn.getConnection();
             try
             {
-                System.out.println("INSERT INTO pricing "
                     + "VALUES ("+ price + ", '" + cat.trim().toLowerCase()
                     + "', '" + form.trim().toLowerCase() + "');");//testing
                 PreparedStatement stat = conn.prepareStatement("INSERT INTO pricing "
@@ -186,7 +184,6 @@ public class PriceSchemeManagement
             try
             {
                 String command = "INSERT INTO formats VALUES ('" + newForm + "');";
-                System.out.println(command);//testing
                 PreparedStatement stat = conn.prepareStatement(command);
                 stat.executeUpdate();
                 ArrayList<String> categories = new ArrayList();
@@ -224,25 +221,19 @@ public class PriceSchemeManagement
             {
                 String command = "INSERT INTO catagories VALUES ('" + newCat +
                         "', " + period + ");";
-                System.out.println("inside priceschememanangement::addcategory "+command);//testing
                 PreparedStatement stat = conn.prepareStatement(command);
                 stat.executeUpdate();
                 
                 ArrayList<String> formats = new ArrayList();
                 formats = this.getAllFormats();
                 //for(String aFormat : formats){
-                  //  System.out.println("for loop format First: " + aFormat);
               //  }
                 for(String aFormat : formats){
 
-                  //  System.out.println("for loop format: " + aFormat);
                     String pricingCommand = "INSERT INTO pricing (catagory,format,price)values ('"
                         + newCat + "','" + aFormat + "',0);";
-                   // System.out.println("after created query");
                     stat = conn.prepareStatement(pricingCommand);
-                   // System.out.println("after prepareStatement");
                     stat.executeUpdate();
-                   // System.out.println("after execute Update");
                 }
                 PRICE_SCHEME = new PriceScheme();
             }
