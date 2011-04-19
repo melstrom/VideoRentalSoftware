@@ -366,6 +366,7 @@ public class Search
     public static Employee getEmployee(int employeeID)
             throws SQLException, ClassNotFoundException
     {
+        System.out.println("inside search::getemployee.");//testing
         JDBCConnection conn = new JDBCConnection();
         //Connection connection = JDBCConnection.getConnection();
         try
@@ -375,11 +376,13 @@ public class Search
                         "address.addressID = account.addressID " +
                         "AND account.accountID = employee.accountID " +
                         "AND employee.employeeID = ?");
+                System.out.println(query);//testing
                 int numParam = 1;
                 String[] params = { "" + employeeID };
                 ResultSet result = conn.getResults(query, numParam, params);
                 if (!result.next())
                 {
+                    System.out.println("in search::getEmployee::if(!result.next())");//testing
                     return null;
                 }
                 String barcode = "" + employeeID;
