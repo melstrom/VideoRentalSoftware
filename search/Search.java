@@ -267,7 +267,6 @@ public class Search
             
             if (result.isAfterLast())
             {
-                //System.out.println("Is afer last"); // TESTING
                 return null;
             }
             
@@ -307,7 +306,6 @@ public class Search
     public static Employee getEmployee(int employeeID)
             throws SQLException, ClassNotFoundException
     {
-        System.out.println("inside search::getemployee.");//testing
         JDBCConnection conn = new JDBCConnection();
         try
         {
@@ -316,13 +314,11 @@ public class Search
                         "address.addressID = account.addressID " +
                         "AND account.accountID = employee.accountID " +
                         "AND employee.employeeID = ?");
-                System.out.println(query);//testing
                 int numParam = 1;
                 String[] params = { "" + employeeID };
                 ResultSet result = conn.getResults(query, numParam, params);
                 if (!result.next())
                 {
-                    System.out.println("in search::getEmployee::if(!result.next())");//testing
                     return null;
                 }
                 String barcode = "" + employeeID;
@@ -693,7 +689,6 @@ public class Search
         {
             throw new IllegalArgumentException("Not an individual movie");
         }
-        //System.out.println(SKU+" "+copyNum);
         GeneralMovie generalMovie = previewGeneralMovie(SKU);
         
         
@@ -753,7 +748,6 @@ public class Search
 
                     IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
                     RentalMovie rentalMovie = new RentalMovie(rentalPeriod, individualMovie);
-                    //System.out.println(SKU+" "+copyNum);
                     return rentalMovie;
                 // copy and pasted signature for RentalMovie
                 //public RentalMovie(int rentalPeriod, IndividualMovie movie)
@@ -783,7 +777,6 @@ public class Search
     private static GeneralMovie previewGeneralMovie(String barcodeID)
             throws SQLException, MovieNotFoundException, ClassNotFoundException, java.lang.Exception
     {
-        //System.out.println(barcodeID);
         String query = "SELECT * FROM videoInfo, physicalVideo "
                 + "WHERE videoInfo.InfoID = physicalVideo.InfoID "
                 + "AND physicalVideo.SKU = '" +barcodeID + "'";
@@ -886,7 +879,6 @@ public class Search
     private static GeneralMovie previewGeneralMovie(ResultSet results)
             throws SQLException, ClassNotFoundException
     {
-        //System.out.println(barcodeID);
 
         if (results.isAfterLast())
         {
