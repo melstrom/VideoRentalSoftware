@@ -50,7 +50,6 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         try {
             int[][] prices;
             PriceSchemeManagement init = new PriceSchemeManagement();
-            System.out.println("FUCK I HATE THIS PROGRAM!!!");
             prices = init.getAllPrices();
             headerString = new ArrayList<String>();
             headerString = init.getAllCategories();
