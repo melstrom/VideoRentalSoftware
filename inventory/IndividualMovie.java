@@ -38,15 +38,15 @@ public class IndividualMovie extends GeneralMovie{
         setCategory(category);
         setBarcode(barcode);
    }
-//type Rental/Sale
-   public IndividualMovie(String type, String SKU, int ID) throws SQLException, ClassNotFoundException
+//type Rental/Sale   typeAgain rental/Sale
+   public IndividualMovie(String type, String SKU, int ID, String typeAgain) throws SQLException, ClassNotFoundException
    {
        super(SKU);
-       String query = "SELECT condition FROM video" + type +" WHERE " + type + "ID = " + ID;
+       String query = "SELECT video" + type + ".catagory FROM video" + type +" WHERE " + typeAgain + "ID = " + ID;
        ResultSet rs = statement.executeQuery(query);
        rs.next();
        this.category = rs.getString(1);
-       String query2 = "SELECT condition FROM video" + type +" WHERE " + type + "ID = " + ID;
+       String query2 = "SELECT video" + type + ".condition FROM video" + type +" WHERE " + typeAgain + "ID = " + ID;
        ResultSet rs2 = statement.executeQuery(query2);
        rs2.next();
        this.condition = rs2.getString(1);

@@ -61,13 +61,15 @@ public class RentalMovie extends IndividualMovie{
         setCondition(movie.getCondition());
     }
 
-    public RentalMovie(String type, String SKU, int ID) throws SQLException, ClassNotFoundException
+    public RentalMovie(String type, String SKU, int ID, String typeAgain) throws SQLException, ClassNotFoundException
     {
-        super(type, SKU, ID);
-        String query = "SELECT customerID FROM video" + type +" WHERE " + type + "ID = " + ID;
+        super(type, SKU, ID, typeAgain);
+        String query = "SELECT video" + type + ".customerID FROM video" + type +" WHERE " + typeAgain + "ID = " + ID;
         ResultSet rs = statement.executeQuery(query);
-        rs.next();
-        this.customerID = rs.getInt(1);
+        if(rs.next());
+        {
+            this.customerID = rs.getInt(1);
+        }
     }
   
   /**
