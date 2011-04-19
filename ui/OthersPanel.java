@@ -87,11 +87,11 @@ public class OthersPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Customer ID", "SKU", "Request Date"
+                "SKU", "Customer ID", "Request Date"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -104,7 +104,7 @@ public class OthersPanel extends javax.swing.JPanel {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap(156, Short.MAX_VALUE)
                 .addComponent(jButton7)
@@ -116,7 +116,7 @@ public class OthersPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jButton7)
                 .addGap(29, 29, 29)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
         );
 
         reportPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Import Movie From a File", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
@@ -153,7 +153,7 @@ public class OthersPanel extends javax.swing.JPanel {
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         reportPanel1Layout.setVerticalGroup(
             reportPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,8 +194,19 @@ public class OthersPanel extends javax.swing.JPanel {
         });
 
         jButton5.setText("Monthly Sale Report");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateMonthlyReport(evt);
+            }
+        });
 
         jButton6.setText("Annualy Sale Report");
+        jButton6.setActionCommand("Annual Sale Report");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateAnnualReport(evt);
+            }
+        });
 
         jLabel3.setText("Note: Genreating sale report may take some time.");
 
@@ -207,22 +218,21 @@ public class OthersPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
                 .addContainerGap())
             .addGroup(reportPanelLayout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(reportPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(reportPanelLayout.createSequentialGroup()
-                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))
-                        .addGap(54, 54, 54))))
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(reportPanelLayout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
+                .addGap(56, 56, 56))
         );
         reportPanelLayout.setVerticalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,13 +244,13 @@ public class OthersPanel extends javax.swing.JPanel {
                     .addComponent(jButton3))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton4)
                 .addGap(18, 18, 18)
                 .addComponent(jButton5)
                 .addGap(17, 17, 17)
                 .addComponent(jButton6)
-                .addContainerGap())
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -249,10 +259,10 @@ public class OthersPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(reportPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(reportPanel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -297,7 +307,7 @@ public class OthersPanel extends javax.swing.JPanel {
         catch(Exception e)
         {
             javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
-                                                "Import Movie From scv File", 0);
+                                                "Import Movie From csv File", 0);
         }
     }//GEN-LAST:event_CSVImport
 
@@ -318,7 +328,7 @@ public class OthersPanel extends javax.swing.JPanel {
             SaleReporter reporter = new SaleReporter();
             reporter.generateReport(today, today, path);
             javax.swing.JOptionPane.showMessageDialog(this, "Sale report successfully" +
-                    " genreated", "Successful", 1);
+                    " generated", "Successful", 1);
         }
         catch(SQLException e)
         {
@@ -348,9 +358,15 @@ public class OthersPanel extends javax.swing.JPanel {
                 Vector<String> oneRequest = new Vector<String>();
                 oneRequest.add("" + allRequests.get(i).getCustomerID());
                 oneRequest.add(allRequests.get(i).getSKU());
-                oneRequest.add();
+                GregorianCalendar date = allRequests.get(i).getRequestDate();
+                String dateString = "" + date.get(date.YEAR) + "-" + date.get(date.MONTH) + "-" + date.get(date.DATE);
+                oneRequest.add(dateString);
             }
-            jTable2 = javax.swing.JTable();
+            Vector<String> cols = new Vector<String>();
+            cols.add("SKU");
+            cols.add("Customer ID");
+            cols.add("Request Date");
+            jTable2.setModel(new javax.swing.table.DefaultTableModel(data,cols));
         }
         catch(SQLException e)
         {
@@ -363,6 +379,62 @@ public class OthersPanel extends javax.swing.JPanel {
                     "Database Driver Error", 0);
         }
     }//GEN-LAST:event_getAllRequests
+
+    private void generateMonthlyReport(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateMonthlyReport
+        GregorianCalendar today = new GregorianCalendar();
+        GregorianCalendar before = new GregorianCalendar(today.YEAR, today.MONTH - 1, today.DATE);
+        String path = jTextField2.getText();
+        try
+        {
+            SaleReporter reporter = new SaleReporter();
+            reporter.generateReport(before, today, path);
+            javax.swing.JOptionPane.showMessageDialog(this, "Sale report successfully" +
+                    " generated", "Successful", 1);
+        }
+        catch(SQLException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Database Error.", 0);
+        }
+        catch(IOException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Destination path is bad.", 0);
+        }
+        catch(ClassNotFoundException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Database Driver Problem", 0);
+        }
+    }//GEN-LAST:event_generateMonthlyReport
+
+    private void generateAnnualReport(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateAnnualReport
+        GregorianCalendar today = new GregorianCalendar();
+        GregorianCalendar before = new GregorianCalendar(today.YEAR - 1, today.MONTH, today.DATE);
+        String path = jTextField2.getText();
+        try
+        {
+            SaleReporter reporter = new SaleReporter();
+            reporter.generateReport(before, today, path);
+            javax.swing.JOptionPane.showMessageDialog(this, "Sale report successfully" +
+                    " generated", "Successful", 1);
+        }
+        catch(SQLException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Database Error.", 0);
+        }
+        catch(IOException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Destination path is bad.", 0);
+        }
+        catch(ClassNotFoundException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Database Driver Problem", 0);
+        }
+    }//GEN-LAST:event_generateAnnualReport
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
