@@ -668,17 +668,19 @@ public class MovieManagement
         String query = generateQuery(table, column, constraint);
         ResultSet resultSet = statement.executeQuery(query);
 
-        while (resultSet.isLast() == false)
+        while (resultSet.next())
         {
             String SKU = resultSet.getString("SKU");
-            //SELECT format FROM videoInfo WHERE SKU = SKU
-//            String format = resultSet.getString("Format");
             int customerID = resultSet.getInt("CustomerID");
             Date datetime = resultSet.getDate("datetime");
             GregorianCalendar requestDate = new GregorianCalendar();
-
+            requestDate.setTime(datetime);
             this.request = new MovieRequest(SKU, customerID, requestDate);
             movieRequest.add(this.request);
+        }
+        if (movieRequest.size()==0)
+        {
+            throw new SQLException("There are no requests.");
         }
         return movieRequest;
     }
