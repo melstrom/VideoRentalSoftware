@@ -57,25 +57,29 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="5" pref="5" max="5" attributes="0"/>
-                      <Component id="jButton2" min="-2" pref="70" max="-2" attributes="0"/>
-                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                      <Component id="jComboBox2" min="-2" pref="190" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="jButton9" min="-2" pref="116" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-                      <Component id="jTextField2" min="-2" pref="130" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="5" pref="5" max="5" attributes="0"/>
                       <Component id="jButton11" min="-2" pref="270" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="5" pref="5" max="5" attributes="0"/>
                       <Component id="jButton3" min="-2" pref="270" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jTextField2" min="-2" pref="134" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jButton9" min="-2" pref="104" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jComboBox2" min="-2" pref="150" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="DiscountButton" min="-2" pref="110" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="126" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -121,18 +125,15 @@
                       <EmptySpace min="10" pref="10" max="10" attributes="0"/>
                       <Component id="jButton8" min="-2" pref="30" max="-2" attributes="0"/>
                       <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jButton2" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="jComboBox2" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jComboBox2" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="DiscountButton" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="20" pref="20" max="20" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jTextField2" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="jButton9" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextField2" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="jButton9" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Component id="jButton11" min="-2" pref="60" max="-2" attributes="0"/>
@@ -227,7 +228,7 @@
                           <Component id="outPenalthField" min="-2" pref="129" max="-2" attributes="1"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="138" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -403,9 +404,9 @@
         <Property name="text" type="java.lang.String" value="$"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="DiscountButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;---"/>
+        <Property name="text" type="java.lang.String" value="Add Discount"/>
       </Properties>
     </Component>
   </SubComponents>
