@@ -16,10 +16,6 @@ public class Employee extends Account
     private String position;
     public static final int ID_START_DIGIT = 1;
 
-
-
-
-
     /**
      * Default constructor of Employee
      * @param position the position of the employee (Manager/Staff)
@@ -32,22 +28,6 @@ public class Employee extends Account
     public Employee (String position, int accountID, String Fname, String Lname, Address address, String phoneNum)
     {
         //public Account(int accountID, String Fname, String Lname, Address address, String phoneNum)
-        super(accountID, Fname, Lname, address,phoneNum);
-        this.position = position;
-    }
-    
-	/**
-     * Constructor that also takes an employeeID as a parameter
-		@param employeeID the employee's ID
-     * @param position the position of the employee (Manager/Staff)
-     * @param accountID the account ID of the account
-     * @param Fname the first name of the user
-     * @param Lname the last name of the user
-     * @param address the address of the user
-     * @param phoneNum the phone number of the user
-     */
-    public Employee (String position, int accountID, String Fname, String Lname, Address address, String phoneNum, int employeeID)
-    {
         super(accountID, Fname, Lname, address,phoneNum);
         this.position = position;
     }

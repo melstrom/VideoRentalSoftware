@@ -21,18 +21,12 @@ package account;
  */
 public abstract class Account
 {
-    // accountID is the barcode number on the customers card, or the employee's id
-    // in the db, the customer barcode is customerID and employee's id is employeeID
     private int accountID;
-
-    //private String loginID; this is the accountID
     private String Fname;
     private String Lname;
     protected String phoneNum;
     private Address address;
-   // private String password;
 //    private boolean status;
-
 
     public static final int ID_LENGTH = 9;
 
