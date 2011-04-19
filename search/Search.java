@@ -1394,7 +1394,10 @@ public class Search
         }
     }
     
-    
+    public GeneralMovie forAlbert (String SKU) throws SQLException, MovieNotFoundException, ClassNotFoundException, Exception
+    {
+ return previewGeneralMovie(SKU);
+}
     
     /**
      * This is a helper method for browse.  It changes the genre enumeration
