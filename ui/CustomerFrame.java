@@ -94,7 +94,6 @@ public class CustomerFrame extends javax.swing.JFrame {
 
       tableContent = new Vector<Vector <String>>();
       for(int i = 0; i < 1; i++){
-          //System.out.println("i = " + i);
           Vector temp = new Vector <String>();
           temp.add(" ");
           temp.add(" ");
@@ -118,7 +117,6 @@ public class CustomerFrame extends javax.swing.JFrame {
     private void UpdateTable() {
       String searchItem = searchField.getText();
       String selectedItem = (String)searchComboBox.getSelectedItem();
-      //System.out.println("SearchItem: " + searchItem);
       tableContent = new Vector<Vector <String>>();
 
         DefaultTableModel table = (DefaultTableModel)jTable1.getModel();
@@ -126,21 +124,17 @@ public class CustomerFrame extends javax.swing.JFrame {
             table.removeRow(0);
 
         try {
-            //System.out.println("testestetsetset");
             result = Search.searchMovies(searchItem, selectedItem);
 
             jdbconnection.JDBCConnection conn = new jdbconnection.JDBCConnection();
-            //System.out.println(result.size());
             for (int i = 0; i < result.size();i++) //inventory.GeneralMovie movie : result)
             {
                 inventory.GeneralMovie singleMovie = (inventory.GeneralMovie)result.get(i);
-                //System.out.println("result Size: " + singleMovie.getTitle());
 
                 Vector <String> row = new Vector<String>();
                 row.add(singleMovie.getTitle());
                 row.add("" + singleMovie.getReleaseDate().get(java.util.Calendar.YEAR));
                 row.add("" + singleMovie.getDirector());
-                //System.out.println("Get Director: " + singleMovie.getDirector());
                 String actors = "";
                 for (String actor : singleMovie.getActors())
                 {
@@ -149,9 +143,7 @@ public class CustomerFrame extends javax.swing.JFrame {
                 }
                 actors = actors.trim().substring(0, actors.length() -2);
                 row.add("" + actors);
-                //System.out.println("Get actors: " + actors);
                 row.add("" + singleMovie.getRating());
-                //System.out.println("Get Rating: " + singleMovie.getRating());
                 row.add(singleMovie.getFormat());
                 if(RentalMovieManagement.getAvailableCopies(singleMovie, conn)> 0)
                     row.add(""+RentalMovieManagement.getAvailableCopies(singleMovie, conn));
@@ -185,7 +177,6 @@ public class CustomerFrame extends javax.swing.JFrame {
       header.add("Actor(s)"); // employee department
       header.add("Rating"); // employee department
       for(String i : header){
-       //System.out.println("header: " + i);
       }
  */
 

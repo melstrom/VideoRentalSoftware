@@ -180,7 +180,6 @@ public class EmployeeFrame extends javax.swing.JFrame {
         RentalMovieManagement RMM = null;
         try {
             RMM = new RentalMovieManagement();
-            //System.out.println("al-checkInComboBox = "+ checkInComboBox.getSelectedItem().toString());
             //RMM.checkIn(currCustomer.getAccountID(),inBarcodeField.getText(),checkInComboBox.getSelectedItem().toString());
             // changed the constructor call: Mitch 16 April
             RMM.checkIn(inBarcodeField.getText(), checkInComboBox.getSelectedItem().toString());

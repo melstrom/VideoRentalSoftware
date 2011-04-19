@@ -61,7 +61,6 @@ DefaultTableModel table;
        
       tableContent = new Vector<Vector <String>>();
       for(int i = 0; i < 1; i++){
-          System.out.println("i = " + i);
           Vector temp = new Vector <String>();
           temp.add(" ");
           temp.add(" ");
@@ -82,21 +81,17 @@ DefaultTableModel table;
       notFoundLabel.setVisible(false);
       String searchItem = (String)inCIdField1.getText();
       String selectedItem = (String)jComboBox3.getSelectedItem();
-      System.out.println("SearchItem: " + searchItem);
       tableContent = new Vector<Vector <String>>();
         table = (DefaultTableModel)jTable4.getModel();
         while (table.getRowCount()>0)
             table.removeRow(0);
 
         try {
-            System.out.println("testestetsetset");
             ArrayList<account.Customer> result = Search.searchCustomers(searchItem, selectedItem);
-            System.out.println("result mofo: " + result.size());
             if(result != null){
                 for (int i = 0; i < result.size();i++) //inventory.GeneralMovie movie : result)
                 {
                     account.Customer singleCustomer = (account.Customer)result.get(i);
-                    System.out.println("result Size: " + singleCustomer.getDL());
 
                     Vector <String> row = new Vector<String>();
                     row.add("" + singleCustomer.getAccountID());

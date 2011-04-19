@@ -396,6 +396,7 @@ public class OthersPanel extends javax.swing.JPanel {
                 GregorianCalendar date = allRequests.get(i).getRequestDate();
                 String dateString = "" + date.get(date.YEAR) + "-" + date.get(date.MONTH) + "-" + date.get(date.DATE);
                 oneRequest.add(dateString);
+                data.add(oneRequest);
             }
             Vector<String> cols = new Vector<String>();
             cols.add("SKU");
@@ -490,6 +491,7 @@ public class OthersPanel extends javax.swing.JPanel {
                 javax.swing.JOptionPane.showMessageDialog(this, "All request hav"
                         + "e been removed.", "Romved Requests", 1);
             }
+            jTable2 = null;
             getAllRequests(evt);
         }
         catch(SQLException e)

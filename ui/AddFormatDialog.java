@@ -136,7 +136,7 @@ public class AddFormatDialog extends javax.swing.JDialog {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddFormatDialog().setVisible(true);
+                new AddFormatDialog(false).setVisible(true);
             }
         });
     }
