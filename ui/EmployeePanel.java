@@ -46,7 +46,6 @@ public class EmployeePanel extends javax.swing.JPanel {
 
       et_data = new Vector<Vector <String>>();
       for(int i = 0; i < 1; i++){
-          System.out.println("Kristan i = " + i);
           Vector temp = new Vector <String>();
           temp.add(" ");
           temp.add(" ");
@@ -66,7 +65,6 @@ public class EmployeePanel extends javax.swing.JPanel {
     private void refreshTable(){
          table = (DefaultTableModel)empTable.getModel();
          while (table.getRowCount()>0)
-             //System.out.println("Delete Row" + table.getRowCount());
             table.removeRow(0);
         try {
             employeeInfoObj = Search.getAllEmployees();
@@ -76,7 +74,6 @@ public class EmployeePanel extends javax.swing.JPanel {
             Logger.getLogger(EmployeePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("size:  " + employeeInfoObj.size());
         et_data = new Vector<Vector<String>>();
         
         Vector<String> row;
@@ -84,7 +81,6 @@ public class EmployeePanel extends javax.swing.JPanel {
            row = new Vector<String>();
 
            String ID = "" + emp.getEmployeeID();
-           System.out.println("id: " +ID);
            row.add(ID);
            String name = "" + emp.getFname() + " " + emp.getLname();
            row.add(name);
@@ -211,20 +207,15 @@ public class EmployeePanel extends javax.swing.JPanel {
             // TODO add your handling code here:
             int rownumber = empTable.getSelectedRow();
             AccountManagement manage = new AccountManagement();
-            System.out.println("after getSelectedRow(): "+ rownumber);
 
             String valueID = "" + table.getValueAt(rownumber, 0);
-            System.out.println("after getValueAt: "+ Integer.parseInt(valueID));
 
             String valuePos = "" + table.getValueAt(rownumber,2);
-            System.out.println("after getPosition At: "+valuePos);
 
             if (valuePos.equals("Manager")) {
                 manage.demoteManager(Integer.parseInt(valueID));
-                System.out.println("In = M: " + Integer.parseInt(valueID));
             }else{
                 manage.promoteEmployee(Integer.parseInt(valueID));
-                System.out.println("In = E: " + Integer.parseInt(valueID));
             }
             
         } catch (SQLException ex) {

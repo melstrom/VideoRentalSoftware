@@ -271,8 +271,7 @@ public class VideoInfoDialog extends javax.swing.JDialog {
 
        ArrayList<GeneralMovie> list = search.searchMovies(searchText, "title");
 
-       ArrayList<GeneralMovie>movie = new <GeneralMovie>ArrayList();
-        System.out.println(list.size());
+       ArrayList<GeneralMovie> movie = new ArrayList<GeneralMovie>();
           for(int i= 0; i<list.size();i++)
           {
               movie.set(i, list.get(i));

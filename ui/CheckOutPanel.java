@@ -405,7 +405,6 @@ public class CheckOutPanel extends javax.swing.JPanel {
 
             cleanUpInputs();
             int custID = Integer.parseInt(outCIdField.getText().toString().trim());
-            //System.out.println("al-custid = "+custID);
             currCustomer = Search.getCustomer(custID);
             if(currCustomer == null){
                 outNameField.setText("Customer Not Found!");
@@ -489,7 +488,6 @@ Action delete = new AbstractAction()
 
     private void addTransactionItem() {
         try {
-            System.out.println("inside gui addtransactionitem: " + barcodeField.getText());//testing
             transactionM.addMovie(barcodeField.getText());
             UpdateTable();
         } catch (SQLException ex) {
@@ -515,7 +513,7 @@ Action delete = new AbstractAction()
 
         Transaction currT = transactionM.getTransaction();
         for(int i = 1; i <= currT.getNumberOfItems(); i++){
-            System.out.println("i = " + i);
+
             Vector row = new Vector <String>();
             row.add(currT.getItemBarcode(i));
             row.add(currT.getItemName(i));
