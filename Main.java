@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         UiController UIC = new UiController();
-        UIC.setMode(UiMode.Employee); //UiMode customer and Employee
+        UIC.setMode(UiMode.Customer); //UiMode customer and Employee
         UIC.startUI();
     }
 
