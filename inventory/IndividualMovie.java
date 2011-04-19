@@ -7,6 +7,9 @@
 */
 
 package inventory;
+import java.sql.*;
+import jdbconnection.JDBCConnection;
+import java.sql.SQLException;
 
 public class IndividualMovie extends GeneralMovie{
 
@@ -34,6 +37,15 @@ public class IndividualMovie extends GeneralMovie{
         setPrice(price);
         setCategory(category);
         setBarcode(barcode);
+   }
+
+   public IndividualMovie(String SKU, int saleID, String condition) throws SQLException, ClassNotFoundException
+   {
+       super(SKU);
+       String query = "SELECT " + condition + " FROM videoSale WHERE SaleID = " + saleID;
+       ResultSet rs = statement.executeQuery(query);
+       rs.next();
+       this.condition = rs.getString(condition);
    }
    
     private String category;            //The categories for the movies such as new release, 7 day rental ect.
@@ -130,5 +142,10 @@ public class IndividualMovie extends GeneralMovie{
     {
         String copyNum = barcode.replaceAll(getSKU(), "");
         return copyNum;
+    }
+        private void setupConnection() throws SQLException, ClassNotFoundException
+    {
+        connection = JDBCConnection.getJDBCConnection();
+        statement = connection.createStatement();
     }
 }
