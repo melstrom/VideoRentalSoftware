@@ -5,6 +5,7 @@
 
 package ui;
 
+import account.Employee;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,20 +52,13 @@ public class UiController {
      */
     public void startUI(){
 
-        boolean logIn = false;
 
         switch (mode) {
             case Employee:
+                   
+                new LoginDialog(this).setVisible(true);
+                // Emp Frame need to innitial by the login call.
 
-                try {
-                    currFrame = new EmployeeFrame(this);
-                    new LoginDialog(mainKey,this,false).setVisible(true);
-                    // Employee Frame will be bring up the login process.
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
-                }
                 break;
 
             case Customer:
@@ -78,12 +72,10 @@ public class UiController {
 		break;
 	}
 
+
+        Employee test = (Employee)mainKey.getAccount();
     }
 
-    private boolean login(){
-
-        return true;
-    }
 
 
     /**
@@ -169,4 +161,18 @@ public class UiController {
         title,
         JOptionPane.ERROR_MESSAGE);
     }
+
+    public void EmpLoginOk(){
+        try {
+            currFrame = new EmployeeFrame(this);
+            currFrame.setVisible(true);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+
 }

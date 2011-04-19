@@ -36,11 +36,11 @@ public class LoginDialog extends javax.swing.JDialog {
     }
 
     /** Creates new form LoginDialog */
-    public LoginDialog(Authentication key, UiController UiC, boolean modal) {
+    public LoginDialog(UiController UiC) {
 
-        super(UiC.getCurrentFrame(), modal);
+        //super(UiC.getCurrentFrame(), modal);
         this.UIC = UiC;
-        this.key = key;
+        key = UiC.getKey();
         initComponents();
 
 
@@ -180,7 +180,7 @@ public class LoginDialog extends javax.swing.JDialog {
                 msgArea.setForeground(Color.black);
                 msgArea.setText("login ok");
                 this.setVisible(false);
-                UIC.getCurrentFrame().setVisible(true);
+                UIC.EmpLoginOk();
                 if(UIC.getMode() == UiMode.Customer)
                     new ReseveMovieDialog(UIC.getCurrentFrame(), false, UIC).setVisible(true);
 

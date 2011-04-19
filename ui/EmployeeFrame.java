@@ -140,7 +140,7 @@ public class EmployeeFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Check In", jPanel1);
 
-        checkOutPanel = new ui.CheckOutPanel();
+        checkOutPanel = new ui.CheckOutPanel(localUIC);
         jTabbedPane1.addTab("Check Out", checkOutPanel);
         membershipPanel = new ui.MembershipPanel();
         jTabbedPane1.addTab("Membership", membershipPanel);
