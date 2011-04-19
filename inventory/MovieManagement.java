@@ -231,7 +231,7 @@ public class MovieManagement
                 actorIndex++;
                 fieldIndex++;
             }
-            
+
             createGeneralMovie(new GeneralMovie(sku, title, actors, director, producer, releaseDate,
                     synopsis, genre, rating, studio, priceInCents, format, length));
         }
@@ -724,10 +724,10 @@ public class MovieManagement
         ArrayList<MovieRequest> movieRequest = new ArrayList<MovieRequest>();
         String table = "madeSpecialOrders";
         String column = "*";
-        String constraint = null;
+        String constraint = "";
 
         String query = generateQuery(table, column, constraint);
-
+        System.out.println(query);//testing
         ResultSet resultSet = statement.executeQuery(query);
 
         while (resultSet.isLast() == false)
@@ -783,6 +783,20 @@ public class MovieManagement
         String table = "madeSpecialOrders";
         String SQL = "DELETE FROM " + table + " WHERE SKU= " + SKU + " and customerID= " + customerID;
         statement.executeUpdate(SQL);
+    }
+
+    public void removeRequest(String SKU)
+            throws SQLException
+    {
+        String command = "DELETE FROM madeSpecialOrders WHERE SKU = " + SKU + ";";
+        statement.executeUpdate(command);
+    }
+
+    public void clearAllRequests()
+            throws SQLException
+    {
+        String command = "DELETE FROM madeSpecialOrders;";
+        statement.executeUpdate(command);
     }
 
     /**
