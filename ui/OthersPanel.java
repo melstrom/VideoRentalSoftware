@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 import inventory.*;
+import javax.swing.table.DefaultTableModel;
 import reports.*;
 
 /**
@@ -26,6 +27,7 @@ import reports.*;
  */
 public class OthersPanel extends javax.swing.JPanel {
 
+    private DefaultTableModel table;
     /** Creates new form OthersPanel */
     public OthersPanel() {
         initComponents();
@@ -386,8 +388,16 @@ public class OthersPanel extends javax.swing.JPanel {
         try
         {
             MovieManagement movieMan = new MovieManagement();
+            Vector<String> cols = new Vector<String>();
+            cols.add("SKU");
+            cols.add("Customer ID");
+            cols.add("Request Date");
             ArrayList<MovieRequest> allRequests = movieMan.getRequest();
             Vector<Vector<String>> data = new Vector<Vector<String>>();
+            jTable2.setModel(new javax.swing.table.DefaultTableModel(data,cols));
+//            while (table.getRowCount() < 0)
+//                table.removeRow(0);
+            
             for(int i = 0; i < allRequests.size(); i++)
             {
                 Vector<String> oneRequest = new Vector<String>();
@@ -396,12 +406,12 @@ public class OthersPanel extends javax.swing.JPanel {
                 GregorianCalendar date = allRequests.get(i).getRequestDate();
                 String dateString = "" + date.get(date.YEAR) + "-" + date.get(date.MONTH) + "-" + date.get(date.DATE);
                 oneRequest.add(dateString);
+                data.add(oneRequest);
             }
-            Vector<String> cols = new Vector<String>();
-            cols.add("SKU");
-            cols.add("Customer ID");
-            cols.add("Request Date");
+            
+            
             jTable2.setModel(new javax.swing.table.DefaultTableModel(data,cols));
+            //table.addRow(cols);
         }
         catch(SQLException e)
         {
@@ -413,6 +423,7 @@ public class OthersPanel extends javax.swing.JPanel {
             javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
                     "Database Driver Error", 0);
         }
+        table.fireTableStructureChanged();
     }//GEN-LAST:event_getAllRequests
 
     private void generateMonthlyReport(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateMonthlyReport
