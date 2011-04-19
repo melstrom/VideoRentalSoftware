@@ -116,8 +116,6 @@ public class AccountManagement
         }
     }
 
-
-
     /**
      * This method takes an employee object, with attributes that differ from
      * the attributes in the database.  It updates the database with this
@@ -186,10 +184,7 @@ public class AccountManagement
         {
             connection.closeConnection();
         }
-
     }
-
-
 
     /**
      * This method takes an customer object, with attributes that differ from
@@ -259,77 +254,8 @@ public class AccountManagement
         {
             connection.closeConnection();
         }
-
     }
 
-    
-    /**
-     * Edits personal information with 4 attributes
-     * @param Fname the first name of the user
-     * @param Lname the last name of the user
-     * @param address the address of the user
-     * @param phoneNum the phone number of the user
-     */
-    /*
-     * Commented out because it doesn't do anything in the database
-     * Mitch 17 April
-     *
-        public void editPersonalInfo(String Fname, String Lname, Address address, String phoneNum)
-    {
-        account.setPersonalInfo(Fname, Lname, address, phoneNum);
-    }
-     *
-     */
-
-    /**
-     * Edits personal information with 5 attributes
-     * @param DL the driver license id of the customer
-     * @param Fname the first name of the user
-     * @param Lname the last name of the user
-     * @param address the address of the user
-     * @param phoneNum the phone number of the user
-     */
-    /*
-     * commented out because it doesn't do anything in the database
-     * Mitch 17 April
-    public void editPersonalInfo(String DL, String Fname, String Lname, Address address, String phoneNum)
-    {
-        Customer customer = (Customer) account;
-        customer.setPersonalInfo(Fname, Lname, address, phoneNum);
-        customer.setDL(DL);
-        account = customer;
-    }
-     *
-     */
-
-    /**
-     * Generates a new employeeID or customerID from the database for a employee or customer
-     * @param accountType The account type to generate a new ID for (employee or customer)
-     * @return A new ID for a customer or employee
-     * @throws SQLException
-     */
-    /*
-     * This method works, however it has been commented out because we are
-     * attempting to find a solution that does not require a dummy employee
-     * or customer stuck in the database
-     * Commented out by Mitch: 17 April
-    public int generateNewID(String accountType) throws SQLException
-    {
-        String table = accountType;
-        String column = accountType + "ID";
-        String SQL = "SELECT " + column + " FROM " + table;
-        ResultSet rs = statement.executeQuery(SQL);
-        rs.last();
-        int LastID = rs.getInt(column);
-        int newID = LastID + 1;
-        return newID;
-    }
-     *
-     */
-    
-    
-    
-    
     /**
      * This method generates a new employee or customer ID.  It finds the 
      * highest previous value of the ID and adds one to it to obtain a new
@@ -366,8 +292,6 @@ public class AccountManagement
         return newHighestID;
     }
 
-
-
     /**
      * This method finds the highest ID number that currently exists
      * for either an employee or customer or account or address
@@ -380,7 +304,6 @@ public class AccountManagement
             throws SQLException, ClassNotFoundException
     {
         String query = JDBCConnection.makeQuery(table, "MAX(" + column + ")", null);
-
         
         if (connection.isClosed())
         {
@@ -412,11 +335,8 @@ public class AccountManagement
             throw new IllegalArgumentException("Cannot find the highest ID of" +
                     " "+table);
         }
-        
     }
-    
-    
-    
+
     /**
      * Promote an employee to manager
      */
@@ -463,32 +383,6 @@ public class AccountManagement
     }
 
     /**
-     * Generates a new accountID from the database for a new account
-     * @return The next accountID for the address table
-     * @throws SQLException
-     */
-    /*
-     * This code workds, however it has been commented out in an attempt
-     * to remove the need for a dummy account in the database
-     * commented out by Mitch: 17 April
-     *
-    private int generateNewAccountID() throws SQLException
-    {
-        String table = "account";
-        String column = "accountID";
-        String SQL = "SELECT " + column + " FROM " + table;
-        ResultSet rs = statement.executeQuery(SQL);
-        rs.last();
-        int LastAccountID = rs.getInt(column);
-        int newAccountID = LastAccountID + 1;
-        return newAccountID;
-    }
-     * 
-     */
-
-
-
-    /**
      * This method generates a new account ID.  The account ID is only ever
      * used in the database.
      * @return a new, unique AccountID
@@ -501,35 +395,6 @@ public class AccountManagement
         int highestID = getHighestID(table, column);
         return highestID + 1;
     }
-
-
-
-    /**
-     * Generates a new addressID from the database for a new address
-     * @return The next addressID for the address table
-     * @throws SQLException
-     */
-    /*
-     * This code works but it has been commented out in an attempt to
-     * find a solution that does not require dummy values to be inserted into
-     * the database
-     * Commented out by Mitch: 17 April
-     * 
-    private int generateAddressID () throws SQLException
-    {
-        String table = "address";
-        String column = "addressID";
-        String SQL = "SELECT " + column + " FROM " + table;
-        ResultSet rs = statement.executeQuery(SQL);
-        rs.last();
-        int LastAccountID = rs.getInt(column);
-        int newAccountID = LastAccountID + 1;
-        return newAccountID;
-    }
-     *
-     */
-
-
 
     /**
      * This method generates a new account ID.  The account ID is only ever
@@ -544,8 +409,6 @@ public class AccountManagement
         int highestID = getHighestID(table, column);
         return highestID + 1;
     }
-
-
 
     /**
      * Prepares a SQL statement to insert a new account
@@ -586,7 +449,7 @@ public class AccountManagement
         return SQL;
     }
 
-        /**
+    /**
      * Sets up the database connection for the class
      * @throws SQLException
      * @throws ClassNotFoundException
@@ -654,3 +517,116 @@ public class AccountManagement
 //            account = customer;
 //        }
 //    }
+
+    /**
+     * Edits personal information with 4 attributes
+     * @param Fname the first name of the user
+     * @param Lname the last name of the user
+     * @param address the address of the user
+     * @param phoneNum the phone number of the user
+     */
+    /*
+     * Commented out because it doesn't do anything in the database
+     * Mitch 17 April
+     *
+        public void editPersonalInfo(String Fname, String Lname, Address address, String phoneNum)
+    {
+        account.setPersonalInfo(Fname, Lname, address, phoneNum);
+    }
+     *
+     */
+
+    /**
+     * Edits personal information with 5 attributes
+     * @param DL the driver license id of the customer
+     * @param Fname the first name of the user
+     * @param Lname the last name of the user
+     * @param address the address of the user
+     * @param phoneNum the phone number of the user
+     */
+    /*
+     * commented out because it doesn't do anything in the database
+     * Mitch 17 April
+    public void editPersonalInfo(String DL, String Fname, String Lname, Address address, String phoneNum)
+    {
+        Customer customer = (Customer) account;
+        customer.setPersonalInfo(Fname, Lname, address, phoneNum);
+        customer.setDL(DL);
+        account = customer;
+    }
+     *
+     */
+
+    /**
+     * Generates a new employeeID or customerID from the database for a employee or customer
+     * @param accountType The account type to generate a new ID for (employee or customer)
+     * @return A new ID for a customer or employee
+     * @throws SQLException
+     */
+    /*
+     * This method works, however it has been commented out because we are
+     * attempting to find a solution that does not require a dummy employee
+     * or customer stuck in the database
+     * Commented out by Mitch: 17 April
+    public int generateNewID(String accountType) throws SQLException
+    {
+        String table = accountType;
+        String column = accountType + "ID";
+        String SQL = "SELECT " + column + " FROM " + table;
+        ResultSet rs = statement.executeQuery(SQL);
+        rs.last();
+        int LastID = rs.getInt(column);
+        int newID = LastID + 1;
+        return newID;
+    }
+     *
+     */
+
+    /**
+     * Generates a new accountID from the database for a new account
+     * @return The next accountID for the address table
+     * @throws SQLException
+     */
+    /*
+     * This code workds, however it has been commented out in an attempt
+     * to remove the need for a dummy account in the database
+     * commented out by Mitch: 17 April
+     *
+    private int generateNewAccountID() throws SQLException
+    {
+        String table = "account";
+        String column = "accountID";
+        String SQL = "SELECT " + column + " FROM " + table;
+        ResultSet rs = statement.executeQuery(SQL);
+        rs.last();
+        int LastAccountID = rs.getInt(column);
+        int newAccountID = LastAccountID + 1;
+        return newAccountID;
+    }
+     *
+     */
+
+    /**
+     * Generates a new addressID from the database for a new address
+     * @return The next addressID for the address table
+     * @throws SQLException
+     */
+    /*
+     * This code works but it has been commented out in an attempt to
+     * find a solution that does not require dummy values to be inserted into
+     * the database
+     * Commented out by Mitch: 17 April
+     *
+    private int generateAddressID () throws SQLException
+    {
+        String table = "address";
+        String column = "addressID";
+        String SQL = "SELECT " + column + " FROM " + table;
+        ResultSet rs = statement.executeQuery(SQL);
+        rs.last();
+        int LastAccountID = rs.getInt(column);
+        int newAccountID = LastAccountID + 1;
+        return newAccountID;
+    }
+     *
+     */
