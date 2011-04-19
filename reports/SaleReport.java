@@ -72,8 +72,6 @@ public class SaleReport
                     startDate.get(endDate.HOUR) + "-" + 
                     startDate.get(endDate.MINUTE) + "-" + 
                     startDate.get(endDate.SECOND);
-            System.out.println("in salereport constructor"+sDateString);//testing
-            System.out.println("in salereport constructor"+eDateString);//testing
 
             PreparedStatement stat = conn.prepareStatement("SELECT * FROM invoice"
                     + " WHERE dateTime BETWEEN '" + sDateString + "' AND '"
