@@ -36,6 +36,7 @@ public class EmployeeInfoDialog extends javax.swing.JDialog {
         this.panelType = panelType;
         initComponents();
     }
+    //EmployeeInfoDialog foo = new EmployeeInfoDialog(new javax.swing.JFrame(), true);
 
     public EmployeeInfoDialog(String EmployeeID, int panelType, boolean modal) {
         this.panelType = panelType;

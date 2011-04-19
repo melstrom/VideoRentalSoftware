@@ -204,6 +204,10 @@ public class PriceSchemeManagement
             {
                 conn.closeConnection();
             }
+            // Added by Mitch: 18 April
+            // updates the Singleton class Formats with the new format
+            Formats dbFormats = Formats.getInstance();
+            dbFormats.update();
         }
         else
             throw new IOException("The new format has already existed.");
