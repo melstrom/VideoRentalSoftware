@@ -1,13 +1,10 @@
 package inventory;
 
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.ResultSet;
 import jdbconnection.JDBCConnection;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -85,7 +82,7 @@ public class MovieManagement
 
     /**
      * Constructor takes a parameter
-     * @param movie a movie to be managed
+     * @param movie A movie to be managed
      */
     public MovieManagement(GeneralMovie movie) throws SQLException, ClassNotFoundException
     {
@@ -93,51 +90,6 @@ public class MovieManagement
         this.movie = movie;
     }
 
-    /**
-     * Constructs a new movie as part of the movie catalog
-     * @param info contains the 7 required information to identify a movie
-     */
-    //TODO: Check if SKU is less than 10 digits - if true, throw exception
-    public void createGeneralMovie(String SKU,
-            String title,
-            String[] actors,
-            String director,
-            String producer,
-            GregorianCalendar releaseDate,
-            String synopsis,
-            String genre,
-	    String rating,
-            String studio,
-            int retailPrice,
-            String format,
-            int runtime)throws MissingFieldException,SQLException, MovieExistsException, java.lang.Exception
-    {
-        try
-        {
-            this.checkDuplicateSKU(SKU);
-            this.movie = new GeneralMovie(SKU,title,actors,director,producer,releaseDate, synopsis,
-                    genre,rating,studio,retailPrice,format, runtime);
-            String actorsList="";
-            for(int i=0; i<actors.length; i++)
-            {
-                actorsList +=actors[i]+",";
-            }
-
-            String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
-            String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
-            String query = generateInsertSQL("videoInfo",columns, values );
-            statement.executeUpdate(query);
-            String columns1[]= {"SKU","Format","InfoID","RetailPrice"};
-            String values1[] = {SKU,format, SKU, ""+retailPrice};
-            query = generateInsertSQL("physicalVideo",columns1, values1);
-            statement.executeUpdate(query);
-        }
-        finally
-        {
-            connection.close();
-        }
-    }
-    
     /**
      * Adds a GeneralMovie to the database by inserting into the videoInfo
      * and physicalVideo tables.  It first searches to see if the information
