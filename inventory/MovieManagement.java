@@ -691,21 +691,21 @@ public class MovieManagement
      * @param account
      * @throws SQLException
      */
-    public void addRequest(GeneralMovie movie, int customerID)throws SQLException, RequestAlreadyExistsException
+    public void addRequest (int customerID, String SKU) throws SQLException, RequestAlreadyExistsException
     {
-        int requestingCustomer = customerID;
         String tablename = "madeSpecialOrders";
         String columns[] = {"datetime", "SKU", "customerID"};
 
-        String query = "SELECT SKU, customerID FROM " + tablename + " WHERE customerID = " + customerID + " AND SKU = '" + movie.getSKU() + "'";
-        if (statement.execute(query)==true)
+        String query = "SELECT SKU, customerID FROM " + tablename + " WHERE customerID = " + customerID + " AND SKU = '" + SKU + "'";
+        ResultSet rs = statement.executeQuery(query);
+        if (rs.next())
         {
             throw new RequestAlreadyExistsException ("The same request has already been made");
         }
         Calendar today = Calendar.getInstance();
         today.setTime(today.getTime());
         String time = makeReleaseDateString((GregorianCalendar)today);
-        String values[] = {time,movie.getSKU(),""+requestingCustomer};
+        String values[] = {time,SKU,""+customerID};
         String SQL = generateInsertSQL(tablename, columns, values);
         statement.executeUpdate(SQL);
     }
