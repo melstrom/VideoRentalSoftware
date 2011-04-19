@@ -1,11 +1,7 @@
 package search;
 
 import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.ResultSet;
+import java.sql.*;
 import account.Customer;
 import inventory.GeneralMovie;
 import inventory.IndividualMovie;
@@ -14,7 +10,6 @@ import inventory.RentalMovie;
 import inventory.RentalMovieManagement;
 import jdbconnection.JDBCConnection;
 import java.util.Date;
-import java.util.Calendar;
 import java.io.IOException;
 import java.util.GregorianCalendar;
 import account.Address;

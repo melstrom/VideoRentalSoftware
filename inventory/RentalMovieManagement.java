@@ -83,7 +83,6 @@ public class RentalMovieManagement
 
             Reservation reservation = new Reservation(customer.getAccountID(), today);
             reservationQuery("" + customer.getAccountID());
-
         }
         else
         {
@@ -278,8 +277,6 @@ public class RentalMovieManagement
         }
         movie.setCondition(newCondition);
     }
-
-
 
     /**
      * This method sets a new category for a given RentalMovie.
