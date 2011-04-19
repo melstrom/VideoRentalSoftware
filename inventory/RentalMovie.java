@@ -8,6 +8,9 @@
 **----------moved out querys 
 */
 package inventory;
+import java.sql.*;
+import jdbconnection.JDBCConnection;
+import java.sql.SQLException;
 
 
 public class RentalMovie extends IndividualMovie{
@@ -18,6 +21,7 @@ public class RentalMovie extends IndividualMovie{
     // period of time a rental movie is held for before it goes back to rental circulation
 
     private int rentalPeriod;
+    private int customerID;
 
 
 
@@ -56,8 +60,15 @@ public class RentalMovie extends IndividualMovie{
 	setGenre(movie.getGenre());
         setCondition(movie.getCondition());
     }
-   
 
+    public RentalMovie(String type, String SKU, int ID) throws SQLException, ClassNotFoundException
+    {
+        super(type, SKU, ID);
+        String query = "SELECT customerID FROM video" + type +" WHERE " + type + "ID = " + ID;
+        ResultSet rs = statement.executeQuery(query);
+        rs.next();
+        this.customerID = rs.getInt(1);
+    }
   
   /**
   * Set rental period for this movie
