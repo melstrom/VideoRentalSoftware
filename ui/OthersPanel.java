@@ -46,6 +46,8 @@ public class OthersPanel extends javax.swing.JPanel {
         jButton7 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
         reportPanel1 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -93,30 +95,63 @@ public class OthersPanel extends javax.swing.JPanel {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jScrollPane2.setViewportView(jTable2);
+
+        jButton8.setText("Remove a Request");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeRequest(evt);
+            }
+        });
+
+        jButton9.setText("Clear All Request");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearAllRequest(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(156, Short.MAX_VALUE)
-                .addComponent(jButton7)
-                .addGap(151, 151, 151))
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                            .addComponent(jButton7)
+                            .addGap(152, 152, 152))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addComponent(jButton8)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton9)
+                        .addContainerGap())))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jButton7)
-                .addGap(29, 29, 29)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton9)
+                    .addComponent(jButton8))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         reportPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Import Movie From a File", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
@@ -153,7 +188,7 @@ public class OthersPanel extends javax.swing.JPanel {
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         reportPanel1Layout.setVerticalGroup(
             reportPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,20 +253,20 @@ public class OthersPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
                 .addContainerGap())
             .addGroup(reportPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(reportPanelLayout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
+                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE))
                 .addGap(56, 56, 56))
         );
         reportPanelLayout.setVerticalGroup(
@@ -250,7 +285,7 @@ public class OthersPanel extends javax.swing.JPanel {
                 .addComponent(jButton5)
                 .addGap(17, 17, 17)
                 .addComponent(jButton6)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -436,6 +471,83 @@ public class OthersPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_generateAnnualReport
 
+    private void clearAllRequest(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearAllRequest
+        try
+        {
+            Object[] options = {"YES","NO"};
+            int choice = javax.swing.JOptionPane.showOptionDialog(this, "Are you sure you "
+                    + "want to clear ALL request?",
+                    "Confirm",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION,
+                    javax.swing.JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+            if(choice == 0)
+            {
+                MovieManagement movieMan = new MovieManagement();
+                movieMan.clearAllRequests();
+                javax.swing.JOptionPane.showMessageDialog(this, "All request hav"
+                        + "e been removed.", "Romved Requests", 1);
+            }
+            getAllRequests(evt);
+        }
+        catch(SQLException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Database Error.", 0);
+        }
+        catch(ClassNotFoundException e)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Database Driver Problem", 0);
+        }
+    }//GEN-LAST:event_clearAllRequest
+
+    private void removeRequest(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRequest
+        int[] lines = jTable2.getSelectedRows();
+        if(lines.length == 0)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please select at l"
+                    + "east one row from the table", "Selection Problem",2);
+        }
+        else
+        {
+            Object[] options = {"YES","NO"};
+            int choice = javax.swing.JOptionPane.showOptionDialog(this, "Are you sure you "
+                        + "want to remove the selected request?",
+                        "Confirm",
+                        javax.swing.JOptionPane.YES_NO_CANCEL_OPTION,
+                        javax.swing.JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+            if(choice == 0)            
+            {
+                try
+                {
+                    MovieManagement movieMan = new MovieManagement();
+                    for(int i = 0 ; i < lines.length; i++)
+                    {
+                        String SKU = (String)jTable2.getValueAt(i, 0);
+                        movieMan.removeRequest(SKU);
+                    }
+                }
+                catch(SQLException e)
+                {
+                    javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                            "Database Error.", 0);
+                }
+                catch(ClassNotFoundException e)
+                {
+                    javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
+                            "Database Driver Problem", 0);
+                }
+            }
+            getAllRequests(evt);
+        }
+    }//GEN-LAST:event_removeRequest
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -445,6 +557,8 @@ public class OthersPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
