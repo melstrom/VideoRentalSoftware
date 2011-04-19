@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import search.Search;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -93,7 +94,7 @@ public class CustomerFrame extends javax.swing.JFrame {
 
       tableContent = new Vector<Vector <String>>();
       for(int i = 0; i < 1; i++){
-          System.out.println("i = " + i);
+          //System.out.println("i = " + i);
           Vector temp = new Vector <String>();
           temp.add(" ");
           temp.add(" ");
@@ -117,7 +118,7 @@ public class CustomerFrame extends javax.swing.JFrame {
     private void UpdateTable() {
       String searchItem = searchField.getText();
       String selectedItem = (String)searchComboBox.getSelectedItem();
-      System.out.println("SearchItem: " + searchItem);
+      //System.out.println("SearchItem: " + searchItem);
       tableContent = new Vector<Vector <String>>();
 
         DefaultTableModel table = (DefaultTableModel)jTable1.getModel();
@@ -125,20 +126,21 @@ public class CustomerFrame extends javax.swing.JFrame {
             table.removeRow(0);
 
         try {
-            System.out.println("testestetsetset");
-            ArrayList<inventory.GeneralMovie> result = Search.searchMovies(searchItem, selectedItem);
-            
-            System.out.println(result.size());
+            //System.out.println("testestetsetset");
+            result = Search.searchMovies(searchItem, selectedItem);
+
+            jdbconnection.JDBCConnection conn = new jdbconnection.JDBCConnection();
+            //System.out.println(result.size());
             for (int i = 0; i < result.size();i++) //inventory.GeneralMovie movie : result)
             {
                 inventory.GeneralMovie singleMovie = (inventory.GeneralMovie)result.get(i);
-                System.out.println("result Size: " + singleMovie.getTitle());
+                //System.out.println("result Size: " + singleMovie.getTitle());
 
                 Vector <String> row = new Vector<String>();
                 row.add(singleMovie.getTitle());
                 row.add("" + singleMovie.getReleaseDate().get(java.util.Calendar.YEAR));
                 row.add("" + singleMovie.getDirector());
-                System.out.println("Get Director: " + singleMovie.getDirector());
+                //System.out.println("Get Director: " + singleMovie.getDirector());
                 String actors = "";
                 for (String actor : singleMovie.getActors())
                 {
@@ -147,15 +149,15 @@ public class CustomerFrame extends javax.swing.JFrame {
                 }
                 actors = actors.trim().substring(0, actors.length() -2);
                 row.add("" + actors);
-                System.out.println("Get actors: " + actors);
+                //System.out.println("Get actors: " + actors);
                 row.add("" + singleMovie.getRating());
-                System.out.println("Get Rating: " + singleMovie.getRating());
+                //System.out.println("Get Rating: " + singleMovie.getRating());
                 row.add(singleMovie.getFormat());
-                if(RentalMovieManagement.getAvailableCopies(singleMovie)> 0)
-                    row.add(""+RentalMovieManagement.getAvailableCopies(singleMovie));
-                else if(RentalMovieManagement.getAvailableCopies(singleMovie)== 0)
+                if(RentalMovieManagement.getAvailableCopies(singleMovie, conn)> 0)
+                    row.add(""+RentalMovieManagement.getAvailableCopies(singleMovie, conn));
+                else if(RentalMovieManagement.getAvailableCopies(singleMovie, conn)== 0)
                     row.add("Rented");
-                else if(RentalMovieManagement.getAvailableCopies(singleMovie) < 0)
+                else if(RentalMovieManagement.getAvailableCopies(singleMovie, conn) < 0)
                     row.add("Not in Store");
                 //tableContent.add(row);
                 table.addRow(row);
@@ -167,7 +169,13 @@ public class CustomerFrame extends javax.swing.JFrame {
             Logger.getLogger(CustomerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }catch (MovieNotFoundException ex) {
             searchField.setText("Movie Not Found");
-        } catch (Exception ex) {System.out.print(ex.getMessage());ex.printStackTrace();}
+        }
+        catch (Exception ex)
+        {
+            javax.swing.JOptionPane.showMessageDialog(null, ex.getMessage(), "An error occurred", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+
+
 
 /*
       header = new Vector<String>();
@@ -177,7 +185,7 @@ public class CustomerFrame extends javax.swing.JFrame {
       header.add("Actor(s)"); // employee department
       header.add("Rating"); // employee department
       for(String i : header){
-       System.out.println("header: " + i);
+       //System.out.println("header: " + i);
       }
  */
 
@@ -380,22 +388,38 @@ public class CustomerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ReserveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReserveButtonActionPerformed
+                                                      
+        JOptionPane.showMessageDialog(null, "This feature is not implemented yet", "Sorry", JOptionPane.INFORMATION_MESSAGE);
+        /*
         if(localUIC.getKey().isLogin())
            new ReseveMovieDialog(this, false, localUIC).setVisible(true);
         else
-           new LoginDialog(localUIC.getKey(),localUIC,false).setVisible(true);     
+        {
+            new LoginDialog(localUIC).setVisible(true);
+        }
+         *
+         */
+           //new LoginDialog(localUIC.getKey(),localUIC,false).setVisible(true);
+            // commented out because there is no such constructor
 }//GEN-LAST:event_ReserveButtonActionPerformed
 
     private void RequestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RequestButtonActionPerformed
-        if(localUIC.getKey().isLogin())
+        JOptionPane.showMessageDialog(null, "This feature is not implemented yet", "Sorry", JOptionPane.INFORMATION_MESSAGE);
+        
+        /*if(localUIC.getKey().isLogin())
            new RequestMovieDialog(this, false, localUIC).setVisible(true);
         else
-           new LoginDialog(localUIC.getKey(),localUIC,false).setVisible(true);
+        {
+            new LoginDialog(localUIC).setVisible(true);
+        }*/
+           //new LoginDialog(localUIC.getKey(),localUIC,false).setVisible(true);
 }//GEN-LAST:event_RequestButtonActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
-        new ui.searchDetailDialog(this, false).setVisible(true);
+        int rowNum = jTable1.getSelectedRow();
+        inventory.GeneralMovie movie = result.get(rowNum);
+        new ui.searchDetailDialog(this, false, movie).setVisible(true);
 }//GEN-LAST:event_jTable1MouseClicked
 
     /**
@@ -424,5 +448,5 @@ public class CustomerFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox searchComboBox;
     private javax.swing.JTextField searchField;
     // End of variables declaration//GEN-END:variables
-
+    private ArrayList<inventory.GeneralMovie> result;
 }

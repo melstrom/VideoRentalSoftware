@@ -784,7 +784,6 @@ public class RentalMovieManagement
         {
             throw new IllegalArgumentException("Not a valid barcode");
         }
-        System.out.println(this.SKU + "-" + rentalID);
     }
 
     /**
@@ -862,7 +861,6 @@ public class RentalMovieManagement
                 + "', videoRental.customerID = NULL, "
                 + "videoRental.checkout_time = NULL "
                 + "WHERE videoRental.rentalID='" + barcode.substring(barcode.length() - 9) + "';";
-        //System.out.println(command);//testing
         PreparedStatement stat = conn.prepareStatement(command);
         stat.execute();
     }
@@ -1020,7 +1018,6 @@ public class RentalMovieManagement
             throws SQLException
     {
         String query = "DELETE FROM " + tableName + " " + where;
-        System.out.println(query);
         return query;
     }
 
@@ -1061,7 +1058,6 @@ public class RentalMovieManagement
         }
         query += ")";
 
-        System.out.println(query);
         return query;
     }
 
@@ -1082,7 +1078,6 @@ public class RentalMovieManagement
         String command = "UPDATE " + tableName
                 + " SET " + attributeName + " = " + "'" + setAttributeTo + "'"
                 + whereCondition;
-        System.out.println(command);
         return command;
     }
 
@@ -1099,7 +1094,6 @@ public class RentalMovieManagement
     private String generateSelectSQL(String tablename, String field, String where)
     {
         String query = "select " + field + " from " + tablename + " " + where;
-        System.out.println(query);
         return query;
     }
 
@@ -1114,7 +1108,6 @@ public class RentalMovieManagement
      */
     private int updateDatabase(String query) throws Exception, SQLException
     {
-        System.out.println(query);
         try
         {
             int rowsChanged = JDBC.update(query);
@@ -1313,20 +1306,34 @@ public class RentalMovieManagement
         JDBCConnection connection = new JDBCConnection();
         try
         {
+            String rentalQuery = JDBCConnection.makeQuery("videoRental",
+                null,
+                "videoRental.SKU = ? AND videoRental.condition = ? AND videoRental.catagory <> ?");
+
+
             String[] parameters = {SKU, "available", "for sale"};
             int numParameters = 3;
+            ResultSet firstSet = connection.getResults(rentalQuery, numParameters, parameters);
+            if (!firstSet.next())
+            {
+                return -1;
+            }
+
             ResultSet result = connection.getResults(query, numParameters, parameters);
 //            if (!result.next())
 //            {
 //                return -1;
 //            }
-            result.next();
-            Integer numAvailableCopies = result.getInt(1);
-//            if (result.wasNull())
-//            {
-//                return -1;
-//            }
-            return numAvailableCopies;
+            if (result.next())
+            {
+                Integer numAvailableCopies = result.getInt(1);
+                
+                return numAvailableCopies;
+            }
+            else
+            {
+                return -1;
+            }
 
         }
         finally
@@ -1334,6 +1341,69 @@ public class RentalMovieManagement
             connection.closeConnection();
         }
     }
+
+
+
+    /**
+     * This method finds the number of available copies of a GeneralMovie,
+     * given that GeneralMovie's SKU.
+     * For checking multiple movies this is faster than getAvailableCopies
+     * (SKU:String) because it does not open and close connections.
+     * @param SKU the SKU of the GeneralMovie
+     * @param connection an open JDBCConnection object
+     * @return a non-negative number indicating the number of copies available
+     * or a negative number if the store does not carry any copies.
+     * @throws MovieNotFoundException if the movie passed is not known to
+     * the video store
+     *
+     */
+    public static int getAvailableCopies(String SKU, JDBCConnection connection)
+            throws MovieNotFoundException, SQLException, ClassNotFoundException
+    {
+        String query =
+                JDBCConnection.makeQuery("videoRental",
+                "COUNT(*)",
+                "videoRental.SKU = ? AND videoRental.condition = ? AND videoRental.catagory <> ?");
+        if (!exists(SKU))
+        {
+            return -1;
+        }
+
+            // checks to see if
+            String rentalQuery = JDBCConnection.makeQuery("videoRental",
+                null,
+                "videoRental.SKU = ? AND (videoRental.condition = ? OR videoRental.condition = ? OR videoRental.condition = ?) AND videoRental.catagory <> ?");
+            String[] rentalParams = {SKU, "available", "rented", "reserved", "for sale"};
+            int rentalNumParams = 5;
+
+            String[] parameters = {SKU, "available", "for sale"};
+            int numParameters = 3;
+            ResultSet firstSet = connection.getResults(rentalQuery, rentalNumParams, rentalParams);
+            if (!firstSet.next())
+            {
+                return -1;
+            }
+
+            ResultSet result = connection.getResults(query, numParameters, parameters);
+//            if (!result.next())
+//            {
+//                return -1;
+//            }
+            if (result.next())
+            {
+                Integer numAvailableCopies = result.getInt(1);
+
+                return numAvailableCopies;
+            }
+            else
+            {
+                return -1;
+            }
+
+        
+    }
+
+
 
     /**
      * This method finds out if a GeneralMovie is known to the database.
@@ -1376,6 +1446,27 @@ public class RentalMovieManagement
     {
         return getAvailableCopies(movie.getSKU());
     }
+
+
+
+    /**
+     * This method finds the number of available copies of a GeneralMovie.
+     * It is much faster than getAvailableCopies(movie:GeneralMovie) because it
+     * does not need to open and close connections.
+     * @param movie the GeneralMovie
+     * @param conn an open JDBCConnection object
+     * @return a non-negative number indicating the number of copies available
+     * or a negative number if the store does not carry any copies.
+     * @throws MovieNotFoundException if the movie passed is not known to
+     * the video store
+     *
+     */
+    public static int getAvailableCopies(GeneralMovie movie, JDBCConnection conn)
+            throws MovieNotFoundException, SQLException, ClassNotFoundException
+    {
+        return getAvailableCopies(movie.getSKU(), conn);
+    }
+
     
     private String barcode;
     private String SKU;
@@ -1509,7 +1600,6 @@ public class RentalMovieManagement
     //Penalty penalty = new Penalty();
 
     // String id = customer.getFname();
-    //System.out.println(id);
 
     return 0;
     }

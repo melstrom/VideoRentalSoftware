@@ -60,7 +60,6 @@ public class TransactionManager
 	*/
 	public void createTransaction(String firstName, String lastName, int customerID, String employeeName, int employeeID)
 	{
-            System.out.println("creating transaction in createTransaction");//testing
 		myTransaction = new Transaction(firstName, lastName, customerID, employeeName, employeeID, TAX_RATE);
 	}
 	
@@ -126,10 +125,7 @@ public class TransactionManager
                 throws SQLException,ClassNotFoundException, IOException, 
                        MovieNotFoundException, Exception
         {
-            System.out.println("into addMovie: " + barcode);//testing
             MovieInterface movie = new MovieInterface(barcode);
-            System.out.println("showing movie: " + movie.getName());//testing
-            System.out.println("number of transaction item: " + myTransaction.getNumberOfItems());//testing
             myTransaction.addTransactionItem(movie);
         }
 

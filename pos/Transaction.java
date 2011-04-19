@@ -118,7 +118,6 @@ public class Transaction
 	*/
 	public Transaction(String firstName, String lastName, int customerID, String employeeName, int employeeID, double taxPercent)
 	{
-            System.out.println("comes intot transaction constructor.");//testing
 		this.customerFirstName = firstName;
 		this.customerLastName = lastName;
 		this.customerID = customerID;
@@ -134,7 +133,6 @@ public class Transaction
 		paid = false;
 		paymentMethod = "";
 		items = new ArrayList<TransactionItem>();
-                System.out.println("getting out of transaction constructor.");//testing
 	}
 	
 
@@ -448,17 +446,12 @@ public class Transaction
 	*/
 	public void addTransactionItem(TransactionItem item) throws Exception
 	{
-            System.out.println("comes into addTransactionItem.");//testing
 		if (paid == true)
 		{
 			throw new IllegalStateException("Transaction has already been paid for.");
 		}
-		//System.out.println("Size 1: " + items.size());
 		items.add(item);
-                System.out.println("item:" + item.getBarcode());//testing
-		//System.out.println("Size 2: " + items.size());
 		subtotalInCents += item.getPrice();
-                System.out.println(subtotalInCents);//testing
 		taxInCents = (int)(taxPercent /100 * subtotalInCents);
                 //TODO: Ask Kvn about logic adding size
 	}
