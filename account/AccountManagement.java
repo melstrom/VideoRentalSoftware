@@ -33,8 +33,6 @@ import jdbconnection.JDBCConnection;
 
 public class AccountManagement
 {
-
-    private Account account;
     private Connection connection;
     private Statement statement;
 
@@ -60,15 +58,15 @@ public class AccountManagement
     {
         int accountID = this.generateNewAccountID();
         int addressID = this.generateAddressID();
-        account = new Employee(position, employeeID, Fname, Lname, address, phoneNum);
+        Employee account = new Employee(position, employeeID, Fname, Lname, address, phoneNum);
         try
         {
             String addressInsert = this.createAddressInsertSQL(address, addressID);
             String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
             String employeeInsert = "INSERT INTO employee (employeeID, accountID, position) values ("
-                    + "'"+employeeID+"'" + ","
+                    + "'"+account.getEmployeeID()+"'" + ","
                     + "'"+accountID+"'" + ","
-                    + "'"+position+"'" + ")";
+                    + "'"+account.getPosition()+"'" + ")";
             statement.executeUpdate(addressInsert);
             statement.executeUpdate(accountInsert);
             statement.executeUpdate(employeeInsert);
@@ -97,16 +95,16 @@ public class AccountManagement
     {
         int accountID = this.generateNewAccountID();
         int addressID = this.generateAddressID();
-        account = new Customer(DL, customerID, Fname, Lname, address, phoneNum);
+        Customer account = new Customer(DL, customerID, Fname, Lname, address, phoneNum);
         try
         {
             String addressInsert = this.createAddressInsertSQL(address, addressID);
             String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
 
             String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense, penalty) values ("
-                    + "'"+customerID+"'" + ","
+                    + "'"+account.getCustomerID()+"'" + ","
                     + "'"+accountID+"'" + ","
-                    + "'"+DL+"'" + ","
+                    + "'"+account.getDL()+"'" + ","
                     + "'0')";
             statement.executeUpdate(addressInsert);
             statement.executeUpdate(accountInsert);
