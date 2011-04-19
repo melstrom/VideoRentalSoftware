@@ -15,6 +15,10 @@ import java.sql.SQLException;
 import search.*;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+import java.io.IOException;
 
 /**
  *
@@ -124,8 +128,32 @@ public class VideoInfoDialog extends javax.swing.JDialog {
 
         searchButton.setText("Search");
         searchButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchButtonActionPerformed(evt);
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                try
+                {
+                    searchButtonActionPerformed(evt);
+                    
+
+                }
+                catch(SQLException e)
+                {
+
+                }
+                catch(MovieNotFoundException e)
+                {
+
+                }
+                catch(IOException e)
+                {
+
+                }
+                catch(java.lang.Exception e)
+                {
+                    
+                }
+
+
             }
         });
 
@@ -230,48 +258,52 @@ public class VideoInfoDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_searchTextFieldActionPerformed
 
-    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt)
+            throws SQLException,MovieNotFoundException,java.io.IOException,java.lang.Exception {//GEN-FIRST:event_searchButtonActionPerformed
         String searchText = searchTextField.getText();
         Search search = new Search();
-        try
-        {
-         ArrayList<GeneralMovie> list = search.searchMovies(searchText, "title");
+       
+       
+  
+    DefaultTableModel model = (DefaultTableModel)resultTable.getModel();
+    while(model.getRowCount()>0)
+        model.removeRow(0);
 
-         /*Object [][]data =new String[10][10];
-            data[0][0]="test";
-            data[1][1]="test";*/
+       ArrayList<GeneralMovie> list = search.searchMovies(searchText, "title");
 
-            DefaultTableModel model = new DefaultTableModel();
-            model.addRow(new Object[]{"v1", "v2"});
-            resultTable.setModel(model);
+       ArrayList<GeneralMovie>movie = new <GeneralMovie>ArrayList();
+        System.out.println(list.size());
+          for(int i= 0; i<list.size();i++)
+          {
+              movie.set(i, list.get(i));
+              String []s = {movie.get(i).getTitle(),movie.get(i).getDirector()};
+              model.addRow(s);
+          }
+
+        //if selected
+
+        String tablename = "physicalVideo";
+        //String query;
+ 
+
+
+    model.fireTableStructureChanged();
+        
+
     
-        }
-        catch(SQLException e)
-        {
-
-        }
-        catch(ClassNotFoundException e)
-        {
-
-        }
-        catch(MovieNotFoundException e)
-        {
-
-        }
-        catch(java.io.IOException e)
-        {
-
-        }
-        catch(java.lang.Exception e)
-        {
-
-        }
-
+         
+        
+    
+        
     }//GEN-LAST:event_searchButtonActionPerformed
 
     /**
     * @param args the command line arguments
     */
+          public boolean isCellEditable(int rowIndex, int colIndex) {
+        return false;   //Disallow the editing of any cell
+      }
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -281,6 +313,7 @@ public class VideoInfoDialog extends javax.swing.JDialog {
                         System.exit(0);
                     }
                 });
+
                 dialog.setVisible(true);
             }
         });
