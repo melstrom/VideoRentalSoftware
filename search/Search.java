@@ -777,13 +777,13 @@ public class Search
      * @throws MovieNotFoundException
      * @throws ClassNotFoundException
      */
-    private static GeneralMovie previewGeneralMovie(String barcodeID)
+    private static GeneralMovie previewGeneralMovie(String SKU)
             throws SQLException, MovieNotFoundException, ClassNotFoundException, java.lang.Exception
     {
         //System.out.println(barcodeID);
         String query = "SELECT * FROM videoInfo, physicalVideo "
                 + "WHERE videoInfo.InfoID = physicalVideo.InfoID "
-                + "AND physicalVideo.SKU = '" +barcodeID + "'";
+                + "AND physicalVideo.SKU = '" +SKU + "'";
         
         Connection connection = JDBCConnection.getConnection();
         try
@@ -849,7 +849,7 @@ public class Search
 //            int retailPriceInCents,
 //            String format,
 //            int runtime)
-            return new GeneralMovie(barcodeID, title, actorList, director, 
+            return new GeneralMovie(SKU, title, actorList, director,
                     producer, releaseCalendar, synopsis, genre,
                     rating, studio, retailPriceInCents, format, length);
         }
