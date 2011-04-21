@@ -501,6 +501,7 @@ public class OthersPanel extends javax.swing.JPanel {
                 javax.swing.JOptionPane.showMessageDialog(this, "All request hav"
                         + "e been removed.", "Romved Requests", 1);
             }
+            jTable2 = null;
             getAllRequests(evt);
         }
         catch(SQLException e)

@@ -167,8 +167,6 @@ public class LoginDialog extends javax.swing.JDialog {
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         try {
 
-            //System.out.println("id: " + idField.getText());
-            //System.out.println("pass: " + charArrayToString(PasswordField.getPassword()));
 
             String id = idField.getText();
             String pass = charArrayToString(PasswordField.getPassword());

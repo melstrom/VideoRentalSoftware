@@ -50,7 +50,6 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         try {
             int[][] prices;
             PriceSchemeManagement init = new PriceSchemeManagement();
-            System.out.println("FUCK I HATE THIS PROGRAM!!!");
             prices = init.getAllPrices();
             headerString = new ArrayList<String>();
             headerString = init.getAllCategories();
@@ -81,7 +80,6 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         }
 
         initComponents();
-        System.out.println("quiting price scheme panel constructor.");//
     }
 
     private Vector ReturnVector(ArrayList list){
@@ -92,7 +90,6 @@ public class PriceSchemePanel extends javax.swing.JPanel {
     private void redrawPanel(){
         table = (DefaultTableModel)priceSchemaTable.getModel();
         while (table.getRowCount()>0){
-            System.out.println("delete Rows");
             table.removeRow(0);}
         ArrayList headerString;
         ArrayList formatString;
@@ -101,7 +98,6 @@ public class PriceSchemePanel extends javax.swing.JPanel {
         try {
             int[][] prices;
             PriceSchemeManagement init = new PriceSchemeManagement();
-            System.out.println("FUCK I HATE THIS PROGRAM!!!");
             prices = init.getAllPrices();
             headerString = new ArrayList<String>();
             headerString = init.getAllCategories();
@@ -245,8 +241,6 @@ public class PriceSchemePanel extends javax.swing.JPanel {
 //            int value = 0;
 //            String format = "" ;
 //            String category = "";
-//            System.out.println("changedrows = " + changedRows.size());//testing
-//            System.out.println("changedcols = " + changedCols.size());//testing
 //            PriceSchemeManagement setNewPrice = new PriceSchemeManagement();
 //            for(int i = 0; i < changedCols.size(); i++){
 //                col = Integer.parseInt("" + changedCols.get(i));

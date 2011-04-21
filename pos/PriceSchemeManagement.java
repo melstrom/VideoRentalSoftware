@@ -121,7 +121,6 @@ public class PriceSchemeManagement
             conn.getConnection();
             try
             {
-                  
                 PreparedStatement stat = conn.prepareStatement("INSERT INTO pricing "
                     + "VALUES ("+ price + ", '" + cat.trim().toLowerCase()
                     + "', '" + form.trim().toLowerCase() + "');");

@@ -55,10 +55,7 @@ public class CustomerInfoDialog extends javax.swing.JDialog {
         try {
             Search customerObject = new Search();
             currentCustomer = Search.getCustomer(Integer.parseInt(customerID));
-            System.out.println("employee Retrieved");
-            System.out.println("return: " + currentCustomer.getFname());
             FirstNameCustomerTextField.setText(currentCustomer.getFname());
-            //System.out.println(currentEmployee.getFname());
             lNameCustomerInfoTextfield.setText(currentCustomer.getLname());
             DLCustInfoTextField.setText(currentCustomer.getDL());
             phoneField.setText(currentCustomer.getPhoneNum());

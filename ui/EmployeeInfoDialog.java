@@ -50,10 +50,7 @@ public class EmployeeInfoDialog extends javax.swing.JDialog {
         try {
             Search employeeObject = new Search();
             currentEmployee = Search.getEmployee(Integer.parseInt(EmployeeID));
-            System.out.println("employee Retrieved");
-            System.out.println("return: " + currentEmployee.getFname());
             firstNameEmployeeInfoTextField.setText(currentEmployee.getFname());
-            //System.out.println(currentEmployee.getFname());
             lastNameEmployeeInfoTextField.setText(currentEmployee.getLname());
             positionEmployeeInfoComboBox.setSelectedItem(currentEmployee.getPosition());
             phoneField.setText(currentEmployee.getPhoneNum());
@@ -405,7 +402,7 @@ public class EmployeeInfoDialog extends javax.swing.JDialog {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                EmployeeInfoDialog dialog = new EmployeeInfoDialog(new javax.swing.JFrame(), true);
+                EmployeeInfoDialog dialog = new EmployeeInfoDialog(1, true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosing(java.awt.event.WindowEvent e) {
                         System.exit(0);
