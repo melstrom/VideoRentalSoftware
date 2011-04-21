@@ -1,6 +1,6 @@
 
 package search;
 
-public class searchVideoProxy {
+public class SearchVideoProxy {
 
 }

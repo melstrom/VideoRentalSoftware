@@ -2,7 +2,6 @@ package inventory;
 
 import jdbconnection.JDBCConnection;
 import java.sql.*;
-//import search.*;
 
 public class SaleMovieManagement
 {

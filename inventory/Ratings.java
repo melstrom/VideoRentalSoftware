@@ -41,8 +41,6 @@ public class Ratings
         update();
     }
 
-
-
     /**
      * Returns an instance of Ratings ensuring that only one instance is ever
      * created.
@@ -53,8 +51,6 @@ public class Ratings
             return INSTANCE;
     }
 
-
-
     /**
      * Returns the possible Ratings that a video can have
      * @return an array of Ratings, held as strings
@@ -63,8 +59,6 @@ public class Ratings
     {
         return ratings;
     }
-
-
 
     /**
      * Updates the possible Ratings.  Should be called when new Ratings are

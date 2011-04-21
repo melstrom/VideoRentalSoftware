@@ -1,10 +1,5 @@
-
-
 package account;
 
-//import pos.SQLhelper;
-//import java.lang.ClassNotFoundException;
-//import java.sql.SQLException;
 /**
     This Address holds the info about an address.
     @author Peter

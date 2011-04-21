@@ -1,4 +1,3 @@
-
 package inventory;
 
 /**
@@ -13,8 +12,6 @@ public class MovieExistsException extends Exception
     {
         super();
     }
-
-
 
     MovieExistsException(String message)
     {

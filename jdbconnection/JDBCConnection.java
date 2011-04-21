@@ -33,8 +33,6 @@ public class JDBCConnection {
       this.conn = getJDBCConnection();
   }
 
-
-
    /**
     * This method closes the database connection.  If an instance of
     * JDBCConnection is created, this closeConnection() method MUST be called
@@ -52,8 +50,6 @@ public class JDBCConnection {
        conn = null;
    }
 
-
-    // makes the connection.
    /**
     * Returns a connection the database.  It is the caller's responsibility to
     * close this connection when he is finished.
@@ -72,7 +68,6 @@ public class JDBCConnection {
     
   }
 
-
  /**
 * Returns a connection the database.  It is the caller's responsibility to
 * close this connection when he is finished.
@@ -87,24 +82,17 @@ public static Connection getConnection()
   return getJDBCConnection();
 }
 
-
-
 /**
  *
  * @return
  * @throws SQLException
  */
   public Statement createStatement()
-    throws SQLException{
-      //try{
-        st = conn.createStatement();
-     // }
-     // catch(Exception egg){System.err.println(egg.getMessage());}
+    throws SQLException
+  {
+      st = conn.createStatement();
       return st;
   }
-
-
-
 
   /**
    *
@@ -116,22 +104,6 @@ public static Connection getConnection()
     throws SQLException{
         return conn.prepareStatement(command);
   }
-  
-    /**
-   *
-   * @return
-   * @throws SQLException
-   */
-  /*public Statement prepareStatement(String command)
-    throws SQLException{
-      //try{
-          st = conn.prepareStatement(command);
-     // }
-      //catch(Exception egg){System.err.println(egg.getMessage());}
-      return st;
-  }*/
-
-  
   
     /**
      * This method generates a simple SQL query of the form
@@ -168,8 +140,6 @@ public static Connection getConnection()
         }
         return query;
     }
-
-
 
     /**
      * This method makes an insert query of the form
@@ -215,8 +185,6 @@ public static Connection getConnection()
         return query;
     }
 
-
-
     /**
      * creates an update query.
      * The form is UPDATE tableName SET column = blah WHERE blah = blah
@@ -234,8 +202,6 @@ public static Connection getConnection()
         return update;
     }
 
-
-
     /**
      * Creates a query that will delete a row from the specified table if it
      * matches the specified constraint, if it's executed
@@ -247,8 +213,6 @@ public static Connection getConnection()
     {
         return "DELETE FROM "+tableName+" WHERE "+constraint;
     }
-
-
 
     /**
      * This method gets the results of an SQL query that you provide
@@ -268,8 +232,6 @@ public static Connection getConnection()
         result = statement.executeQuery(query);
         return result;
     }
-    
-    
 
     /**
      * This method uses PreparedStatement to get a ResultSet.  A query should
@@ -296,8 +258,6 @@ public static Connection getConnection()
         return result;
     }
 
-
-
     /**
      * This method executes a query that changes the database.
      * It can be either an INSERT, UPDATE, or DELETE query.
@@ -313,8 +273,6 @@ public static Connection getConnection()
         
         return linesChanged;
     }
-
-
 
     /**
      * This method executes a query that chagnse the database.
@@ -341,8 +299,6 @@ public static Connection getConnection()
         return linesChanged;
     }
 
-
-
     /**
      * This checks if the JDBCConnection object is closed.
      * @return true if closed,otherwise false
@@ -353,8 +309,6 @@ public static Connection getConnection()
         return conn.isClosed();
     }
 
-
-
     /**
      * This method is used to re-open a database connection if you have closed it
      * @throws Exception
@@ -363,7 +317,6 @@ public static Connection getConnection()
     {
         conn = getConnection();
     }
-  
 }
 
 

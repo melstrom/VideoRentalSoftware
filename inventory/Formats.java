@@ -41,8 +41,6 @@ public class Formats
         update();
     }
 
-
-
     /**
      * Returns an instance of Formats ensuring that only one instance is ever
      * created.
@@ -53,8 +51,6 @@ public class Formats
             return INSTANCE;
     }
 
-
-
     /**
      * Returns the possible formats that a video can have
      * @return an array of formats, held as strings
@@ -63,8 +59,6 @@ public class Formats
     {
         return formats;
     }
-
-
 
     /**
      * Updates the possible formats.  Should be called when new formats are

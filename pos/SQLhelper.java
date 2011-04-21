@@ -4,10 +4,8 @@ import account.Address;
 import account.Employee;
 import account.Customer;
 import account.Account;
-import java.util.ArrayList;
 
 // sql stuff
-import java.lang.ClassNotFoundException;
 import java.sql.SQLException;
 
 import java.sql.Connection;
@@ -15,7 +13,6 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.util.GregorianCalendar;
 import java.util.Date;
 
 /**
@@ -40,26 +37,11 @@ public class SQLhelper
 	public static final String ACCOUNT_TABLE_PK = "accountID";
 	public static final String CUSTOMER_TABLE_NAME = "customer";
 	public static final String CUSTOMER_TABLE_PK = "customerID";
-	
-	
-	
-
-
-
-
-
-
-
-
-
-
-
 
 	private Statement statement;
 	private PreparedStatement pstatement;
 	private Connection connection;
-	
-	
+
 	/**
 		Gets the total number of rows of a table.
 		@param table the table name
@@ -106,7 +88,7 @@ public class SQLhelper
 	/**
 	 * Method to add employee info to the database.
 	 * @param theEmployee the employee you wish to add to the database
-	 * @return the primary key of hte tuple entry
+	 * @return the primary key of the tuple entry
 	 * @throws IllegalStateException if the employee is already in the db
 	 */
 	private int insertNewEmployee(Employee theEmployee, int accountID) throws ClassNotFoundException, IllegalStateException, SQLException
@@ -391,16 +373,6 @@ public class SQLhelper
 		connection.close();
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 		Method to insert movie info into the db table (this is for the cvs file reader).
 		
@@ -466,17 +438,6 @@ public class SQLhelper
 		closeConnection();
 		return infoID;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 		Init connection to the db for a SQL PreparedStatement (remember to close the connection after you are done).

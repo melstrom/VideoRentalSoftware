@@ -40,7 +40,6 @@ public class Reservation {
       pickupDate = reservePickupdate;
     }
 
-
     /**
      * Accessors - Get the customer account id
      * @return account id of the customer who makes the reservation
@@ -77,5 +76,4 @@ public class Reservation {
     public void setDate(GregorianCalendar date){
         pickupDate = date;
     }   
-
 }

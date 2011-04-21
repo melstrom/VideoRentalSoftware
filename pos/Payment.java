@@ -44,6 +44,4 @@ public class Payment
 	{
 		return paymentMethod;
 	}
-
-
 }

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package inventory;
 
 /**
@@ -17,8 +12,6 @@ public class MissingFieldException extends Exception
     {
         super();
     }
-
-
 
     MissingFieldException(String message)
     {

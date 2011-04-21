@@ -131,7 +131,7 @@ public class Search
             }
 
             result.close();
-        } // end try
+        }
         finally
         {
             connection.close();
@@ -161,11 +161,6 @@ public class Search
         {
             return null;
         }
-
-        // old, working query
-        //String query = "SELECT customer.customerID FROM customer, account WHERE ";
-        
-        // new query for getCustomer(result:ResultSet)
         String query = "SELECT * FROM customer, address, account WHERE ";
 
         String nameQuery;
@@ -209,7 +204,6 @@ public class Search
             throws SQLException, ClassNotFoundException
     {
         JDBCConnection conn = new JDBCConnection();
-        //Connection connection = JDBCConnection.getConnection();
         try
         {
                 String query = conn.makeQuery("address, account, customer", 
@@ -224,7 +218,6 @@ public class Search
                 {
                     return null;
                 }
-                //String barcode = "" + memberID;
                 String driversLicense = result.getString("customer.driversLicense");
                 String firstName = result.getString("account.firstName");
                 String lastName = result.getString("account.lastName");
@@ -236,14 +229,12 @@ public class Search
                 String province = result.getString("address.province");
                 String country = result.getString("address.country");
                 String postalCode = result.getString("address.postalCode");
-                //int addressID = result.getInt("address.addressID");
 
                 Address address = new Address(houseNumber, streetName,
                         city, province, country, postalCode);
                 
                 return new Customer(driversLicense, memberID,
                         firstName, lastName, address, phoneNum);
-                
         }
         finally
         {
@@ -264,10 +255,8 @@ public class Search
     public static Customer getCustomer(ResultSet result)
             throws SQLException, ClassNotFoundException
     {
-            
             if (result.isAfterLast())
             {
-                //System.out.println("Is afer last"); // TESTING
                 return null;
             }
             
@@ -283,7 +272,6 @@ public class Search
             String province = result.getString("address.province");
             String country = result.getString("address.country");
             String postalCode = result.getString("address.postalCode");
-            //int addressID = result.getInt("address.addressID");
 
             Address address = new Address(houseNumber, streetName,
                     city, province, country, postalCode);
@@ -334,7 +322,6 @@ public class Search
                 String province = result.getString("address.province");
                 String country = result.getString("address.country");
                 String postalCode = result.getString("address.postalCode");
-                //int addressID = result.getInt("address.addressID");
 
                 Address address = new Address(houseNumber, streetName,
                         city, province, country, postalCode);
@@ -377,7 +364,6 @@ public class Search
                     String postalCode = resultSet.getString("postalCode");
                     String country = resultSet.getString("country");
                     String phoneNum = resultSet.getString("phoneNum");
-                    //int addressID = resultSet.getInt("address.addressID");
 
                     Address address = new Address(houseNumber, streetName,
                         city, province, country, postalCode);
@@ -435,7 +421,6 @@ public class Search
             return null;
         }
     }
-
 
     /**
      * This method searches the database for a GeneralMovie matching the passed
@@ -502,26 +487,6 @@ public class Search
             }
             ResultSet result = connection.getResults(query, numParameters, parameters);
             ArrayList<GeneralMovie> searchResults = new ArrayList<GeneralMovie>();
-            /*
-            if (result.next())
-            {
-                String sku = result.getString("physicalVideo.SKU");
-                if (result.wasNull())
-                {
-                    return null;
-                }
-                searchResults.add(previewMovie(sku));
-            }
-            else
-            {
-                return null;
-            }
-            while (result.next())
-            {
-                String sku = result.getString("physicalVideo.SKU");
-                searchResults.add(previewMovie(sku));
-            }
-             * */
             while (result.next())
             {
                 GeneralMovie aMovie = previewGeneralMovie(result);
@@ -533,28 +498,11 @@ public class Search
         {
             connection.closeConnection();
         }
-        /*ResultSet result
-                = searchMoviesGetSQLResult(title, actor, director);
-        ArrayList<GeneralMovie> searchResults = new ArrayList<GeneralMovie>();
-        while (result.next())
-        {
-            searchResults.add(previewMovie(result.getString("physicalVideo.SKU")));
-        }
-        result.close();
-
-        if (searchResults.isEmpty())
-        {
-            return null;
-        }
-        else
-        {
-            return searchResults;
-        }*/
     }
 
     /**
      * Pads a string with wildcard % symbols so that we can search for
-     * matches that only contain the term instead of equalling exactly
+     * matches that only contain the term instead of equaling exactly
      * @param str
      * @return
      */
@@ -593,7 +541,6 @@ public class Search
                 "WHERE ";
         ArrayList<String> searchCriteria = new ArrayList<String>();
 
-        // adding the query forms of the non-null parameters to the array list
         if (title != null)
         {
             searchCriteria.add("videoInfo.title LIKE ?");
@@ -690,7 +637,6 @@ public class Search
         {
             throw new IllegalArgumentException("Not an individual movie");
         }
-        //System.out.println(SKU+" "+copyNum);
         GeneralMovie generalMovie = previewGeneralMovie(SKU);
         
         
@@ -707,26 +653,20 @@ public class Search
             statement.setString(parameterIndex, SKU);
             parameterIndex++;
             statement.setString(parameterIndex, copyNum);
-            //ResultSet result = statement.executeQuery(rentalQuery);
             ResultSet result = statement.executeQuery();
             if (result.next())
             {
-//                String isNull = result.getString(1);
-//                if (!result.wasNull())
-//                {
-                    
-                    String category = result.getString("videoSale.catagory");
-                    String format = result.getString("physicalVideo.format");
-                    String condition = result.getString("videoSale.condition");
+                String category = result.getString("videoSale.catagory");
+                String format = result.getString("physicalVideo.format");
+                String condition = result.getString("videoSale.condition");
 
                     // copy and pasted IndividualMovie constructor:
-                    //   public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition
+                    // public IndividualMovie(String category, int price, String barcode, GeneralMovie movie, String condition
 
-                    PriceSchemeManagement priceScheme = new PriceSchemeManagement();
-                    int priceInCents = priceScheme.getPrice(category, format);
-                    IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcode, generalMovie, condition);
-                    return individualMovie;
-//                }
+                PriceSchemeManagement priceScheme = new PriceSchemeManagement();
+                int priceInCents = priceScheme.getPrice(category, format);
+                IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcode, generalMovie, condition);
+                return individualMovie;
             }
             else
             {
@@ -750,10 +690,7 @@ public class Search
 
                     IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcode, generalMovie, condition);
                     RentalMovie rentalMovie = new RentalMovie(rentalPeriod, individualMovie);
-                    //System.out.println(SKU+" "+copyNum);
                     return rentalMovie;
-                // copy and pasted signature for RentalMovie
-                //public RentalMovie(int rentalPeriod, IndividualMovie movie)
                 }
                 else
                 {
@@ -764,7 +701,6 @@ public class Search
         }
         finally
         {
-            
             conn.close();
         }
     }
@@ -780,7 +716,6 @@ public class Search
     private static GeneralMovie previewGeneralMovie(String SKU)
             throws SQLException, MovieNotFoundException, ClassNotFoundException, java.lang.Exception
     {
-        //System.out.println(barcodeID);
         String query = "SELECT * FROM videoInfo, physicalVideo "
                 + "WHERE videoInfo.InfoID = physicalVideo.InfoID "
                 + "AND physicalVideo.SKU = '" +SKU + "'";
@@ -831,24 +766,9 @@ public class Search
             // mod by 10^2 to get the days
             int day = (releaseDate % 100);
             java.util.GregorianCalendar release =
-                    new java.util.GregorianCalendar(year, month, day);
+            new java.util.GregorianCalendar(year, month, day);
  *
  */
-            // copy and pasted GeneralMovie signature
-//            public GeneralMovie
-//            (String SKU,
-//            String title,
-//            String[] actors,
-//            String director,
-//            String producer,
-//            GregorianCalendar releaseDate,
-//            String synopsis,
-//            String genre,
-//	    String rating,
-//            String studio,
-//            int retailPriceInCents,
-//            String format,
-//            int runtime)
             return new GeneralMovie(SKU, title, actorList, director,
                     producer, releaseCalendar, synopsis, genre,
                     rating, studio, retailPriceInCents, format, length);
@@ -883,8 +803,6 @@ public class Search
     private static GeneralMovie previewGeneralMovie(ResultSet results)
             throws SQLException, ClassNotFoundException
     {
-        //System.out.println(barcodeID);
-
         if (results.isAfterLast())
         {
             return null;
@@ -970,9 +888,6 @@ public class Search
             throw new IllegalArgumentException("Not a valid search type");
         }
     }
-    
-    
-    
     
     /**
      * This method searches the database for a rental movie matching the search
@@ -1290,9 +1205,6 @@ public class Search
         {
             return null;
         }
-
-        //Connection connection = JDBCConnection.getConnection();
-
             PreparedStatement statement = connection.prepareStatement(query);
             int numTerms = searchTerms.size();
             int parameterIndex = 1; // SQL starts numbering indecies from 1
@@ -1331,9 +1243,6 @@ public class Search
         {
             return null;
         }
-
-        //Connection connection = JDBCConnection.getConnection();
-
             PreparedStatement statement = connection.prepareStatement(query);
             int numTerms = searchTerms.size();
             int parameterIndex = 1; // SQL starts numbering indecies from 1
@@ -1538,143 +1447,3 @@ public class Search
          return previewGeneralMovie(SKU);
     }
 }
-    
-    /**
-     * This is a helper method for browse.  It changes the genre enumeration
-     * into a string so that it can be used in an SQL query.
-     * 
-     * @param genre the genre enumeration to convert
-     * @return a string representing the genre.
-     * @deprecated
-     */
-    /*
-    private static String generateGenreStr(Genre genre)
-    {
-        String genreStr;
-        switch (genre)
-        {
-            case ACTION:
-                genreStr = "action";
-                break;
-            case COMEDY:
-                genreStr = "comedy";
-                break;            
-            case DRAMA:
-                genreStr = "drama";
-                break;            
-            case FAMILY:
-                genreStr = "family";
-                break;            
-            case HORROR:
-                genreStr = "horror";
-                break;            
-            case ROMANCE:
-                genreStr = "romance";
-                break;            
-            case SUSPENSE:
-                genreStr = "suspense";
-                break;            
-            case WESTERN:
-                genreStr = "western";
-                break;            
-            default:
-                genreStr = null;
-                // should never get here
-        } // end switch
-        return genreStr;
-    }
-     *
-     */
-
-
-
-    /**
-     * This method is a helper method for browse.  It generates the
-     * SQL query for the genre that is to be browsed.
-     *
-     * @param genreStr the genre to be browsed.
-     * @return the SQL query asking for all GeneralMovies in the specified genre
-     * @deprecated
-     */
-    /*
-    private static String generateBrowseQuery(String genreStr)
-    {
-        String query = "SELECT physicalVideo.SKU " +
-                "FROM physicalVideo, videoInfo" +
-                "WHERE videoInfo.genre = " + genreStr +
-                " AND videoInfo.infoID = physicalVideo.infoID";
-        return query;
-    }
-     *
-     */
-
-
-
-    /**
-     * This is a helper method for browse.  It gets the SQL results of the
-     * passed query.  A connection to the database is created and closed in
-     * this method.
-     *
-     * @param query the SQL query to send to the database
-     * @return the results of the query
-     * @throws SQLException
-     * @deprecated
-     */
-    /*
-    private static ResultSet browseGetSQLResult(String query)
-            throws SQLException
-    {
-        Connection connection = JDBCConnection.getConnection();
-        try
-        {
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(query);
-            return result;
-        }
-        finally
-        {
-            connection.close();
-        }
-    }
-     *
-     */
-
-
-
-    /**
-     * This is a helper method for browse.  It takes the results of an SQL
-     * query and converts them into a list of GeneralMovies.
-     * TODO: verify assumption that GeneralMovie can be constructed using a SKU
-     * @param result the results of an SQL query
-     * @return a list of GeneralMovies that were in the results
-     * @throws SQLException if a database access error occurs or this method
-     * is called on a closed result set
-     * @deprecated
-     */
-    /*
-    private static ArrayList<GeneralMovie> browseResultsList(ResultSet result)
-            throws SQLException, MovieNotFoundException, ClassNotFoundException,
-            Exception
-    {
-        ArrayList<GeneralMovie> resultsList = new ArrayList<GeneralMovie>();
-        while (result.next())
-        {
-            resultsList.add(
-                    previewMovie(result.getString("physicalVideo.SKU")));
-        }
-        return resultsList;
-    }
-     *
-     */
-
-    /**
-     * This enumeration represents all the possible genres of movies that are
-     * carried by the video store.
-     * TODO: decide maybe this is standalone enum, or mabye it goes in Movie class
-     */
-    /*public enum Genre
-    {
-        ACTION, COMEDY, DRAMA, FAMILY, HORROR, ROMANCE, SUSPENSE, WESTERN,
-        SCIENCE_FICTION, MUSICAL, SILENT, FOREIGN, INDEPENDENT,
-        DOCUMENTARY, TV_SERIES, MISC
-    }*/

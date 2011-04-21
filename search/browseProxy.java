@@ -1,5 +1,5 @@
 package search;
 
-public class browseProxy {
+public class BrowseProxy {
 
 }

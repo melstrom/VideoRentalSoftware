@@ -1,5 +1,5 @@
 package search;
 
-public class previewVideoProxy {
+public class PreviewVideoProxy {
 
 }

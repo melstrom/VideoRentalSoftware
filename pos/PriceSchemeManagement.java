@@ -5,8 +5,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import jdbconnection.*;
 import inventory.*;
-import java.util.Vector;
-import search.*;
 
 /**
  This class is the control object of the class PriceScheme.

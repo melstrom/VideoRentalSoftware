@@ -1,12 +1,10 @@
 package pos;
 
-
 import java.sql.*;
 import java.io.IOException;
 import search.*;
 import inventory.*;
 import jdbconnection.JDBCConnection;
-//import pos.PriceSchemeManagement;
 /**
  *
  * @author xliu01

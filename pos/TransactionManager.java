@@ -16,7 +16,6 @@ private int getEmployeeID(Employee employee)
 */
 package pos;
 
-import java.lang.ClassNotFoundException;
 import java.sql.SQLException;
 import inventory.*;
 import java.io.IOException;
