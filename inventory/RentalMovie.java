@@ -9,21 +9,16 @@
 */
 package inventory;
 import java.sql.*;
-import jdbconnection.JDBCConnection;
 import java.sql.SQLException;
-
 
 public class RentalMovie extends IndividualMovie{
 
-    
     public static final int ID_LENGTH = IndividualMovie.ID_LENGTH;
     public static final int RENTAL_HOLD_PERIOD = 3;
     // period of time a rental movie is held for before it goes back to rental circulation
 
     private int rentalPeriod;
     private int customerID;
-
-
 
     /**
      * Empty constructor
@@ -61,9 +56,9 @@ public class RentalMovie extends IndividualMovie{
         setCondition(movie.getCondition());
     }
 
-    public RentalMovie(String type, String SKU, int ID, String typeAgain) throws SQLException, ClassNotFoundException
+    public RentalMovie(String type, String SKU, int ID, String typeAgain, Statement statement) throws SQLException, ClassNotFoundException
     {
-        super(type, SKU, ID, typeAgain);
+        super(type, SKU, ID, typeAgain, statement);
         String query = "SELECT video" + type + ".customerID FROM video" + type +" WHERE " + typeAgain + "ID = " + ID;
         ResultSet rs = statement.executeQuery(query);
         if(rs.next());
@@ -80,18 +75,13 @@ public class RentalMovie extends IndividualMovie{
   {
     this.rentalPeriod = rentalPeriod;
   }
-  /**
- * Get rental period 
- * @return rental period
- */
+
+    /**
+    * Get rental period
+    * @return rental period
+    */
   public int getRentalPeriod()
   {
     return rentalPeriod;
   }
-
-  
-
-   
-  
-
 }
