@@ -644,22 +644,22 @@ public class Search
      * @param barcodeID the unique identifying number of the movie
      * @return the movie that corresponds to the barcodeID
      */
-    public static GeneralMovie previewMovie(String barcodeID)
+    public static GeneralMovie previewMovie(String barcode)
             throws MovieNotFoundException, SQLException,
             IllegalArgumentException, ClassNotFoundException, IOException, java.lang.Exception
     {
-        int barcodeLength = barcodeID.length();
+        int barcodeLength = barcode.length();
         GeneralMovie movie;
         
         if (GeneralMovie.MIN_SKU_LENGTH <= barcodeLength 
                 && barcodeLength <= GeneralMovie.MAX_SKU_LENGTH)
         {
-            movie = previewGeneralMovie(barcodeID);
+            movie = previewGeneralMovie(barcode);
         }
         else if (barcodeLength > GeneralMovie.MAX_SKU_LENGTH 
                 && barcodeLength <= (GeneralMovie.MAX_SKU_LENGTH + IndividualMovie.ID_LENGTH))
         {
-            movie = previewIndividualMovie(barcodeID);
+            movie = previewIndividualMovie(barcode);
         }
         else
         {
@@ -677,13 +677,13 @@ public class Search
      * @throws SQLException
      * @throws IllegalArgumentException
      */
-    public static IndividualMovie previewIndividualMovie(String barcodeID)
+    public static IndividualMovie previewIndividualMovie(String barcode)
             throws MovieNotFoundException, SQLException, 
             IllegalArgumentException, ClassNotFoundException
             ,java.io.IOException, java.lang.Exception
     {
         String[] splitBarcode = { null, null };
-        inventory.RentalMovieManagement.splitBarcode(barcodeID, splitBarcode);
+        inventory.RentalMovieManagement.splitBarcode(barcode, splitBarcode);
         String SKU = splitBarcode[0];
         String copyNum = splitBarcode[1];
         if (copyNum == null)
@@ -724,7 +724,7 @@ public class Search
 
                     PriceSchemeManagement priceScheme = new PriceSchemeManagement();
                     int priceInCents = priceScheme.getPrice(category, format);
-                    IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
+                    IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcode, generalMovie, condition);
                     return individualMovie;
 //                }
             }
@@ -748,7 +748,7 @@ public class Search
                     int priceInCents = priceScheme.getPrice(category, format);
                     int rentalPeriod = RentalMovieManagement.getRentalPeriod(category);
 
-                    IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcodeID, generalMovie, condition);
+                    IndividualMovie individualMovie = new IndividualMovie(category, priceInCents, barcode, generalMovie, condition);
                     RentalMovie rentalMovie = new RentalMovie(rentalPeriod, individualMovie);
                     //System.out.println(SKU+" "+copyNum);
                     return rentalMovie;
