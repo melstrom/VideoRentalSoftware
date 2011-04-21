@@ -25,7 +25,6 @@
  *     
  */
 package inventory;
-import jdbconnection.JDBCConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -88,13 +87,11 @@ public class GeneralMovie
         this.runtime = runtime;
     }
 
-    public GeneralMovie (String SKU) throws SQLException, ClassNotFoundException
+    public GeneralMovie (String SKU, Statement statement) throws SQLException, ClassNotFoundException
     {
-        connection = JDBCConnection.getJDBCConnection();
-        statement = connection.createStatement();
-        ResultSet rsn = statement.executeQuery("SELECT InfoID FROM physicalVideo WHERE SKU = '" + SKU + "'");
-        rsn.next();
-        int infoID = rsn.getInt(1);
+        ResultSet rs = statement.executeQuery("SELECT InfoID FROM physicalVideo WHERE SKU = '" + SKU + "'");
+        rs.next();
+        int infoID = rs.getInt(1);
         this.SKU = SKU;
         this.title = outputInfo("title", infoID);
 	this.director = outputInfo("director", infoID);
@@ -102,73 +99,24 @@ public class GeneralMovie
         this.actors = actorsString.split(",");
         this.synopsis = outputInfo("description", infoID);
 	this.studio = outputInfo("studio", infoID);
-        ResultSet rs3 = statement.executeQuery("SELECT releaseDate FROM videoInfo WHERE InfoID = " + infoID);
-        rs3.next();
-        Date date = rs3.getDate(1);
+        rs = statement.executeQuery("SELECT releaseDate FROM videoInfo WHERE InfoID = " + infoID);
+        rs.next();
+        Date date = rs.getDate(1);
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(date);
 	this.releaseDate = calendar;
         this.producer = outputInfo("producer", infoID);
-        ResultSet rs = statement.executeQuery("SELECT RetailPrice FROM physicalVideo WHERE InfoID = " + infoID);
+        rs = statement.executeQuery("SELECT RetailPrice FROM physicalVideo WHERE InfoID = " + infoID);
         rs.next();
         this.retailPriceInCents = rs.getInt(1);
 	setRating(outputInfo("rating", infoID));
         setGenre(outputInfo("genre", infoID));
-        ResultSet rsnn = statement.executeQuery("SELECT format FROM physicalVideo WHERE InfoID = " + infoID);
-        rsnn.next();
-        setFormat(rsnn.getString(1));
-        ResultSet rs2 = statement.executeQuery("SELECT length FROM videoInfo WHERE InfoID = " + infoID);
-        rs2.next();
-        this.runtime = rs2.getInt(1);
-    }
-
-    /**
-     * Constructor of GeneralMovie
-     * takes 12 parameters
-     * @param SKU
-     * @param title
-     * @param actors
-     * @param director
-     * @param producer
-     * @param releaseDate
-     * @param synopsis
-     * @param genre
-     * @param rating
-     * @param studio
-     * @param retailPriceInCents
-     * @param format
-     */
-
-    public GeneralMovie
-            (String SKU,
-            String title,
-            String actors,
-            String director,
-            String producer,
-            GregorianCalendar releaseDate,
-            String synopsis,
-            String genre,
-	    String rating,
-            String studio,
-            int retailPriceInCents,
-            String format,
-            int runtime)
-            throws Exception
-    {
-        reservations = new ArrayList<Reservation>();
-        this.title = title;
-        this.SKU = SKU;
-	this.director = director;
-        this.actors = actors.split(",");
-        this.synopsis = synopsis;
-	this.studio = studio;
-	this.releaseDate = releaseDate;
-        this.producer = producer;
-        this.retailPriceInCents = retailPriceInCents;
-	setRating(rating);
-        setGenre(genre);
-        setFormat(format);
-        this.runtime = runtime;
+        rs = statement.executeQuery("SELECT format FROM physicalVideo WHERE InfoID = " + infoID);
+        rs.next();
+        setFormat(rs.getString(1));
+        rs = statement.executeQuery("SELECT length FROM videoInfo WHERE InfoID = " + infoID);
+        rs.next();
+        this.runtime = rs.getInt(1);
     }
 
     public int getLength()
