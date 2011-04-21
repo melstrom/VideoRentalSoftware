@@ -306,56 +306,11 @@ public class AccountManagement
     }
 
     /**
-     * This method finds the highest ID number that currently exists
-     * for either an employee or customer or account or address
-     * @return the highest ID
+     * Promotes an employee to manager
+     * @param employeeID The employeeID of the employee being promoted
      * @throws SQLException
-     * @throws IllegalArgumentException if the table is not
-     * account, customer, employee, or address
+     * @throws AlreadyManagerException
      */
-    private int getHighestID(String table, String column)
-            throws SQLException, ClassNotFoundException
-    {
-        String query = JDBCConnection.makeQuery(table, "MAX(" + column + ")", null);
-        
-        if (connection.isClosed())
-        {
-            setupConnection();
-        }
-        ResultSet result = statement.executeQuery(query);//conn.getResults(query);
-        if (result.next() && result.getInt(1) != 0)
-        {
-                return result.getInt(1);
-        }
-        else if (table.equalsIgnoreCase("customer"))
-        {
-            return (int) (Math.pow(10, Customer.ID_LENGTH - 1) * Customer.ID_START_DIGIT);
-        }
-        else if (table.equalsIgnoreCase("employee"))
-        {
-            return (int) (Math.pow(10, Employee.ID_LENGTH - 1) * Employee.ID_START_DIGIT);
-        }
-        else if (table.equalsIgnoreCase("account"))
-        {
-            return 0;
-        }
-        else if (table.equalsIgnoreCase("address"))
-        {
-            return 0;
-        }
-        else
-        {
-            throw new IllegalArgumentException("Cannot find the highest ID of" +
-                    " "+table);
-        }
-    }
-
-/**
- * Promotes an employee to manager
- * @param employeeID The employeeID of the employee being promoted
- * @throws SQLException
- * @throws AlreadyManagerException
- */
     public void promoteEmployee(int employeeID) throws SQLException, AlreadyManagerException
     {
         String table = "employee";
@@ -467,6 +422,51 @@ public class AccountManagement
         + address.getPostalCode() + "')";
         return SQL;
     }
+    
+    /**
+     * This method finds the highest ID number that currently exists
+     * for either an employee or customer or account or address
+     * @return the highest ID
+     * @throws SQLException
+     * @throws IllegalArgumentException if the table is not
+     * account, customer, employee, or address
+     */
+    private int getHighestID(String table, String column)
+            throws SQLException, ClassNotFoundException
+    {
+        String query = JDBCConnection.makeQuery(table, "MAX(" + column + ")", null);
+
+        if (connection.isClosed())
+        {
+            setupConnection();
+        }
+        ResultSet result = statement.executeQuery(query);//conn.getResults(query);
+        if (result.next() && result.getInt(1) != 0)
+        {
+                return result.getInt(1);
+        }
+        else if (table.equalsIgnoreCase("customer"))
+        {
+            return (int) (Math.pow(10, Customer.ID_LENGTH - 1) * Customer.ID_START_DIGIT);
+        }
+        else if (table.equalsIgnoreCase("employee"))
+        {
+            return (int) (Math.pow(10, Employee.ID_LENGTH - 1) * Employee.ID_START_DIGIT);
+        }
+        else if (table.equalsIgnoreCase("account"))
+        {
+            return 0;
+        }
+        else if (table.equalsIgnoreCase("address"))
+        {
+            return 0;
+        }
+        else
+        {
+            throw new IllegalArgumentException("Cannot find the highest ID of" +
+                    " "+table);
+        }
+    }
 
     /**
      * Sets up the database connection for the class
@@ -479,173 +479,3 @@ public class AccountManagement
         statement = connection.createStatement();
     }
 }
-
-//    /**
-//     * Check if an account id already exists in the database
-//     * @param ID an account ID
-//     * @param userType the type of user (employee/customer)
-//     * @return boolean
-//     * @throws SQLException
-//     */
-//    private boolean isDuplicatedID(int ID, String accountType)
-//            throws SQLException, ClassNotFoundException, java.lang.Exception
-//    {
-//        String table = accountType;
-//        String column = accountType;
-//        int constraint = ID;
-//        String query = "SELECT " + column + "ID FROM " + table + " WHERE " + column + "ID = " + constraint;
-//        Statement statement = connection.createStatement();
-//        boolean result = statement.execute(query);
-//        return result;
-//    }
-//    /**
-//     * Set log in information
-//     * @param loginID the log in ID/username of the account
-//     * @param password the password of the account
-//     */
-//    public void setLogin(String loginID, String password)
-//    {
-//        account.setLogin(loginID, password);
-//    }
-//    /**
-//     * Change the status of the account (Active/Inactive)
-//     */
-//    public void changeStatus()
-//    {
-//        account.changeStatus();
-//    }
-
-
-
-//    /**
-//     * Edit an existing account
-//     * @param aAccount the account
-//     * @param accountType the type of the account
-//     */
-//    public void editAccount(Object aAccount, String accountType)
-//    {
-//        if (accountType.equals("employee"))
-//        {
-//            Employee employee = (Employee) aAccount;
-//            account = employee;
-//        }
-//
-//        else if (accountType.equals("customer"))
-//        {
-//            Customer customer = (Customer) aAccount;
-//            account = customer;
-//        }
-//    }
-
-    /**
-     * Edits personal information with 4 attributes
-     * @param Fname the first name of the user
-     * @param Lname the last name of the user
-     * @param address the address of the user
-     * @param phoneNum the phone number of the user
-     */
-    /*
-     * Commented out because it doesn't do anything in the database
-     * Mitch 17 April
-     *
-        public void editPersonalInfo(String Fname, String Lname, Address address, String phoneNum)
-    {
-        account.setPersonalInfo(Fname, Lname, address, phoneNum);
-    }
-     *
-     */
-
-    /**
-     * Edits personal information with 5 attributes
-     * @param DL the driver license id of the customer
-     * @param Fname the first name of the user
-     * @param Lname the last name of the user
-     * @param address the address of the user
-     * @param phoneNum the phone number of the user
-     */
-    /*
-     * commented out because it doesn't do anything in the database
-     * Mitch 17 April
-    public void editPersonalInfo(String DL, String Fname, String Lname, Address address, String phoneNum)
-    {
-        Customer customer = (Customer) account;
-        customer.setPersonalInfo(Fname, Lname, address, phoneNum);
-        customer.setDL(DL);
-        account = customer;
-    }
-     *
-     */
-
-    /**
-     * Generates a new employeeID or customerID from the database for a employee or customer
-     * @param accountType The account type to generate a new ID for (employee or customer)
-     * @return A new ID for a customer or employee
-     * @throws SQLException
-     */
-    /*
-     * This method works, however it has been commented out because we are
-     * attempting to find a solution that does not require a dummy employee
-     * or customer stuck in the database
-     * Commented out by Mitch: 17 April
-    public int generateNewID(String accountType) throws SQLException
-    {
-        String table = accountType;
-        String column = accountType + "ID";
-        String SQL = "SELECT " + column + " FROM " + table;
-        ResultSet rs = statement.executeQuery(SQL);
-        rs.last();
-        int LastID = rs.getInt(column);
-        int newID = LastID + 1;
-        return newID;
-    }
-     *
-     */
-
-    /**
-     * Generates a new accountID from the database for a new account
-     * @return The next accountID for the address table
-     * @throws SQLException
-     */
-    /*
-     * This code workds, however it has been commented out in an attempt
-     * to remove the need for a dummy account in the database
-     * commented out by Mitch: 17 April
-     *
-    private int generateNewAccountID() throws SQLException
-    {
-        String table = "account";
-        String column = "accountID";
-        String SQL = "SELECT " + column + " FROM " + table;
-        ResultSet rs = statement.executeQuery(SQL);
-        rs.last();
-        int LastAccountID = rs.getInt(column);
-        int newAccountID = LastAccountID + 1;
-        return newAccountID;
-    }
-     *
-     */
-
-    /**
-     * Generates a new addressID from the database for a new address
-     * @return The next addressID for the address table
-     * @throws SQLException
-     */
-    /*
-     * This code works but it has been commented out in an attempt to
-     * find a solution that does not require dummy values to be inserted into
-     * the database
-     * Commented out by Mitch: 17 April
-     *
-    private int generateAddressID () throws SQLException
-    {
-        String table = "address";
-        String column = "addressID";
-        String SQL = "SELECT " + column + " FROM " + table;
-        ResultSet rs = statement.executeQuery(SQL);
-        rs.last();
-        int LastAccountID = rs.getInt(column);
-        int newAccountID = LastAccountID + 1;
-        return newAccountID;
-    }
-     *
-     */

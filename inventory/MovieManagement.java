@@ -187,7 +187,243 @@ public class MovieManagement
             createGeneralMovie(new GeneralMovie(sku, title, actors, director, producer, releaseDate,
                     synopsis, genre, rating, studio, priceInCents, format, length));
         }
-    }    
+    }
+
+        /**
+     * Creates a new copy of a movie in the database
+     * @param generalMovie
+     * @param type The type of movie to default to (sale or rental)
+     * @return The generated SKU that uniquely identifies the copy (printed out and labelled on the copy)
+     * @throws SQLException
+     */
+    public String addCopy(GeneralMovie generalMovie, String type) throws SQLException
+    {
+        String barcode = null;
+        try
+        {
+            if (type.equals("sale"))
+            {
+                barcode = this.addSaleMovie(generalMovie, type);
+            }
+            else
+                 if(type.equals("rental"))
+            {
+                barcode = this.addRentalMovie(generalMovie, type);
+            }
+            return barcode;
+        }
+        finally
+        {
+            connection.close();
+        }
+    }
+
+    /**
+     * Changes the information of a movie
+     * @param info contains the 13 required information to identify a movie
+     */
+    public void editInfo(String SKU,
+            String title,
+            String[] actors,
+            String director,
+            String producer,
+            GregorianCalendar releaseDate,
+            String synopsis,
+            String genre,
+	    String rating,
+            String studio,
+            int retailPrice,
+            String format,
+            int runtime) throws SQLException, MissingFieldException
+    {
+        try
+        {
+            if (connection.isClosed())
+            {
+                connection = JDBCConnection.getConnection();
+            }
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new SQLException(e.getMessage());
+        }
+        try
+        {
+            this.movie = new GeneralMovie(SKU,title,actors,director,producer,releaseDate, synopsis,
+                    genre,rating,studio,retailPrice,format, runtime);
+            String actorsList="";
+            actorsList+= actors[0];
+            for(int i=1; i<actors.length; i++)
+            {
+                actorsList = actorsList + "," + actors[i];
+            }
+            String dateString = ""+releaseDate.get(Calendar.YEAR);
+            dateString += "-";
+            dateString += releaseDate.get(Calendar.MONTH);
+            dateString += "-";
+            dateString += releaseDate.get(Calendar.DATE);
+            String tables = "videoInfo, physicalVideo";
+            String set = "videoInfo.title = ?," +
+                    "videoInfo.actors = ?," +
+                    "videoInfo.director = ?," +
+                    "videoInfo.producer = ?," +
+                    "videoInfo.releaseDate = ?," +
+                    "videoInfo.description = ?," +
+                    "videoInfo.genre = ?," +
+                    "videoInfo.rating = ?," +
+                    "videoInfo.studio = ?," +
+                    "physicalVideo.RetailPrice = ?," +
+                    "physicalVideo.Format = ?," +
+                    "videoInfo.length = ?";
+            String constraint =  "physicalVideo.infoID = videoInfo.infoID AND physicalVideo.SKU = ?";
+            String query = JDBCConnection.makeUpdate(tables, set, constraint);
+            int numParams = 13;
+            String[] params = {
+                title,
+                actorsList,
+                director,
+                producer,
+                dateString,
+                synopsis,
+                genre,
+                rating,
+                studio,
+                ""+retailPrice,
+                format,
+                ""+runtime,
+                SKU
+            };
+
+            java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query);
+            for (int i = 1; i <= numParams; i++)
+            {
+                preparedStatement.setString(i, params[i-1]);
+            }
+
+            preparedStatement.executeUpdate();
+
+            /*
+             * Need to update all the fields that get passed in
+
+            String table = "physicalVideo";
+            String column = "infoID";
+            String constraint = "WHERE SKU = " + SKU;
+            String query2 = generateQuery(table, column, constraint);
+            ResultSet rs = statement.executeQuery(query2);
+            rs.next();
+            int infoID = rs.getInt("infoID");
+>>>>>>> 0b6117953b75bf56208856ed98716d3774eb2686
+            String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
+            String paramaterizedValues[] = new String[columns.length];
+            for (int i = 0; i < columns.length; i++)
+            {
+                paramaterizedValues[i] = "?";
+            }
+            String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
+<<<<<<< HEAD
+            String query = generateUpdateSQL("videoInfo",columns, paramaterizedValues );
+            java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query);
+            for (int i = 1; i <= values.length; i++)
+            {
+                preparedStatement.setString(i, values[i-1]);
+            }
+            preparedStatement.executeUpdate();
+
+             *
+             */
+
+            //statement.executeUpdate(query);
+        }
+        finally
+        {
+            connection.close();
+        }
+    }
+
+    /**
+     *  Get an arrayList of MovieRequests
+     *  @return an arrayList of MovieRequests
+     */
+    public ArrayList<MovieRequest> getRequest() throws SQLException
+    {
+        ArrayList<MovieRequest> movieRequest = new ArrayList<MovieRequest>();
+        String table = "madeSpecialOrders";
+        String column = "*";
+        String constraint = "";
+
+        String query = generateQuery(table, column, constraint);
+        ResultSet resultSet = statement.executeQuery(query);
+
+        while (resultSet.next())
+        {
+            String SKU = resultSet.getString("SKU");
+            int customerID = resultSet.getInt("CustomerID");
+            Date datetime = resultSet.getDate("datetime");
+            GregorianCalendar requestDate = new GregorianCalendar();
+            requestDate.setTime(datetime);
+            this.request = new MovieRequest(SKU, customerID, requestDate);
+            movieRequest.add(this.request);
+        }
+        if (movieRequest.isEmpty())
+        {
+            throw new SQLException("There are no requests.");
+        }
+        return movieRequest;
+    }
+
+    /**
+     * Create query for special order
+     * @param copy
+     * @param account
+     * @throws SQLException
+     */
+    public void addRequest (int customerID, String SKU) throws SQLException, RequestAlreadyExistsException
+    {
+        String tablename = "madeSpecialOrders";
+        String columns[] = {"datetime", "SKU", "customerID"};
+
+        String query = "SELECT SKU, customerID FROM " + tablename + " WHERE customerID = " + customerID + " AND SKU = '" + SKU + "'";
+        ResultSet rs = statement.executeQuery(query);
+        if (rs.next())
+        {
+            throw new RequestAlreadyExistsException ("The same request has already been made");
+        }
+        Calendar today = Calendar.getInstance();
+        today.setTime(today.getTime());
+        String time = makeReleaseDateString((GregorianCalendar)today);
+        String values[] = {time,SKU,""+customerID};
+        String SQL = generateInsertSQL(tablename, columns, values);
+        statement.executeUpdate(SQL);
+    }
+
+    /**
+     * Manually removes a request from the list of requests
+     * @param request
+     */
+    public void removeRequest(MovieRequest request) throws SQLException
+    {
+        this.request = request;
+        int customerID = request.getCustomerID();
+        String SKU = request.getSKU();
+
+        String table = "madeSpecialOrders";
+        String SQL = "DELETE FROM " + table + " WHERE SKU= " + SKU + " and customerID= " + customerID;
+        statement.executeUpdate(SQL);
+    }
+
+    public void removeRequest(String SKU)
+            throws SQLException
+    {
+        String command = "DELETE FROM madeSpecialOrders WHERE SKU = " + SKU + ";";
+        statement.executeUpdate(command);
+    }
+
+    public void clearAllRequests()
+            throws SQLException
+    {
+        String command = "DELETE FROM madeSpecialOrders;";
+        statement.executeUpdate(command);
+    }
 
     /**
      * This method looks at the attributes of a GeneralMovie and tries to
@@ -504,242 +740,6 @@ public class MovieManagement
     }
 
     /**
-     * Creates a new copy of a movie in the database
-     * @param generalMovie
-     * @param type The type of movie to default to (sale or rental)
-     * @return The generated SKU that uniquely identifies the copy (printed out and labelled on the copy)
-     * @throws SQLException
-     */
-    public String addCopy(GeneralMovie generalMovie, String type) throws SQLException
-    {
-        String barcode = null;
-        try
-        {
-            if (type.equals("sale"))
-            {
-                barcode = this.addSaleMovie(generalMovie, type);
-            }
-            else
-                 if(type.equals("rental"))
-            {
-                barcode = this.addRentalMovie(generalMovie, type);
-            }
-            return barcode;
-        }
-        finally
-        {
-            connection.close();
-        }
-    }
-
-    /**
-     * Changes the information of a movie
-     * @param info contains the 13 required information to identify a movie
-     */
-    public void editInfo(String SKU,
-            String title,
-            String[] actors,
-            String director,
-            String producer,
-            GregorianCalendar releaseDate,
-            String synopsis,
-            String genre,
-	    String rating,
-            String studio,
-            int retailPrice,
-            String format,
-            int runtime) throws SQLException, MissingFieldException
-    {
-        try
-        {
-            if (connection.isClosed())
-            {
-                connection = JDBCConnection.getConnection();
-            }
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new SQLException(e.getMessage());
-        }
-        try
-        {
-            this.movie = new GeneralMovie(SKU,title,actors,director,producer,releaseDate, synopsis,
-                    genre,rating,studio,retailPrice,format, runtime);
-            String actorsList="";
-            actorsList+= actors[0];
-            for(int i=1; i<actors.length; i++)
-            {
-                actorsList = actorsList + "," + actors[i];
-            }
-            String dateString = ""+releaseDate.get(Calendar.YEAR);
-            dateString += "-";
-            dateString += releaseDate.get(Calendar.MONTH);
-            dateString += "-";
-            dateString += releaseDate.get(Calendar.DATE);
-            String tables = "videoInfo, physicalVideo";
-            String set = "videoInfo.title = ?," +
-                    "videoInfo.actors = ?," +
-                    "videoInfo.director = ?," +
-                    "videoInfo.producer = ?," +
-                    "videoInfo.releaseDate = ?," +
-                    "videoInfo.description = ?," +
-                    "videoInfo.genre = ?," +
-                    "videoInfo.rating = ?," +
-                    "videoInfo.studio = ?," +
-                    "physicalVideo.RetailPrice = ?," +
-                    "physicalVideo.Format = ?," +
-                    "videoInfo.length = ?";
-            String constraint =  "physicalVideo.infoID = videoInfo.infoID AND physicalVideo.SKU = ?";
-            String query = JDBCConnection.makeUpdate(tables, set, constraint);
-            int numParams = 13;
-            String[] params = {
-                title,
-                actorsList,
-                director,
-                producer,
-                dateString,
-                synopsis,
-                genre,
-                rating,
-                studio,
-                ""+retailPrice,
-                format,
-                ""+runtime,
-                SKU
-            };
-
-            java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query);
-            for (int i = 1; i <= numParams; i++)
-            {
-                preparedStatement.setString(i, params[i-1]);
-            }
-
-            preparedStatement.executeUpdate();
-                    
-            /*
-             * Need to update all the fields that get passed in
-
-            String table = "physicalVideo";
-            String column = "infoID";
-            String constraint = "WHERE SKU = " + SKU;
-            String query2 = generateQuery(table, column, constraint);
-            ResultSet rs = statement.executeQuery(query2);
-            rs.next();
-            int infoID = rs.getInt("infoID");
->>>>>>> 0b6117953b75bf56208856ed98716d3774eb2686
-            String columns[]={"InfoID","Description","Genre","Producer","Title","Actors", "studio", "Rating"};
-            String paramaterizedValues[] = new String[columns.length];
-            for (int i = 0; i < columns.length; i++)
-            {
-                paramaterizedValues[i] = "?";
-            }
-            String values[]={SKU,synopsis, genre, producer, title, actorsList, studio, rating};
-<<<<<<< HEAD
-            String query = generateUpdateSQL("videoInfo",columns, paramaterizedValues );
-            java.sql.PreparedStatement preparedStatement = connection.prepareStatement(query);
-            for (int i = 1; i <= values.length; i++)
-            {
-                preparedStatement.setString(i, values[i-1]);
-            }
-            preparedStatement.executeUpdate();
-
-             * 
-             */
-
-            //statement.executeUpdate(query);
-        }
-        finally
-        {
-            connection.close();
-        }
-    }
-
-    /**
-     *  Get an arrayList of MovieRequests
-     *  @return an arrayList of MovieRequests
-     */
-    public ArrayList<MovieRequest> getRequest() throws SQLException
-    {
-        ArrayList<MovieRequest> movieRequest = new ArrayList<MovieRequest>();
-        String table = "madeSpecialOrders";
-        String column = "*";
-        String constraint = "";
-
-        String query = generateQuery(table, column, constraint);
-        ResultSet resultSet = statement.executeQuery(query);
-
-        while (resultSet.next())
-        {
-            String SKU = resultSet.getString("SKU");
-            int customerID = resultSet.getInt("CustomerID");
-            Date datetime = resultSet.getDate("datetime");
-            GregorianCalendar requestDate = new GregorianCalendar();
-            requestDate.setTime(datetime);
-            this.request = new MovieRequest(SKU, customerID, requestDate);
-            movieRequest.add(this.request);
-        }
-        if (movieRequest.size()==0)
-        {
-            throw new SQLException("There are no requests.");
-        }
-        return movieRequest;
-    }
-
-    /**
-     * Create query for special order
-     * @param copy
-     * @param account
-     * @throws SQLException
-     */
-    public void addRequest (int customerID, String SKU) throws SQLException, RequestAlreadyExistsException
-    {
-        String tablename = "madeSpecialOrders";
-        String columns[] = {"datetime", "SKU", "customerID"};
-
-        String query = "SELECT SKU, customerID FROM " + tablename + " WHERE customerID = " + customerID + " AND SKU = '" + SKU + "'";
-        ResultSet rs = statement.executeQuery(query);
-        if (rs.next())
-        {
-            throw new RequestAlreadyExistsException ("The same request has already been made");
-        }
-        Calendar today = Calendar.getInstance();
-        today.setTime(today.getTime());
-        String time = makeReleaseDateString((GregorianCalendar)today);
-        String values[] = {time,SKU,""+customerID};
-        String SQL = generateInsertSQL(tablename, columns, values);
-        statement.executeUpdate(SQL);
-    }
-
-    /**
-     * Manually removes a request from the list of requests
-     * @param request
-     */
-    public void removeRequest(MovieRequest request) throws SQLException
-    {
-        this.request = request;
-        int customerID = request.getCustomerID();
-        String SKU = request.getSKU();
-
-        String table = "madeSpecialOrders";
-        String SQL = "DELETE FROM " + table + " WHERE SKU= " + SKU + " and customerID= " + customerID;
-        statement.executeUpdate(SQL);
-    }
-
-    public void removeRequest(String SKU)
-            throws SQLException
-    {
-        String command = "DELETE FROM madeSpecialOrders WHERE SKU = " + SKU + ";";
-        statement.executeUpdate(command);
-    }
-
-    public void clearAllRequests()
-            throws SQLException
-    {
-        String command = "DELETE FROM madeSpecialOrders;";
-        statement.executeUpdate(command);
-    }
-
-    /**
      * Check if the movie information already exist in the database
      * @param SKU
      */
@@ -948,11 +948,7 @@ public class MovieManagement
                 query += ", ";
             }
         }
-//<<<<<<< HEAD
-//        query += " WHERE " +columnNames[0]+ " = " + values[0];
-//=======
         query += "WHERE " +columnNames[0]+ " = " + constraint;
-//>>>>>>> 0b6117953b75bf56208856ed98716d3774eb2686
         return query;
     }
 
@@ -967,61 +963,3 @@ public class MovieManagement
         statement = connection.createStatement();
     }
 }
-
-    /**
-     * Makes the constraint string for searching for videoInfo
-     * @param movie
-     * @return
-     * TODO: use PreparedStatement to prevent escaping queries with '
-     */
-   /*private static String makeConstraint(GeneralMovie movie)
-    {
-
-        //String SKU = movie.getSKU();
-        String title = movie.getTitle();
-        String[] actors = movie.getActors();
-        String director = movie.getDirector();
-        String producer = movie.getProducer();
-        String studio = movie.getStudio();
-        String synopsis = movie.getSynopsis();
-        String rating = movie.getRating();
-        java.util.Calendar releaseDate = movie.getReleaseDate();
-        String genre = movie.getGenre();
-        int runtime = movie.getLength();
-        String constraint = "";
-        //constraint = "SKU = '"+SKU+"'";
-        //constraint += " AND ";
-        constraint += "Title = '" + title + "'";
-        constraint += " AND ";
-        constraint += makeActorConstraint(actors);
-        constraint += " AND ";
-        constraint += "director = '" + director + "'";
-        constraint += " AND ";
-        constraint += "Producer = '" + producer + "'";
-        constraint += " AND ";
-        constraint += "studio = '" + studio + "'";
-        constraint += " AND ";
-        constraint += "Description = '" + synopsis + "'";
-        constraint += " AND ";
-        constraint += "Rating = '" + rating + "'";
-        constraint += " AND ";
-        constraint += "releaseDate = '" + makeReleaseDateString(releaseDate) + "'";
-        constraint += " AND ";
-        constraint += "Genre = '" + genre + "'";
-        constraint += " AND ";
-        constraint += "length = '" + runtime + "'";
-        return constraint;
-    }*/
-
-//    /**
-//     *
-//     * @return quantity of...something
-//     */
-//    public int getQuantity()
-//    {
-//        String table = "videoInfo";
-//        int quantity = movie.getSKU();
-//        //SELECT COUNT(SKU) FROM videoInfo WHERE SKU='SKU'
-//
-//        return quantity;
-//    }

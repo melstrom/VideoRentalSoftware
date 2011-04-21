@@ -975,161 +975,6 @@ public class RentalMovieManagement
     }
 
     /**
-     * This method generates an SQL query to set the condition of the RentalMovie
-     * eg
-     * UPDATE VideoRental
-     * SET Condition = 'lost'
-     * WHERE (RentalID = 1021 AND SKU = 10010010011)
-     * @param condition
-     * @throws SQLException
-     * @throws MovieNotFoundException
-     * @throws Exception
-     * @pre currentMovie is set/not null
-     * @pre input condition is one of the condition from conditions[]
-     * @pre rentalID is not null
-     * @post a line is updated in videoRental
-     */
-    private void setConditionQuery(String condition) throws SQLException, MovieNotFoundException, Exception
-    {
-        for (int i = 0; i < conditions.length; i++)
-        {
-            if (condition.equals(conditions[i]))
-            {
-                String table = "videoRental", attribute = "videoRental.condition", attributeTo = condition;
-                String where = " where rentalID=" + quote + rentalID + quote;
-                String query = generateUpdateSQL(table, attribute, attributeTo, where);
-                updateDatabase(query);
-            }
-        }
-    }
-
-    /**
-     * Generates a delete query
-     * DELETE FROM tableName WHERE columns[0] = 'keys[0]' AND ... AND
-     * columns[n] = 'keys[n]'
-     * @param tableName the table name in database
-     * @param where a where statement
-     * @return a query
-     * @throws SQLException
-     * @pre tablename exists in the database
-     * @post a query is generated
-     */
-    private String generateDeleteSQL(String tableName, String where)
-            throws SQLException
-    {
-        String query = "DELETE FROM " + tableName + " " + where;
-        return query;
-    }
-
-    /**
-     * Generates an sql query for inserting a new row into a table
-     * @param tableName
-     * @param columnNames an array containing the names of the columns to change
-     * @param values an array containing the values ot put in the columns
-     * @return a query
-     * @throws SQLExceptoin
-     * @pre tablename exists in the database
-     * @pre value of columnNames[] are column titles of tablename
-     * @post a query is generated
-     */
-    private String generateInsertSQL(String tableName, String[] columnNames, String[] values)
-            throws SQLException {
-        if (columnNames.length != values.length)
-        {
-            throw new SQLException("SQLException: column/value mismatch");
-        }
-        String query = "INSERT INTO " + tableName + " (";
-        for (int i = 0; i < columnNames.length; i++)
-        {
-            query += columnNames[i];
-            if (i != columnNames.length - 1)
-            {
-                query += ", ";
-            }
-        }
-        query += ") VALUES (";
-        for (int i = 0; i < values.length; i++)
-        {
-            query = query + "'" + values[i] + "'";
-            if (i != values.length - 1)
-            {
-                query += ", ";
-            }
-        }
-        query += ")";
-
-        return query;
-    }
-
-    /**
-     * This method generates a simple sql query for updating a table
-     * @param tableName the tablename
-     * @param attributeName the selected column name
-     * @param setAttributeTo the value the selected attribute will change to
-     * @param whereCondition a where clause
-     * @return a query
-     * @pre tablename exists in the database
-     * @pre attributeName is one of the columns of tablename
-     * @post a query is generated
-     */
-    private static String generateUpdateSQL(String tableName, String attributeName,
-            String setAttributeTo, String whereCondition)
-    {
-        String command = "UPDATE " + tableName
-                + " SET " + attributeName + " = " + "'" + setAttributeTo + "'"
-                + whereCondition;
-        return command;
-    }
-
-    /**
-     * Generate a select query
-     * @param tablename the tablename
-     * @param field the field to be selected
-     * @param where a where clause
-     * @return a query
-     * @pre tablename exists in the database
-     * @pre field is one of the columns of tablename
-     * @post a query is generated
-     */
-    private String generateSelectSQL(String tablename, String field, String where)
-    {
-        String query = "select " + field + " from " + tablename + " " + where;
-        return query;
-    }
-
-    /**
-     * This method sends an update query to the Database
-     * @param query an SQL query
-     * @return the number of rows affected.
-     * @throws SQLException
-     * @pre input query is checked
-     * @post database is updated
-     * @post number of lines affected is returned for verification
-     */
-    private int updateDatabase(String query) throws Exception, SQLException
-    {
-        try
-        {
-            int rowsChanged = JDBC.update(query);
-            if (rowsChanged > 1)
-            {
-                throw new SQLException("SQLException: database corrupted");
-            }
-            if (rowsChanged < 1)
-            {
-                throw new MovieNotFoundException("MovieNotFoundException: "
-                        + "cannot find barcode number");
-            }
-
-            return rowsChanged;
-        }
-        finally
-        {
-            connection.close();
-        }
-    }
-
-    /**
      * This method gets the first available pick up day for a rental movie.
      * It does not make any reservations.
      * @param movie the movie you want to reserve
@@ -1467,6 +1312,161 @@ public class RentalMovieManagement
         return getAvailableCopies(movie.getSKU(), conn);
     }
 
+        /**
+     * This method generates an SQL query to set the condition of the RentalMovie
+     * eg
+     * UPDATE VideoRental
+     * SET Condition = 'lost'
+     * WHERE (RentalID = 1021 AND SKU = 10010010011)
+     * @param condition
+     * @throws SQLException
+     * @throws MovieNotFoundException
+     * @throws Exception
+     * @pre currentMovie is set/not null
+     * @pre input condition is one of the condition from conditions[]
+     * @pre rentalID is not null
+     * @post a line is updated in videoRental
+     */
+    private void setConditionQuery(String condition) throws SQLException, MovieNotFoundException, Exception
+    {
+        for (int i = 0; i < conditions.length; i++)
+        {
+            if (condition.equals(conditions[i]))
+            {
+                String table = "videoRental", attribute = "videoRental.condition", attributeTo = condition;
+                String where = " where rentalID=" + quote + rentalID + quote;
+                String query = generateUpdateSQL(table, attribute, attributeTo, where);
+                updateDatabase(query);
+            }
+        }
+    }
+
+    /**
+     * Generates a delete query
+     * DELETE FROM tableName WHERE columns[0] = 'keys[0]' AND ... AND
+     * columns[n] = 'keys[n]'
+     * @param tableName the table name in database
+     * @param where a where statement
+     * @return a query
+     * @throws SQLException
+     * @pre tablename exists in the database
+     * @post a query is generated
+     */
+    private String generateDeleteSQL(String tableName, String where)
+            throws SQLException
+    {
+        String query = "DELETE FROM " + tableName + " " + where;
+        return query;
+    }
+
+    /**
+     * Generates an sql query for inserting a new row into a table
+     * @param tableName
+     * @param columnNames an array containing the names of the columns to change
+     * @param values an array containing the values ot put in the columns
+     * @return a query
+     * @throws SQLExceptoin
+     * @pre tablename exists in the database
+     * @pre value of columnNames[] are column titles of tablename
+     * @post a query is generated
+     */
+    private String generateInsertSQL(String tableName, String[] columnNames, String[] values)
+            throws SQLException {
+        if (columnNames.length != values.length)
+        {
+            throw new SQLException("SQLException: column/value mismatch");
+        }
+        String query = "INSERT INTO " + tableName + " (";
+        for (int i = 0; i < columnNames.length; i++)
+        {
+            query += columnNames[i];
+            if (i != columnNames.length - 1)
+            {
+                query += ", ";
+            }
+        }
+        query += ") VALUES (";
+        for (int i = 0; i < values.length; i++)
+        {
+            query = query + "'" + values[i] + "'";
+            if (i != values.length - 1)
+            {
+                query += ", ";
+            }
+        }
+        query += ")";
+
+        return query;
+    }
+
+    /**
+     * This method generates a simple sql query for updating a table
+     * @param tableName the tablename
+     * @param attributeName the selected column name
+     * @param setAttributeTo the value the selected attribute will change to
+     * @param whereCondition a where clause
+     * @return a query
+     * @pre tablename exists in the database
+     * @pre attributeName is one of the columns of tablename
+     * @post a query is generated
+     */
+    private static String generateUpdateSQL(String tableName, String attributeName,
+            String setAttributeTo, String whereCondition)
+    {
+        String command = "UPDATE " + tableName
+                + " SET " + attributeName + " = " + "'" + setAttributeTo + "'"
+                + whereCondition;
+        return command;
+    }
+
+    /**
+     * Generate a select query
+     * @param tablename the tablename
+     * @param field the field to be selected
+     * @param where a where clause
+     * @return a query
+     * @pre tablename exists in the database
+     * @pre field is one of the columns of tablename
+     * @post a query is generated
+     */
+    private String generateSelectSQL(String tablename, String field, String where)
+    {
+        String query = "select " + field + " from " + tablename + " " + where;
+        return query;
+    }
+
+    /**
+     * This method sends an update query to the Database
+     * @param query an SQL query
+     * @return the number of rows affected.
+     * @throws SQLException
+     * @pre input query is checked
+     * @post database is updated
+     * @post number of lines affected is returned for verification
+     */
+    private int updateDatabase(String query) throws Exception, SQLException
+    {
+        try
+        {
+            int rowsChanged = JDBC.update(query);
+            if (rowsChanged > 1)
+            {
+                throw new SQLException("SQLException: database corrupted");
+            }
+            if (rowsChanged < 1)
+            {
+                throw new MovieNotFoundException("MovieNotFoundException: "
+                        + "cannot find barcode number");
+            }
+
+            return rowsChanged;
+        }
+        finally
+        {
+            connection.close();
+        }
+    }
+
     
     private String barcode;
     private String SKU;
@@ -1486,224 +1486,3 @@ public class RentalMovieManagement
     final char quote = '\'';
     final char comma = ',';
 }
-
-    /** This method sets the condition of the instanced RentalMovie to a specified
-     * value and updates the database.
-     * @param condition The condition that you want to set for the instanced
-     * RentalMovie.  It must match either good, lost, or broken, case insensitive.
-     * @throws IllegalArgumentException if the condition does not match
-     * @throws SQLException if a connection to the database cannot be made or if
-     * more than one row is changed
-     * @throws MovieNotFoundException
-     * @pre the input condition is one of the conditions in conditions[]
-     * @post one and only one row is changed
-     */
-//
-//    public void setCondition(String condition)
-//            throws IllegalArgumentException, SQLException,
-//            MovieNotFoundException, Exception {
-//        String original = movie.getCondition();
-//
-//        /*if(condition.equals(original))
-//        {
-//        throw new IllegalArgumentException("input selection is the current selection");
-//        }*/
-//        for (int i = 0; i < conditions.length; i++) {
-//            if (condition.equals(conditions[i])) {
-//                movie.setCondition(condition.toLowerCase());
-//                setConditionQuery(condition);
-//            }
-//        }
-//
-//        if (movie.getCondition().equals(original)) {
-//            throw new IllegalArgumentException("condition must be lost, broken,reserved, available, rented or overdue");
-//        }
-//
-//
-//    }
-
-    /**
-     * Changes a rental movie to a sale movie and updates the database
-     * @param barcodeNum
-     * @throws MovieNotFoundException
-     * @throws SQLException
-     * @pre the currentMovie is selected/not null
-     * @pre the category of the currentMovie is not for_sale
-     * @pre the condition of the currentMovie is available
-     * @post a line is added to videoRental
-     * @post a line is removed from videoSale
-     */
-    /*
-     * commented out because it is unused: Mitch: 16 April
-    private void changeToSaleQuery() throws SQLException, MovieNotFoundException, Exception {
-        if (movie.getCondition().equals("available")) {
-            //add new line in sales table
-            String table = "videoRental";
-            String attribute = "videoRental.catagory";
-            String attributeTo = "for sale";
-            String where = " where rentalID=" + quote + rentalID + quote + " and SKU=" + quote + SKU + quote;
-            String query = generateUpdateSQL(table, attribute, attributeTo, where);
-            updateDatabase(query);
-
-            String[]columnNames = {"SaleID","condition","catagory", "SKU"};
-            String[] values = { rentalID, movie.getCondition(), movie.getCategory(),SKU };
-            table = "videoSale";
-            query = generateInsertSQL(table, columnNames,values);
-            updateDatabase(query);
-        }
-
-    }
-    */
-
-    /**
-     * Set the format of the current movie
-     * @param format the format
-     * @throws java.lang.Exception
-     * @pre the format is one of the formats in formats[]
-     * @post only one row is changed
-     */
-    /* public void setFormat(String format)throws java.lang.Exception
-    {
-    String original = movie.getFormat();
-    if(format.equals(original))
-    {
-    throw new IllegalArgumentException("input selection is the current selection");
-    }
-    if(format!= null)
-    {
-    for(int i = 0; i < formats.length; i++)
-    {
-    if(format.equals(formats[i]))
-    movie.setFormat(format);
-    setFormatQuery(format);
-    }
-    }
-
-    if(movie.getFormat().equals(original))
-    {
-    throw new IllegalArgumentException("format must be DVD, Blu-ray or VHS");
-    }
-    }	*/
-    //method not implemented
-    /**
-     * Get the penalty of the customer
-     * @param customerID the customerID
-     * @return the overdue penalty the customer must pay before checkout another movie
-     * @pre input customerID exists in the database
-     * @post the result is a price in cents
-     */
-    /*
-    public int getPenalty(int customerID)throws SQLException, java.lang.Exception
-    {
-    Search search = new Search();
-    Customer customer = search.getCustomer(customerID);
-    //Penalty penalty = new Penalty();
-
-    // String id = customer.getFname();
-
-    return 0;
-    }
-     */
-    /**
-     * Set category for the current movie
-     * @param category the movie category
-     * @throws SQLException
-     * @throws IllegalArgumentException
-     * @throws MovieNotFoundException
-     * @pre input category is one of the categories in categories[]
-     * @post only one row is changed
-     */
-//    public void setCategory(String category)
-//            throws SQLException, IllegalArgumentException, MovieNotFoundException, Exception {
-//        String original = movie.getCategory();
-//        /*if(category.equals(original))
-//        {
-//        throw new IllegalArgumentException("input selection is the current selection");
-//        }*/
-//
-//        for (int i = 0; i < categories.length; i++) {
-//            if (category.equals(categories[i])) {
-//                movie.setCategory(category);
-//                setCategoryQuery(category);
-//            }
-//        }
-//
-//        if (movie.getCategory().equals(original)) {
-//            throw new IllegalArgumentException("category must be 7 day, new release or for sale");
-//        }
-//    }
-
-    /**
-     * Changes the attributes of the RentalMovie to the specified ones.
-     * If you don't want to change any attributes, then send them as null
-     * @param category the category of the movie
-     * @param condition the condition of the movie
-     * @throws MovieNotFoundException
-     * @throws SQLException
-     * @throws java.lang.Exception
-     * @pre current copy is selected/not null
-     */
-    /*
-    public void editCopy(String category, String condition)
-            throws MovieNotFoundException, SQLException, java.lang.Exception {
-        setCategory(category);
-        //setFormat(format);
-        setCondition(condition);
-    }
-     *
-     */
-
-    /**
-     * Change a movie from type rental to sale
-     * @throws SQLException
-     * @throws MovieNotFoundException
-     * @throws java.lang.Exception
-     */
-    /*
-     * Commented out becuase it does not move the movie from the videoRental
-     * table to the videoSale table in the database
-    public void changeToSales()throws SQLException,MovieNotFoundException,java.lang.Exception
-    {
-    movie.setCategory("for sale");
-    changeToSaleQuery();
-    }
-     *
-     */
-    /**
-     * change a movie from type sale to rental
-     * @throws SQLException
-     * @throws MovieNotFoundException
-     * @throws java.lang.Exception
-     */
-    /*
-     * commented out because we are not changing a sale movie back to rental
-    public void changeToRental() throws SQLException, MovieNotFoundException, java.lang.Exception {
-        movie.setCategory("7 day");
-        changeToRentalQuery();
-    }
-     *
-     */
-
-    /**
-     * Set the format of the currentMovie
-     * @param format the format
-     * @throws SQLException
-     * @throws MovieNotFoundException
-     * @throws Exception
-     * @pre currentMovie is set/not null
-     * @pre rentalID is not null
-     * @pre input format is one if the formats from formats[]
-     * @post a line is updated in videoRental
-     */
-    /*private void setFormatQuery(String format)
-    throws SQLException, MovieNotFoundException, Exception
-    {
-
-    String table = "", attribute = "video.format", attributeTo = format;
-    String where = " where rentalID="+quote+rentalID+quote;
-    String query = generateUpdateSQL(table, attribute,attributeTo, where);
-    updateDatabase(query);
-
-
-
-    }*/
