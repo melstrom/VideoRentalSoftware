@@ -2,7 +2,7 @@ package inventory;
 
 import java.sql.SQLException;
 import java.sql.ResultSet;
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 import java.util.ArrayList;
 
 /**

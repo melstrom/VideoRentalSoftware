@@ -3,7 +3,7 @@ package pos;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import jdbconnection.*;
+import jdbcconnection.*;
 import inventory.*;
 
 /**

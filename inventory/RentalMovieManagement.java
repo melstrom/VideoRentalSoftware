@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Date;
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 
 /**
  * This is a utility class that encapsulates the interface of all classes that

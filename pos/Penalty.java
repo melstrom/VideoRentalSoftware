@@ -2,7 +2,7 @@ package pos;
 
 import java.io.IOException;
 import java.sql.*;
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 /**
  *
  * @author xliu01

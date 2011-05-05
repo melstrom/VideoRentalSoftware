@@ -8,7 +8,7 @@ import inventory.IndividualMovie;
 import inventory.MovieNotFoundException;
 import inventory.RentalMovie;
 import inventory.RentalMovieManagement;
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 import java.util.Date;
 import java.io.IOException;
 import java.util.GregorianCalendar;

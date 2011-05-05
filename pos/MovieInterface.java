@@ -4,7 +4,7 @@ import java.sql.*;
 import java.io.IOException;
 import search.*;
 import inventory.*;
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 /**
  *
  * @author xliu01

@@ -1,6 +1,6 @@
 package inventory;
 
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 
 import java.util.ArrayList;
 import java.sql.*;

@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

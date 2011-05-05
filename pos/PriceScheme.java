@@ -1,7 +1,7 @@
 package pos;
 import java.sql.*;
 import java.util.ArrayList;
-import jdbconnection.*;
+import jdbcconnection.*;
 
 /**
 This class contains the information of prices and the information of categories

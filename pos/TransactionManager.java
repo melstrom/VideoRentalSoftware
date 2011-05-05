@@ -23,7 +23,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.util.Vector;
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 import java.sql.ResultSet;
 
 /**

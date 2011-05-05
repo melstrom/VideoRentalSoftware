@@ -1,6 +1,6 @@
 package authentication;
 import account.*;
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 import search.*;
 
 import java.sql.*;

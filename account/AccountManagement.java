@@ -29,7 +29,7 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 
 /**
  * AccountManagement is charge of all account related tasks, such as creating new

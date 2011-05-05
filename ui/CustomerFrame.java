@@ -126,7 +126,7 @@ public class CustomerFrame extends javax.swing.JFrame {
         try {
             result = Search.searchMovies(searchItem, selectedItem);
 
-            jdbconnection.JDBCConnection conn = new jdbconnection.JDBCConnection();
+            jdbcconnection.JDBCConnection conn = new jdbcconnection.JDBCConnection();
             for (int i = 0; i < result.size();i++) //inventory.GeneralMovie movie : result)
             {
                 inventory.GeneralMovie singleMovie = (inventory.GeneralMovie)result.get(i);

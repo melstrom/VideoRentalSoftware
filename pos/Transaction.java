@@ -1,6 +1,6 @@
 package pos;
 
-import jdbconnection.JDBCConnection;
+import jdbcconnection.JDBCConnection;
 import java.sql.*;
 /*
 todos/decisions
