@@ -189,7 +189,7 @@ public class MovieManagement
         }
     }
 
-        /**
+    /**
      * Creates a new copy of a movie in the database
      * @param generalMovie
      * @param type The type of movie to default to (sale or rental)
@@ -556,61 +556,6 @@ public class MovieManagement
     }
 
     /**
-     * This method finds the next unused infoID number and returns it.
-     * @pre The infoIDs are below maximum
-     * @return The next unused infoID
-     * @throws MovieLimitReachedException if there are no infoIDs left
-     */
-    private static int nextInfoID() throws Exception
-    {
-        int currentHighestID = getHighestID("videoInfo", "InfoID");
-        int newHighestID = currentHighestID + 1;
-        if (newHighestID > Math.pow(10, GeneralMovie.INFO_ID_LENGTH) - 1)
-        {
-            throw new MovieLimitReachedException("Cannot add movie information."
-                    + "Maximum number of movie information is reached");
-        }
-        return newHighestID;
-    }
-
-    /**
-     * This method finds the highest ID number that currently exists
-     * @pre The ID number is an integer
-     * @pre The ID number has a minimum value of 100000000
-     * @return the highest ID
-     * @throws Exception
-     */
-    private static int getHighestID(String table, String column) throws Exception
-    {
-        String query = JDBCConnection.makeQuery(table, "MAX(" + column + ")", null);
-        JDBCConnection conn = new JDBCConnection();
-        try
-        {
-            ResultSet result = conn.getResults(query);
-            if (result.next())
-            {
-                result.getString(1);
-                if (result.wasNull())
-                {
-                    return (int) Math.pow(10, GeneralMovie.INFO_ID_LENGTH - 1);
-                }
-                else
-                {
-                    return result.getInt(1);
-                }
-            }
-            else
-            {
-                return (int) Math.pow(10, GeneralMovie.INFO_ID_LENGTH - 1);
-            }
-        }
-        finally
-        {
-            conn.closeConnection();
-        }
-    }
-
-    /**
      * This method adds information to the videoInfo table in the database
      * @param infoID the new key for the videoInfo
      * @param movie the movie to add
@@ -866,30 +811,6 @@ public class MovieManagement
     }
 
     /**
-     * Generate a rental/sale ID
-     * @param type the ID type
-     * @return an ID
-     * @throws SQLException
-     * @pre type is rental/sale
-     */
-    private int generateNewID(String type, String tableName) throws SQLException
-    {
-        String table = tableName;
-        String column = type+"ID";
-        String constraint = "ORDER BY "+type+"ID";
-        String query = generateQuery(table, column, constraint);
-        ResultSet resultSet = statement.executeQuery(query);
-        int LastID = 100000000;
-        if (resultSet.last())
-        {
-            LastID = resultSet.getInt(type+"ID");
-        }
-        int newID = LastID + 1;
-
-        return newID;
-    }
-
-    /**
      * Add a line to videoSale table
      * @param generalMovie
      * @return a SKU for this saleMovie
@@ -936,7 +857,7 @@ public class MovieManagement
         return newBarCode;
     }
 
-        private String generateUpdateSQL(String tableName, String[] columnNames, String[] values, int constraint)
+    private String generateUpdateSQL(String tableName, String[] columnNames, String[] values, int constraint)
     {
         String query = "UPDATE "+tableName+" SET ";
         for (int i = 1; i < columnNames.length; i++)

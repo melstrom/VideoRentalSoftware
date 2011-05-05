@@ -97,8 +97,6 @@ public class AccountManagement
      * @throws SQLException
      * @throws java.lang.Exception
      */
-
-    //TODO: Fix exception handling and documentation
     public void createCustomer(int customerID, String DL, String Fname, String Lname, Address address, String phoneNum)
             throws SQLException, java.lang.Exception
     {
@@ -269,43 +267,6 @@ public class AccountManagement
     }
 
     /**
-     * This method generates a new employee or customer ID.  It finds the 
-     * highest previous value of the ID and adds one to it to obtain a new
-     * unique ID.  If there are no values in the database, then it automatically
-     * starts at the minimum possible value.
-     * 
-     * @param accountType the type of account.  Must be either employee or customer
-     * @return the new ID
-     * @throws SQLException if a connection the database cannot be made
-     * @throws AccountLimitReachedException if the maximum number of accounts, either
-     * customer or employee depending on the accountType, has been reached
-     * @throws ClassNotFoundException
-     * @throws IllegalArgumentException if the accountType is not customer
-     * or employee
-     */
-    public int generateNewID(String accountType) throws SQLException,
-            AccountLimitReachedException, ClassNotFoundException
-    {
-        String table = accountType;
-        String column = accountType + "ID";
-        int highestID = getHighestID(table, column);
-        int newHighestID = highestID + 1;
-        int maxCustomerID = Integer.MAX_VALUE;
-        int maxEmployeeID = (int) Math.pow(10, Customer.ID_LENGTH -1) * Customer.ID_START_DIGIT - 1;
-        if (accountType.equalsIgnoreCase("customer") && newHighestID > maxCustomerID)
-        {
-            throw new AccountLimitReachedException("The maximum number of " +
-                    "customer accounts has been reached");
-        }
-        else if (accountType.equalsIgnoreCase("employee") && newHighestID > maxEmployeeID)
-        {
-            throw new AccountLimitReachedException("The maximum number" +
-                    " of employee accounts has been reached");
-        }
-        return newHighestID;
-    }
-
-    /**
      * Promotes an employee to manager
      * @param employeeID The employeeID of the employee being promoted
      * @throws SQLException
@@ -354,34 +315,6 @@ public class AccountManagement
             String updateQuery = JDBCConnection.makeUpdate(table, set, constraint);
             statement.executeUpdate(updateQuery);
         }
-    }
-
-    /**
-     * This method generates a new account ID.  The account ID is only ever
-     * used in the database.
-     * @return a new, unique AccountID
-     * @throws SQLException
-     */
-    private int generateNewAccountID() throws SQLException, ClassNotFoundException
-    {
-        String table = "account";
-        String column = "accountID";
-        int highestID = getHighestID(table, column);
-        return highestID + 1;
-    }
-
-    /**
-     * This method generates a new address ID.  The address ID is only ever
-     * used in the database.
-     * @return a new, unique AddressID
-     * @throws SQLException
-     */
-    private int generateAddressID() throws SQLException, ClassNotFoundException
-    {
-        String table = "address";
-        String column = "addressID";
-        int highestID = getHighestID(table, column);
-        return highestID + 1;
     }
 
     /**
