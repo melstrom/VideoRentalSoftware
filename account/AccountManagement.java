@@ -359,27 +359,7 @@ public class AccountManagement
             + phoneNum + "')";
             return SQL;
     }
-
-    /**
-     * Prepares a SQL statement to insert a new address
-     * @param address An address object containing all address information
-     * @param addressID addressID generated from generateAddressID
-     * @return A SQL statement that inserts a new address when run
-     * @throws SQLException
-     */
-    private String createAddressInsertSQL (Address address, int addressID) throws SQLException
-    {
-        String SQL = "INSERT INTO address (addressID, houseNumber, streetName, city, province, country, postalCode) value ("
-        + addressID + ","
-        + address.getHouseNumber() + ",'"
-        + address.getStreetName() + "','"
-        + address.getCity() + "','"
-        + address.getProvince() + "','"
-        + address.getCountry() + "','"
-        + address.getPostalCode() + "')";
-        return SQL;
-    }
-
+    
     /**
      * Sets up the database connection for the class
      * @throws SQLException
