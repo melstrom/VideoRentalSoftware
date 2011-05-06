@@ -106,29 +106,41 @@ public class AccountManagement
      * @throws SQLException
      * @throws java.lang.Exception
      */
-    public void createCustomer(int customerID, String DL, String Fname, String Lname, Address address, String phoneNum)
+    public void createCustomer(
+            String Fname,
+            String Lname,
+            String address,
+            String province,
+            String postalCode,
+            String phoneNum,
+            String phoneNum2,
+            String driverLicense,
+            String email)
             throws SQLException, java.lang.Exception
     {
-        int accountID = this.generateNewAccountID();
-        int addressID = this.generateAddressID();
-        Customer account = new Customer(DL, customerID, Fname, Lname, address, phoneNum);
-        String addressInsert = this.createAddressInsertSQL(address, addressID);
-        String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
-        String customerInsert = "INSERT INTO customer (customerID, accountID, driversLicense, penalty) values ("
-                + "'"+account.getCustomerID()+"'" + ","
-                + "'"+accountID+"'" + ","
-                + "'"+account.getDL()+"'" + ","
-                + "'0')";
-        try
-        {
-            statement.executeUpdate(addressInsert);
-            statement.executeUpdate(accountInsert);
+        String customerInsert = "INSERT INTO Customers ("
+                + "FirstName,"
+                + "LastName,"
+                + "Address,"
+                + "Province,"
+                + "PostalCode,"
+                + "PrimaryContact,"
+                + "SecondaryContact,"
+                + "DriverLicense,"
+                + "Email,"
+                + "Active)"
+                + "values ("
+                + "'" + Fname + "',"
+                + "'" + Lname + "',"
+                + "'" + address + "',"
+                + "'" + province + "',"
+                + "'" + postalCode + "',"
+                + "'" + phoneNum + "',"
+                + "'" + phoneNum2 + "',"
+                + "'" + driverLicense + "',"
+                + "'" + email + "',"
+                + "1)";
             statement.executeUpdate(customerInsert);
-        }
-        finally
-        {
-            connection.close();
-        }
     }
 
     /**
