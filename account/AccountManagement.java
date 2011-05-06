@@ -73,24 +73,25 @@ public class AccountManagement
             String email)
             throws SQLException, java.lang.Exception
     {
-        String employeeInsert = "INSERT INTO employee (FirstName,"
-            + "LastName,"
-            + "Address,"
-            + "Province,"
-            + "PostalCode,"
-            + "PrimaryContact,"
-            + "SecondaryContact,"
-            + "Email)"
-            + "values ("
-            + "'" + Fname + "'"
-            + "'" + Lname + "'"
-            + "'" + address + "'"
-            + "'" + province + "'"
-            + "'" + postalCode + "'"
-            + "'" + phoneNum + "'"
-            + "'" + phoneNum2 + "'"
-            + "'" + email + "'"
-            + "1)";
+        String employeeInsert = "INSERT INTO Employees ("
+                + "FirstName,"
+                + "LastName,"
+                + "Address,"
+                + "Province,"
+                + "PostalCode,"
+                + "PrimaryContact,"
+                + "SecondaryContact,"
+                + "Email)"
+                + "values ("
+                + "'" + Fname + "'"
+                + "'" + Lname + "'"
+                + "'" + address + "'"
+                + "'" + province + "'"
+                + "'" + postalCode + "'"
+                + "'" + phoneNum + "'"
+                + "'" + phoneNum2 + "'"
+                + "'" + email + "'"
+                + "1)";
             statement.executeUpdate(employeeInsert);
     }
 
