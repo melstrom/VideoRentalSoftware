@@ -340,25 +340,6 @@ public class AccountManagement
             statement.executeUpdate(updateQuery);
         }
     }
-
-    /**
-     * Prepares a SQL statement to insert a new account
-     * @param accountID accountID generated from generateNewAccountID
-     * @param addressID addressID generated from generateAddressID
-     * @param Fname The first name
-     * @param Lname The last name
-     * @return A SQL statement that inserts a new account when run
-     */
-    private String createAccountInsertSQL (int accountID, int addressID, String Fname, String Lname, String phoneNum)
-    {
-            String SQL = "INSERT INTO account (accountID, addressID, firstName, lastName, phoneNum) value("
-            + accountID + ","
-            + addressID + ",'"
-            + Fname + "','"
-            + Lname + "','"
-            + phoneNum + "')";
-            return SQL;
-    }
     
     /**
      * Sets up the database connection for the class
