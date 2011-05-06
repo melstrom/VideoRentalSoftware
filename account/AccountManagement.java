@@ -81,7 +81,8 @@ public class AccountManagement
                 + "PostalCode,"
                 + "PrimaryContact,"
                 + "SecondaryContact,"
-                + "Email)"
+                + "Email,"
+                + "Manager)"
                 + "values ("
                 + "'" + Fname + "'"
                 + "'" + Lname + "'"
@@ -91,7 +92,7 @@ public class AccountManagement
                 + "'" + phoneNum + "'"
                 + "'" + phoneNum2 + "'"
                 + "'" + email + "'"
-                + "1)";
+                + "0)";
             statement.executeUpdate(employeeInsert);
     }
 
