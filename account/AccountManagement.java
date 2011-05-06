@@ -379,51 +379,6 @@ public class AccountManagement
         + address.getPostalCode() + "')";
         return SQL;
     }
-    
-    /**
-     * This method finds the highest ID number that currently exists
-     * for either an employee or customer or account or address
-     * @return the highest ID
-     * @throws SQLException
-     * @throws IllegalArgumentException if the table is not
-     * account, customer, employee, or address
-     */
-    private int getHighestID(String table, String column)
-            throws SQLException, ClassNotFoundException
-    {
-        String query = JDBCConnection.makeQuery(table, "MAX(" + column + ")", null);
-
-        if (connection.isClosed())
-        {
-            setupConnection();
-        }
-        ResultSet result = statement.executeQuery(query);//conn.getResults(query);
-        if (result.next() && result.getInt(1) != 0)
-        {
-                return result.getInt(1);
-        }
-        else if (table.equalsIgnoreCase("customer"))
-        {
-            return (int) (Math.pow(10, Customer.ID_LENGTH - 1) * Customer.ID_START_DIGIT);
-        }
-        else if (table.equalsIgnoreCase("employee"))
-        {
-            return (int) (Math.pow(10, Employee.ID_LENGTH - 1) * Employee.ID_START_DIGIT);
-        }
-        else if (table.equalsIgnoreCase("account"))
-        {
-            return 0;
-        }
-        else if (table.equalsIgnoreCase("address"))
-        {
-            return 0;
-        }
-        else
-        {
-            throw new IllegalArgumentException("Cannot find the highest ID of" +
-                    " "+table);
-        }
-    }
 
     /**
      * Sets up the database connection for the class
