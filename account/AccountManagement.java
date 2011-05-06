@@ -296,9 +296,9 @@ public class AccountManagement
      */
     public void promoteEmployee(int employeeID) throws SQLException, AlreadyManagerException
     {
-        String table = "employee";
-        String column = "position";
-        String query = "SELECT " + column + " FROM " + table + " WHERE employeeID = " + employeeID;
+        String table = "Employees";
+        String column = "Manager";
+        String query = "SELECT " + column + " FROM " + table + " WHERE EmployeeID = " + employeeID;
         ResultSet rs = statement.executeQuery(query);
         if (rs.next())
         {
@@ -307,7 +307,7 @@ public class AccountManagement
             {
                 throw new AlreadyManagerException("The employee is already a manager");
             }
-        String SQL = "UPDATE " + table + " SET " + column + " = 'Manager' WHERE employeeID = " + "'"+employeeID+"'";
+        String SQL = "UPDATE " + table + " SET " + column + " = 1 WHERE employeeID = " + "'"+employeeID+"'";
         statement.executeUpdate(SQL);
         }
     }
