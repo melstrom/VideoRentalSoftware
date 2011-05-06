@@ -302,6 +302,7 @@ public class AccountManagement
         ResultSet rs = statement.executeQuery(query);
         if (rs.next())
         {
+            //TODO: Change rs to get bit and update if statement
             String result = rs.getString(1);
             if (result.equalsIgnoreCase("manager"))
             {
@@ -326,6 +327,7 @@ public class AccountManagement
         ResultSet rs = statement.executeQuery(query);
         if (rs.next())
         {
+            //TODO: Change rs to get bit and update if statement
             String result = rs.getString(1);
             if (result.equalsIgnoreCase("Employee"))
             {
