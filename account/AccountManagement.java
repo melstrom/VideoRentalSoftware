@@ -62,28 +62,36 @@ public class AccountManagement
      * @throws SQLException
      * @throws java.lang.Exception
      */
-    public void createEmployee(int employeeID, String position, String Fname, String Lname, Address address, String phoneNum)
+    public void createEmployee(
+            String Fname,
+            String Lname,
+            String address,
+            String province,
+            String postalCode,
+            String phoneNum,
+            String phoneNum2,
+            String email)
             throws SQLException, java.lang.Exception
     {
-        int accountID = this.generateNewAccountID();
-        int addressID = this.generateAddressID();
-        Employee account = new Employee(position, employeeID, Fname, Lname, address, phoneNum);
-        String addressInsert = this.createAddressInsertSQL(address, addressID);
-        String accountInsert = this.createAccountInsertSQL(accountID, addressID, Fname, Lname, phoneNum);
-        String employeeInsert = "INSERT INTO employee (employeeID, accountID, position) values ("
-        + "'"+account.getEmployeeID()+"'" + ","
-        + "'"+accountID+"'" + ","
-        + "'"+account.getPosition()+"'" + ")";
-        try
-        {
-            statement.executeUpdate(addressInsert);
-            statement.executeUpdate(accountInsert);
+        String employeeInsert = "INSERT INTO employee (FirstName,"
+            + "LastName,"
+            + "Address,"
+            + "Province,"
+            + "PostalCode,"
+            + "PrimaryContact,"
+            + "SecondaryContact,"
+            + "Email)"
+            + "values ("
+            + "'" + Fname + "'"
+            + "'" + Lname + "'"
+            + "'" + address + "'"
+            + "'" + province + "'"
+            + "'" + postalCode + "'"
+            + "'" + phoneNum + "'"
+            + "'" + phoneNum2 + "'"
+            + "'" + email + "'"
+            + "1)";
             statement.executeUpdate(employeeInsert);
-        }
-        finally
-        {
-            connection.close();
-        }
     }
 
     /**
