@@ -320,9 +320,9 @@ public class AccountManagement
      */
     public void demoteManager(int employeeID) throws SQLException, NotManagerException
     {
-        String table = "employee";
-        String column = "position";
-        String query = "SELECT " + column + " FROM " + table + " WHERE employeeID = " + employeeID;
+        String table = "Employees";
+        String column = "Manager";
+        String query = "SELECT " + column + " FROM " + table + " WHERE EmployeeID = " + employeeID;
         ResultSet rs = statement.executeQuery(query);
         if (rs.next())
         {
@@ -332,8 +332,8 @@ public class AccountManagement
                 throw new NotManagerException("The employee is not a manager");
             }
 
-            String set = column + " = 'Employee'";
-            String constraint = "employeeID = '"+employeeID+"'";
+            String set = column + " = 0";
+            String constraint = "EmployeeID = '"+employeeID+"'";
             String updateQuery = JDBCConnection.makeUpdate(table, set, constraint);
             statement.executeUpdate(updateQuery);
         }
