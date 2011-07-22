@@ -1,4 +1,0 @@
-Add the bugs I missed here
-
--classpath not set correctly (fixed)
-	
