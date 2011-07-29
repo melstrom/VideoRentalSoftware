@@ -39,8 +39,7 @@ public class MainJFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 800));
 
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
-        jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 24));
 
         checkInPanel = new CheckInJPanel();
         jTabbedPane1.addTab("Check In", checkInPanel);
