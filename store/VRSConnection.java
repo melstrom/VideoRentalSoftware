@@ -265,6 +265,59 @@ public class VRSConnection
 
 
 
+    /**
+     * Inserts a row into a single pre-existing table.
+     *
+     * Specifying columns is optional.  If you don't want to specify that columns
+     * use null for that parameter.  If you use null you must include values for
+     * every column, in the correct order.  See ER diagram for details.
+     *
+     * @param table the table you want to insert values into
+     * @param columns the columns that you want to insert values into. This must
+     * match the number and order of the values parameter.  It may be null.
+     * @param values the values you want to insert into the columns.  If the
+     * columns parameter is null then you must include all the values for every
+     * column in the right order
+     * @param params variables to fill the ?s in the sql query
+     * @return the number of rows inserted
+     */
+    public int insert(String table, String[] columns, String[] values,
+            String[] params) throws SQLException
+    {
+        String insert;
+        String columnsSQL;
+        String valuesSQL;
+
+        if (table == null)
+        {
+            throw new IllegalArgumentException("You must provide a table.");
+        }
+        insert = "INSERT INTO " + table;
+
+        if (columns == null || columns.length < 1)
+        {
+            columnsSQL = "";
+        }
+        else
+        {
+            columnsSQL = "(" + arrayToCSL(columns) + ")";
+        }
+
+        if (values == null || values.length < 1)
+        {
+            throw new IllegalArgumentException("You must provide values to insert.");
+        }
+        valuesSQL = "(" + arrayToCSL(values) + ")";
+
+        String query = insert + ' ' + columnsSQL + ' ' + valuesSQL;
+
+        PreparedStatement stat = prepareStatement(query, params);
+        int numInserted = stat.executeUpdate();
+        return numInserted;
+    }
+
+
+
     // private methods
     
     /**
