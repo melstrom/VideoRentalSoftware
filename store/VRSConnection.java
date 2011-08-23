@@ -223,7 +223,48 @@ public class VRSConnection
         
         return rowsChanged;
     }
-    
+
+
+
+    /**
+     * Deletes rows from a single table.
+     * The table name is required, but the condition may be null if you wish
+     * to delete everything in the table.
+     *
+     * @param table the table to delete from
+     * @param condition the condition that the row must meet in order to be
+     * deleted
+     * @param params the variable ?s to fill in
+     * @return the number of rows deleted
+     */
+    public int delete(String table, String condition, String[] params) throws SQLException
+    {
+       String delete;
+       String where;
+
+       if (table == null || table.length() < 1)
+       {
+           throw new IllegalArgumentException("You must provide a table");
+       }
+       delete = "DELETE FROM " + table;
+
+       if (condition == null)
+       {
+           where = "";
+       }
+       else
+       {
+           where = "WHERE " + condition;
+       }
+
+       String query = delete + ' ' + where;
+       PreparedStatement stat = prepareStatement(query, params);
+       int rowsDeleted = stat.executeUpdate();
+       return rowsDeleted;
+    }
+
+
+
     // private methods
     
     /**
