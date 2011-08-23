@@ -162,8 +162,67 @@ public class VRSConnection
 
 
 
-    public int update(/* bookmark*/)
-        {return -1;}
+    /**
+     * This method performs an update query on a single table.
+     * The first two parameters are required.  The others may be null if they
+     * are not relevant.
+     *
+     * If part of your SQL statement is a string or char variable, you should
+     * include it in your statement as a ? character, and put the variable
+     * into the params array.
+     * e.g.
+     * String input = Scanner.getLine();
+     * vrsconn.select({"Customers_"}, null, "name_ = ?", { input });
+     *
+     * rather than
+     *
+     * String input = Scanner.getLine();
+     * vrsconn.select({"Customers_"}, null, "name_ = \'" + input + "\'", null);
+     *
+     * @param table the table that you want to update
+     * @param setToValue the columns to update, and the value that you want to
+     * update it to i.e. setToValue = { "Customers.name = \'Harry Potter\'" }
+     * @param condition The condition that the value must meet in order to be
+     * updated i.e. condition = Customers.name = "\'Snape\'"
+     * the WHERE is inserted for you.  If you want to change all rows in the
+     * table then use null for this parameter
+     * @param params the variables that may appear as ? in the sql statement.
+     * @return the number of rows changed
+     */
+    public int update(String table, String[] setToValue, String condition, 
+            String[] params) throws SQLException
+    {
+        String update;
+        String set;
+        String where;
+
+        if (table == null || table.length() < 1)
+        {
+            throw new IllegalArgumentException("You must provide a table.");
+        }
+        update = "UPDATE " + table;
+
+        if (setToValue == null || setToValue.length < 1)
+        {
+            throw new IllegalArgumentException("You must provide columns to update");
+        }
+        set = "SET " + arrayToCSL(setToValue);
+
+        if (condition == null)
+        {
+            where = "";
+        }
+        else
+        {
+            where = "WHERE " + condition;
+        }
+
+        String query = update + ' ' + set + ' ' + where;
+        PreparedStatement stat = prepareStatement(query, params);
+        int rowsChanged = stat.executeUpdate();
+        
+        return rowsChanged;
+    }
     
     // private methods
     
@@ -209,7 +268,7 @@ public class VRSConnection
     private PreparedStatement prepareStatement(String sql, String[] params) throws SQLException
     {
         PreparedStatement stat = conn.prepareStatement(sql);
-        if (params == null)
+        if (params == null || params.length < 1)
         {
             return stat;
         }
