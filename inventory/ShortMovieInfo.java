@@ -1,5 +1,4 @@
 package inventory;
-import store.*;
 import java.sql.*;
 import java.io.*;
 
@@ -44,10 +43,15 @@ public class ShortMovieInfo extends MovieInfo
         fullInfo = null;
     }
 
-    private void instanstiateFullMovieInfo()
+    private void instantiateFullMovieInfo()
             throws SQLException,IOException
     {
         fullInfo = new FullMovieInfo(super.getUPC());
+    }
+
+    public String getFormat()
+    {
+        return this.format;
     }
 
     public String getTitile()
@@ -55,11 +59,16 @@ public class ShortMovieInfo extends MovieInfo
         return this.title;
     }
 
+    public int getYear()
+    {
+        return this.year;
+    }
+
     public String[] getActors()
             throws SQLException,IOException
     {
         if(fullInfo == null)
-            instanstiateFullMovieInfo();
+            instantiateFullMovieInfo();
         return fullInfo.getActors();
     }
 
@@ -67,20 +76,15 @@ public class ShortMovieInfo extends MovieInfo
             throws SQLException,IOException
     {
         if(fullInfo == null)
-            instanstiateFullMovieInfo();
+            instantiateFullMovieInfo();
         return fullInfo.getDirector();
-    }
-
-    public int getYear()
-    {
-        return this.year;
     }
 
     public String getStudio()
             throws SQLException,IOException
     {
         if(fullInfo == null)
-            instanstiateFullMovieInfo();
+            instantiateFullMovieInfo();
         return fullInfo.getStudio();
     }
 
@@ -88,20 +92,41 @@ public class ShortMovieInfo extends MovieInfo
             throws SQLException,IOException
     {
         if(fullInfo == null)
-            instanstiateFullMovieInfo();
+            instantiateFullMovieInfo();
         return fullInfo.getDistro();
+    }
+
+    public int getMSRP()
+            throws SQLException, IOException
+    {
+        if(fullInfo == null)
+            instantiateFullMovieInfo();
+        return fullInfo.getMSRP();
+    }
+
+    public int getAvailability()
+    {
+        return this.availability;
+    }
+
+    public int getTotalCopies()
+    {
+        return this.totalCopies;
+    }
+    
+    public String getRating()
+            throws SQLException, IOException
+    {
+        if(fullInfo == null)
+            instantiateFullMovieInfo();
+        return fullInfo.getRating();
     }
 
     public String getGenre()
             throws SQLException,IOException
     {
         if(fullInfo == null)
-            instanstiateFullMovieInfo();
+            instantiateFullMovieInfo();
         return fullInfo.getGenre();
-    }
-
-    public String getFormat()
-    {
-        return this.format;
     }
 }
