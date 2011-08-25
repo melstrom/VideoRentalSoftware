@@ -1,5 +1,5 @@
 package inventory;
-import store.*;
+import store.VRSConnection;
 import java.sql.*;
 import java.io.*;
 
@@ -58,6 +58,21 @@ public class FullMovieInfo extends MovieInfo
         return allActors.split(DELIMETER);
     }
 
+    public String getFormat()
+    {
+        return this.format;
+    }
+
+    public String getTitile()
+    {
+        return this.title;
+    }
+
+    public int getYear()
+    {
+        return this.year;
+    }
+
     public String[] getActors()
     {
         return this.actors;
@@ -77,24 +92,10 @@ public class FullMovieInfo extends MovieInfo
     {
         return this.distro;
     }
-    public String getGenre()
+    
+    public int getMSRP()
     {
-        return this.genre;
-    }
-
-    public String getFormat()
-    {
-        return this.format;
-    }
-
-    public String getTitile()
-    {
-        return this.title;
-    }
-
-    public int getYear()
-    {
-        return this.year;
+        return this.msrp;
     }
 
     public int getAvailability()
@@ -111,9 +112,9 @@ public class FullMovieInfo extends MovieInfo
     {
         return this.rating;
     }
-
-    public int getMSRP()
+    
+    public String getGenre()
     {
-        return this.msrp;
+        return this.genre;
     }
 }

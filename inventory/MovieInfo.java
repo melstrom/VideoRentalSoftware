@@ -70,4 +70,3 @@ public abstract class MovieInfo
     abstract int getMSRP()
             throws SQLException, IOException;
 }
-
