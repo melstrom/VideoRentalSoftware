@@ -11,7 +11,8 @@ public abstract class MovieInfo
     private int upc;
 
     //class public static field:
-    protected final static String PK_NAME  = " Movie_Info ";
+    protected final static String PK_NAME  = " UPC_ ";
+    protected final static String TABLE_NAME = " Movie_Info ";
     //the following data fields only valid if the calling function is selecting
     //all the columns in the table
     protected final static int UPC_INDEX = 1;
