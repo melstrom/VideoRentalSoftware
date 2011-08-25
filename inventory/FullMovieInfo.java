@@ -22,7 +22,7 @@ public class FullMovieInfo extends MovieInfo
     private String rating;
     private String genre;
 
-    public FullMovieInfo(final String UPC)
+    public FullMovieInfo(final int UPC)
             throws SQLException, IOException
     {
         VRSConnection conn = VRSConnection.getInstance();

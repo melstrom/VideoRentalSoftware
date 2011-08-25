@@ -8,7 +8,7 @@ import java.io.*;
  */
 public abstract class MovieInfo
 {
-    private String upc;
+    private int upc;
 
     //class public static field:
     protected final static String PK_NAME  = " Movie_Info ";
@@ -32,7 +32,7 @@ public abstract class MovieInfo
      * this method sets the instance data field upc
      * @param newUPC the UPC that an object of this class wanted to have
      */
-    protected void setUPC(String newUPC)
+    protected void setUPC(int newUPC)
     {
         this.upc = newUPC;
     }
@@ -41,7 +41,7 @@ public abstract class MovieInfo
      * this method return the UPC of an object of this class
      * @return the UPC of this object
      */
-    public String getUPC()
+    public int getUPC()
     {
         return this.upc;
     }

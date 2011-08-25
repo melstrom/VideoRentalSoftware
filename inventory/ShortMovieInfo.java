@@ -34,7 +34,7 @@ public class ShortMovieInfo extends MovieInfo
         //moving the pointer of the ResultSet back to what it was
         result.last();
 
-        super.setUPC(result.getString(MovieInfo.UPC_INDEX));
+        super.setUPC(result.getInt(MovieInfo.UPC_INDEX));
         this.title = result.getString(MovieInfo.TITLE_INDEX);
         this.year = result.getInt(MovieInfo.YEAR_INDEX);
         this.format = result.getString(MovieInfo.FORMAT_INDEX);
