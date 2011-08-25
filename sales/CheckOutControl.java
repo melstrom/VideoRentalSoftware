@@ -6,7 +6,7 @@ package sales;
  */
 public class CheckOutControl
 {
-    private String paymentMethod;
+    private String paymentMethod; //Includes cash, debit, and credit
     private Invoice invoice;
 
     /**
@@ -15,7 +15,8 @@ public class CheckOutControl
      */
     public void addItem (int SKU)
     {
-
+        //inquire db about item. Is it a discount or an inventory item? Let it = item
+        invoice.addItem(item);
     }
 
     /**
@@ -24,7 +25,8 @@ public class CheckOutControl
      */
     public void addFine (int amount)
     {
-
+        //inquire db about fine
+        invoice.addItem(Fine);
     }
 
     /**
@@ -32,7 +34,7 @@ public class CheckOutControl
      */
     public void removeItem ()
     {
-
+        invoice.removeItem();
     }
 
     /**
@@ -41,7 +43,7 @@ public class CheckOutControl
      */
     public void createNewInvoice (int customerID)
     {
-
+        Invoice invoice = new Invoice (customerID);
     }
 
     /**
@@ -49,9 +51,18 @@ public class CheckOutControl
      * @param paymentMethod
      * @return
      */
-    public int checkout (String paymentMethod)
+    public int checkout (String paymentMethod, int paymentAmount)
     {
-        int change = 0; //placeholder initialization
-        return change;
+        if (paymentMethod.equals("Cash"))
+        {
+            int change; //placeholder initialization
+            change = paymentAmount - invoice.getTotal();
+            if (change <= 0)
+            {
+                //Throw not enough $ exception
+            }
+            return change;
+        }
+        return 0;
     }
 }
