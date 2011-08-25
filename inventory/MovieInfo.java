@@ -1,4 +1,6 @@
 package inventory;
+import java.sql.*;
+import java.io.*;
 
 /**
  *
@@ -8,11 +10,26 @@ public abstract class MovieInfo
 {
     private String upc;
 
+    //class public static field:
+    protected final static int UPC_INDEX = 1;
+    protected final static int FORMAT_INDEX =2;
+    protected final static int TITLE_INDEX = 3;
+    protected final static int YEAR_INDEX = 4;
+    protected final static int ACTORS_INDEX = 5;
+    protected final static int DIRECTOR_INDEX = 6;
+    protected final static int STUDIO_INDEX = 7;
+    protected final static int DISTRO_INDEX = 8;
+    protected final static int MSRP_INDEX = 9;
+    protected final static int AVAILABILITY_INDEX =10;
+    protected final static int TOTAL_COPY_INDEX = 11;
+    protected final static int RATING_INDEX = 12;
+    protected final static int GENRE_INDEX = 13;
+
     /**
      * this method sets the instance data field upc
      * @param newUPC the UPC that an object of this class wanted to have
      */
-    private void setUPC(String newUPC)
+    protected void setUPC(String newUPC)
     {
         this.upc = newUPC;
     }
@@ -27,11 +44,16 @@ public abstract class MovieInfo
     }
 
     abstract String getTitile();
-    abstract String[] getActors();
-    abstract String getDirector();
+    abstract String[] getActors()
+            throws SQLException,IOException;
+    abstract String getDirector()
+            throws SQLException,IOException;
     abstract int getYear();
-    abstract String getStudio();
-    abstract String getDistro();
-    abstract String getGenre();
+    abstract String getStudio()
+            throws SQLException,IOException;
+    abstract String getDistro()
+            throws SQLException,IOException;
+    abstract String getGenre()
+            throws SQLException,IOException;
     abstract String getFormat();
 }
