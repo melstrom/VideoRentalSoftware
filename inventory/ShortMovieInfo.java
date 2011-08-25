@@ -44,7 +44,7 @@ public class ShortMovieInfo extends MovieInfo
         fullInfo = null;
     }
 
-    private void instanstiateFullMovieInfo()
+    private void instantiateFullMovieInfo()
             throws SQLException,IOException
     {
         fullInfo = new FullMovieInfo(super.getUPC());
@@ -59,7 +59,7 @@ public class ShortMovieInfo extends MovieInfo
             throws SQLException,IOException
     {
         if(fullInfo == null)
-            instanstiateFullMovieInfo();
+            instantiateFullMovieInfo();
         return fullInfo.getActors();
     }
 
@@ -67,7 +67,7 @@ public class ShortMovieInfo extends MovieInfo
             throws SQLException,IOException
     {
         if(fullInfo == null)
-            instanstiateFullMovieInfo();
+            instantiateFullMovieInfo();
         return fullInfo.getDirector();
     }
 
@@ -80,7 +80,7 @@ public class ShortMovieInfo extends MovieInfo
             throws SQLException,IOException
     {
         if(fullInfo == null)
-            instanstiateFullMovieInfo();
+            instantiateFullMovieInfo();
         return fullInfo.getStudio();
     }
 
@@ -88,7 +88,7 @@ public class ShortMovieInfo extends MovieInfo
             throws SQLException,IOException
     {
         if(fullInfo == null)
-            instanstiateFullMovieInfo();
+            instantiateFullMovieInfo();
         return fullInfo.getDistro();
     }
 
@@ -96,12 +96,38 @@ public class ShortMovieInfo extends MovieInfo
             throws SQLException,IOException
     {
         if(fullInfo == null)
-            instanstiateFullMovieInfo();
+            instantiateFullMovieInfo();
         return fullInfo.getGenre();
     }
 
     public String getFormat()
     {
         return this.format;
+    }
+
+    public int getAvailability()
+    {
+        return this.availability;
+    }
+
+    public int getTotalCopies()
+    {
+        return this.totalCopies;
+    }
+
+    public int getMSRP()
+            throws SQLException, IOException
+    {
+        if(fullInfo == null)
+            instantiateFullMovieInfo();
+        return fullInfo.getMSRP();
+    }
+
+    public String getRating()
+            throws SQLException, IOException
+    {
+        if(fullInfo == null)
+            instantiateFullMovieInfo();
+        return fullInfo.getRating();
     }
 }

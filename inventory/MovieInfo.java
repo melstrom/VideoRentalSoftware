@@ -11,6 +11,9 @@ public abstract class MovieInfo
     private String upc;
 
     //class public static field:
+    protected final static String PK_NAME  = " Movie_Info ";
+    //the following data fields only valid if the calling function is selecting
+    //all the columns in the table
     protected final static int UPC_INDEX = 1;
     protected final static int FORMAT_INDEX =2;
     protected final static int TITLE_INDEX = 3;
@@ -43,17 +46,28 @@ public abstract class MovieInfo
         return this.upc;
     }
 
+    //methods that are providing services from ShrotMovieInfo. You can also
+    //access these method by an object of FullMovieInfo
+    abstract String getFormat();
     abstract String getTitile();
+    abstract int getYear();
+    abstract int getAvailability();
+    abstract int getTotalCopies();
+
+    //methods that is acutally providing services from FullMovieInfo
     abstract String[] getActors()
             throws SQLException,IOException;
     abstract String getDirector()
             throws SQLException,IOException;
-    abstract int getYear();
     abstract String getStudio()
             throws SQLException,IOException;
     abstract String getDistro()
             throws SQLException,IOException;
     abstract String getGenre()
             throws SQLException,IOException;
-    abstract String getFormat();
+    abstract String getRating()
+            throws SQLException, IOException;
+    abstract int getMSRP()
+            throws SQLException, IOException;
 }
+

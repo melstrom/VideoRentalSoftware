@@ -28,8 +28,7 @@ public class FullMovieInfo extends MovieInfo
         VRSConnection conn = VRSConnection.getInstance();
 
         final String[] TABLE_NAME = {" Movie_Info "};
-        final String PK_NAME = " UPC_ ";
-        final String CONDITION = PK_NAME + " = " + UPC;
+        final String CONDITION = MovieInfo.PK_NAME + " = " + UPC;
 
         ResultSet result = conn.select(TABLE_NAME, null, CONDITION, null);
 
@@ -57,5 +56,64 @@ public class FullMovieInfo extends MovieInfo
     {
         final String DELIMETER = "::";
         return allActors.split(DELIMETER);
+    }
+
+    public String[] getActors()
+    {
+        return this.actors;
+    }
+
+    public String getDirector()
+    {
+        return this.director;
+    }
+
+    public String getStudio()
+    {
+        return this.studio;
+    }
+
+    public String getDistro()
+    {
+        return this.distro;
+    }
+    public String getGenre()
+    {
+        return this.genre;
+    }
+
+    public String getFormat()
+    {
+        return this.format;
+    }
+
+    public String getTitile()
+    {
+        return this.title;
+    }
+
+    public int getYear()
+    {
+        return this.year;
+    }
+
+    public int getAvailability()
+    {
+        return this.availability;
+    }
+
+    public int getTotalCopies()
+    {
+        return this.totalCopies;
+    }
+
+    public String getRating()
+    {
+        return this.rating;
+    }
+
+    public int getMSRP()
+    {
+        return this.msrp;
     }
 }
