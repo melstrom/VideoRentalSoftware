@@ -27,8 +27,9 @@ public class Invoice
     private int totalSales;
 
     /**
-     *
-     * @param customerID
+     * Constructor for the Invoice class
+     * @param customerID The customerID entered by the employee required to
+     * create a new invoice.
      */
     public Invoice (int customerID)
     {
@@ -38,7 +39,7 @@ public class Invoice
 
     /**
      *
-     * @return
+     * @return Returns the subtotal of the current invoice
      */
     public int getSubtotal ()
     {
@@ -47,7 +48,7 @@ public class Invoice
 
     /**
      *
-     * @return
+     * @return Returns the tax amount of the current invoice
      */
     public int getTax ()
     {
@@ -56,7 +57,7 @@ public class Invoice
 
     /**
      *
-     * @return
+     * @return Returns the total of the current invoice
      */
     public int getTotal ()
     {
@@ -65,7 +66,7 @@ public class Invoice
 
     /**
      *
-     * @return
+     * @return Returns the list of the current items in the invoice
      */
     public ArrayList getInvoiceItems ()
     {
@@ -83,9 +84,9 @@ public class Invoice
     /**
      *
      */
-    protected void addItem ()
+    protected void addItem (InvoiceItem item)
     {
-
+        invoiceItems.add(item);
     }
 
     /**
