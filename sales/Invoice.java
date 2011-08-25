@@ -1,6 +1,8 @@
 package sales;
 
 import java.util.ArrayList;
+import accounts.AccountControl;
+import accounts.Customer;
 
 /**
  * The invoice class contains within itself all the information
@@ -30,7 +32,8 @@ public class Invoice
      */
     public Invoice (int customerID)
     {
-
+        AccountControl ac = new AccountControl();
+        customer = ac.getCustomer (int customerID);
     }
 
     /**
@@ -96,17 +99,17 @@ public class Invoice
     /**
      *
      */
-    private void calculateSubtotal ()
+    private void calculateSubtotal (int amount)
     {
-
+        subtotal =+ amount;
     }
 
     /**
      *
      */
-    private void calculateTax ()
+    private void calculateTax (int amount)
     {
-
+        tax =+ amount;
     }
 
     /**
@@ -114,7 +117,6 @@ public class Invoice
      */
     private void calculateTotal ()
     {
-
+        total =+ total;
     }
-
 }
