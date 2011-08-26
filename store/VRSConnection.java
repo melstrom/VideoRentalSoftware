@@ -90,9 +90,6 @@ public class VRSConnection
         conn.close();
     }
     
-    
-    
-    
     // public SQL methods
 
     /**
