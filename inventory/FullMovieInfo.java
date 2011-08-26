@@ -27,10 +27,10 @@ public class FullMovieInfo extends MovieInfo
     {
         VRSConnection conn = VRSConnection.getInstance();
 
-        final String[] TABLE_NAME = {" Movie_Info "};
+        final String[] TABLE_NAMES = {MovieInfo.TABLE_NAME};
         final String CONDITION = MovieInfo.PK_NAME + " = " + UPC;
 
-        ResultSet result = conn.select(TABLE_NAME, null, CONDITION, null);
+        ResultSet result = conn.select(TABLE_NAMES, null, CONDITION, null);
 
         if(!result.next())//Although this will not happen, examining it is still
                           //a good pratice
