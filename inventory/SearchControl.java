@@ -34,7 +34,7 @@ public class SearchControl
 
     public void cleanUp()
     {
-        results = null;
+        results.clear();
     }
 
     private void search(final String CONDITION)
