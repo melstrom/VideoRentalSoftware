@@ -63,7 +63,7 @@ public class FullMovieInfo extends MovieInfo
         return this.format;
     }
 
-    public String getTitile()
+    public String getTitle()
     {
         return this.title;
     }

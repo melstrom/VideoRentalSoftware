@@ -50,7 +50,7 @@ public abstract class MovieInfo
     //methods that are providing services from ShrotMovieInfo. You can also
     //access these method by an object of FullMovieInfo
     abstract String getFormat();
-    abstract String getTitile();
+    abstract String getTitle();
     abstract int getYear();
     abstract int getAvailability();
     abstract int getTotalCopies();
