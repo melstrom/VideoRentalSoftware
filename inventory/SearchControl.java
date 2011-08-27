@@ -14,7 +14,7 @@ public class SearchControl
 
     public SearchControl()
     {
-        results = null;
+        results = new ArrayList<MovieInfo>();
     }
     
     public ArrayList<MovieInfo> getShortMovieInfo()
