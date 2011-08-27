@@ -29,7 +29,8 @@ public class ShortMovieInfo extends MovieInfo
     {
         if(!result.next())//the next() method has a side-effect! but if it
                           //return false, the side-effect would be ok.
-            throw new IOException("This is the last row in your result.");
+            throw new IOException("This is the last row in your result.\nPlease"
+                                  + " contact technical support.");
 
         //moving the pointer of the ResultSet back to what it was
         result.last();
