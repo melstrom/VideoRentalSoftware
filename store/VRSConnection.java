@@ -37,10 +37,19 @@ public class VRSConnection
     }
 
     // constructor
-    private VRSConnection() throws SQLException
+    private VRSConnection() 
+            throws SQLException, ClassNotFoundException
     {
+        /*Oringinally un-implemented part:
         // needs implementation
         throw new SQLException("Not implemented yet");
+         *
+         */
+
+        //Modification by Kevin:
+        //trial implementation begins:
+        conn = this.getConnection();
+        //trial implementation ends
     }
 
     // public methods
@@ -65,16 +74,18 @@ public class VRSConnection
     public Connection getConnection()
             throws SQLException, ClassNotFoundException
     {
+        //Modification by Kevin:
         ////from version 1....
-        //testing
-        ////////////
+        //trial implementation begins:
 
         //Load the JDBC driver.
         Class.forName("com.mysql.jdbc.Driver");
         //connection to the database.
-        String url = "jdbc:mysql://174.132.159.251:3306/kpoirier_CPSC2301?user=kpoirier_User&password=foobar";
+        String url = "jdbc:mysql://174.132.159.251:3306/kpoirier_CPSC2301?user"
+                + "=kpoirier_User&password=foobar";//needs to be re-allocate to
+                                                   //Cary's server
         return DriverManager.getConnection(url);
-
+        //trial implementation ends
 
 
         //////////////////
@@ -89,11 +100,6 @@ public class VRSConnection
      */
     public void open()
     {
-
-
-
-
-
         ////////
         throw new RuntimeException("Not implemented yet");
     }
