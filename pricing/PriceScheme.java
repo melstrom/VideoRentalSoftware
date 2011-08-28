@@ -7,6 +7,18 @@ import java.sql.SQLException;
 /**
  * Interface for PriceScheme.
  * File must exactly match on both client and server.
+ *
+ * To get a copy of the PriceScheme object use the code
+ *
+ * PriceScheme priceScheme = (PriceScheme) Naming.lookup("PriceScheme");
+ *
+ * You will need to import the following:
+ * 
+ * java.net.MalformedURLException;
+ * java.rmi.Naming;
+ * java.rmi.NotBoundException;
+ * java.rmi.RemoteException;
+ *
  * @author Mitch
  */
 public interface PriceScheme extends Remote
@@ -57,17 +69,24 @@ public interface PriceScheme extends Remote
     //*****************************************************************
 
     /**
+     * WARNING
+     * Do not include the following code in the client build.
+     * 
      * Adds the price scheme to the database
      * @throws RemoteException
      */
     void add() throws RemoteException, SQLException;
 
     /**
+     * WARNING
+     * Do not include the following code in the client build.
+     *
      * Sets a new price in cents for all movies that have the supplied category
      * and format
      * @param cents
      * @param category
      * @param format
+     *
      */
     void setPrice(int cents, String category, String format)
             throws RemoteException, SQLException;
