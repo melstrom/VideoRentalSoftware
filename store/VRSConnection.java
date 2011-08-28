@@ -39,7 +39,7 @@ public class VRSConnection
     private VRSConnection() throws SQLException
     {
         // needs implementation
-        throw new SQLException("Not implemented yet");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     // public methods
@@ -71,10 +71,10 @@ public class VRSConnection
     /**
      * Re-opens a connection in case it is lost
      */
-    public void open()
+    public void open() throws SQLException
     {
         // not implemented
-        throw new RuntimeException("Not implemented yet");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     
