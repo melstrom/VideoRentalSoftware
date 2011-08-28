@@ -1,7 +1,7 @@
 package accounts;
 
 import java.sql.SQLException;
-// bookmark
+import inventory.RentedCopy;
 /**
  * The proxy for the Customer type
  * @author mtee00
