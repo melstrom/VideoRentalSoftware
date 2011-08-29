@@ -136,24 +136,25 @@ public class Copy implements sales.InvoiceItem/*cross package/coupling*/
                                                 //wanted to be caught
         
             //insert a row in the Rented_Out_Copies
-            final java.sql.Date TODAY = new 
+            final java.sql.Date SQL_TODAY = new
                     java.sql.Date(Calendar.getInstance()//return Calendar object
                                           .getTime()//returns java.util.Date
                                           .getTime()//returns long int
                                           );
-            final Calendar RETURN_DATE_CAL =
-                    Calendar.getInstance()
-                    .add(Calendar.DATE,
-                         PriceScheme.getRentalPeriod(this.category));
-            final java.sql.Date RETURN_DATE = new
-                    java.sql.Date(RETURN_DATE_CAL.getTime()//returns util.Date
+
+            final Calendar RETURN_CAL = Calendar.getInstance();
+            RETURN_CAL.add(Calendar.DATE,
+                           PriceScheme.getRentalPeriod(this.category));
+
+            final java.sql.Date SQL_RETURN_DATE = new
+                    java.sql.Date(RETURN_CAL.getTime()//returns util.Date
                                                  .getTime()//returns long int
                                                  );
             final String[] INSERT_VALUES = {
                                             "" + this.sku,
                                             "" + custID,
-                                            TODAY.toString(),
-                                            RETURN_DATE.toString()
+                                            SQL_TODAY.toString(),
+                                            SQL_RETURN_DATE.toString()
                                            };
 
             int insertedRow = conn.insert(RentedCopy.TABLE_NAME, null, 
@@ -164,7 +165,8 @@ public class Copy implements sales.InvoiceItem/*cross package/coupling*/
         {
             throw new SQLException("Database error. Please try again. \nIf this"
                                    + " message still appears, please contact "
-                                   + "the technical support.");
+                                   + "the technical support.\nSystem error mes"
+                                   + "sage: " + expt.getMessage());
         }
     }
 }
