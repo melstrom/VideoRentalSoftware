@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.DriverManager;
 
 /**
  * This class acts as the database connection for each terminal.
@@ -61,9 +62,20 @@ public class VRSConnection
      * Do not close this connection.
      * @return a reference to the database connection
      */
+    /*
+     * Eddited by Kevin: copy and paste from the old version. Database location
+     * now is pointing to Cary's server.
+     */
     public Connection getConnection()
+            throws SQLException, ClassNotFoundException
     {
-        return conn;
+      //Load the JDBC driver.
+      Class.forName("com.mysql.jdbc.Driver");
+      //connection to the database.
+      String url = "jdbc:mysql://24.87.132.24:3306/VideoRentalStore?user=vrslo"
+              + "gin&password=vrspass";
+      return DriverManager.getConnection(url);
+
     }
 
 
