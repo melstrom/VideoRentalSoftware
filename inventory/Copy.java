@@ -103,6 +103,11 @@ public class Copy implements sales.InvoiceItem/*cross package/coupling*/
         }
     }
 
+    public Copy(int upc, String category)
+    {
+        
+    }
+
     public String getName()
     {
         return this.sku + ": " + this.title + "\t" + this.format + "\t" +
