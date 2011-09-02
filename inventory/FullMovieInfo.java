@@ -52,10 +52,73 @@ public class FullMovieInfo extends MovieInfo
         this.totalCopies = result.getInt(MovieInfo.TOTAL_COPY_INDEX);
     }
 
+    public FullMovieInfo(String[] movieRawInfo)
+    {
+        super.setUPC(Integer.parseInt(movieRawInfo[MovieInfo.UPC_INDEX - 1]));
+        this.format = movieRawInfo[MovieInfo.FORMAT_INDEX -1];
+        this.title = movieRawInfo[MovieInfo.TITLE_INDEX -1];
+        this.year = Integer.parseInt(movieRawInfo[MovieInfo.YEAR_INDEX -1]);
+        this.actors = splitActors(movieRawInfo[MovieInfo.ACTORS_INDEX -1]);
+        this.director = movieRawInfo[MovieInfo.DIRECTOR_INDEX - 1];
+        this.studio = movieRawInfo[MovieInfo.STUDIO_INDEX - 1];
+        this.distro = movieRawInfo[MovieInfo.DISTRO_INDEX - 1];
+        this.msrp = Integer.parseInt(movieRawInfo[MovieInfo.MSRP_INDEX - 1]);
+        this.availability = 0;
+        this.totalCopies = 0;
+        this.rating = movieRawInfo[MovieInfo.RATING_INDEX - 1];
+        this.genre = movieRawInfo[MovieInfo.GENRE_INDEX - 1];
+    }
+
+    public void record()
+            throws SQLException
+    {
+        VRSConnection conn = VRSConnection.getInstance();
+
+        final String[] COLUMNS = {
+                                    MovieInfo.PK_NAME,
+                                    " format_ ",
+                                    " title_ ",
+                                    " year_ ",
+                                    " actors_ ",
+                                    " director_ ",
+                                    " studtio_ ",
+                                    " distro_ ",
+                                    " MSRP_ ",
+                                    " availability_ ",
+                                    " total_Copies ",
+                                    " rating_ ",
+                                    " genre_ "
+                                 };
+        final String[] VALUES = {
+                                    "" + super.getUPC(),
+                                    this.format,
+                                    this.title,
+                                    "" + this.year,
+                                    mergeActors(this.actors),
+                                    this.director,
+                                    this.studio,
+                                    this.distro,
+                                    "" + this.msrp,
+                                    "" + this.availability,
+                                    "" + this.totalCopies,
+                                    this.rating,
+                                    this.genre
+                                };
+        int rowInsert = conn.insert(MovieInfo.TABLE_NAME, COLUMNS, VALUES,
+                                    null);
+    }
+
     private String[] splitActors(String allActors)
     {
-        final String DELIMETER = "::";
-        return allActors.split(DELIMETER);
+        return allActors.split(MovieInfo.ACTORS_SEPERATOR);
+    }
+
+    private String mergeActors(String[] allActors)
+    {
+        String longActors = "";
+        for(int row = 0; row < allActors.length; row++)
+            longActors += allActors[row] + MovieInfo.ACTORS_SEPERATOR;
+        return longActors;
     }
 
     public String getFormat()

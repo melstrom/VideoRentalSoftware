@@ -10,6 +10,10 @@ import pricing.PriceScheme;
 import java.sql.*;
 import java.io.*;
 import java.util.*;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -30,17 +34,17 @@ public class Copy implements InvoiceItem/*cross package/coupling*/
     //class static data field:
     protected static final String TABLE_NAME = " Copies_ ";
     protected static final String PK_NAME = " Copies_.SKU_ ";
-    protected static final String AVAILABLE_STATUS = "available";
-    protected static final String RENTED_OUT_STATUS = "rented";
-    protected static final String DAMAGED_STATUS = "damaged";
-    protected static final String GOOD_CONDITION = "good";
-    protected static final String BAD_CONDITION = "bad";
+    public static final String AVAILABLE_STATUS = "available";
+    public static final String RENTED_OUT_STATUS = "rented";
+    public static final String DAMAGED_STATUS = "overdue";
+    public static final String GOOD_CONDITION = "good";
+    public static final String DAMAGED_CONDITION = "damaged";
     //fields below are only valid if all the columns are in your result set
-    protected static final int SKU_INDEX = 1;
-    protected static final int UPC_INDEX = 2;
-    protected static final int CONDITION_INDEX = 3;
-    protected static final int CATEGORY_INDEX = 4;
-    protected static final int STATUS_INDEX = 5;
+    public static final int SKU_INDEX = 1;
+    public static final int UPC_INDEX = 2;
+    public static final int CONDITION_INDEX = 3;
+    public static final int CATEGORY_INDEX = 4;
+    public static final int STATUS_INDEX = 5;
 
     /* Method signiture according to the class diagram
     public Copy(int sku, int upc, String category)
@@ -165,6 +169,7 @@ public class Copy implements InvoiceItem/*cross package/coupling*/
                                 };
         int rowInsert = conn.insert(Copy.TABLE_NAME, COLUMNS, VALUES, null);
 
+        //return the new auto-generated sku to the calling function:
         final String[] MAX_TABLES = {Copy.TABLE_NAME};
         final String[] MAX_COLUMN = {"MAX(" + Copy.PK_NAME + ")"};
         final String MAX_CONDITION = " UPC_ = " + this.upc;
@@ -183,12 +188,16 @@ public class Copy implements InvoiceItem/*cross package/coupling*/
     }
 
     public int getPrice()
+            throws NotBoundException, MalformedURLException, RemoteException
     {
-        return PriceScheme.getInstance().getPrice(this.format, this.category);//UNSURE. needs to need confirm
+        PriceScheme priceScheme = (PriceScheme) Naming.lookup
+                                                           ("PriceScheme");
+        return priceScheme.getPrice(this.format, this.category);
     }
 
     public void checkOut(int custID)
-            throws AvailabilityException, SQLException
+            throws AvailabilityException, SQLException, NotBoundException,
+                   MalformedURLException, RemoteException
     {
         if(!this.status.equals(Copy.AVAILABLE_STATUS))
         //condition checking
@@ -216,8 +225,10 @@ public class Copy implements InvoiceItem/*cross package/coupling*/
                                           );
 
             final Calendar RETURN_CAL = Calendar.getInstance();
+            PriceScheme priceScheme = (PriceScheme) Naming.lookup
+                                                           ("PriceScheme");
             RETURN_CAL.add(Calendar.DATE,
-                           PriceScheme.getRentalPeriod(this.category));
+                           priceScheme.getRentalPeriod(this.category));
 
             final java.sql.Date SQL_RETURN_DATE = new
                     java.sql.Date(RETURN_CAL.getTime()//returns util.Date

@@ -1,4 +1,7 @@
 package sales;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -7,6 +10,7 @@ package sales;
 public interface InvoiceItem
 {
     public String getName();
-    public int getPrice();
+    public int getPrice()
+            throws NotBoundException, MalformedURLException, RemoteException;
     public void checkout();
 }

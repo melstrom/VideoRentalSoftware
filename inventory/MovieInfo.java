@@ -13,21 +13,22 @@ public abstract class MovieInfo
     //class public static field:
     protected final static String PK_NAME  = " Movie_Info.UPC_ ";
     protected final static String TABLE_NAME = " Movie_Info ";
+    public final static String ACTORS_SEPERATOR = "::";
     //the following data fields only valid if the calling function is selecting
     //all the columns in the table
-    protected final static int UPC_INDEX = 1;
-    protected final static int FORMAT_INDEX =2;
-    protected final static int TITLE_INDEX = 3;
-    protected final static int YEAR_INDEX = 4;
-    protected final static int ACTORS_INDEX = 5;
-    protected final static int DIRECTOR_INDEX = 6;
-    protected final static int STUDIO_INDEX = 7;
-    protected final static int DISTRO_INDEX = 8;
-    protected final static int MSRP_INDEX = 9;
-    protected final static int AVAILABILITY_INDEX =10;
-    protected final static int TOTAL_COPY_INDEX = 11;
-    protected final static int RATING_INDEX = 12;
-    protected final static int GENRE_INDEX = 13;
+    public final static int UPC_INDEX = 1;
+    public final static int FORMAT_INDEX =2;
+    public final static int TITLE_INDEX = 3;
+    public final static int YEAR_INDEX = 4;
+    public final static int ACTORS_INDEX = 5;
+    public final static int DIRECTOR_INDEX = 6;
+    public final static int STUDIO_INDEX = 7;
+    public final static int DISTRO_INDEX = 8;
+    public final static int MSRP_INDEX = 9;
+    public final static int AVAILABILITY_INDEX =10;
+    public final static int TOTAL_COPY_INDEX = 11;
+    public final static int RATING_INDEX = 12;
+    public final static int GENRE_INDEX = 13;
 
     /**
      * this method sets the instance data field upc
