@@ -1,4 +1,5 @@
 package accounts;
+import inventory.Copy;
 import inventory.RentedCopy;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -171,10 +172,11 @@ public abstract class Customer extends Account
 
     /**
      * Adds a rental movie to the Customer's account
+     * Meant to act as a manual override
      * @param copy
      * @throws SQLException
      */
-    abstract void addRental(RentedCopy copy) throws SQLException;
+    abstract void addRental(Copy copy) throws SQLException;
 
 
 

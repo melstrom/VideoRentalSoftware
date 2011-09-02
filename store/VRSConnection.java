@@ -316,7 +316,7 @@ public class VRSConnection
         {
             throw new IllegalArgumentException("You must provide values to insert.");
         }
-        valuesSQL = "(" + arrayToCSL(values) + ")";
+        valuesSQL = "VALUES (" + arrayToCSL(values) + ")";
 
         String query = insert + ' ' + columnsSQL + ' ' + valuesSQL;
 
