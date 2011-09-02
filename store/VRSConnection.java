@@ -37,10 +37,20 @@ public class VRSConnection
     }
 
     // constructor
-    private VRSConnection() throws SQLException
+    
+    /*
+     * Eddited by Kevin: copy and paste from the old version. Database location
+     * now is pointing to Cary's server.
+     * 
+     */
+    private VRSConnection() throws SQLException, ClassNotFoundException
     {
-        // needs implementation
-        throw new UnsupportedOperationException("Not supported yet.");
+        //Load the JDBC driver.
+        Class.forName("com.mysql.jdbc.Driver");
+        //connection to the database.
+        String url = "jdbc:mysql://24.87.132.24:3306/VideoRentalStore?user=vrslo"
+                + "gin&password=vrspass";
+        conn = DriverManager.getConnection(url);
     }
 
     // public methods
@@ -62,19 +72,9 @@ public class VRSConnection
      * Do not close this connection.
      * @return a reference to the database connection
      */
-    /*
-     * Eddited by Kevin: copy and paste from the old version. Database location
-     * now is pointing to Cary's server.
-     */
     public Connection getConnection()
-            throws SQLException, ClassNotFoundException
     {
-      //Load the JDBC driver.
-      Class.forName("com.mysql.jdbc.Driver");
-      //connection to the database.
-      String url = "jdbc:mysql://24.87.132.24:3306/VideoRentalStore?user=vrslo"
-              + "gin&password=vrspass";
-      return DriverManager.getConnection(url);
+        return conn;
 
     }
 
