@@ -5,6 +5,7 @@
 
 package inventory;
 import store.VRSConnection;
+import sales.InvoiceItem;
 import pricing.PriceScheme;
 import java.sql.*;
 import java.io.*;
@@ -14,7 +15,7 @@ import java.util.*;
  *
  * @author kevin
  */
-public class Copy implements sales.InvoiceItem/*cross package/coupling*/
+public class Copy implements InvoiceItem/*cross package/coupling*/
 {
     //instance data field:
     private int sku;
@@ -24,14 +25,16 @@ public class Copy implements sales.InvoiceItem/*cross package/coupling*/
     private String category;
     private String status;
     private int upc;
-    private ShortMovieInfo movieInfo;
+    private MovieInfo movieInfo;
 
     //class static data field:
-    protected static final String TABLE_NAME = " Copy_ ";
-    protected static final String PK_NAME = " Copy_.SKU_ ";
+    protected static final String TABLE_NAME = " Copies_ ";
+    protected static final String PK_NAME = " Copies_.SKU_ ";
     protected static final String AVAILABLE_STATUS = "available";
     protected static final String RENTED_OUT_STATUS = "rented";
     protected static final String DAMAGED_STATUS = "damaged";
+    protected static final String GOOD_CONDITION = "good";
+    protected static final String BAD_CONDITION = "bad";
     //fields below are only valid if all the columns are in your result set
     protected static final int SKU_INDEX = 1;
     protected static final int UPC_INDEX = 2;
@@ -47,8 +50,8 @@ public class Copy implements sales.InvoiceItem/*cross package/coupling*/
      */
 
     /**
-     * This is the constructor signature that I think it should be at this
-     * moment.
+     * This constructor is for the use of getting data of an existing copy in
+     * the database
      * @param targetSKU
      * @throws SQLException
      * @throws IOException
@@ -60,8 +63,8 @@ public class Copy implements sales.InvoiceItem/*cross package/coupling*/
         
         try
         {
-            //needs to confirm the select command with 2 tables (other than select
-            //join) while the database is setup.
+            //needs to confirm the select command with 2 tables (other than 
+            //select join) while the database is setup.
             final String[] TABLES = {Copy.TABLE_NAME, MovieInfo.TABLE_NAME};
             final String[] COLUMNS = { Copy.TABLE_NAME + ".*",
                                        MovieInfo.TABLE_NAME + ".title_",
@@ -96,16 +99,81 @@ public class Copy implements sales.InvoiceItem/*cross package/coupling*/
             //row not found error:
                 throw new IOException("Copy with SKU \"" + targetSKU + "\" "
                                       + "cannot be found.");
-            else
             //other error:
-                throw expt;
+            throw expt;
 
         }
     }
 
+    /**
+     * This constructor is for the service of adding new copy of an existing
+     * movie.
+     * @param upc
+     * @param category
+     * @throws SQLException
+     * @throws IOException
+     */
     public Copy(int upc, String category)
+            throws SQLException, IOException
     {
-        
+        VRSConnection conn = VRSConnection.getInstance();
+        final String[] TABLES = {MovieInfo.TABLE_NAME};
+        final String CONDITION = MovieInfo.PK_NAME + " = " + upc;
+        try
+        {
+            ResultSet result = conn.select(TABLES, null, CONDITION, null);
+            result.next();//this statement will must be executed properly since
+                          //an empty result set will cause an SQLException
+                          //be thrown and be caught
+
+            movieInfo = new ShortMovieInfo(result);
+            this.title = movieInfo.getTitle();
+            this.format = movieInfo.getFormat();
+            this.condition = Copy.GOOD_CONDITION;
+            this.category = category;
+            this.status = Copy.AVAILABLE_STATUS;
+            this.upc = upc;
+        }
+        catch(SQLException expt)
+        {
+            if(expt.getMessage().contains("not found"))//UNSURE
+                throw new IOException("The movie with UPC \"" + upc + "\"cannot"
+                        + " be found.");
+            throw expt;
+        }
+    }
+
+    public int record()
+            throws IOException, SQLException
+    {
+        if(this.upc <= 0 || !this.condition.equals(Copy.GOOD_CONDITION) ||
+           this.category.isEmpty() || !this.status.equals(Copy.AVAILABLE_STATUS))
+            throw new IOException("Information of this copy is incorrect.");
+
+        VRSConnection conn = VRSConnection.getInstance();
+        final String[] COLUMNS = {
+                                    " UPC_ ",
+                                    " condition_ ",
+                                    " category_ ",
+                                    " status_ "
+                                 };
+        final String[] VALUES = {
+                                    "" + this.upc,
+                                    this.condition,
+                                    this.category,
+                                    this.status
+                                };
+        int rowInsert = conn.insert(Copy.TABLE_NAME, COLUMNS, VALUES, null);
+
+        final String[] MAX_TABLES = {Copy.TABLE_NAME};
+        final String[] MAX_COLUMN = {"MAX(" + Copy.PK_NAME + ")"};
+        final String MAX_CONDITION = " UPC_ = " + this.upc;
+        ResultSet maxSKUResult = conn.select(MAX_TABLES, MAX_COLUMN,
+                                             MAX_CONDITION, null);
+
+        this.sku = maxSKUResult.getInt(1);//The result set contains only one
+                                          //columns
+        return this.sku;
     }
 
     public String getName()
