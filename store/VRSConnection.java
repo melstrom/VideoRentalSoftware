@@ -168,6 +168,75 @@ public class VRSConnection
         ResultSet rs = stat.executeQuery();
         return rs;
     }
+    
+    
+    /**
+     * This method makes an SQL SELECT query.  The only required parameter is
+     * table.  The rest may be null.
+     * 
+     * This is method is intended for use on a single table.
+     * 
+     * You can tag things on to the end of the query e.g. ORDER BY
+     * If part of your SQL statement is a string or char variable, you should
+     * include it in your statement as a ? character, and put the variable
+     * into the params array.
+     * e.g.
+     * String input = Scanner.getLine();
+     * vrsconn.select("Customers_", null, "name_ = ?", { input });
+     *
+     * rather than
+     *
+     * String input = Scanner.getLine();
+     * vrsconn.select({"Customers_"}, null, "name_ = \'" + input + "\'", null);
+     * @param tables the table that you are selecting results from
+     * @param columns the column(s) that you want.  If you want them all this
+     * can be null
+     * @param condition the condition that your results must fulfill.  If you
+     * want everything, you may leave this as null.  You can add things that are
+     * not strictly conditions, such as ORDER BY commands, but keep in mind that
+     * if this parameter is not null, it will always have a WHERE clause.
+     * @param params the variables that may appear as ? in the sql statement.
+     * @return all the results of your query
+     */
+    public ResultSet select(String table, String[] columns, String condition,
+            String[] params) throws SQLException
+    {
+        String select;
+        String from;
+        String where;
+
+        if (columns == null || columns.length < 1)
+        {
+            select = "SELECT *";
+        }
+        else
+        {
+            select = "SELECT " + arrayToCSL(columns);
+        }
+
+        if (table == null || table.length() < 1)
+        {
+            throw new IllegalArgumentException("You must provide tables to query");
+        }
+        else
+        {
+            from = "FROM " + table;
+        }
+
+        if (condition == null)
+        {
+            where = "";
+        }
+        else
+        {
+            where = "WHERE " + condition;
+        }
+
+        String query = select + ' ' + from + ' ' + where;
+        PreparedStatement stat = prepareStatement(query, params);
+        ResultSet rs = stat.executeQuery();
+        return rs;
+    }
 
 
 
