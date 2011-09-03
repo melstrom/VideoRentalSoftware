@@ -119,6 +119,7 @@ public final class Employee extends Account
 
         rs.next();
         int newID = rs.getInt(1);
+        accountID = newID;
         return newID;
 
     }

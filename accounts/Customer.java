@@ -339,6 +339,7 @@ public abstract class Customer extends Account
 
         rs.next();
         int newID = rs.getInt(1);
+        accountID = newID;
         return newID;
 
     }
