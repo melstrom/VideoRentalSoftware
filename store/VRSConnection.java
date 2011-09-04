@@ -99,7 +99,8 @@ public class VRSConnection
      */
     public void close() throws SQLException
     {
-        conn.close();
+        if (!conn.isClosed())
+            conn.close();
     }
     
     // public SQL methods
