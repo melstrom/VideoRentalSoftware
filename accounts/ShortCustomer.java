@@ -1,5 +1,6 @@
-package accounts;
+  package accounts;
 
+import inventory.Copy;
 import java.sql.SQLException;
 import inventory.RentedCopy;
 /**
@@ -62,7 +63,10 @@ public class ShortCustomer extends Customer
     
     // package methods
 
-    void addRental(RentedCopy copy) {
+    // Meant to act as a manual override
+    // adds a new copy to the customer's renals.
+    void addRental(Copy copy) throws SQLException
+    {
         initImpl();
         customer.addRental(copy);
     }

@@ -40,7 +40,12 @@ public final class Employee extends Account
     }
 
 
-
+    
+    /**
+     * Creates an Employee given the unique employee ID number
+     * @param employeeID
+     * @throws SQLException 
+     */
     Employee(int employeeID) throws SQLException
     {
         VRSConnection conn = VRSConnection.getInstance();
@@ -60,6 +65,49 @@ public final class Employee extends Account
         status = rs.getInt(columnIndex++);
         position = rs.getInt(columnIndex++);
         accountID = employeeID;
+    }
+    
+    
+    
+    /**
+     * Creates an Employee, given all the information about the employee.
+     * This constructor is only intended to be used when the Employee information
+     * has been retrieved separately from the database but there is no object 
+     * yet.
+     * All parameters must be provided and valid.
+     * @param employeeID
+     * @param name
+     * @param address
+     * @param postalCode
+     * @param phoneNumber
+     * @param status
+     * @param position 
+     */
+    Employee(int employeeID, String name, String address, String postalCode,
+            String phoneNumber, int status, int position)
+    {
+        boolean hasNull = name == null || address == null || postalCode == null
+                || phoneNumber == null;
+        boolean hasEmptyString = name.length() < 1 || address.length() < 1 ||
+                postalCode.length() < 1 || phoneNumber.length() < 1;
+        boolean validStatus = status == Employee.ACTIVE ||
+                status == Employee.INACTIVE;
+        boolean validPosition = position == Employee.EMPLOYEE ||
+                position == Employee.MANAGER;
+        
+        if (hasNull || hasEmptyString || !validStatus || !validPosition)
+        {
+            throw new IllegalArgumentException("All parameters must be"
+                    + " filled in and valid.");
+        }
+        
+        this.accountID = employeeID;
+        this.name = name;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+        this.status = status;
+        this.position = position;
     }
 
     // public methods
@@ -119,6 +167,7 @@ public final class Employee extends Account
 
         rs.next();
         int newID = rs.getInt(1);
+        accountID = newID;
         return newID;
 
     }
